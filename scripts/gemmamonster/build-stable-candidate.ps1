@@ -82,7 +82,7 @@ if ($ShortRoot -notmatch '^[A-Za-z0-9_.-]+$') { throw "ShortRoot must be a simpl
 $head = Get-GitValue $root @('rev-parse', 'HEAD')
 $tree = Get-GitValue $root @('rev-parse', "$head^{tree}")
 $branch = Get-GitValue $root @('rev-parse', '--abbrev-ref', 'HEAD')
-$dirtyLines = @(& git -C $root status --porcelain)
+$dirtyLines = @(& git -C $root status --porcelain | Where-Object { $_ -notmatch '^\?\? bazel-[^/]*/$' })
 $dirty = $dirtyLines.Count -gt 0
 if ($dirty -and -not $AllowDirty) {
     throw 'Working tree is dirty before build. Commit/stash changes or pass -AllowDirty; dirty candidates cannot become known-good.'
