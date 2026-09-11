@@ -24,10 +24,11 @@ def llm_engine():
     new_git_repository(
         name = "llm_engine",
         remote = "https://github.com/openvinotoolkit/openvino.genai",
-        commit = "2689c9ec9e28b83421f3fa5d380b10dd10dc3379",
+        commit = "7ea2546852a382cd16bd22dea0cfad2db70ed744",
         build_file = "@_llm_engine//:BUILD",
         init_submodules = True,
         recursive_init_submodules = True,
+        patches = ["//third_party/llm_engine:openvino-genai-xgrammar-0.2.6.patch"],
         patch_args = ["-p1"],
     )
     # when using local repository manually run: git submodule update --recursive 

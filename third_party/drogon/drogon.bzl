@@ -91,7 +91,10 @@ if __name__ == "__main__":
 """)
 
     # Locate the Python binary
-    python_binary = repository_ctx.which("python3") or repository_ctx.which("python")
+    if repository_ctx.os.name.startswith("windows"):
+        python_binary = repository_ctx.which("python")
+    else:
+        python_binary = repository_ctx.which("python3") or repository_ctx.which("python")
     if not python_binary:
         fail("Python interpreter not found in PATH")
 
@@ -156,7 +159,6 @@ config_setting(
     name = "dbg",
     values = {{"compilation_mode": "dbg"}},
 )
-
 config_setting(
     name = "opt",
     values = {{"compilation_mode": "opt"}},

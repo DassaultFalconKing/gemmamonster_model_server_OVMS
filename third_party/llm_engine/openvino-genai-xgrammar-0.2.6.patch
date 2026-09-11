@@ -1,0 +1,31 @@
+diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
+--- a/src/cpp/CMakeLists.txt
++++ b/src/cpp/CMakeLists.txt
+@@ -152,7 +152,7 @@ if(ANDROID)
+ endif()
+ 
+ if(ENABLE_XGRAMMAR)
+-    set(XGRAMMAR_VERSION v0.1.31)
++    set(XGRAMMAR_VERSION v0.2.6)
+     set(XGRAMMAR_DIR ${CMAKE_BINARY_DIR}/xgrammar)
+ 
+     FetchContent_Declare(
+diff --git a/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp b/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp
+--- a/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp
++++ b/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp
+@@ -69,7 +69,14 @@ xgrammar::Grammar XGrammarStructuredOutput::create_grammar(const std::optional<S
+     }
+ 
+     if (structured_output_config.value().json_schema.has_value()) {
+-        return xgrammar::Grammar::FromJSONSchema(structured_output_config.value().json_schema.value());
++        return xgrammar::Grammar::FromJSONSchema(
++            structured_output_config.value().json_schema.value(),
++            /*any_whitespace=*/true,
++            /*indent=*/std::nullopt,
++            /*separators=*/std::nullopt,
++            /*strict_mode=*/true,
++            /*max_whitespace_cnt=*/2
++        );
+     } else if (structured_output_config.value().regex.has_value()) {
+         return xgrammar::Grammar::FromRegex(structured_output_config.value().regex.value());
+     } else if (structured_output_config.value().grammar.has_value()) {

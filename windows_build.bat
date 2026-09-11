@@ -52,7 +52,7 @@ IF "%~4"=="--integrity" (
 set "bazelStartupCmd=--output_user_root=!BAZEL_SHORT_PATH!"
 set "openvino_dir=!BAZEL_SHORT_PATH!/openvino/runtime/cmake"
 
-set "buildCommand=bazel %bazelStartupCmd% build  %buildWithIntegrity% %bazelBuildArgs% --action_env OpenVINO_DIR=%openvino_dir% --jobs=%NUMBER_OF_PROCESSORS% --verbose_failures %buildTargets% 2>&1 | tee win_build.log"
+set "buildCommand=bazel %bazelStartupCmd% build  %buildWithIntegrity% %bazelBuildArgs% --action_env OpenVINO_DIR=%openvino_dir% --jobs=%NUMBER_OF_PROCESSORS% --verbose_failures %buildTargets%"
 set "setOvmsVersionCmd=python windows_set_ovms_version.py"
 
 :: Setting PATH environment variable based on default windows node settings: Added ovms_windows specific python settings and c:/opt and removed unused Nvidia and OCL specific tools.
@@ -69,7 +69,11 @@ for /f "usebackq eol=# tokens=1,3" %%A in ("%cd%\versions.mk") do (
 )
 
 :: Bazel compilation settings
-set VS_2022_BT="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools"
+if defined BAZEL_VS (
+    set VS_2022_BT="%BAZEL_VS:"=%"
+) ELSE (
+    set VS_2022_BT="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools"
+)
 IF /I EXIST %VS_2022_BT% goto :msvc_bt ELSE goto :msvc_error
 
 :msvc_error
@@ -105,7 +109,9 @@ if !errorlevel! neq 0 exit /b !errorlevel!
 :: Set ovms.exe --version parameters
 %setOvmsVersionCmd% "%bazelBuildArgs%" !BAZEL_SHORT_PATH!
 :: Start bazel build
-%buildCommand%
-if !errorlevel! neq 0 exit /b !errorlevel!
+%buildCommand% > win_build.log 2>&1
+set "buildExit=!errorlevel!"
+type win_build.log
+if !buildExit! neq 0 exit /b !buildExit!
 
 endlocal
