@@ -35,7 +35,7 @@ END_HEAD: TBD (worklog commit follows; no source commits in this session)
 | Build | GREEN + binary identity | PASS | 23 actions, stamp 2026.4.0.59189254e, ovms_test F1E5B60D... (42,066,944 B, 01:5x) |
 | Gate 1 isolated 20x | 20/20 (necessary, not sufficient) | 20/20 PASS | exit 0 all runs |
 | Gate 2 family 20x | repeated, counts | 20/20 PASS (5/5 tests each) | exit 0 all runs |
-| Gate 3 full suite run 1 | >=3 consecutive PASS | CRASH 0xC0000005 | dump ovms_test.exe_260913_015830.dmp; AV-EXECUTE @0x9F, worker tid 8544, RBP=0/RAX=1/RCX=RDX=0 — same signature |
+| Gate 3 full suite run 1 | >=3 consecutive PASS | CRASH 0xC0000005 in ConfigChangeStressTestAsync.ChangeToEmptyConfigAsyncInference (last RUN, no OK — verified in log) | dump ovms_test.exe_260913_015830.dmp; AV-EXECUTE @0x9F, worker tid 8544, RBP=0/RAX=1/RCX=RDX=0 — same signature |
 | Gate 4 CLI 3/3 | PASS | 3/3 PASS, exit 0 | no regression in CLI area |
 | Gate 4 maintainer gate ps1 | PASS marker | FAIL exit -1073741819 | same stress-churn crash context, 2nd post-fix confirmation |
 | src/llm/** | untouched | CLEAN | git diff -- src/llm empty |
