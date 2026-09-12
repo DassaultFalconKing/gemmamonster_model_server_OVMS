@@ -36,9 +36,15 @@ $knownWindowsSporadic = 'ConfigChangeStressTestSingleModel.ChangeToEmptyConfigIn
 
 $originalProcessRepoPath = [Environment]::GetEnvironmentVariable('OVMS_MODEL_REPOSITORY_PATH', 'Process')
 try {
+    if ([string]::IsNullOrEmpty($originalProcessRepoPath)) {
+        $repoPathState = '<unset>'
+    } else {
+        $repoPathState = '<set>'
+    }
+
     Write-Host "Gemmamonster RC2 ovms_test gate"
     Write-Host "  binary: $OvmsTestPath"
-    Write-Host "  inherited OVMS_MODEL_REPOSITORY_PATH: $([string]::IsNullOrEmpty($originalProcessRepoPath) ? '<unset>' : '<set>')"
+    Write-Host "  inherited OVMS_MODEL_REPOSITORY_PATH: $repoPathState"
 
     # Make the negative tests deterministic. Restore the caller's environment in finally.
     [Environment]::SetEnvironmentVariable('OVMS_MODEL_REPOSITORY_PATH', $null, 'Process')
