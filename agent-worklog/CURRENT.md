@@ -100,8 +100,20 @@ Runtime layers:
 
 Promotion hard failures include promise-without-native-tool-call, GPU fatal/quarantine/restart, and selected prefix-cache profile producing reproducible zero-token completions.
 
+## B-PARITY build session outcome (2026-09-12/13)
+
+Session: `agent-worklog/sessions/2026-09-12-b-parity-build-session.md` (PROVEN).
+
+- START_HEAD `58a0cfd5cf73262fd4e7be2f2be0baef155f90e3`, clean tree at start.
+- Commits on `integration/gemmamonster-rc2-semantic-refit-20260912`: `5b70bee1` (rc1-parity preflight profile, contract test GREEN), `31c3bcd3` (exact a43f644 3-file parity patch, `src/llm` diff empty), worklog checkpoints.
+- BUILD_HEAD `4bdc46d9` (docs-only worklog checkpoint on top of parity; binary-affecting source = `31c3bcd3` tree plus build-stamped `src/version.hpp` left dirty per RC1 mechanics).
+- Preflight `rc1-parity` PASS: Bazel 6.4.0 at `C:\opt\bazel.exe`, Python 3.12.10, MSVC 14.44.35207, exact 2026.4 RC2 pins, `OV_USE_BINARY=1`.
+- Bootstrap PASS: exact `openvino_genai_windows_2026.4.0.0rc2_x86_64.zip` (276786727 B), `C:\opt\openvino` -> rc2 dir.
+- Official build PASS: 8604 actions, `--config=win_mp_on_py_on`.
+- Built `ovms.exe --version`: `2026.4.0.4bdc46d97` (NEW source, not `82a8a4ec7`); backend pins exact.
+- `ovms_test.exe` FAIL: exit 0xC0000005; 82 OK, 3 deterministic death-test "failed to die" (`ovmsconfig_test.cpp:359,811,948`), crash in `ConfigChangeStressTestSingleModel.ChangeToEmptyConfigInference`. No src edits in session; root cause unresolved, handed to source session.
+- NO package produced (tests not green). READY_FOR_ACCEPTANCE=NO.
+
 ## Next safe action
 
-Build agent: follow `RC2-B-PARITY-BUILD-RUNBOOK-20260912.md` exactly and return one immutable package identity. Do not tune runtime.
-
-Test agent, after package exists: follow `RC2-B-PARITY-ACCEPTANCE-RUNBOOK-20260912.md`, establish P0 correctness first, then profile P1→P5 one variable at a time.
+Source session first: resolve ovmsconfig death-test mismatches + stress crash without touching `src/llm/**` unless bisect proves involvement. Re-run full `ovms_test.exe` to green, then package. Acceptance agent must not treat any artifact from this session as an accepted candidate.

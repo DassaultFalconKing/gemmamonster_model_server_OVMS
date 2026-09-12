@@ -46,9 +46,50 @@ END_HEAD: TBD
 |---|---|---|
 | preflight contract RED | FAIL (expected) | exit 1, missing ToolchainProfile |
 | preflight contract GREEN | PASS | GEMMAMONSTER_ENV_PREFLIGHT_PROFILE_CONTRACT_PASS, exit 0 |
-| rc1-parity preflight PASS | NOT_RUN | |
-| ovms_test.exe | NOT_RUN | |
-| package self-test | NOT_RUN | |
+| rc1-parity preflight PASS | PASS | bazel 6.4.0 at C:\opt\bazel.exe, Python 3.12.10, MSVC 14.44.35207 dir present, exact pins, OV_USE_BINARY=1, WORKTREE CLEAN, HEAD 4bdc46d9 |
+| dependency bootstrap | PASS | `cmd.exe /d /s /c "windows_install_build_dependencies.bat opt 0 0"` exit 0; downloaded openvino_genai_windows_2026.4.0.0rc2_x86_64.zip (276786727 B); C:\opt\openvino symlink -> rc2 dir; post-bootstrap preflight -RequireRuntimeRoot PASS |
+| official build | PASS | `cmd.exe /d /s /c 'windows_build.bat "" --with_python --with_tests'` exit 0; 8604 actions, elapsed 3000.7s; --config=win_mp_on_py_on |
+| ovms_test.exe full | FAIL | exit -1073741819 (0xC0000005); 82 OK then 3 FAILED + crash; log saved under opencode tool-output tool_097c9ad00001kwvxM47shETXaI |
+| 3 death tests isolated | FAIL (deterministic) | exit 1; all "failed to die" (child returned instead of exiting OVMS_EX_USAGE) |
+| built ovms.exe --version | PASS (identity) | `OpenVINO Model Server 2026.4.0.4bdc46d97`; backend 2026.4.0-22955-227c33757d1; GenAI 2026.4.0.0-3407-7ea2546852a; flags --config=win_mp_on_py_on |
+| package | NOT_RUN | forbidden: tests not green; no candidate packaged as accepted |
+
+## Findings
+
+- PROVEN: new binary identifies NEW candidate source 4bdc46d97, not 82a8a4ec7; exact OV/GenAI pins embedded.
+- PROVEN: 3 death-test failures are deterministic logic mismatches (parse returns instead of exiting) in src/test/ovmsconfig_test.cpp:359,811,948 — config validation area, untouched by this session (no src edits; git diff -- src/llm empty).
+- PROVEN: full-suite crash 0xC0000005 inside ConfigChangeStressTestSingleModel.ChangeToEmptyConfigInference after 82 OK.
+- INFERRED: failures are source/substrate behavior on this branch, not build-infra artifacts (patch touches only .bazelrc defines, VS default path, OpenCV toolset; preflight script cannot affect the binary).
+- PROVEN: build stamps src/version.hpp (2026.4.0.4bdc46d97 + win_mp_on_py_on); RC1 commits 82a8a4ec/a43f644 keep REPLACE_ placeholders, so stamp stays uncommitted (parity).
+- Harness constraint: each tool call is a fresh OS process (verified PID/env non-persistence); every consequential chunk therefore re-ran Enter-GemmamonsterEnv (sanitize->assert->init->verify) first. Test runs additionally prepended pinned rc2 runtime dirs to PATH after preflight (0xC0000135 DLL-not-found otherwise); documented, no uncontrolled DLLs.
+- No runtime tuning, no NovaClaw acceptance, no model edits performed.
+
+## Negative evidence
+
+- RC1's own ovms_test result is UNKNOWN (forensic doc records no test run) — no regression claim possible in either direction.
+- No package created, so no PACKAGE_SHA256 / dist hashes exist for this session.
+
+## Decisions made
+
+- STOP per runbook: ovms_test.exe failed -> no packaging as accepted, no READY_FOR_ACCEPTANCE=YES.
+- Leave src/version.hpp stamp dirty (RC1 parity); hand off failure characterization to a source session.
+
+## Unresolved
+
+- Why Config::parse returns instead of exiting for --list_models-alone / --add_to_config-without-path / --pull-without-repo-path on this branch (needs source session; src/llm untouched).
+- Stress-test access violation root cause (needs source/runtime session with crash dump).
+
+## Handoff / next safe actions
+
+- Source session: investigate ovmsconfig death-test mismatches + stress crash on branch integration/gemmamonster-rc2-semantic-refit-20260912 WITHOUT touching src/llm semantics unless bisect proves llm involvement.
+- Only after ovms_test.exe is green: run windows_create_package.bat opt --with_python and continue the B-PARITY handoff.
+- Acceptance agent: do NOT use any package from this session as accepted; none was produced.
+
+## Final repository state
+
+HEAD: TBD (worklog commit on top of 4bdc46d9; binary built from 4bdc46d9)
+STATUS: ` M src/version.hpp` (build stamp only, intentionally uncommitted)
+COMMITS_CREATED: 5b70bee1 (profile), 31c3bcd3 (parity patch), 4bdc46d9 (worklog checkpoint), + final worklog commit
 
 ## Findings
 
