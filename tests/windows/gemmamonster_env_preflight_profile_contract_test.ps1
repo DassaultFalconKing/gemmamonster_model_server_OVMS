@@ -42,6 +42,6 @@ foreach ($sha in @(
 }
 
 Assert-Contains "OV_USE_BINARY\s*=\s*'1'" 'binary OpenVINO/GenAI dependency mode remains explicit'
-Assert-Contains "RUNTIME_PROFILE\s*=\s*\$ToolchainProfile" 'preflight summary reports the selected profile rather than a hard-coded value'
+Assert-Contains "RUNTIME_PROFILE\s*=\s*\`$ToolchainProfile" 'preflight summary reports the selected profile rather than a hard-coded value'
 
 Write-Host 'GEMMAMONSTER_ENV_PREFLIGHT_PROFILE_CONTRACT_PASS'
