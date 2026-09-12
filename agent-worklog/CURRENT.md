@@ -112,7 +112,7 @@ Session: `agent-worklog/sessions/2026-09-12-b-parity-build-session.md` (PROVEN).
 - Official build PASS: 8604 actions, `--config=win_mp_on_py_on`.
 - Built `ovms.exe --version`: `2026.4.0.4bdc46d97` (NEW source, not `82a8a4ec7`); backend pins exact.
 - `ovms_test.exe` FAIL: exit 0xC0000005; 82 OK, 3 deterministic death-test "failed to die" (`ovmsconfig_test.cpp:359,811,948`), crash in `ConfigChangeStressTestSingleModel.ChangeToEmptyConfigInference`. No src edits in session; root cause unresolved, handed to source session.
-- Layer attribution (PROVEN): failures are substrate/CLI-layer, NOT the new Gemma4 semantics. Failing tests run CLI/config validation on dummy models and never execute `src/llm/**`; code under test last touched by substrate commits (`#4368`, `#4413`, `#4486`), refit commits touch only `src/llm/**`.
+- Layer attribution (PROVEN): failures are substrate/CLI-layer, NOT the new Gemma4 semantics. The 3 death-test failures are STALE TESTS: built `ovms.exe --list_models` exits 0 via new default repo path `C:\llm\models`, so `ovmsconfig_test.cpp:359,811,948` encode an outdated must-die contract. Fix belongs to the tests, not product/`src/llm`. Stress-test crash (0xC0000005) is a separate unresolved item.
 - NO package produced (tests not green). READY_FOR_ACCEPTANCE=NO.
 
 ## Next safe action
