@@ -1,0 +1,32 @@
+{
+  "model": "gemma4-26-heretic",
+  "messages": [
+    {"role": "user", "content": "What is the weather in Moscow and Tokyo? Give me both results."},
+    {"role": "assistant", "content": null, "tool_calls": [
+      {"id": "call_1", "type": "function", "function": {"name": "get_weather", "arguments": "{\"city\": \"Moscow\"}"}},
+      {"id": "call_2", "type": "function", "function": {"name": "get_weather", "arguments": "{\"city\": \"Tokyo}\"}"}}
+    ]},
+    {"role": "tool", "tool_call_id": "call_1", "content": "{\"temp\": 18, \"condition\": \"cloudy\"}"},
+    {"role": "tool", "tool_call_id": "call_2", "content": "{\"temp\": 25, \"condition\": \"sunny\"}"}
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "description": "Get the current weather for a given city",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "The city name"
+            }
+          },
+          "required": ["city"]
+        }
+      }
+    }
+  ],
+  "max_tokens": 256
+}

@@ -1,0 +1,7 @@
+{
+  "model": "gemma4-26-heretic",
+  "messages": [
+    {"role": "user", "content": "Say hello in one sentence."}
+  ],
+  "max_tokens": 64
+}

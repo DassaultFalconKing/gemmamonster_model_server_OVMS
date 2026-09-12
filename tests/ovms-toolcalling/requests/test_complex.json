@@ -1,0 +1,28 @@
+{
+  "model": "gemma4-26-heretic",
+  "messages": [
+    {"role": "user", "content": "Book a flight from Moscow to Tokyo on 2026-10-01 for 2 passengers in economy class."}
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "book_flight",
+        "description": "Book a flight between two cities",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "origin": {"type": "string", "description": "Departure city"},
+            "destination": {"type": "string", "description": "Arrival city"},
+            "date": {"type": "string", "description": "Flight date in YYYY-MM-DD format"},
+            "passengers": {"type": "integer", "description": "Number of passengers"},
+            "class": {"type": "string", "enum": ["economy", "business", "first"], "description": "Travel class"}
+          },
+          "required": ["origin", "destination", "date", "passengers"]
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 256
+}

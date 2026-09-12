@@ -1,0 +1,53 @@
+{
+  "model": "gemma4-26-heretic",
+  "messages": [
+    {"role": "user", "content": "Get me the weather in Moscow, the current time in New York, and the exchange rate for USD to EUR."}
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "description": "Get the current weather for a given city",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {"type": "string", "description": "The city name"}
+          },
+          "required": ["city"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "get_time",
+        "description": "Get the current time in a given timezone",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "timezone": {"type": "string", "description": "The timezone name like America/New_York"}
+          },
+          "required": ["timezone"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "get_exchange_rate",
+        "description": "Get the exchange rate between two currencies",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "from": {"type": "string", "description": "Source currency code"},
+            "to": {"type": "string", "description": "Target currency code"}
+          },
+          "required": ["from", "to"]
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 512
+}
