@@ -117,4 +117,4 @@ Session: `agent-worklog/sessions/2026-09-12-b-parity-build-session.md` (PROVEN).
 
 ## Next safe action
 
-Source session first: resolve ovmsconfig death-test mismatches + stress crash without touching `src/llm/**` unless bisect proves involvement. Re-run full `ovms_test.exe` to green, then package. Acceptance agent must not treat any artifact from this session as an accepted candidate.
+Root-cause session (2026-09-13, `agent-worklog/sessions/2026-09-13-stress-crash-root-cause.md`, PROVEN): full-suite crash is AV-execute to small-int (0xA0/0xC8) on stress WORKER threads during model unload (3 dumps); H1 test-harness callback race REJECTED by signal-at-end experiment (still crashes); markers show all callbacks complete. Open: H2 production lifetime race (unload vs in-flight async; `OVMS_InferenceAsync` guard is sync-scope) + §5 matrix + §6 upstream delta. Source session: guard audit first, no exclusion-list change, no package. Acceptance agent must not treat any artifact from this session as an accepted candidate.
