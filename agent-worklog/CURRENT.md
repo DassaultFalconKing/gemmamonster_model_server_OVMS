@@ -112,7 +112,7 @@ Session: `agent-worklog/sessions/2026-09-12-b-parity-build-session.md` (PROVEN).
 - Official build PASS: 8604 actions, `--config=win_mp_on_py_on`.
 - Built `ovms.exe --version`: `2026.4.0.4bdc46d97` (NEW source, not `82a8a4ec7`); backend pins exact.
 - `ovms_test.exe` FAIL: exit 0xC0000005; 82 OK, 3 deterministic death-test "failed to die" (`ovmsconfig_test.cpp:359,811,948`), crash in `ConfigChangeStressTestSingleModel.ChangeToEmptyConfigInference`. No src edits in session; root cause unresolved, handed to source session.
-- Layer attribution (PROVEN): failures are substrate/CLI-layer, NOT the new Gemma4 semantics. The 3 death-test failures are STALE TESTS: built `ovms.exe --list_models` exits 0 via new default repo path `C:\llm\models`, so `ovmsconfig_test.cpp:359,811,948` encode an outdated must-die contract. Fix belongs to the tests, not product/`src/llm`. Stress-test crash (0xC0000005) is a separate unresolved item.
+- Layer attribution (PROVEN): failures are NOT the new Gemma4 semantics (`src/llm/**` never executed by failing tests). CORRECTION: the 3 death-test failures were environmental, not stale tests — host USER env `OVMS_MODEL_REPOSITORY_PATH=C:\llm\models` (intentional OVMS default) made those inputs valid; maintainer gate (`tests/windows/gemmamonster_rc2_ovms_test_gate.ps1`, commits a3957461/7fcb024f) clears it and all 3 PASS. Full suite minus upstream-known-sporadic `ChangeToEmptyConfigInference` (CVS-176244) still crashes 0xC0000005 in sibling `ConfigChangeStressTestAsync.ChangeToEmptyConfigAsyncInference` — same stress family, root cause open. No package; READY_FOR_ACCEPTANCE=NO.
 - NO package produced (tests not green). READY_FOR_ACCEPTANCE=NO.
 
 ## Next safe action
