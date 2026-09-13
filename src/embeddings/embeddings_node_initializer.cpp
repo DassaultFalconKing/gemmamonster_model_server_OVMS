@@ -18,6 +18,7 @@
 #include <utility>
 #include <filesystem>
 #include <optional>
+#include "openvino/core/except.hpp"
 
 #include "src/filesystem/filesystem.hpp"
 #include "src/mediapipe_internal/graph_side_packets.hpp"
@@ -82,20 +83,26 @@ public:
             return StatusCode::MEDIAPIPE_GRAPH_CONFIG_FILE_INVALID;
         }
 
-        auto servable = std::make_shared<EmbeddingsServable>(
-            nodeOptions.models_path(),
-            nodeOptions.target_device(),
-            nodeOptions.plugin_config(),
-            basePath,
-            pooling,
-            nodeOptions.normalize_embeddings(),
-            configuredMaxLength);
-        servable->initialize(
-            nodeOptions.models_path(),
-            nodeOptions.target_device(),
-            nodeOptions.plugin_config(),
-            basePath);
-        embeddingsServableMap.insert(std::pair<std::string, std::shared_ptr<EmbeddingsServable>>(nodeName, std::move(servable)));
+        try {
+            auto servable = std::make_shared<EmbeddingsServable>(
+                nodeOptions.models_path(),
+                nodeOptions.target_device(),
+                nodeOptions.plugin_config(),
+                basePath,
+                pooling,
+                nodeOptions.normalize_embeddings(),
+                configuredMaxLength);
+            servable->initialize(
+                nodeOptions.models_path(),
+                nodeOptions.target_device(),
+                nodeOptions.plugin_config(),
+                basePath);
+            embeddingsServableMap.insert(std::pair<std::string, std::shared_ptr<EmbeddingsServable>>(nodeName, std::move(servable)));
+        } catch (const ov::Exception& e) {
+            SPDLOG_ERROR("Embeddings node {} in graph {} failed to initialize from {}: {}",
+                nodeName, graphName, modelsPath.string(), e.what());
+            return StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED;
+        }
         return StatusCode::OK;
     }
 };
