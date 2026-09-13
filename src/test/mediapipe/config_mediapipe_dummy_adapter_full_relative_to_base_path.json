@@ -2,7 +2,7 @@
     "model_config_list": [
         {"config": {
                 "name": "dummy",
-                "base_path": "/ovms/src/test/dummy",
+                "base_path": "C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\dummy",
                 "shape": "(1, 10)"
         }
         }
@@ -10,7 +10,7 @@
     "mediapipe_config_list": [
     {
         "name":"mediaDummy",
-        "base_path":"/ovms/src/test/mediapipe/relative_paths",
+        "base_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\mediapipe/relative_paths",
         "graph_path":"../graphdummy.pbtxt",
         "subconfig":"graph1/subconfig.json"
     }

@@ -3,13 +3,13 @@
     "mediapipe_config_list": [
     {
         "name":"speech2text",
-        "base_path":"/ovms/src/test/audio/",
-        "graph_path":"/ovms/src/test/audio/graph_stt.pbtxt"
+        "base_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\audio/",
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\audio/graph_stt.pbtxt"
     },
     {
         "name":"speech2textWordTimestamps",
-        "base_path":"/ovms/src/test/audio/",
-        "graph_path":"/ovms/src/test/audio/graph_stt_word_timestamps.pbtxt"
+        "base_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\audio/",
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\audio/graph_stt_word_timestamps.pbtxt"
     }
     ]
 }

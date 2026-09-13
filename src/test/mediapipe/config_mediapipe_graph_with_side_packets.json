@@ -4,7 +4,7 @@
     "mediapipe_config_list": [
     {
         "name":"mediaWithParams",
-        "graph_path":"/ovms/src/test/mediapipe/graphWithParams.pbtxt"
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\mediapipe/graphWithParams.pbtxt"
     }
     ]
 }

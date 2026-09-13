@@ -3,7 +3,7 @@
         {"config": {
                 "name": "passthrough",
                 "target_device": "CPU",
-                "base_path": "/ovms/src/test/passthrough_string",
+                "base_path": "C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\passthrough_string",
                 "shape": "(-1)"}}
     ]
 }
