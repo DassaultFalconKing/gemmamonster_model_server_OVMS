@@ -30,6 +30,7 @@ node {
     node_options: {
         [type.googleapis.com/mediapipe.LLMCalculatorOptions]: {
           models_path: "/ovms/src/test/llm_testing/facebook/opt-125m"
+          device: "CPU"
           cache_size: 1
           plugin_config: '{"prompt_lookup": true, "INFERENCE_PRECISION_HINT": "f32"}'
         }
