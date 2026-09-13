@@ -325,19 +325,21 @@ void runWindowsSafeAsyncStress(
 
 class StressCapiConfigChanges : public ConfigChangeStressTest {
 public:
-    static void SetUpTestSuite() {
+    void SetUp() override {
 #ifdef _WIN32
         GTEST_SKIP() << "Skipping test on Windows, sporadic";  // CVS-176244
 #endif
+        ConfigChangeStressTest::SetUp();
     }
 };
 
 class ConfigChangeStressTestSingleModel : public ConfigChangeStressTestAsync {
 public:
-    static void SetUpTestSuite() {
+    void SetUp() override {
 #ifdef _WIN32
         GTEST_SKIP() << "Skipping test on Windows, sporadic";  // CVS-176244
 #endif
+        ConfigChangeStressTestAsync::SetUp();
     }
 };
 
