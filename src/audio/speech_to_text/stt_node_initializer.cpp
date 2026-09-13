@@ -16,6 +16,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include "openvino/core/except.hpp"
 
 #include "src/mediapipe_internal/graph_side_packets.hpp"
 #include "src/mediapipe_internal/node_initializer.hpp"
@@ -60,8 +61,14 @@ public:
             SPDLOG_ERROR("Failed to unpack calculator options");
             return StatusCode::MEDIAPIPE_GRAPH_CONFIG_FILE_INVALID;
         }
-        auto servable = std::make_shared<SttServable>(nodeOptions, basePath);
-        sttServableMap.insert(std::pair<std::string, std::shared_ptr<SttServable>>(nodeName, std::move(servable)));
+        try {
+            auto servable = std::make_shared<SttServable>(nodeOptions, basePath);
+            sttServableMap.insert(std::pair<std::string, std::shared_ptr<SttServable>>(nodeName, std::move(servable)));
+        } catch (const ov::Exception& e) {
+            SPDLOG_ERROR("SpeechToText node {} in graph {} failed to initialize from {} with base {}: {}",
+                nodeName, graphName, nodeOptions.models_path(), basePath, e.what());
+            return StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED;
+        }
         return StatusCode::OK;
     }
 };
