@@ -48,32 +48,6 @@ enum : unsigned int {
     POSTPROCESS,
     TIMER_END
 };
-
-class AsyncInferenceLifetimeGuard {
-public:
-    AsyncInferenceLifetimeGuard(
-        std::shared_ptr<ModelInstanceUnloadGuard> modelUnloadGuard,
-        std::shared_ptr<ExecutingStreamIdGuard> streamIdGuard,
-        std::shared_ptr<OutputKeeper> outputKeeper) :
-        modelUnloadGuard(std::move(modelUnloadGuard)),
-        streamIdGuard(std::move(streamIdGuard)),
-        outputKeeper(std::move(outputKeeper)) {}
-
-    ~AsyncInferenceLifetimeGuard() {
-        // The model unload guard must be released last. Releasing it can allow
-        // ModelInstance::unloadModelComponents() to destroy inferRequestsQueue,
-        // which StreamIdGuard::~StreamIdGuard() still needs in returnStream().
-        outputKeeper.reset();
-        streamIdGuard.reset();
-        modelUnloadGuard.reset();
-    }
-
-private:
-    std::shared_ptr<ModelInstanceUnloadGuard> modelUnloadGuard;
-    std::shared_ptr<ExecutingStreamIdGuard> streamIdGuard;
-    std::shared_ptr<OutputKeeper> outputKeeper;
-};
-
 template <typename RequestType, typename ResponseType>
 Status modelInferAsync(ModelInstance& instance, const RequestType* request,
     std::unique_ptr<ModelInstanceUnloadGuard>& modelUnloadGuardPtr) {
@@ -158,20 +132,11 @@ Status modelInferAsync(ModelInstance& instance, const RequestType* request,
     }
 
     void* userCallbackData = request->getResponseCompleteCallbackData();
-    auto asyncLifetimeGuard = std::make_shared<AsyncInferenceLifetimeGuard>(
-        std::shared_ptr<ModelInstanceUnloadGuard>(std::move(modelUnloadGuardPtr)),
-        std::move(executingStreamIdGuard),
-        std::move(outKeeper));
     // here pass by copy into callback
     {
-        // Keep lifetime-dependent resources in one object: lambda capture members
-        // are declared in unspecified order and cannot define teardown ordering.
+        // order is important here - destructors are called in order from right to left
         inferRequest.set_callback(
-            [&instance, request, &inferRequest, userCallback, userCallbackData, asyncLifetimeGuard = std::move(asyncLifetimeGuard)](std::exception_ptr exception) mutable {
-                // set_callback() below can replace/destroy this closure while it is
-                // executing. Keep the bundle alive until this callback scope exits.
-                auto callbackLifetimeGuard = asyncLifetimeGuard;
-                (void)callbackLifetimeGuard;
+            [&instance, request, &inferRequest, userCallback, userCallbackData, modelUnloadGuardPtrMoved = std::shared_ptr<ModelInstanceUnloadGuard>(std::move(modelUnloadGuardPtr)), streamIdGuardMoved = std::move(executingStreamIdGuard), movedOutputKeeper = std::move(outKeeper)](std::exception_ptr exception) mutable {
                 struct CallbackGuard {
                     OVMS_InferenceRequestCompletionCallback_t userCallback{nullptr};
                     void* userCallbackData{nullptr};
