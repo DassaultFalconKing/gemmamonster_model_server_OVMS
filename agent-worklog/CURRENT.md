@@ -1,6 +1,6 @@
 # Gemmamonster Worklog Current State
 
-Updated: 2026-09-12
+Updated: 2026-09-13
 
 ## Current objective
 
@@ -117,4 +117,4 @@ Session: `agent-worklog/sessions/2026-09-12-b-parity-build-session.md` (PROVEN).
 
 ## Next safe action
 
-Root-cause session (2026-09-13, `agent-worklog/sessions/2026-09-13-stress-crash-root-cause.md`, PROVEN): full-suite crash is AV-execute to small-int (0xA0/0xC8) on stress WORKER threads during model unload (3 dumps); H1 test-harness callback race REJECTED by signal-at-end experiment (still crashes); markers show all callbacks complete. SUPERSEDED by validation session below: reviewer's guard fix (4fa90bae3/bcf476ee6) built pristine (stamp 59189254e) and FALSIFIED as crash fix — post-fix full suite crashes with byte-identical signature (0x9F, worker, same stack; Gate 3 run 1 + maintainer gate). Gate 1 20/20, Gate 2 20/20, CLI 3/3 PASS. Hypothesis REJECTED per prompt rule, no new exclusion, no package, READY_FOR_ACCEPTANCE=NO. Reviewer decision needed: keep patch as hardening or revert; next audit = OV set_callback boundary + unload-spanning objects. src/llm/** clean. Acceptance agent must not treat any artifact as accepted.
+Root-cause/validation chain (2026-09-13): `agent-worklog/sessions/2026-09-13-stress-crash-root-cause.md` proved the full-suite-only worker-thread AV and rejected callback signal ordering. The deterministic async guard-order experiment (`4fa90bae3`/`bcf476ee6`) then built cleanly but was FALSIFIED by the same full-suite crash signature and was reverted in `4362e9b3d11e2dbde7049c0aa5fd086f4dd98c21`; current `src/inference_executor.hpp` is back to the pre-experiment source. The active hypothesis is now a Windows test-harness defect: legacy async stress workers call GoogleTest assertions concurrently from 20 worker threads, which GoogleTest documents as unsupported on Windows, and the legacy status macro leaks owned `OVMS_Status*` objects on successful calls. Test-only fix `5def2c3c0b12a31243a68e6c2d62f286cc2ea63d` routes worker failures through thread-safe state, moves assertions to the main thread after join, consumes/deletes C-API statuses, and updates all four async ConfigChange tests; contract is `tests/python/test_windows_stress_harness_contract.py` (`20f8d23a`). This hypothesis is NOT runtime-proven yet. Next required action is exact RC2 Windows validation from `next-session-prompt.md`: contract 3/3, build, blocker 20x, async family repeated, >=3 consecutive full-suite PASS runs, CLI 3/3, maintainer gate PASS. No new exclusions, no package, READY_FOR_ACCEPTANCE=NO until those gates are green. `src/llm/**` remains untouched.
