@@ -3,7 +3,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-HEADER = ROOT / "src" / "test" / "stress_test_utils.hpp"
+SOURCE = ROOT / "src" / "test" / "c_api_stress_tests.cpp"
 
 
 def extract_function(text: str, name: str) -> str:
@@ -24,10 +24,8 @@ def extract_function(text: str, name: str) -> str:
 
 class WindowsStressHarnessContractTest(unittest.TestCase):
     def test_async_worker_does_not_call_googletest_from_worker_threads(self):
-        body = extract_function(
-            HEADER.read_text(encoding="utf-8"),
-            "triggerCApiAsyncInferenceInALoop",
-        )
+        text = SOURCE.read_text(encoding="utf-8")
+        body = extract_function(text, "runWindowsSafeAsyncWorker")
         forbidden = ("ASSERT_", "EXPECT_", "::testing::Test::HasFailure")
         hits = [token for token in forbidden if token in body]
         self.assertEqual(
@@ -36,6 +34,20 @@ class WindowsStressHarnessContractTest(unittest.TestCase):
             "GoogleTest assertions are unsupported from concurrent worker "
             f"threads on Windows: {hits}",
         )
+
+    def test_async_stress_tests_do_not_use_legacy_worker(self):
+        text = SOURCE.read_text(encoding="utf-8")
+        self.assertNotIn(
+            "&ConfigChangeStressTest::triggerCApiAsyncInferenceInALoop",
+            text,
+        )
+        self.assertGreaterEqual(text.count("runWindowsSafeAsyncStress("), 5)
+
+    def test_capi_status_helper_releases_owned_statuses(self):
+        text = SOURCE.read_text(encoding="utf-8")
+        body = extract_function(text, "consumeCapiStatus")
+        self.assertIn("OVMS_StatusDelete(status);", body)
+        self.assertIn("OVMS_StatusDelete(codeStatus);", body)
 
 
 if __name__ == "__main__":
