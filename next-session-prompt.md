@@ -1,176 +1,125 @@
-# NEXT SESSION PROMPT — Windows async unload lifetime fix validation
+# NEXT SESSION PROMPT — Windows-safe async C-API stress validation
 
 Repository: `DassaultFalconKing/gemmamonster_model_server_OVMS`
 
 Branch: `integration/gemmamonster-rc2-semantic-refit-20260912`
 
-Source-fix HEAD: `bcf476ee60677b3764d4db61d9c04293f70dffaa`
+Expected predecessor at handoff: `20f8d23a5edd8c892ef184dac06f39b55efb82ac` or a strict fast-forward descendant.
 
-Root-cause report predecessor: `9f9a9edf7e4e62ceebfd4b6fd50386379db7ec88`
+Status: **SOURCE TEST-HARNESS FIX PRESENT; WINDOWS BUILD/RUNTIME VALIDATION REQUIRED; READY_FOR_ACCEPTANCE=NO**.
 
-Status entering this session: **SOURCE FIX PRESENT, WINDOWS RUNTIME VALIDATION REQUIRED, READY_FOR_ACCEPTANCE=NO**.
+## Proven history
 
-## Mission
+- Negative CLI 3/3 is closed: inherited `OVMS_MODEL_REPOSITORY_PATH=C:\llm\models` was the cause.
+- Pre-fix full suite repeatedly crashes in `ConfigChangeStressTestAsync.ChangeToEmptyConfigAsyncInference` with `0xC0000005` EXECUTE AV to tiny addresses on stress worker threads during model unload.
+- H1 callback-signal ordering was rejected experimentally.
+- The async lifetime/guard-order patch (`4fa90bae` / `bcf476ee`) was also rejected experimentally: isolated 20/20 and family 20/20 passed, but full suite reproduced the same crash signature. It has been reverted by `4362e9b3d11e2dbde7049c0aa5fd086f4dd98c21`.
+- `src/inference_executor.hpp` is back to blob `1092c82f7c60ab74fc97e26fb55b9215a48804bb`, the pre-experiment version.
+- No evidence implicates `src/llm/**`.
 
-Validate or falsify the async-inference lifetime-order fix on the exact Windows RC2 B-parity toolchain. Do not broaden scope. Do not touch `src/llm/**` unless new evidence directly proves involvement.
+## New root-cause evidence
 
-The previous full-suite blocker is:
+The C-API stress harness executes GoogleTest assertions (`ASSERT_*`, `EXPECT_*`, `::testing::Test::HasFailure`) directly from 20 concurrent worker threads. GoogleTest documents that assertions from multiple threads are not supported on Windows.
 
-`ConfigChangeStressTestAsync.ChangeToEmptyConfigAsyncInference`
+The same harness also used a status macro that calls `OVMS_StatusCode(nullptr, ...)` on successful C-API calls and does not release the returned status object, creating cumulative test-process leaks.
 
-with deterministic full-suite `0xC0000005` EXECUTE AVs to small addresses (`0xA0` / `0xC8`) on stress worker threads during model unload.
-
-## What is already proven
-
-1. The three negative CLI death-test failures were caused by inherited host env `OVMS_MODEL_REPOSITORY_PATH=C:\llm\models`. They pass 3/3 when the process env is sanitized. Do not reopen that investigation.
-2. H1, the test-user-callback `signal.set_value()` ordering hypothesis, is rejected. Moving the signal to the end still produced the same crash; marker runs showed all callbacks completed.
-3. The crash is full-suite/process-state dependent: isolated async crash test was 5/5 PASS and ConfigChange family runs were 3/3 PASS, while full suite crashed 4/4.
-4. No evidence touches Gemma4 or `src/llm/**`.
-5. The previous report's wording that `ModelInstanceUnloadGuard` is only sync-scope is incorrect. `modelInferAsync()` moves it into the OpenVINO callback capture as a `shared_ptr`, so it survives `OVMS_InferenceAsync()` return.
-
-## Source invariant found after the report
-
-Before `bcf476ee...`, `modelInferAsync()` captured these lifetime-dependent objects separately in the OpenVINO callback:
-
-- `ModelInstanceUnloadGuard`
-- `ExecutingStreamIdGuard`
-- `OutputKeeper`
-
-and the source comment claimed their destructors run "right to left".
-
-That assumption is not portable C++. Lambda by-copy captures become unnamed closure data members whose declaration order is unspecified. Therefore the source cannot encode a required teardown dependency by capture-list position.
-
-This matters because:
-
-- `ModelInstanceUnloadGuard::~ModelInstanceUnloadGuard()` decrements `predictRequestsHandlesCount`.
-- Model unload waits until that count reaches zero, then destroys `inferRequestsQueue` and other model components.
-- `ExecutingStreamIdGuard` ultimately runs `StreamIdGuard::~StreamIdGuard()`, which calls `inferRequestsQueue_.returnStream(id_)`.
-
-If the closure destroys the model unload guard before the stream guard, the unload thread may observe zero active inference handles and reset `inferRequestsQueue` while `StreamIdGuard` still needs that queue. That is a concrete use-after-lifetime race consistent with the Windows async+unload crash signature.
-
-Latest upstream OVMS still contains the same separate-capture/right-to-left assumption, so treat this as a likely upstream lifetime bug, not a Gemmamonster parser regression.
+This is consistent with the observed discriminator: isolated/family runs are clean while the long-lived full-suite process crashes on a worker thread. It is a test-harness defect hypothesis, not a production inference change.
 
 ## Patch under validation
 
-`bcf476ee60677b3764d4db61d9c04293f70dffaa`
+- `5def2c3c0b12a31243a68e6c2d62f286cc2ea63d` — `fix(test): make async C-API stress Windows-safe`
+  - changes only `src/test/c_api_stress_tests.cpp`;
+  - preserves the exact fixture/test names;
+  - all async stress workers report failure through thread-safe state instead of invoking GoogleTest from worker threads;
+  - assertions execute after worker `join()` on the main test thread;
+  - C-API statuses are explicitly consumed/deleted;
+  - all four async config-change tests use the safe runner.
+- `20f8d23a5edd8c892ef184dac06f39b55efb82ac` — contract-test parser fix.
+- Contract: `tests/python/test_windows_stress_harness_contract.py`.
 
-`src/inference_executor.hpp` now:
+Two empty service commits (`3e9bd432...` and `03e4a76f...`) exist in history from an API no-op write. Do not rewrite history to remove them; they change no tree content.
 
-- groups the three lifetime-dependent resources in `AsyncInferenceLifetimeGuard`;
-- releases `OutputKeeper` first;
-- releases `ExecutingStreamIdGuard` second, while `inferRequestsQueue` is still pinned;
-- releases `ModelInstanceUnloadGuard` last;
-- captures one shared lifetime bundle instead of relying on lambda capture-member order;
-- takes a local `shared_ptr` copy inside the callback so `request.set_callback(empty)` cannot destroy the final bundle while the callback is still executing.
+## Session start
 
-Final diff from report HEAD is intentionally narrow: only `src/inference_executor.hpp`, 37 additions / 2 deletions. No `src/llm/**` changes.
+1. Fetch/re-resolve the branch and record actual `START_HEAD`.
+2. Require `20f8d23a...` to be an ancestor unless a newer fast-forward validation commit exists.
+3. Confirm `git diff -- src/llm` is empty.
+4. Clean only generated/instrumentation residue according to the established B-parity runbook. Preserve dumps/logs.
+5. Use exact `rc1-parity`, Bazel 6.4.0, MSVC 14.44.35207, Python 3.12.10 and exact OpenVINO/GenAI 2026.4 RC2 pins. No upgrades/tuning.
 
-## Session start discipline
+## Gate 0 — contract + compilation
 
-1. Re-resolve the remote branch and record actual START_HEAD.
-2. Confirm `bcf476ee60677b3764d4db61d9c04293f70dffaa` is an ancestor of START_HEAD.
-3. Preserve the previous dumps/logs before cleaning the worktree.
-4. The prior local worktree may still contain uncommitted `RACE_*` instrumentation in `src/test/stress_test_utils.hpp` and a generated `src/version.hpp` build stamp. Remove the instrumentation before candidate build. Restore generated build-state files as required by the established B-parity runbook. Do not accidentally delete retained dump evidence.
-5. Use the exact existing `rc1-parity` environment and exact 2026.4 RC2 dependency pins. No toolchain upgrades, no dependency refresh, no runtime tuning.
+Run:
 
-## Build gate
+```powershell
+python -m unittest tests.python.test_windows_stress_harness_contract
+```
 
-Build the patched source using the same B-parity build path recorded in:
+Require 3/3 PASS.
 
-`agent-worklog/sessions/2026-09-12-b-parity-build-session.md`
+Then build with the exact existing B-parity Windows build path. Compilation/linking must pass before runtime interpretation. If the new test helper has a mechanical C++ compile error, make the smallest correction preserving these invariants:
 
-Compilation/linking must be GREEN before any runtime conclusion. Record the new `ovms.exe --version` / source stamp so stale binaries are impossible to confuse with the patched build.
+- no GoogleTest call from `runWindowsSafeAsyncWorker`;
+- no legacy `triggerCApiAsyncInferenceInALoop` pointer used by the four async tests;
+- owned `OVMS_Status*` objects are deleted;
+- fixture/test names are unchanged.
 
-If the patch fails to compile, make only the smallest mechanical correction necessary to express the same lifetime invariant. Do not redesign async inference.
+Record binary identity after build.
 
-## Runtime validation
+## Gate 1 — exact blocker
 
-### Gate 1 — exact async stress test
+Run `ConfigChangeStressTestAsync.ChangeToEmptyConfigAsyncInference` at least 20 times. Record every exit code.
 
-Run at least 20 times:
+This gate was clean before, so it is necessary but not sufficient.
 
-`ConfigChangeStressTestAsync.ChangeToEmptyConfigAsyncInference`
+## Gate 2 — async ConfigChange family
 
-Record all exit codes and durations.
+Run all four async tests repeatedly, at least 20 family repetitions if practical:
 
-This test was already isolated-clean before the fix, so 20/20 PASS is necessary but **not sufficient**.
+- `ConfigChangeStressTestAsync.ChangeToEmptyConfigAsyncInference`
+- `ConfigChangeStressTestAsync.ChangeToWrongShapeAsyncInference`
+- `ConfigChangeStressTestAsync.ChangeToAutoShapeDuringAsyncInference`
+- `ConfigChangeStressTestAsyncStartEmpty.ChangeToLoadedModelDuringAsyncInference`
 
-### Gate 2 — ConfigChange family
+Record pass/fail counts.
 
-Run the relevant `ConfigChange*` stress family repeatedly, preferably 20 repetitions or an equivalent repeated-test invocation. Record pass/skip/fail counts.
+## Gate 3 — full-suite discriminator
 
-### Gate 3 — full-suite discriminator
+Run the normal maintained Windows suite/gate environment, with inherited `OVMS_MODEL_REPOSITORY_PATH` sanitized and the existing intentional CVS-176244 treatment only.
 
-This is the important RED/GREEN check.
+Require **3 consecutive full-suite PASS runs** before claiming this hypothesis supported.
 
-The pre-fix full suite crashed 4/4 with the same execute-AV family. Run the full `ovms_test.exe` suite with the existing intentional Windows CVS-176244 handling and with process env sanitized as in the maintained gate.
+If any run still crashes:
 
-Require **at least 3 consecutive full-suite PASS runs** before calling the lifetime-order fix causally supported.
+- capture dump;
+- record exact last running test;
+- compare exception code, access type, target address, victim thread and module/offsets with prior dumps;
+- mark this hypothesis REJECTED if the same signature survives;
+- do not add a new exclusion.
 
-If any full-suite run reproduces `0xC0000005`, capture a new dump and compare:
+If the suite progresses past the async blocker and exposes another Windows-sporadic fixture, distinguish an upstream CVS-176244 fixture from a new defect. Do not silently broaden exclusions.
 
-- exception code;
-- execute/read/write classification;
-- target address;
-- crashing thread role;
-- unload log state;
-- stack/module offsets.
+## Gate 4 — existing maintained gates
 
-If the same signature survives, mark this hypothesis REJECTED rather than adding another exclusion.
+Require:
 
-### Gate 4 — existing CLI and maintainer gates
+1. negative CLI 3/3 PASS;
+2. `tests/windows/gemmamonster_rc2_ovms_test_gate.ps1` emits `GEMMAMONSTER_RC2_OVMS_TEST_GATE_PASS`;
+3. `src/llm/**` remains untouched.
 
-Re-run the negative CLI gate and require 3/3 PASS.
-
-Then run:
-
-`tests/windows/gemmamonster_rc2_ovms_test_gate.ps1`
-
-with the patched `ovms_test.exe`.
-
-The gate must print its normal PASS marker.
-
-## Interpretation
-
-### If patched full suite is 3/3 PASS
-
-Record:
-
-- baseline: pre-fix full suite 4/4 CRASH;
-- patched: full suite >=3/3 PASS;
-- targeted/family counts;
-- exact patched binary identity;
-- no new Windows exclusions.
-
-Then the teardown-order fix is supported by RED/GREEN runtime evidence.
-
-Only after all required tests are green may packaging proceed through the existing B-parity runbook.
-
-### If the same crash remains
-
-Do not weaken or hide the test. Keep the source patch only if independent evidence shows it fixes a real invariant; otherwise revert it in a dedicated commit and report the falsification.
-
-Next audit target is then the OpenVINO callback replacement/destruction boundary around `ov::InferRequest::set_callback()` and any remaining object whose lifetime spans model unload. Use the new dump, not speculation.
-
-## Prohibited shortcuts
-
-- No `src/llm/**` changes.
-- No new test exclusion for `ConfigChangeStressTestAsync.ChangeToEmptyConfigAsyncInference`.
-- No LM_CB/VLM_CB architectural detour.
-- No dependency/toolchain changes.
-- No packaging while any required gate is red.
-- No `READY_FOR_ACCEPTANCE=YES` based on isolated tests alone.
+No package until all required gates are green.
 
 ## Required pushed report
 
-Commit and push a new evidence worklog containing:
+Push a fast-forward evidence worklog containing:
 
-- actual START_HEAD and END_HEAD;
+- `START_HEAD` / `END_HEAD`;
 - exact build command and binary identity;
-- whether the worktree was cleaned of old RACE markers;
-- exact-test repetition result;
-- ConfigChange family repetition result;
-- three full-suite results;
+- contract result;
+- compile result;
+- exact-test 20x result;
+- async-family repetition result;
+- each full-suite result;
 - negative CLI result;
 - maintainer gate result;
 - any new dump signature;
@@ -178,4 +127,4 @@ Commit and push a new evidence worklog containing:
 - package status;
 - `READY_FOR_ACCEPTANCE` verdict.
 
-Do not rewrite existing history. Push fast-forward only to `integration/gemmamonster-rc2-semantic-refit-20260912`.
+If the patch fails the full-suite discriminator, leave the evidence explicit and do not pretend the bug moved merely because the test ran longer.
