@@ -7,9 +7,10 @@ SOURCE = ROOT / "src" / "test" / "c_api_stress_tests.cpp"
 
 
 def extract_function(text: str, name: str) -> str:
-    marker = f"void {name}("
-    start = text.index(marker)
-    body_start = text.index("{", start)
+    marker = f"{name}("
+    name_start = text.index(marker)
+    start = text.rfind("\n", 0, name_start) + 1
+    body_start = text.index("{", name_start)
     depth = 0
     for index in range(body_start, len(text)):
         char = text[index]
