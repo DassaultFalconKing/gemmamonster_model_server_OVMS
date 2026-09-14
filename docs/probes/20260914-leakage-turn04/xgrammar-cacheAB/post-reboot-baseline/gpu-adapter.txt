@@ -1,0 +1,9 @@
+shared usage = 1247.9 MB
+dedicated usage = 0 MB
+total committed = 1994.7 MB
+shared usage = 0 MB
+dedicated usage = 0 MB
+total committed = 5.2 MB
+shared usage = 0 MB
+dedicated usage = 0 MB
+total committed = 0 MB

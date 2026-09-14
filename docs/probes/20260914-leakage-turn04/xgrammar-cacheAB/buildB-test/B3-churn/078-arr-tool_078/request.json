@@ -1,0 +1,46 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Use tool_078 to log run 78 with appropriate values."
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 256,
+  "temperature": 1.0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "tool_078",
+        "description": "Diagnostic tool tool_078.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "array",
+              "description": "tags",
+              "items": {
+                "type": "string"
+              }
+            },
+            "level": {
+              "type": "string",
+              "description": "level",
+              "enum": [
+                "low",
+                "mid",
+                "high"
+              ]
+            }
+          },
+          "required": [
+            "tags"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

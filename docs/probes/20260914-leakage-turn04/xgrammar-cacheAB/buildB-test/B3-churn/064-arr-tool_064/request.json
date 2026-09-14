@@ -1,0 +1,46 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Use tool_064 to log run 64 with appropriate values."
+    }
+  ],
+  "tool_choice": "required",
+  "max_tokens": 256,
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "tool_064",
+        "description": "Diagnostic tool tool_064.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "array",
+              "description": "tags",
+              "items": {
+                "type": "string"
+              }
+            },
+            "level": {
+              "type": "string",
+              "description": "level",
+              "enum": [
+                "low",
+                "mid",
+                "high"
+              ]
+            }
+          },
+          "required": [
+            "tags"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

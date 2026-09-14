@@ -1,0 +1,45 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Use tool_071 to log run 71 with appropriate values."
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 256,
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "tool_071",
+        "description": "Diagnostic tool tool_071.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "scores": {
+              "type": "array",
+              "description": "scores",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "mode": {
+              "type": "string",
+              "description": "mode",
+              "enum": [
+                "fast",
+                "slow"
+              ]
+            }
+          },
+          "required": [
+            "mode"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+cmd.exe /d /c "cd /d "C:\gemmamonster-artifacts\candidates\2026.4\4be7330b8-cache-B-off-20260914T220000Z\ovms" && call setupvars.bat && ovms.exe --config_path "C:\Users\testc\AppData\Local\Temp\opencode\buildB-test\config.json" --rest_port 18091 --port 18092 --log_level TRACE >> "C:\Users\testc\AppData\Local\Temp\opencode\buildB-test\server.stdout.log" 2>&1"

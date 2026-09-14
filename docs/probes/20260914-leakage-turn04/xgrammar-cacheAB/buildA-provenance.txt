@@ -1,0 +1,7 @@
+Build A (unlimited control, instrumented):
+  ovms source : 17064400 (WS whitespace fix, unchanged)
+  genai base  : 7ea25468 + bounded-whitespace patch + cache-diagnostics patch (commit 4be7330b8)
+  xgrammar    : 9aa840b6, cache_enabled=true, max_memory_bytes=-1
+  ovms.exe    : AF921BB2 (reused, no ABI change from instrumentation)
+  genai DLL   : CF762217 (fresh Build A)
+  package     : C:\gemmamonster-artifacts\candidates\2026.4\4be7330b8-cache-instrumented-A-unlimited-20260914T213000Z\ovms

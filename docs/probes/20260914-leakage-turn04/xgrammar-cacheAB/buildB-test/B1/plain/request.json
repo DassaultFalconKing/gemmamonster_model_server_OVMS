@@ -1,0 +1,1 @@
+{"model":"gemma4","messages":[{"role":"user","content":"What is 7 plus 8? Answer with just the number, nothing else."}],"max_tokens":64,"temperature":0}

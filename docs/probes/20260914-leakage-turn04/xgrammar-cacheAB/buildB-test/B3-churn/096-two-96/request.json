@@ -1,0 +1,58 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Pick the right tool for query 96 about Paris and call it."
+    }
+  ],
+  "tool_choice": "required",
+  "max_tokens": 256,
+  "temperature": 1.0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "tool_096_a",
+        "description": "Diagnostic tool tool_096_a.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string",
+              "description": "field q"
+            }
+          },
+          "required": [
+            "q"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "tool_096_b",
+        "description": "Diagnostic tool tool_096_b.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer",
+              "description": "field x"
+            },
+            "y": {
+              "type": "string",
+              "description": "field y"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

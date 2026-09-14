@@ -1,0 +1,18 @@
+BootTime: 09/14/2026 21:05:03 | Now: 09/14/2026 21:15:58
+FreeKB=17938300 TotalKB=33072884
+
+Name          : Intel(R) Arc(TM) 140V GPU (16GB)
+DriverVersion : 32.0.101.8991
+AdapterRAM    : 4293918720
+
+Name          : DisplayLink USB Device
+DriverVersion : 11.2.3146.0
+AdapterRAM    : 
+
+Name          : DisplayLink USB Device
+DriverVersion : 11.2.3146.0
+AdapterRAM    : 
+
+
+INFO: No tasks are running which match the specified criteria.
+
