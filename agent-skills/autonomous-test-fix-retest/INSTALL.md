@@ -1,35 +1,31 @@
-# Installing the portable skill
+# Installation
 
-The portable unit is the directory:
+This directory is self-contained. Do not clone an origin repository merely to install it.
 
-`agent-skills/autonomous-test-fix-retest/`
+## Cross-platform
 
-## Recommended cross-runtime install
+```bash
+python install.py
+python install.py "$HOME/.claude/skills"
+```
 
-Clone or update the remote branch, then copy the directory to:
+## POSIX shell
+
+```bash
+sh install.sh
+sh install.sh "$HOME/.claude/skills"
+```
+
+## PowerShell
+
+```powershell
+.\install.ps1
+# or
+.\install.ps1 -TargetRoot "$HOME/.claude/skills"
+```
+
+The default target root is `~/.agents/skills`, giving the installed directory:
 
 `~/.agents/skills/autonomous-test-fix-retest/`
 
-The installed directory must contain `SKILL.md` at its root.
-
-Example:
-
-```bash
-git clone --depth 1 --branch skills/autonomous-test-fix-retest \
-  https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS.git /tmp/gemmamonster-skills
-mkdir -p ~/.agents/skills
-rm -rf ~/.agents/skills/autonomous-test-fix-retest
-cp -R /tmp/gemmamonster-skills/agent-skills/autonomous-test-fix-retest ~/.agents/skills/
-```
-
-On runtimes with a different native skill directory, copy or symlink the same folder there. Claude Code commonly uses `~/.claude/skills/`; Codex, Gemini CLI, and Copilot CLI can use the cross-runtime `~/.agents/skills/` location.
-
-Restart or start a fresh agent session if the runtime discovers skills only at session initialization.
-
-## Verify installation
-
-Ask the agent to list/read its available skill named:
-
-`autonomous-test-fix-retest`
-
-Then give it a stabilization task with sequential failures and verify that it continues after the first ordinary blocker instead of handing the task back prematurely.
+If a runtime uses another native skill root, pass that root explicitly. Start a fresh agent session when the runtime only discovers skills at session initialization.

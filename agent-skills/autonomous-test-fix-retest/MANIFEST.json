@@ -1,0 +1,21 @@
+{
+  "format": "portable-agent-skill/v1",
+  "name": "autonomous-test-fix-retest",
+  "version": "1.0.0",
+  "entrypoint": "SKILL.md",
+  "files": [
+    "AGENT-NOTE.md",
+    "INSTALL.md",
+    "MANIFEST.json",
+    "README.md",
+    "SHA256SUMS",
+    "SKILL.md",
+    "TEACHING.md",
+    "TESTS.md",
+    "install.ps1",
+    "install.py",
+    "install.sh",
+    "scripts/selfcheck.py",
+    "tests/test_portability.py"
+  ]
+}

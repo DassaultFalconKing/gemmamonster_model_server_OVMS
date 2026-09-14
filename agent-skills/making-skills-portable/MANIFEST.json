@@ -1,0 +1,20 @@
+{
+  "format": "portable-agent-skill/v1",
+  "name": "making-skills-portable",
+  "version": "1.0.0",
+  "entrypoint": "SKILL.md",
+  "files": [
+    "INSTALL.md",
+    "MANIFEST.json",
+    "README.md",
+    "SCENARIOS.md",
+    "SHA256SUMS",
+    "SKILL.md",
+    "install.ps1",
+    "install.py",
+    "install.sh",
+    "scripts/skill_portability.py",
+    "tests/test_bundle_self.py",
+    "tests/test_skill_portability.py"
+  ]
+}
