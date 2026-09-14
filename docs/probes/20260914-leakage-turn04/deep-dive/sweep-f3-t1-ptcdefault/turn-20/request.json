@@ -1,0 +1,397 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Call the echo tool exactly once per turn with the next list item as text, in order, starting with sweep-item-1. After each tool result, continue with the next item on the following turn. Do not write any text, only call the tool. List: sweep-item-1, sweep-item-2, sweep-item-3, sweep-item-4, sweep-item-5, sweep-item-6, sweep-item-7, sweep-item-8, sweep-item-9, sweep-item-10, sweep-item-11, sweep-item-12, sweep-item-13, sweep-item-14, sweep-item-15, sweep-item-16, sweep-item-17, sweep-item-18, sweep-item-19, sweep-item-20, sweep-item-21, sweep-item-22, sweep-item-23, sweep-item-24, sweep-item-25, sweep-item-26, sweep-item-27, sweep-item-28, sweep-item-29, sweep-item-30, sweep-item-31, sweep-item-32."
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "xDPnxr7n9",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-1\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "xDPnxr7n9",
+      "content": "{\"echoed\":\"sweep-item-1\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "AcrQLf0ar",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-2\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "AcrQLf0ar",
+      "content": "{\"echoed\":\"sweep-item-2\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "WKpANWCs5",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-3\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "WKpANWCs5",
+      "content": "{\"echoed\":\"sweep-item-3\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "7MKSieIS5",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-4\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "7MKSieIS5",
+      "content": "{\"echoed\":\"sweep-item-4\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "pQ5GzHc68",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-5\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "pQ5GzHc68",
+      "content": "{\"echoed\":\"sweep-item-5\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "i2ljwnbO8",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-6\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "i2ljwnbO8",
+      "content": "{\"echoed\":\"sweep-item-6\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "ZxLI1hUJL",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-7\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "ZxLI1hUJL",
+      "content": "{\"echoed\":\"sweep-item-7\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "ADuafTHd5",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-8\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "ADuafTHd5",
+      "content": "{\"echoed\":\"sweep-item-8\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "AiqnUTbIw",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-9\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "AiqnUTbIw",
+      "content": "{\"echoed\":\"sweep-item-9\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "x38GrhZwP",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-10\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "x38GrhZwP",
+      "content": "{\"echoed\":\"sweep-item-10\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "WqQHtEldI",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-11\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "WqQHtEldI",
+      "content": "{\"echoed\":\"sweep-item-11\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "P44BQBTuz",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-12\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "P44BQBTuz",
+      "content": "{\"echoed\":\"sweep-item-12\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "Dxb0dsFai",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-13\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "Dxb0dsFai",
+      "content": "{\"echoed\":\"sweep-item-13\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "b75Y2G5fr",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-14\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "b75Y2G5fr",
+      "content": "{\"echoed\":\"sweep-item-14\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "EWWKzTDfn",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-15\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "EWWKzTDfn",
+      "content": "{\"echoed\":\"sweep-item-15\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "zAmG2DOHz",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-16\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "zAmG2DOHz",
+      "content": "{\"echoed\":\"sweep-item-16\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "CgTSOVeIA",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-17\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "CgTSOVeIA",
+      "content": "{\"echoed\":\"sweep-item-17\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "zO7UhNzJL",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-18\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "zO7UhNzJL",
+      "content": "{\"echoed\":\"sweep-item-18\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "HbU0ZKTzp",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-19\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "HbU0ZKTzp",
+      "content": "{\"echoed\":\"sweep-item-19\"}"
+    }
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "echo",
+        "description": "Echo back the given text.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text to echo."
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 256,
+  "temperature": 1.0,
+  "top_p": 0.95,
+  "top_k": 64
+}

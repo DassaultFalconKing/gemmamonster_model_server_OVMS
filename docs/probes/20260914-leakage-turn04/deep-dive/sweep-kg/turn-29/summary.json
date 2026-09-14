@@ -1,0 +1,17 @@
+{
+  "iter": 29,
+  "tool_turn": 28,
+  "http": "HTTP 200",
+  "prompt_tokens": 1300,
+  "completion_tokens": 256,
+  "finish_reason": "length",
+  "tool_calls_count": 0,
+  "tool_names": "",
+  "tool_arguments": "",
+  "sig": "",
+  "literal_call_open": false,
+  "repeat_prev_sig": false,
+  "empty_turn": true,
+  "finish_length": true,
+  "content_excerpt": ""
+}

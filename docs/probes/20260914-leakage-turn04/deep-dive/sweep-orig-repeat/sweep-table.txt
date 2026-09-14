@@ -1,0 +1,39 @@
+
+iter tool_turn finish_reason tool_calls_count tool_names tool_arguments           literal_call_open repeat_prev_sig empt
+                                                                                                                    y_tu
+                                                                                                                      rn
+---- --------- ------------- ---------------- ---------- --------------           ----------------- --------------- ----
+   1         1 tool_calls                   1 echo       {"text":"sweep-item-1"}              False           False …lse
+   2         2 tool_calls                   1 echo       {"text":"sweep-item-2"}              False           False …lse
+   3         3 tool_calls                   1 echo       {"text":"sweep-item-3"}              False           False …lse
+   4         4 tool_calls                   1 echo       {"text":"sweep-item-4"}              False           False …lse
+   5         5 tool_calls                   1 echo       {"text":"sweep-item-5"}              False           False …lse
+   6         6 tool_calls                   1 echo       {"text":"sweep-item-6"}              False           False …lse
+   7         7 tool_calls                   1 echo       {"text":"sweep-item-7"}              False           False …lse
+   8         8 tool_calls                   1 echo       {"text":"sweep-item-8"}              False           False …lse
+   9         9 tool_calls                   1 echo       {"text":"sweep-item-9"}              False           False …lse
+  10        10 tool_calls                   1 echo       {"text":"sweep-item-10"}             False           False …lse
+  11        11 tool_calls                   1 echo       {"text":"sweep-item-11"}             False           False …lse
+  12        12 tool_calls                   1 echo       {"text":"sweep-item-12"}             False           False …lse
+  13        13 tool_calls                   1 echo       {"text":"sweep-item-13"}             False           False …lse
+  14        14 tool_calls                   1 echo       {"text":"sweep-item-14"}             False           False …lse
+  15        15 tool_calls                   1 echo       {"text":"sweep-item-15"}             False           False …lse
+  16        16 tool_calls                   1 echo       {"text":"sweep-item-16"}             False           False …lse
+  17        17 tool_calls                   1 echo       {"text":"sweep-item-17"}             False           False …lse
+  18        18 tool_calls                   1 echo       {"text":"sweep-item-18"}             False           False …lse
+  19        19 tool_calls                   1 echo       {"text":"sweep-item-19"}             False           False …lse
+  20        20 tool_calls                   1 echo       {"text":"sweep-item-20"}             False           False …lse
+  21        21 tool_calls                   1 echo       {"text":"sweep-item-21"}             False           False …lse
+  22        22 tool_calls                   1 echo       {"text":"sweep-item-22"}             False           False …lse
+  23        23 tool_calls                   1 echo       {"text":"sweep-item-23"}             False           False …lse
+  24        24 tool_calls                   1 echo       {"text":"sweep-item-24"}             False           False …lse
+  25        25 tool_calls                   1 echo       {"text":"sweep-item-25"}             False           False …lse
+  26        26 tool_calls                   1 echo       {"text":"sweep-item-26"}             False           False …lse
+  27        27 tool_calls                   1 echo       {"text":"sweep-item-27"}             False           False …lse
+  28        28 tool_calls                   1 echo       {"text":"sweep-item-28"}             False           False …lse
+  29        29 tool_calls                   1 echo       {"text":"sweep-item-29"}             False           False …lse
+  30        30 tool_calls                   1 echo       {"text":"sweep-item-30"}             False           False …lse
+  31        31 tool_calls                   1 echo       {"text":"sweep-item-31"}             False           False …lse
+  32        32 tool_calls                   1 echo       {"text":"sweep-item-32"}             False           False …lse
+
+

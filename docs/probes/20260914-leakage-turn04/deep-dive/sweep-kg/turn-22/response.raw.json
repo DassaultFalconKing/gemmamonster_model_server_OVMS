@@ -1,0 +1,1 @@
+{"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"OBp4pDdU0","type":"function","function":{"name":"echo","arguments":"{\"text\":\"sweep-item-22\"}"}}]}}],"created":1789401361,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":1055,"completion_tokens":22,"total_tokens":1077}}

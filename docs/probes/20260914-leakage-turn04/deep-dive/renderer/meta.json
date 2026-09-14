@@ -1,0 +1,16 @@
+{
+ "genai_version": "2026.3.1.0-3290-56d9685302d",
+ "model_dir": "C:\\llm\\models\\OpenVINO\\Wondernutts\\gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov",
+ "turn-03-success": {
+  "prompt_chars": 1304,
+  "prompt_tokens": 410,
+  "tail_chars": 1304,
+  "suffix_after_last_tool_response_close": "'<|channel>thought\\n<channel|>'"
+ },
+ "turn-04-length-empty": {
+  "prompt_chars": 1450,
+  "prompt_tokens": 446,
+  "tail_chars": 1450,
+  "suffix_after_last_tool_response_close": "'<|channel>thought\\n<channel|>'"
+ }
+}

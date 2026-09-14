@@ -1,0 +1,22 @@
+[
+ {
+  "type": "function",
+  "function": {
+   "name": "echo",
+   "description": "Echo back the given text.",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "text": {
+      "type": "string",
+      "description": "Text to echo."
+     }
+    },
+    "required": [
+     "text"
+    ],
+    "additionalProperties": false
+   }
+  }
+ }
+]

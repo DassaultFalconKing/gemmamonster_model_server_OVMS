@@ -1,0 +1,17 @@
+{
+  "iter": 20,
+  "tool_turn": 20,
+  "http": "HTTP 200",
+  "prompt_tokens": 985,
+  "completion_tokens": 24,
+  "finish_reason": "tool_calls",
+  "tool_calls_count": 1,
+  "tool_names": "echo",
+  "tool_arguments": "{\"text\":\"sweep-item-20\"}",
+  "sig": "echo|{\"text\":\"sweep-item-20\"}",
+  "literal_call_open": false,
+  "repeat_prev_sig": false,
+  "empty_turn": false,
+  "finish_length": false,
+  "content_excerpt": ""
+}

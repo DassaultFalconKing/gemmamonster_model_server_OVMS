@@ -1,0 +1,111 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Call the echo tool exactly once per turn with the next list item as text, in order, starting with sweep-item-1. After each tool result, continue with the next item on the following turn. Do not write any text, only call the tool. List: sweep-item-1, sweep-item-2, sweep-item-3, sweep-item-4, sweep-item-5, sweep-item-6, sweep-item-7, sweep-item-8, sweep-item-9, sweep-item-10, sweep-item-11, sweep-item-12, sweep-item-13, sweep-item-14, sweep-item-15, sweep-item-16, sweep-item-17, sweep-item-18, sweep-item-19, sweep-item-20, sweep-item-21, sweep-item-22, sweep-item-23, sweep-item-24, sweep-item-25, sweep-item-26, sweep-item-27, sweep-item-28, sweep-item-29, sweep-item-30, sweep-item-31, sweep-item-32."
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "elDC7bse0",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-1\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "elDC7bse0",
+      "content": "{\"echoed\":\"sweep-item-1\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "XHwKVkvZD",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-2\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "XHwKVkvZD",
+      "content": "{\"echoed\":\"sweep-item-2\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "w7lKc95MA",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-3\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "w7lKc95MA",
+      "content": "{\"echoed\":\"sweep-item-3\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "ngF4HDNBu",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-4\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "ngF4HDNBu",
+      "content": "{\"echoed\":\"sweep-item-4\"}"
+    }
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "echo",
+        "description": "Echo back the given text.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text to echo."
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "parallel_tool_calls": false,
+  "max_tokens": 256,
+  "temperature": 0
+}

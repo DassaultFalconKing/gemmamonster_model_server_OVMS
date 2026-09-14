@@ -1,0 +1,1 @@
+'<|channel>thought\n<channel|>'
