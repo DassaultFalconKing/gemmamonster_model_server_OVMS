@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.19)
 project(gemma4_whitespace_contract LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(GENAI_SOURCE_ROOT "C:/g54r2/openvino_genai_src" CACHE PATH "Pinned GenAI source")
@@ -15,6 +15,9 @@ endforeach()
 find_package(OpenVINO REQUIRED COMPONENTS Runtime)
 set(XGRAMMAR_BUILD_PYTHON_BINDINGS OFF CACHE BOOL "" FORCE)
 set(XGRAMMAR_BUILD_CXX_TESTS OFF CACHE BOOL "" FORCE)
+# XGrammar's bundled config sets normal variables, overriding cache options.
+# Its documented build-root config takes precedence without changing pinned source.
+file(WRITE "${CMAKE_BINARY_DIR}/config.cmake" "set(XGRAMMAR_BUILD_PYTHON_BINDINGS OFF)\nset(XGRAMMAR_BUILD_CXX_TESTS OFF)\nset(XGRAMMAR_ENABLE_CPPTRACE OFF)\nset(XGRAMMAR_ENABLE_COVERAGE OFF)\nset(XGRAMMAR_ENABLE_INTERNAL_CHECK OFF)\n")
 add_subdirectory("${XGRAMMAR_SOURCE_ROOT}" xgrammar)
 add_executable(whitespace_contract whitespace_contract.cpp)
 target_include_directories(whitespace_contract PRIVATE "${GENAI_SOURCE_ROOT}/src/cpp/include")
