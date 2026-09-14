@@ -4,6 +4,7 @@ param(
     [ValidateSet('maintainer-rc2','known-good-rc1')][string]$RuntimeProfile = 'maintainer-rc2',
     [string]$ShortRoot = '',
     [string]$Gemma4TokenizerPath = '',
+    [string]$WhitespaceGrammarDirectory = '',
     [switch]$NoPython,
     [string]$LogPath = ''
 )
@@ -87,6 +88,9 @@ try {
     $testBinPath = "C:\$ShortRoot\openvino\runtime\bin\intel64\Release;C:\$ShortRoot\openvino\runtime\3rdparty\tbb\bin"
     $testPathValue = "$testBinPath;C:\opt\Python312;" + $env:PATH
     $cmd = "call `"$setupvars`" && call `"$opencvSetup`" && set `"BAZEL_SH=C:\opt\msys64\usr\bin\bash.exe`" && set `"PYTHONHOME=C:\opt\Python312`" && bazel --output_user_root=C:\$ShortRoot test --config=$config --action_env OpenVINO_DIR=$openvinoDir --test_env=PYTHONHOME=C:\opt\Python312 --test_env=`"PATH=$testPathValue`" --test_output=errors --verbose_failures $targetText"
+    if ($WhitespaceGrammarDirectory) {
+        $cmd += " --test_env=`"GEMMA4_WHITESPACE_GRAMMAR_DIR=$WhitespaceGrammarDirectory`""
+    }
     Write-Host "Running GEMMAMONSTER source contracts on $RuntimeProfile"
     Write-Host "  HEAD: $((& git -C $root rev-parse HEAD).Trim())"
     Write-Host "  dependency root: C:\$ShortRoot"
