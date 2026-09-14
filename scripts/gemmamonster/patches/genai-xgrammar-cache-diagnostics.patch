@@ -1,0 +1,94 @@
+diff --git a/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp b/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp
+--- a/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp
++++ b/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp
+@@ -4,13 +4,60 @@
+ #include "xgrammar_backend.hpp"
+ #include "logger.hpp"
+ #include <algorithm>
++#include <chrono>
+ #include <cmath>
+-#include <limits>
++#include <functional>
+ #include <iostream>
++#include <limits>
++#include <type_traits>
++#include <variant>
+ 
+ namespace ov {
+ namespace genai {
+ 
++
++namespace {
++// Diagnostic-only: stable source string for a run-local grammar fingerprint.
++// Pure observation: does not affect compilation, caching, or matching behavior.
++// Uses StructuredOutputConfig::structural_tag_to_json, which covers every
++// StructuralTag alternative (value and shared_ptr forms); legacy
++// StructuralTagsConfig keeps its own to_json().
++std::string grammar_fingerprint_source(const ov::genai::StructuredOutputConfig& cfg) {
++    using SOC = ov::genai::StructuredOutputConfig;
++    if (cfg.json_schema.has_value()) {
++        return std::string("json_schema:") + cfg.json_schema.value();
++    }
++    if (cfg.regex.has_value()) {
++        return std::string("regex:") + cfg.regex.value();
++    }
++    if (cfg.grammar.has_value()) {
++        return std::string("ebnf:") + cfg.grammar.value();
++    }
++    auto variant_source = [](const auto& v) -> std::string {
++        return std::visit([](const auto& g) -> std::string {
++            using T = std::decay_t<decltype(g)>;
++            if constexpr (std::is_same_v<T, std::string>) {
++                return g;
++            } else if constexpr (std::is_same_v<T, ov::genai::StructuralTagsConfig>) {
++                return g.to_json();
++            } else if constexpr (std::is_same_v<T, SOC::StructuralTag>) {
++                return std::visit([](const auto& h) -> std::string {
++                    return SOC::structural_tag_to_json(h);
++                }, g);
++            } else {
++                return SOC::structural_tag_to_json(g);
++            }
++        }, v);
++    };
++    if (cfg.structural_tags_config.has_value()) {
++        return std::string("structural:") + variant_source(cfg.structural_tags_config.value());
++    }
++    if (cfg.compound_grammar.has_value()) {
++        return std::string("compound:") + variant_source(cfg.compound_grammar.value());
++    }
++    return "none";
++}
++}  // namespace
+ XGrammarStructuredOutput::XGrammarStructuredOutput(const ov::genai::Tokenizer::TokenizerImpl& tokenizer_impl, std::optional<int> vocab_size) {
+     auto vocab_vector = tokenizer_impl.m_vocab;
+     OPENVINO_ASSERT(!vocab_vector.empty(),
+@@ -29,6 +76,8 @@ XGrammarStructuredOutput::XGrammarStructuredOutput(const ov::genai::Tokenizer::T
+         true
+     );
+     m_grammar_compiler = std::make_unique<xgrammar::GrammarCompiler>(std::move(tokenizer_info));
++    std::cout << "[XGrammarCache] init limit_bytes=" << m_grammar_compiler->CacheLimitBytes()
++              << " size_bytes=" << m_grammar_compiler->GetCacheSizeBytes() << std::endl;
+ }
+ 
+ 
+@@ -124,8 +173,19 @@ XGrammarStructuredOutput::get_logits_transformer(const ov::genai::GenerationConf
+         OPENVINO_THROW("Structured output is not enabled in the provided GenerationConfig.");
+     }
+     sampling_parameters.structured_output_config.value().validate();
++    const auto fp_src = grammar_fingerprint_source(sampling_parameters.structured_output_config.value());
++    const auto fp = std::hash<std::string>{}(fp_src);
++    const auto cache_before = m_grammar_compiler->GetCacheSizeBytes();
++    const auto t0 = std::chrono::steady_clock::now();
+     auto grammar = create_grammar(sampling_parameters.structured_output_config);
+     auto compiled_grammar = m_grammar_compiler->CompileGrammar(grammar);
++    const auto compile_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
++        std::chrono::steady_clock::now() - t0).count();
++    const auto cache_after = m_grammar_compiler->GetCacheSizeBytes();
++    std::cout << "[XGrammarCache] fp=" << fp
++              << " limit_bytes=" << m_grammar_compiler->CacheLimitBytes()
++              << " before_bytes=" << cache_before << " after_bytes=" << cache_after
++              << " compile_ms=" << compile_ms << std::endl;
+     std::vector<int> override_stop_tokens(sampling_parameters.stop_token_ids.begin(), sampling_parameters.stop_token_ids.end());
+     return std::make_shared<LogitTransformers::XGrammarLogitsTransformer>(std::move(compiled_grammar), override_stop_tokens);
+ }

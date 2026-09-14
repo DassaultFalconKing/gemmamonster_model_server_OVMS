@@ -11,7 +11,9 @@ function Run-Git([string]$Root, [string[]]$Arguments) {
 }
 function Apply-Patch([string]$Root, [string]$Name) {
     $patch = Join-Path $PSScriptRoot "patches/$Name"
-    & git -C $Root apply --reverse --check $patch 2>$null
+    # NOTE: 2>&1 (not 2>$null): probing reverse-applicability must never throw
+    # on hosts where native stderr is terminating (Windows PowerShell 5.1).
+    $null = & git -C $Root apply --reverse --check $patch 2>&1
     if ($LASTEXITCODE -eq 0) { return }
     Run-Git $Root @('apply', '--check', $patch)
     Run-Git $Root @('apply', $patch)
@@ -29,6 +31,7 @@ foreach ($entry in @(@($genai,$genaiSha), @($xgrammar,$xgrammarSha))) {
 }
 Apply-Patch $genai 'genai-gemma4-bounded-whitespace.patch'
 Apply-Patch $xgrammar 'xgrammar-subproject-install.patch'
+Apply-Patch $genai 'genai-xgrammar-cache-diagnostics.patch'
 Push-Location $repo
 try {
     & "$PSScriptRoot/Enter-GemmamonsterEnv.ps1" -RequireRuntimeRoot | Out-Null
