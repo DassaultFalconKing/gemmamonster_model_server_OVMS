@@ -2,7 +2,7 @@ param([string]$RuntimeRoot = 'C:\g54r2')
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $genai = Join-Path $RuntimeRoot 'openvino_genai_src'
-$xgrammar = Join-Path $RuntimeRoot 'whitespace-xgrammar-reference'
+$xgrammar = Join-Path $RuntimeRoot 'openvino_genai_build/_deps/xgrammar-src'
 $genaiSha = '7ea2546852a382cd16bd22dea0cfad2db70ed744'
 $xgrammarSha = '9aa840b6d16abf094f3e8e2ac9c10465b77656c9'
 function Run-Git([string]$Root, [string[]]$Arguments) {
@@ -15,6 +15,11 @@ function Apply-Patch([string]$Root, [string]$Name) {
     if ($LASTEXITCODE -eq 0) { return }
     Run-Git $Root @('apply', '--check', $patch)
     Run-Git $Root @('apply', $patch)
+}
+if (-not (Test-Path (Join-Path $xgrammar '.git'))) {
+    & git clone --no-checkout https://github.com/mlc-ai/xgrammar.git $xgrammar
+    if ($LASTEXITCODE -ne 0) { throw 'XGrammar clone failed' }
+    Run-Git $xgrammar @('checkout', '--detach', $xgrammarSha)
 }
 foreach ($entry in @(@($genai,$genaiSha), @($xgrammar,$xgrammarSha))) {
     if ((& git -C $entry[0] rev-parse HEAD) -ne $entry[1]) {

@@ -177,7 +177,7 @@ A mixed tree is a provenance failure even if compilation succeeds.
 
 Frozen known-good `9a162626` keeps stock GenAI and XGrammar `v0.1.31`. Current repair uses GenAI base `7ea2546852a382cd16bd22dea0cfad2db70ed744` plus the tracked schema API patch, and XGrammar `9aa840b6d16abf094f3e8e2ac9c10465b77656c9` with recursively pinned submodules.
 
-Use existing checkouts at `C:\g54r2\openvino_genai_src` and `C:\g54r2\whitespace-xgrammar-reference`. The script checks both SHA values, synchronizes recursive dependencies, applies the versioned patches, builds the C++ runtime and installs matching headers and DLLs into `C:\g54r2\openvino`.
+Use the existing checkout at `C:\g54r2\openvino_genai_src`. The script creates or verifies XGrammar under `openvino_genai_build\_deps\xgrammar-src`, checks both SHA values, synchronizes recursive dependencies, applies the versioned patches, builds the C++ runtime and installs matching headers and DLLs into `C:\g54r2\openvino`.
 
 ```powershell
 .\scripts\gemmamonster\build-whitespace-genai.ps1
