@@ -1,0 +1,37 @@
+{
+  "genai_base": "7ea2546852a382cd16bd22dea0cfad2db70ed744",
+  "xgrammar_head": "9aa840b6d16abf094f3e8e2ac9c10465b77656c9",
+  "xgrammar_submodules": [
+    " 6689d14c203eed390ae7bb64f56a983cfd7dff9c 3rdparty/cpptrace (v0.1-644-g6689d14)",
+    " bbd2f4d32427e548797929af08cfe2a9cbb3cf12 3rdparty/dlpack (v1.0)",
+    " df1544bcee0c7ce35cd5ea0b3eb8cc81855a4140 3rdparty/googletest (release-1.8.0-3498-gdf1544bc)"
+  ],
+  "patches": [
+    {
+      "Path": "C:\\git\\gemmamonster-2026.4-unified-20260911\\scripts\\gemmamonster\\patches\\genai-gemma4-bounded-whitespace.patch",
+      "Hash": "F04D6D8E963F25169A6B68CDABFDB3BB612545B404A510DC6B8E4EEF9963EE97"
+    },
+    {
+      "Path": "C:\\git\\gemmamonster-2026.4-unified-20260911\\scripts\\gemmamonster\\patches\\xgrammar-subproject-install.patch",
+      "Hash": "C4E82DDF92D75C9B802B5DDA6999ED5D1480F40187ECE1BF94E6904D0465CCFA"
+    }
+  ],
+  "installed_genai": {
+    "Path": "C:\\g54r2\\openvino\\runtime\\bin\\intel64\\Release\\openvino_genai.dll",
+    "Hash": "CAC5BB7EC19966D4415A73EBC12E52B1F0599095BF301DBA205625373AE8FB47"
+  },
+  "protected_runtime_modules": [
+    {
+      "Path": "C:\\g54r2\\openvino\\runtime\\bin\\intel64\\Release\\openvino.dll",
+      "Hash": "DEF53DD31213FBB75A3D054ED5A244B3E7A984BE30183A740787801A97C3AD2A"
+    },
+    {
+      "Path": "C:\\g54r2\\openvino\\runtime\\bin\\intel64\\Release\\openvino_intel_gpu_plugin.dll",
+      "Hash": "CA51F00BFD2781E4B83408387F07C2B8105AAA1BEF5045B579BCB051B1454B78"
+    },
+    {
+      "Path": "C:\\g54r2\\openvino\\runtime\\bin\\intel64\\Release\\openvino_tokenizers.dll",
+      "Hash": "EF29A1D5B477819BE3E5AB88A13E9FF7B250639A430F186D4B7C3532D9A49807"
+    }
+  ]
+}

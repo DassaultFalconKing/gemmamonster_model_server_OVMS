@@ -1,5 +1,87 @@
 # Whitespace-loop repair report — 2026-09-14
 
+## Current repair result (supersedes the historical blocked attempt below)
+
+**IMPLEMENTED; unit/matcher verification PASS; full product/live acceptance NOT RUN.**
+The user requested manual product build/run after source fixes. No new OVMS candidate
+package has been built or promoted, and no inference server was launched.
+
+```text
+VERIFIED_SOURCE_HEAD: a8c7b47f7fa3044334aab0b06277e8138bbe33ae
+VERIFIED_SOURCE_TREE: 87dc249ad12ded93f6ad4659b5a3daa7e40ba0c3
+SOURCE_BASE: 908d669563f57535ab4eb747989e9ab33dfd5267
+BRANCH: fix/gemma4-whitespace-loop-20260914 (local only)
+BAZEL: official 6.4.0
+GENAI_BASE: 7ea2546852a382cd16bd22dea0cfad2db70ed744 + tracked API/fetch patch
+TOKENIZERS: a04accf6282d9b304214b492694b18c3979f667a
+OPENVINO_LINE: 2026.4.0.0rc2; header 2026.4.0 verified
+OPENVINO_SOURCE: UNKNOWN locally; configured approved pin 227c33757d1ef95d4da506d00686f923fdd2a535
+XGRAMMAR: 9aa840b6d16abf094f3e8e2ac9c10465b77656c9 (remote main HEAD at selection)
+GENAI_BUILD_INSTALL: PASS
+ENV_PREFLIGHT: PASS (clean repository, selected RC2 runtime)
+UNIT_BUILD: PASS
+UNIT_TARGETS: PASS 6/6
+REAL_BUILDER_CPP_MATCHER: PASS 6/6 choices/modes
+WHITESPACE_BOUND: PASS serialization and C++ matcher; live NOT RUN
+INCOMPLETE_FRAME_DIAGNOSTIC: PASS focused tokenizer/parser/streamer test
+OVMS_PRODUCT_BUILD: NOT RUN (manual user step)
+LIVE_FRESH: UNKNOWN / NOT RUN
+LIVE_WARMED: UNKNOWN / NOT RUN
+LIVE_PARALLEL_TRUE: UNKNOWN / NOT RUN
+LIVE_PARALLEL_FALSE: UNKNOWN / NOT RUN
+OVERALL_ACCEPTANCE: NOT ACCEPTED (product/live gates remain)
+```
+
+The real GenAI JSONSchema type now has an optional `max_whitespace_cnt`, serialized
+inside each schema format node and included in equality/string representation. Gemma4
+tool tags set it to 2; other callers retain the absent/unbounded default. The actual
+XGrammar compiler/matcher accepts canonical calls and whitespace up to 2, rejects
+longer spaces/newlines/tabs at four JSON gaps, preserves whitespace inside strings,
+and accepts repeated calls only in parallel mode. Six real builder grammar JSON files
+are saved with evidence; this is not an OVMS-only placeholder field.
+
+OVMSTextStreamer keeps legacy no-argument `end()` semantics and adds `end(reason)`.
+The production unary/streaming completion path passes its actual reason through the
+derived streamer seam. Parser diagnostics expose phase, pending byte count and known
+tool name; the terminal warning also records finish reason and generated token count.
+The regression test proves incomplete canonical arguments produce neither executable
+tool calls nor content deltas. No JSON auto-closing or fabricated calls were added.
+
+Before implementation, the actual source test run failed the two new assertions:
+missing bounded schema serialization and missing LENGTH/pending-frame diagnostics.
+After implementation, parser tests are 32/32 PASS; generation tests are 17 PASS and
+one old optional Python/XGrammar 0.1.31 probe SKIPPED. The new pinned C++ matcher
+independently verifies the six current choice/multiplicity cases. All six Bazel
+targets PASS and WORKSPACE restoration is byte exact.
+
+XGrammar recursive pins are cpptrace `6689d14c203eed390ae7bb64f56a983cfd7dff9c`,
+DLPack `bbd2f4d32427e548797929af08cfe2a9cbb3cf12`, and googletest
+`df1544bcee0c7ce35cd5ea0b3eb8cc81855a4140`; picojson is vendored in the selected
+commit. Python APIs/bindings are disabled for this C++ installation, so TVM-FFI is
+outside its dependency graph. A separate XGrammar patch fixes header installation
+paths in a CMake subproject. No OpenVINO/GenAI upstream/main or 2026.5 update occurred.
+The frozen known-good profile remains unchanged.
+
+Installed GenAI DLL SHA256:
+`CAC5BB7EC19966D4415A73EBC12E52B1F0599095BF301DBA205625373AE8FB47`.
+OpenVINO, GPU plugin and Tokenizers DLLs were compared before/after installation and
+are byte-identical. `build-whitespace-genai.ps1` rejects a non-2026.4.0 header or
+protected DLL hash drift and writes dependency provenance. Build full OVMS using
+`build-stable-candidate.ps1 -RuntimeProfile maintainer-rc2 -SkipDependencies -WithoutTests`;
+omitting `-SkipDependencies` may reinstall stock runtime dependencies.
+
+Evidence: `repair-evidence/whitespace-repair-red-640.log`,
+`repair-evidence/whitespace-repair-green-640.log`,
+`repair-evidence/whitespace-real-builder-matcher.log`,
+`repair-evidence/genai-whitespace-cpp-install.log`,
+`repair-evidence/whitespace-dependencies.json`, and six grammar fixtures.
+The initial full GenAI build also succeeded; its verbose compiler log remains at
+`C:\git\artifacts\genai-whitespace-build.log`. The old standalone attempt failed
+linking the GenAI formatter, then was corrected to link the actual library; it was
+not counted as semantic RED. No tests of unrelated models/live multi-turn cases ran.
+
+## Historical blocked attempt (superseded)
+
 ## Toolchain update after the blocked attempt
 
 At the user's authorization, commit `fdd349b33eb0e60721d0c8f6b78f9402abc31068`

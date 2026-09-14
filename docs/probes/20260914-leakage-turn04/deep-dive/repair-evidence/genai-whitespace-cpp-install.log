@@ -1,0 +1,299 @@
+Python 3.12.10
+[setupvars.bat] OpenVINO environment initialized
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.26200.
+-- OpenVINO GenAI full version: 2026.4.0.0-3407-7ea2546852a
+-- ENABLE_SYSTEM_OPENCL is OFF - CDPruner will use CPU-only DPP implementation
+-- Using the multi-header code from C:/g54r2/openvino_genai_build/_deps/nlohmann_json-src/include/
+CMake Deprecation Warning at C:/g54r2/openvino_genai_build/_deps/gguflib-src/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Config file: C:/g54r2/openvino_genai_build/_deps/xgrammar-src/cmake/config.cmake
+-- Build type: Release
+-- Build Python bindings: OFF
+-- Build C++ tests: OFF
+-- CUDA architectures: native
+-- Enable C++ trace: OFF
+-- OpenCL library or headers not found, ENABLE_OPENCL_DPP will not be defined.
+-- Configuring done (4.3s)
+-- Generating done (0.9s)
+-- Build files have been written to: C:/g54r2/openvino_genai_build
+MSBuild version 17.14.51+25f168cee for .NET Framework
+
+  1>Checking Build System
+  gguflib.vcxproj -> C:\g54r2\openvino_genai_build\src\cpp\Release\gguflib.lib
+  xgrammar.vcxproj -> C:\g54r2\openvino_genai_build\_deps\xgrammar-build\Release\xgrammar.lib
+  openvino_genai_misaki_cpp.vcxproj -> C:\g54r2\openvino_genai_build\src\cpp\Release\openvino_genai_misaki_cpp.lib
+  openvino_genai_obj.vcxproj -> C:\g54r2\openvino_genai_build\src\cpp\openvino_genai_obj.dir\Release\openvino_genai_obj.lib
+  openvino_genai.vcxproj -> C:\g54r2\openvino_genai_build\openvino_genai\openvino_genai.dll
+  openvino_genai_c.vcxproj -> C:\g54r2\openvino_genai_build\src\c\Release\openvino_genai_c.dll
+  Building Custom Rule C:/g54r2/openvino_genai_src/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/runtime/lib/intel64/Release/openvino_genai.lib
+-- Installing: C:\g54r2\openvino/runtime/bin/intel64/Release/openvino_genai.dll
+-- Up-to-date: C:\g54r2\openvino/runtime/include
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino/genai
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino/genai/automatic_speech_recognition
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/automatic_speech_recognition/generation_config.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/automatic_speech_recognition/perf_metrics.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/automatic_speech_recognition/pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/cache_eviction.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/chat_history.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/common_types.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/continuous_batching_pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/extensions.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/generation_config.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/generation_handle.hpp
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/autoencoder_kl.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/autoencoder_kl_qwen_image.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/clip_text_model.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/clip_text_model_with_projection.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/flux2_transformer_2d_model.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/flux_transformer_2d_model.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/generation_config.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/image2image_pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/image_generation_perf_metrics.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/inpainting_pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/qwen2_5_vl_for_conditional_generation.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/qwen3_text_encoder.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/qwen_image_transformer_2d_model.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/scheduler.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/sd3_transformer_2d_model.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/t5_encoder_model.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/text2image_pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/unet2d_condition_model.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/image_generation/zimage_transformer_2d_model.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/json_container.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/llm_pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/lora_adapter.hpp
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino/genai/omni
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/omni/decoded_results.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/omni/pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/omni/speech_streamer_base.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/omni/talker.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/omni/talker_perf_metrics.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/omni/talker_speech_config.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/parsers.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/perf_metrics.hpp
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino/genai/rag
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/rag/embedding_pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/rag/text_embedding_pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/rag/text_rerank_pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/scheduler_config.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/sparse_attention.hpp
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino/genai/speculative_decoding
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/speculative_decoding/perf_metrics.hpp
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino/genai/speech_generation
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/speech_generation/speech_generation_config.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/speech_generation/speech_generation_perf_metrics.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/speech_generation/text2speech_pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/streamer_base.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/taylorseer_config.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/text_streamer.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/tokenizer.hpp
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino/genai/video_generation
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/video_generation/autoencoder_kl_ltx_video.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/video_generation/generation_config.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/video_generation/ltx_video_transformer_3d_model.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/video_generation/text2video_pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/visibility.hpp
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino/genai/visual_language
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/visual_language/perf_metrics.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/visual_language/pipeline.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/visual_language/video_metadata.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/whisper_generation_config.hpp
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/whisper_pipeline.hpp
+-- Up-to-date: C:\g54r2\openvino/runtime/include
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino/genai
+-- Up-to-date: C:\g54r2\openvino/runtime/include/openvino/genai/c
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/c/chat_history.h
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/c/generation_config.h
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/c/json_container.h
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/c/llm_pipeline.h
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/c/perf_metrics.h
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/c/visibility.h
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/c/vlm_pipeline.h
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/c/whisper_generation_config.h
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/c/whisper_pipeline.h
+-- Installing: C:\g54r2\openvino/runtime/include/openvino/genai/version.hpp
+-- Old export file "C:\g54r2\openvino/runtime/cmake/OpenVINOGenAITargets.cmake" will be replaced.  Removing files [C:\g54r2\openvino/runtime/cmake/OpenVINOGenAITargets-debug.cmake, C:\g54r2\openvino/runtime/cmake/OpenVINOGenAITargets-release.cmake].
+-- Installing: C:\g54r2\openvino/runtime/cmake/OpenVINOGenAITargets.cmake
+-- Installing: C:\g54r2\openvino/runtime/cmake/OpenVINOGenAITargets-release.cmake
+-- Installing: C:\g54r2\openvino/runtime/cmake/OpenVINOGenAIConfig.cmake
+-- Installing: C:\g54r2\openvino/runtime/cmake/OpenVINOGenAIConfigVersion.cmake
+-- Installing: C:\g54r2\openvino/runtime/lib/intel64/Release/openvino_genai_c.lib
+-- Installing: C:\g54r2\openvino/runtime/bin/intel64/Release/openvino_genai_c.dll
+-- Installing: C:\g54r2\openvino/samples/deployment-requirements.txt
+-- Installing: C:\g54r2\openvino/samples/export-requirements.txt
+-- Installing: C:\g54r2\openvino/samples/requirements.txt
+-- Installing: C:\g54r2\openvino/samples/cpp/fetch_opencv.cmake
+-- Up-to-date: C:\g54r2\openvino/samples/cpp/text_generation
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/beam_search_causal_lm.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/benchmark_genai.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/chat_sample.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/encrypted_model_causal_lm.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/greedy_causal_lm.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/lora_greedy_causal_lm.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/multinomial_causal_lm.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/prompt_lookup_decoding_lm.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/README.md
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/read_prompt_from_file.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/read_prompt_from_file.h
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/speculative_decoding_lm.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/text_generation/structured_output_generation.cpp
+-- Up-to-date: C:\g54r2\openvino/samples/cpp/image_generation
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/512x512.bmp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/baseline.bmp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/benchmark_image_gen.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/denoising_process.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/encrypted_stable_diffusion.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/heterogeneous_stable_diffusion.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/image2image.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/image2image_concurrency.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/imageimage.bmp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/imwrite.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/imwrite.hpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/inpainting.bmp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/inpainting.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/load_image.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/load_image.hpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/lora.bmp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/lora_text2image.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/progress_bar.hpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/README.md
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/stable_diffusion_export_import.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/taylorseer.bmp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/taylorseer_baseline.bmp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/taylorseer_text2image.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/text2image.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/image_generation/text2image_concurrency.cpp
+-- Up-to-date: C:\g54r2\openvino/samples/cpp/video_generation
+-- Installing: C:\g54r2\openvino/samples/cpp/video_generation/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/samples/cpp/video_generation/imwrite_video.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/video_generation/imwrite_video.hpp
+-- Installing: C:\g54r2\openvino/samples/cpp/video_generation/lora_text2video.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/video_generation/README.md
+-- Installing: C:\g54r2\openvino/samples/cpp/video_generation/taylorseer_text2video.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/video_generation/text2video.cpp
+-- Up-to-date: C:\g54r2\openvino/samples/cpp/speech_generation
+-- Installing: C:\g54r2\openvino/samples/cpp/speech_generation/audio_utils.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/speech_generation/audio_utils.hpp
+-- Installing: C:\g54r2\openvino/samples/cpp/speech_generation/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/samples/cpp/speech_generation/kokoro_phonemize_fallback.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/speech_generation/README.md
+-- Installing: C:\g54r2\openvino/samples/cpp/speech_generation/text2speech.cpp
+-- Up-to-date: C:\g54r2\openvino/samples/cpp/visual_language_chat
+-- Installing: C:\g54r2\openvino/samples/cpp/visual_language_chat/benchmark_vlm.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/visual_language_chat/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/samples/cpp/visual_language_chat/encrypted_model_vlm.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/visual_language_chat/load_image.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/visual_language_chat/load_image.hpp
+-- Installing: C:\g54r2\openvino/samples/cpp/visual_language_chat/load_video.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/visual_language_chat/load_video.hpp
+-- Installing: C:\g54r2\openvino/samples/cpp/visual_language_chat/README.md
+-- Installing: C:\g54r2\openvino/samples/cpp/visual_language_chat/video_to_text_chat.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/visual_language_chat/visual_language_chat.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/visual_language_chat/visual_language_lora.cpp
+-- Up-to-date: C:\g54r2\openvino/samples/cpp/automatic_speech_recognition
+-- Installing: C:\g54r2\openvino/samples/cpp/automatic_speech_recognition/audio_utils.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/automatic_speech_recognition/audio_utils.hpp
+-- Installing: C:\g54r2\openvino/samples/cpp/automatic_speech_recognition/automatic_speech_recognition.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/automatic_speech_recognition/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/samples/cpp/automatic_speech_recognition/README.md
+-- Up-to-date: C:\g54r2\openvino/samples/cpp/omni
+-- Installing: C:\g54r2\openvino/samples/cpp/omni/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/samples/cpp/omni/omni_chat.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/omni/README.md
+-- Up-to-date: C:\g54r2\openvino/samples/cpp/rag
+-- Installing: C:\g54r2\openvino/samples/cpp/rag/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/samples/cpp/rag/image_video_embedding.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/rag/README.md
+-- Installing: C:\g54r2\openvino/samples/cpp/rag/text_embeddings.cpp
+-- Installing: C:\g54r2\openvino/samples/cpp/rag/text_rerank.cpp
+-- Up-to-date: C:\g54r2\openvino/samples/python/text_generation
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/beam_search_causal_lm.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/benchmark_genai.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/chat_sample.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/compound_grammar_generation.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/encrypted_model_causal_lm.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/greedy_causal_lm.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/limit_checker.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/lora_greedy_causal_lm.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/multinomial_causal_lm.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/prompt_lookup_decoding_lm.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/react_sample.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/README.md
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/speculative_decoding_lm.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/structural_tags_generation.py
+-- Installing: C:\g54r2\openvino/samples/python/text_generation/structured_output_generation.py
+-- Up-to-date: C:\g54r2\openvino/samples/python/image_generation
+-- Installing: C:\g54r2\openvino/samples/python/image_generation/benchmark_image_gen.py
+-- Installing: C:\g54r2\openvino/samples/python/image_generation/denoising_process.py
+-- Installing: C:\g54r2\openvino/samples/python/image_generation/encrypted_stable_diffusion.py
+-- Installing: C:\g54r2\openvino/samples/python/image_generation/heterogeneous_stable_diffusion.py
+-- Installing: C:\g54r2\openvino/samples/python/image_generation/image2image.py
+-- Installing: C:\g54r2\openvino/samples/python/image_generation/inpainting.py
+-- Installing: C:\g54r2\openvino/samples/python/image_generation/lora_text2image.py
+-- Installing: C:\g54r2\openvino/samples/python/image_generation/README.md
+-- Installing: C:\g54r2\openvino/samples/python/image_generation/stable_diffusion_export_import.py
+-- Installing: C:\g54r2\openvino/samples/python/image_generation/taylorseer_text2image.py
+-- Installing: C:\g54r2\openvino/samples/python/image_generation/text2image.py
+-- Up-to-date: C:\g54r2\openvino/samples/python/video_generation
+-- Installing: C:\g54r2\openvino/samples/python/video_generation/lora_text2video.py
+-- Installing: C:\g54r2\openvino/samples/python/video_generation/README.md
+-- Installing: C:\g54r2\openvino/samples/python/video_generation/taylorseer_text2video.py
+-- Installing: C:\g54r2\openvino/samples/python/video_generation/text2video.py
+-- Installing: C:\g54r2\openvino/samples/python/video_generation/video_utils.py
+-- Up-to-date: C:\g54r2\openvino/samples/python/speech_generation
+-- Installing: C:\g54r2\openvino/samples/python/speech_generation/create_speaker_embedding.py
+-- Installing: C:\g54r2\openvino/samples/python/speech_generation/kokoro_phonemize_fallback.py
+-- Installing: C:\g54r2\openvino/samples/python/speech_generation/README.md
+-- Installing: C:\g54r2\openvino/samples/python/speech_generation/text2speech.py
+-- Up-to-date: C:\g54r2\openvino/samples/python/visual_language_chat
+-- Installing: C:\g54r2\openvino/samples/python/visual_language_chat/benchmark_vlm.py
+-- Installing: C:\g54r2\openvino/samples/python/visual_language_chat/encrypted_model_vlm.py
+-- Installing: C:\g54r2\openvino/samples/python/visual_language_chat/milebench_eval_vlm.py
+-- Installing: C:\g54r2\openvino/samples/python/visual_language_chat/README.md
+-- Installing: C:\g54r2\openvino/samples/python/visual_language_chat/video_to_text_chat.py
+-- Installing: C:\g54r2\openvino/samples/python/visual_language_chat/visual_language_chat.py
+-- Installing: C:\g54r2\openvino/samples/python/visual_language_chat/visual_language_lora.py
+-- Up-to-date: C:\g54r2\openvino/samples/python/automatic_speech_recognition
+-- Installing: C:\g54r2\openvino/samples/python/automatic_speech_recognition/automatic_speech_recognition.py
+-- Installing: C:\g54r2\openvino/samples/python/automatic_speech_recognition/README.md
+-- Installing: C:\g54r2\openvino/samples/python/automatic_speech_recognition/recorder.py
+-- Up-to-date: C:\g54r2\openvino/samples/python/rag
+-- Installing: C:\g54r2\openvino/samples/python/rag/image_video_embedding.py
+-- Installing: C:\g54r2\openvino/samples/python/rag/README.md
+-- Installing: C:\g54r2\openvino/samples/python/rag/text_embeddings.py
+-- Installing: C:\g54r2\openvino/samples/python/rag/text_rerank.py
+-- Up-to-date: C:\g54r2\openvino/samples/c/common
+-- Installing: C:\g54r2\openvino/samples/c/common/json_utils.c
+-- Installing: C:\g54r2\openvino/samples/c/common/json_utils.h
+-- Up-to-date: C:\g54r2\openvino/samples/c/text_generation
+-- Installing: C:\g54r2\openvino/samples/c/text_generation/benchmark_genai_c.c
+-- Installing: C:\g54r2\openvino/samples/c/text_generation/chat_sample_c.c
+-- Installing: C:\g54r2\openvino/samples/c/text_generation/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/samples/c/text_generation/greedy_causal_lm_c.c
+-- Installing: C:\g54r2\openvino/samples/c/text_generation/README.md
+-- Up-to-date: C:\g54r2\openvino/samples/c/whisper_speech_recognition
+-- Installing: C:\g54r2\openvino/samples/c/whisper_speech_recognition/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/samples/c/whisper_speech_recognition/README.md
+-- Installing: C:\g54r2\openvino/samples/c/whisper_speech_recognition/whisper_speech_recognition.c
+-- Installing: C:\g54r2\openvino/samples/c/whisper_speech_recognition/whisper_utils.c
+-- Installing: C:\g54r2\openvino/samples/c/whisper_speech_recognition/whisper_utils.h
+-- Up-to-date: C:\g54r2\openvino/samples/c/visual_language_chat
+-- Installing: C:\g54r2\openvino/samples/c/visual_language_chat/CMakeLists.txt
+-- Installing: C:\g54r2\openvino/samples/c/visual_language_chat/load_image.c
+-- Installing: C:\g54r2\openvino/samples/c/visual_language_chat/load_image.h
+-- Installing: C:\g54r2\openvino/samples/c/visual_language_chat/vlm_pipeline.c
+-- Installing: C:\g54r2\openvino/docs/licensing/LICENSE-GENAI
+-- Installing: C:\g54r2\openvino/docs/licensing/third-party-programs-genai.txt

@@ -1,0 +1,8 @@
+Python 3.14.6
+[setupvars.bat] OpenVINO environment initialized
+PASS auto single
+PASS auto parallel
+PASS required single
+PASS required parallel
+PASS echo single
+PASS echo parallel

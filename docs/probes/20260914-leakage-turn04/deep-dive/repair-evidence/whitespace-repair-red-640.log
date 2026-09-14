@@ -1,0 +1,583 @@
+Python 3.12.10
+[setupvars.bat] OpenVINO environment initialized
+Setting vars for OpenCV 4.14.0 
+Append PYTHONPATH: C:\opt\opencv_4.14.0\\python_loader_is_not_installed 
+WARNING: The following configs were expanded more than once: [short_logs, v2, monolithic]. For repeatable flags, repeats are counted twice and may lead to unexpected behavior.
+INFO: Options provided by the client:
+  Inherited 'common' options: --isatty=0 --terminal_columns=80
+INFO: Options provided by the client:
+  Inherited 'build' options: --python_path=C:/opt/Python312/python.exe
+INFO: Reading rc options for 'test' from c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc:
+  Inherited 'build' options: --define=no_cuda=1 --spawn_strategy=standalone --genrule_strategy=standalone --define=grpc_no_ares=true --define=MEDIAPIPE_DISABLE_GPU=1 --define=MEDIAPIPE_DISABLE=0 --define=CLOUD_DISABLE=0 --define=PYTHON_DISABLE=0 --apple_platform_type=macos -c opt --copt=-O2 --copt=-DGRPC_BAZEL_BUILD --cxxopt=-D_GLIBCXX_USE_CXX11_ABI=1 --enable_platform_specific_config --experimental_repo_remote_exec --experimental_cc_shared_library --check_visibility=true --incompatible_strict_action_env --cxxopt=-DOVMS_DUMP_TO_FILE=0 --remote_upload_local_results=true
+INFO: Reading rc options for 'test' from c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc:
+  'test' options: --test_timeout=1200 --experimental_ui_max_stdouterr_bytes=304857600
+INFO: Found applicable config definition build:win_mp_on_py_on in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --config=windows --define=MEDIAPIPE_DISABLE=0 --define=PYTHON_DISABLE=0
+INFO: Found applicable config definition build:windows in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --host_cxxopt=/std:c++17 --cxxopt=/std:c++17 --noenable_bzlmod --define=use_fast_cpp_protos=true --define=allow_oversize_protos=true --announce_rc --noincompatible_remove_legacy_whole_archive --features=-force_no_whole_archive --define=with_xla_support=true --config=short_logs --config=v2 --define=no_aws_support=true --define=no_hdfs_support=true --experimental_link_static_libraries_once=false --incompatible_enforce_config_setting_visibility --config=monolithic --copt=/W0 --host_copt=/W0 --copt=/external:anglebrackets --host_copt=/external:anglebrackets --copt=/external:W0 --host_copt=/external:W0 --copt=/Zc:__cplusplus --host_copt=/Zc:__cplusplus --copt=/D_USE_MATH_DEFINES --host_copt=/D_USE_MATH_DEFINES --features=compiler_param_file --features=archive_param_file --copt=/d2ReducedOptimizeHugeFunctions --host_copt=/d2ReducedOptimizeHugeFunctions --copt=-DWIN32_LEAN_AND_MEAN --host_copt=-DWIN32_LEAN_AND_MEAN --copt=-DNOGDI --host_copt=-DNOGDI --copt=/Zc:preprocessor --host_copt=/Zc:preprocessor --linkopt=/OPT:REF --host_linkopt=/OPT:REF --linkopt=/OPT:ICF --host_linkopt=/OPT:ICF --action_env PYTHON_BIN_PATH=C:/opt/Python312/python.exe --action_env PYTHON_LIB_PATH=C:/opt/Python312/lib/site-packages --repo_env PYTHON_BIN_PATH=C:/opt/Python312/python.exe --python_path=C:/opt/Python312/python.exe --define=override_eigen_strong_inline=true --deleted_packages=tensorflow/core/tfrt/stubs,tensorflow/compiler/mlir/tfrt,tensorflow/compiler/mlir/tfrt/benchmarks,tensorflow/compiler/mlir/tfrt/ir,tensorflow/compiler/mlir/tfrt/ir/mlrt,tensorflow/compiler/mlir/tfrt/jit/python_binding,tensorflow/compiler/mlir/tfrt/jit/transforms,tensorflow/compiler/mlir/tfrt/python_tests,tensorflow/compiler/mlir/tfrt/tests,tensorflow/compiler/mlir/tfrt/tests/mlrt,tensorflow/compiler/mlir/tfrt/tests/ir,tensorflow/compiler/mlir/tfrt/tests/analysis,tensorflow/compiler/mlir/tfrt/tests/jit,tensorflow/compiler/mlir/tfrt/tests/lhlo_to_tfrt,tensorflow/compiler/mlir/tfrt/tests/lhlo_to_jitrt,tensorflow/compiler/mlir/tfrt/tests/tf_to_corert,tensorflow/compiler/mlir/tfrt/tests/tf_to_tfrt_data,tensorflow/compiler/mlir/tfrt/tests/saved_model,tensorflow/compiler/mlir/tfrt/transforms/lhlo_gpu_to_tfrt_gpu,tensorflow/compiler/mlir/tfrt/transforms/mlrt,tensorflow/core/runtime_fallback,tensorflow/core/runtime_fallback/conversion,tensorflow/core/runtime_fallback/kernel,tensorflow/core/runtime_fallback/opdefs,tensorflow/core/runtime_fallback/runtime,tensorflow/core/runtime_fallback/util,tensorflow/core/tfrt/mlrt,tensorflow/core/tfrt/mlrt/attribute,tensorflow/core/tfrt/mlrt/kernel,tensorflow/core/tfrt/mlrt/bytecode,tensorflow/core/tfrt/mlrt/interpreter,tensorflow/compiler/mlir/tfrt/translate/mlrt,tensorflow/compiler/mlir/tfrt/translate/mlrt/testdata,tensorflow/core/tfrt/gpu,tensorflow/core/tfrt/run_handler_thread_pool,tensorflow/core/tfrt/runtime,tensorflow/core/tfrt/saved_model,tensorflow/core/tfrt/graph_executor,tensorflow/core/tfrt/saved_model/tests,tensorflow/core/tfrt/tpu,tensorflow/core/tfrt/utils,tensorflow/core/tfrt/utils/debug,tensorflow/core/tfrt/saved_model/python,tensorflow/core/tfrt/graph_executor/python --override_repository=boringssl=C:\opt\boringSSL-SwiftPM --define=CLOUD_DISABLE=1 --define=PYTHON_DISABLE=1 --define=MEDIAPIPE_DISABLE=0 --action_env OpenVINO_DIR=c:/opt/openvino/runtime/cmake --action_env OpenCV_DIR=c:/opt/opencv_4.14.0 --repo_env=HERMETIC_PYTHON_VERSION=3.12
+INFO: Found applicable config definition build:short_logs in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --output_filter=DONT_MATCH_ANYTHING
+INFO: Found applicable config definition build:v2 in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --define=tf_api_version=2 --action_env=TF2_BEHAVIOR=1
+INFO: Found applicable config definition build:monolithic in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --define framework_shared_object=false --define tsl_protobuf_header_only=false
+INFO: Found applicable config definition build:windows in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --host_cxxopt=/std:c++17 --cxxopt=/std:c++17 --noenable_bzlmod --define=use_fast_cpp_protos=true --define=allow_oversize_protos=true --announce_rc --noincompatible_remove_legacy_whole_archive --features=-force_no_whole_archive --define=with_xla_support=true --config=short_logs --config=v2 --define=no_aws_support=true --define=no_hdfs_support=true --experimental_link_static_libraries_once=false --incompatible_enforce_config_setting_visibility --config=monolithic --copt=/W0 --host_copt=/W0 --copt=/external:anglebrackets --host_copt=/external:anglebrackets --copt=/external:W0 --host_copt=/external:W0 --copt=/Zc:__cplusplus --host_copt=/Zc:__cplusplus --copt=/D_USE_MATH_DEFINES --host_copt=/D_USE_MATH_DEFINES --features=compiler_param_file --features=archive_param_file --copt=/d2ReducedOptimizeHugeFunctions --host_copt=/d2ReducedOptimizeHugeFunctions --copt=-DWIN32_LEAN_AND_MEAN --host_copt=-DWIN32_LEAN_AND_MEAN --copt=-DNOGDI --host_copt=-DNOGDI --copt=/Zc:preprocessor --host_copt=/Zc:preprocessor --linkopt=/OPT:REF --host_linkopt=/OPT:REF --linkopt=/OPT:ICF --host_linkopt=/OPT:ICF --action_env PYTHON_BIN_PATH=C:/opt/Python312/python.exe --action_env PYTHON_LIB_PATH=C:/opt/Python312/lib/site-packages --repo_env PYTHON_BIN_PATH=C:/opt/Python312/python.exe --python_path=C:/opt/Python312/python.exe --define=override_eigen_strong_inline=true --deleted_packages=tensorflow/core/tfrt/stubs,tensorflow/compiler/mlir/tfrt,tensorflow/compiler/mlir/tfrt/benchmarks,tensorflow/compiler/mlir/tfrt/ir,tensorflow/compiler/mlir/tfrt/ir/mlrt,tensorflow/compiler/mlir/tfrt/jit/python_binding,tensorflow/compiler/mlir/tfrt/jit/transforms,tensorflow/compiler/mlir/tfrt/python_tests,tensorflow/compiler/mlir/tfrt/tests,tensorflow/compiler/mlir/tfrt/tests/mlrt,tensorflow/compiler/mlir/tfrt/tests/ir,tensorflow/compiler/mlir/tfrt/tests/analysis,tensorflow/compiler/mlir/tfrt/tests/jit,tensorflow/compiler/mlir/tfrt/tests/lhlo_to_tfrt,tensorflow/compiler/mlir/tfrt/tests/lhlo_to_jitrt,tensorflow/compiler/mlir/tfrt/tests/tf_to_corert,tensorflow/compiler/mlir/tfrt/tests/tf_to_tfrt_data,tensorflow/compiler/mlir/tfrt/tests/saved_model,tensorflow/compiler/mlir/tfrt/transforms/lhlo_gpu_to_tfrt_gpu,tensorflow/compiler/mlir/tfrt/transforms/mlrt,tensorflow/core/runtime_fallback,tensorflow/core/runtime_fallback/conversion,tensorflow/core/runtime_fallback/kernel,tensorflow/core/runtime_fallback/opdefs,tensorflow/core/runtime_fallback/runtime,tensorflow/core/runtime_fallback/util,tensorflow/core/tfrt/mlrt,tensorflow/core/tfrt/mlrt/attribute,tensorflow/core/tfrt/mlrt/kernel,tensorflow/core/tfrt/mlrt/bytecode,tensorflow/core/tfrt/mlrt/interpreter,tensorflow/compiler/mlir/tfrt/translate/mlrt,tensorflow/compiler/mlir/tfrt/translate/mlrt/testdata,tensorflow/core/tfrt/gpu,tensorflow/core/tfrt/run_handler_thread_pool,tensorflow/core/tfrt/runtime,tensorflow/core/tfrt/saved_model,tensorflow/core/tfrt/graph_executor,tensorflow/core/tfrt/saved_model/tests,tensorflow/core/tfrt/tpu,tensorflow/core/tfrt/utils,tensorflow/core/tfrt/utils/debug,tensorflow/core/tfrt/saved_model/python,tensorflow/core/tfrt/graph_executor/python --override_repository=boringssl=C:\opt\boringSSL-SwiftPM --define=CLOUD_DISABLE=1 --define=PYTHON_DISABLE=1 --define=MEDIAPIPE_DISABLE=0 --action_env OpenVINO_DIR=c:/opt/openvino/runtime/cmake --action_env OpenCV_DIR=c:/opt/opencv_4.14.0 --repo_env=HERMETIC_PYTHON_VERSION=3.12
+INFO: Found applicable config definition build:short_logs in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --output_filter=DONT_MATCH_ANYTHING
+INFO: Found applicable config definition build:v2 in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --define=tf_api_version=2 --action_env=TF2_BEHAVIOR=1
+INFO: Found applicable config definition build:monolithic in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --define framework_shared_object=false --define tsl_protobuf_header_only=false
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+DEBUG: Rule 'rules_foreign_cc' indicated that a canonical reproducible form can be obtained by modifying arguments commit = "1fb8a1ed9100236590c2a9441d79811aefaabcf8"
+DEBUG: Repository rules_foreign_cc instantiated at:
+  C:/git/gemmamonster-2026.4-unified-20260911/WORKSPACE:223:15: in <toplevel>
+Repository rule git_repository defined at:
+  C:/g54r2/f3bslrdg/external/bazel_tools/tools/build_defs/repo/git.bzl:181:33: in <toplevel>
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+DEBUG: Rule 'pybind11_bazel' indicated that a canonical reproducible form can be obtained by modifying arguments sha256 = "b72c5b44135b90d1ffaba51e08240be0b91707ac60bea08bb4d84b47316211bb"
+DEBUG: Repository pybind11_bazel instantiated at:
+  C:/git/gemmamonster-2026.4-unified-20260911/WORKSPACE:334:13: in <toplevel>
+Repository rule http_archive defined at:
+  C:/g54r2/f3bslrdg/external/bazel_tools/tools/build_defs/repo/http.bzl:372:31: in <toplevel>
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/py/python_repo.bzl:107:10: Using hermetic Python 3.12
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'com_google_absl' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'pybind11_bazel' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'com_google_protobuf' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'com_github_gflags_gflags' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'boringssl' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'zlib' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'pybind11' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'upb' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'com_github_glog_glog' because it already exists.
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+DEBUG: Rule 'com_github_jupp0r_prometheus_cpp' indicated that a canonical reproducible form can be obtained by modifying arguments sha256 = "281b6d9a26da35375c9958954e03616d71ea28d57ec193b0e75c3e10ff3da55d"
+DEBUG: Repository com_github_jupp0r_prometheus_cpp instantiated at:
+  C:/git/gemmamonster-2026.4-unified-20260911/WORKSPACE:565:13: in <toplevel>
+Repository rule http_archive defined at:
+  C:/g54r2/f3bslrdg/external/bazel_tools/tools/build_defs/repo/http.bzl:372:31: in <toplevel>
+WARNING: The following configs were expanded more than once: [short_logs, v2, monolithic]. For repeatable flags, repeats are counted twice and may lead to unexpected behavior.
+Loading: 
+Loading: 0 packages loaded
+Analyzing: 6 targets (3 packages loaded, 0 targets configured)
+Analyzing: 6 targets (7 packages loaded, 6 targets configured)
+Analyzing: 6 targets (47 packages loaded, 9 targets configured)
+Analyzing: 6 targets (48 packages loaded, 9 targets configured)
+Analyzing: 6 targets (48 packages loaded, 9 targets configured)
+Analyzing: 6 targets (48 packages loaded, 9 targets configured)
+Analyzing: 6 targets (48 packages loaded, 9 targets configured)
+Analyzing: 6 targets (48 packages loaded, 9 targets configured)
+Analyzing: 6 targets (58 packages loaded, 327 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (66 packages loaded, 333 targets configured)
+Analyzing: 6 targets (81 packages loaded, 859 targets configured)
+Analyzing: 6 targets (94 packages loaded, 3097 targets configured)
+DEBUG: Rule 'pybind11' indicated that a canonical reproducible form can be obtained by modifying arguments sha256 = "d475978da0cdc2d43b73f30910786759d593a9d8ee05b1b6846d1eb16c6d2e0c"
+DEBUG: Repository pybind11 instantiated at:
+  C:/git/gemmamonster-2026.4-unified-20260911/WORKSPACE:340:13: in <toplevel>
+Repository rule http_archive defined at:
+  C:/g54r2/f3bslrdg/external/bazel_tools/tools/build_defs/repo/http.bzl:372:31: in <toplevel>
+Analyzing: 6 targets (99 packages loaded, 3666 targets configured)
+Analyzing: 6 targets (99 packages loaded, 3666 targets configured)
+Analyzing: 6 targets (129 packages loaded, 4403 targets configured)
+INFO: Analyzed 6 targets (135 packages loaded, 4816 targets configured).
+INFO: Found 6 test targets...
+[0 / 244] [Prepa] Creating source manifest for //src/test/llm/gemma4_fast:gemma4_parser_contract_test
+[228 / 1,463] Compiling src/llm/io_processing/chat_template/analyzer.cpp; 0s local ... (5 actions, 4 running)
+[493 / 1,466] Compiling src/llm/io_processing/chat_template/analyzer.cpp; 1s local ... (5 actions running)
+[764 / 1,466] Compiling src/llm/io_processing/chat_template/analyzer.cpp; 2s local ... (6 actions running)
+[1,024 / 1,466] Compiling src/stringutils.cpp; 3s local ... (6 actions running)
+[1,216 / 1,476] Compiling src/stringutils.cpp; 4s local ... (7 actions running)
+[1,217 / 1,476] Compiling src/stringutils.cpp; 5s local ... (7 actions running)
+[1,219 / 1,476] Compiling src/stringutils.cpp; 6s local ... (7 actions running)
+[1,221 / 1,476] Compiling src/stringutils.cpp; 7s local ... (7 actions running)
+[1,222 / 1,476] Executing genrule @local_config_python//:python_include; 6s local ... (7 actions running)
+[1,237 / 1,487] Executing genrule @local_config_python//:python_include; 7s local ... (6 actions running)
+[1,251 / 1,507] Executing genrule @local_config_python//:python_include; 8s local ... (7 actions running)
+[1,254 / 1,507] Executing genrule @local_config_python//:python_include; 9s local ... (7 actions running)
+[1,262 / 1,515] Executing genrule @local_config_python//:python_include; 10s local ... (7 actions running)
+[1,320 / 1,628] Executing genrule @local_config_python//:python_include; 11s local ... (7 actions running)
+[1,366 / 1,714] Executing genrule @local_config_python//:python_include; 12s local ... (7 actions running)
+[1,391 / 1,743] Executing genrule @local_config_python//:python_include; 13s local ... (8 actions running)
+[1,393 / 1,743] 1 / 6 tests; Executing genrule @local_config_python//:python_include; 14s local ... (8 actions running)
+[1,398 / 1,743] 1 / 6 tests; Executing genrule @local_config_python//:python_include; 15s local ... (8 actions running)
+[1,407 / 1,743] 1 / 6 tests; Executing genrule @local_config_python//:python_include; 16s local ... (7 actions running)
+[1,410 / 1,743] 1 / 6 tests; Executing genrule @local_config_python//:python_include; 17s local ... (8 actions running)
+[1,411 / 1,743] 1 / 6 tests; Executing genrule @local_config_python//:python_include; 18s local ... (8 actions, 7 running)
+[1,442 / 1,743] 1 / 6 tests; Executing genrule @local_config_python//:python_include; 20s local ... (8 actions, 7 running)
+[1,444 / 1,745] 1 / 6 tests; Executing genrule @local_config_python//:python_include; 21s local ... (8 actions running)
+[1,445 / 1,745] 1 / 6 tests; Executing genrule @local_config_python//:python_include; 22s local ... (8 actions running)
+[1,446 / 1,745] 1 / 6 tests; Executing genrule @local_config_python//:python_include; 23s local ... (8 actions running)
+[1,450 / 1,745] 1 / 6 tests; Compiling src/llm/io_processing/base_output_parser.cpp; 16s local ... (8 actions running)
+[1,452 / 1,745] 1 / 6 tests; Compiling src/llm/io_processing/base_output_parser.cpp; 17s local ... (8 actions running)
+[1,454 / 1,745] 1 / 6 tests; Compiling src/audio/audio_utils.cpp; 15s local ... (8 actions running)
+[1,486 / 1,747] 1 / 6 tests; Compiling src/audio/audio_utils.cpp; 16s local ... (8 actions running)
+[1,487 / 1,748] 1 / 6 tests; Compiling src/audio/audio_utils.cpp; 18s local ... (8 actions, 7 running)
+[1,490 / 1,748] 1 / 6 tests; Compiling src/audio/audio_utils.cpp; 19s local ... (8 actions running)
+[1,491 / 1,748] 1 / 6 tests; Compiling src/audio/audio_utils.cpp; 20s local ... (7 actions running)
+[1,493 / 1,748] 1 / 6 tests; Compiling src/audio/audio_utils.cpp; 21s local ... (8 actions running)
+[1,498 / 1,748] 1 / 6 tests; Compiling src/config.cpp; 20s local ... (7 actions running)
+[1,508 / 1,750] 1 / 6 tests; Compiling src/config.cpp; 21s local ... (7 actions running)
+[1,512 / 1,750] 1 / 6 tests; Compiling src/config.cpp; 22s local ... (8 actions running)
+[1,513 / 1,750] 1 / 6 tests; Compiling src/config.cpp; 26s local ... (8 actions, 7 running)
+[1,517 / 1,752] 1 / 6 tests; Compiling src/config.cpp; 28s local ... (8 actions running)
+[1,518 / 1,752] 1 / 6 tests; Compiling src/config.cpp; 30s local ... (8 actions, 7 running)
+[1,521 / 1,754] 1 / 6 tests; Compiling src/modelconfig.cpp; 18s local ... (8 actions running)
+[1,522 / 1,754] 1 / 6 tests; Compiling src/modelconfig.cpp; 21s local ... (8 actions, 7 running)
+[1,524 / 1,756] 1 / 6 tests; Compiling src/modelconfig.cpp; 22s local ... (8 actions running)
+[1,526 / 1,756] 1 / 6 tests; Compiling src/modelconfig.cpp; 24s local ... (8 actions running)
+[1,527 / 1,756] 1 / 6 tests; Compiling src/llm/io_processing/image_utils.cpp; 22s local ... (8 actions, 7 running)
+[1,530 / 1,758] 1 / 6 tests; Compiling src/llm/io_processing/image_utils.cpp; 23s local ... (8 actions, 7 running)
+[1,532 / 1,760] 1 / 6 tests; Compiling src/llm/io_processing/image_utils.cpp; 24s local ... (8 actions running)
+[1,535 / 1,762] 1 / 6 tests; Compiling src/llm/py_jinja_template_processor.cpp; 19s local ... (8 actions running)
+[1,536 / 1,762] 1 / 6 tests; Compiling src/llm/py_jinja_template_processor.cpp; 20s local ... (8 actions running)
+[1,537 / 1,762] 1 / 6 tests; Compiling src/llm/py_jinja_template_processor.cpp; 22s local ... (8 actions, 7 running)
+[1,539 / 1,764] 1 / 6 tests; Compiling src/llm/py_jinja_template_processor.cpp; 23s local ... (8 actions running)
+[1,540 / 1,764] 1 / 6 tests; Compiling src/llm/py_jinja_template_processor.cpp; 29s local ... (8 actions, 7 running)
+[1,544 / 1,766] 1 / 6 tests; Compiling src/llm/py_jinja_template_processor.cpp; 30s local ... (8 actions running)
+[1,545 / 1,766] 1 / 6 tests; Compiling src/precision_configuration.cpp; 16s local ... (8 actions, 7 running)
+[1,547 / 1,766] 1 / 6 tests; Compiling src/precision_configuration.cpp; 17s local ... (8 actions running)
+[1,548 / 1,766] 1 / 6 tests; Compiling src/llm/io_processing/qwen3/reasoning_parser.cpp; 18s local ... (8 actions, 7 running)
+[1,550 / 1,768] 1 / 6 tests; Compiling src/llm/io_processing/qwen3/reasoning_parser.cpp; 20s local ... (8 actions running)
+[1,553 / 1,770] 1 / 6 tests; Compiling src/llm/io_processing/qwen3/reasoning_parser.cpp; 21s local ... (8 actions running)
+[1,554 / 1,770] 1 / 6 tests; Compiling src/llm/io_processing/qwen3/reasoning_parser.cpp; 24s local ... (8 actions, 7 running)
+[1,557 / 1,772] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/image_decoding_processor.cpp; 23s local ... (8 actions, 7 running)
+[1,562 / 1,776] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/image_decoding_processor.cpp; 25s local ... (8 actions running)
+[1,563 / 1,776] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/image_decoding_processor.cpp; 26s local ... (8 actions running)
+[1,564 / 1,776] 1 / 6 tests; Compiling src/json_parser.cpp; 19s local ... (8 actions, 7 running)
+[1,564 / 1,776] 1 / 6 tests; Compiling src/json_parser.cpp; 20s local ... (8 actions running)
+[1,565 / 1,776] 1 / 6 tests; Compiling src/llm/io_processing/input_processor.cpp; 19s local ... (8 actions, 7 running)
+[1,571 / 1,780] 1 / 6 tests; Compiling src/llm/io_processing/input_processor.cpp; 20s local ... (8 actions, 7 running)
+[1,573 / 1,782] 1 / 6 tests; Compiling src/llm/io_processing/input_processor.cpp; 21s local ... (8 actions running)
+[1,574 / 1,782] 1 / 6 tests; Compiling src/llm/io_processing/input_processor.cpp; 25s local ... (8 actions, 7 running)
+[1,576 / 1,784] 1 / 6 tests; Compiling src/llm/io_processing/input_processor.cpp; 27s local ... (8 actions running)
+[1,577 / 1,784] 1 / 6 tests; Compiling src/llm/io_processing/input_processor.cpp; 28s local ... (8 actions running)
+[1,578 / 1,784] 1 / 6 tests; Compiling src/cli_parser.cpp; 30s local ... (8 actions, 7 running)
+[1,579 / 1,784] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/audio_decoding_processor.cpp; 22s local ... (8 actions running)
+[1,582 / 1,786] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/audio_decoding_processor.cpp; 23s local ... (8 actions running)
+[1,587 / 1,790] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/audio_decoding_processor.cpp; 24s local ... (7 actions running)
+[1,591 / 1,792] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/audio_decoding_processor.cpp; 25s local ... (8 actions running)
+[1,592 / 1,792] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_content_parser.cpp; 17s local ... (8 actions, 7 running)
+[1,593 / 1,792] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/text_content_normalization_processor.cpp; 16s local ... (8 actions, 7 running)
+[1,595 / 1,794] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/text_content_normalization_processor.cpp; 17s local ... (8 actions running)
+[1,596 / 1,794] 1 / 6 tests; Compiling src/llm/apis/openai_completions.cpp; 9s local ... (8 actions running)
+[1,597 / 1,794] 1 / 6 tests; Compiling src/llm/apis/openai_completions.cpp; 18s local ... (8 actions, 7 running)
+[1,600 / 1,796] 1 / 6 tests; Compiling src/llm/apis/openai_completions.cpp; 20s local ... (8 actions, 7 running)
+[1,605 / 1,800] 1 / 6 tests; Compiling src/llm/apis/openai_completions.cpp; 21s local ... (8 actions running)
+[1,606 / 1,800] 1 / 6 tests; Compiling src/llm/apis/openai_completions.cpp; 23s local ... (8 actions, 7 running)
+[1,608 / 1,802] 1 / 6 tests; Compiling src/llm/apis/openai_completions.cpp; 25s local ... (8 actions running)
+[1,609 / 1,802] 1 / 6 tests; Compiling src/llm/apis/openai_completions.cpp; 26s local ... (8 actions, 7 running)
+[1,609 / 1,802] 1 / 6 tests; Compiling src/llm/apis/openai_completions.cpp; 28s local ... (8 actions running)
+[1,610 / 1,802] 1 / 6 tests; Compiling src/llm/apis/openai_completions.cpp; 31s local ... (8 actions, 7 running)
+[1,612 / 1,804] 1 / 6 tests; Compiling src/llm/apis/openai_completions.cpp; 33s local ... (8 actions running)
+[1,615 / 1,806] 1 / 6 tests; Compiling src/llm/apis/openai_completions.cpp; 34s local ... (8 actions running)
+[1,617 / 1,806] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/chat_template_processor.cpp; 29s local ... (8 actions running)
+[1,623 / 1,808] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/chat_template_processor.cpp; 30s local ... (8 actions running)
+[1,624 / 1,808] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/chat_template_processor.cpp; 33s local ... (7 actions running)
+[1,625 / 1,811] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/chat_template_processor.cpp; 34s local ... (8 actions running)
+[1,626 / 1,811] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/chat_template_processor.cpp; 35s local ... (8 actions running)
+[1,628 / 1,811] 1 / 6 tests; Compiling src/llm/apis/openai_responses.cpp; 19s local ... (8 actions, 7 running)
+[1,629 / 1,811] 1 / 6 tests; Compiling src/llm/apis/openai_responses.cpp; 20s local ... (8 actions, 7 running)
+[1,638 / 1,819] 1 / 6 tests; Compiling src/llm/apis/openai_responses.cpp; 21s local ... (8 actions running)
+[1,641 / 1,821] 1 / 6 tests; Compiling src/llm/apis/openai_responses.cpp; 22s local ... (8 actions running)
+[1,642 / 1,821] 1 / 6 tests; Compiling src/llm/apis/openai_responses.cpp; 29s local ... (8 actions, 7 running)
+[1,649 / 1,863] 1 / 6 tests; Compiling src/llm/apis/openai_responses.cpp; 30s local ... (8 actions, 7 running)
+[1,654 / 2,094] 1 / 6 tests; Compiling src/llm/apis/openai_api_handler.cpp; 23s local ... (8 actions, 7 running)
+[1,659 / 2,094] 1 / 6 tests; Compiling src/llm/apis/openai_api_handler.cpp; 24s local ... (8 actions, 7 running)
+[1,664 / 2,100] 1 / 6 tests; Compiling src/llm/apis/openai_api_handler.cpp; 25s local ... (8 actions, 7 running)
+[1,670 / 2,100] 1 / 6 tests; Compiling src/llm/apis/openai_api_handler.cpp; 26s local ... (7 actions running)
+[1,677 / 2,102] 1 / 6 tests; Compiling src/llm/apis/openai_api_handler.cpp; 27s local ... (8 actions running)
+[1,681 / 2,102] 1 / 6 tests; Compiling src/llm/apis/openai_api_handler.cpp; 28s local ... (8 actions running)
+[1,684 / 2,102] 1 / 6 tests; Compiling src/llm/apis/openai_api_handler.cpp; 29s local ... (8 actions running)
+[1,686 / 2,102] 1 / 6 tests; Compiling src/llm/apis/openai_api_handler.cpp; 30s local ... (8 actions running)
+[1,693 / 2,104] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/chat_template_adapter.cpp; 22s local ... (8 actions, 7 running)
+[1,694 / 2,104] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/chat_template_adapter.cpp; 23s local ... (8 actions running)
+[1,703 / 2,109] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/chat_template_adapter.cpp; 24s local ... (8 actions running)
+[1,706 / 2,109] 1 / 6 tests; Compiling src/llm/io_processing/input_processors/chat_template_adapter.cpp; 25s local ... (8 actions running)
+[1,713 / 2,111] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 13s local ... (8 actions running)
+[1,723 / 2,113] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 14s local ... (7 actions running)
+[1,726 / 2,113] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 15s local ... (8 actions running)
+[1,731 / 2,115] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 17s local ... (8 actions running)
+[1,738 / 2,117] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 18s local ... (8 actions running)
+[1,742 / 2,117] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 19s local ... (8 actions running)
+[1,750 / 2,121] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 20s local ... (7 actions running)
+[1,752 / 2,121] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 21s local ... (8 actions running)
+[1,759 / 2,123] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 22s local ... (8 actions, 7 running)
+[1,768 / 2,123] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 23s local ... (8 actions running)
+[1,779 / 2,125] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 24s local ... (8 actions running)
+[1,784 / 2,125] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 25s local ... (8 actions running)
+[1,797 / 2,129] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 26s local ... (8 actions running)
+[1,805 / 2,129] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 27s local ... (8 actions running)
+[1,816 / 2,133] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 28s local ... (8 actions running)
+[1,825 / 2,133] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 29s local ... (7 actions running)
+[1,828 / 2,133] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 30s local ... (8 actions running)
+[1,837 / 2,135] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 31s local ... (7 actions, 6 running)
+[1,843 / 2,137] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 32s local ... (8 actions running)
+[1,849 / 2,139] 1 / 6 tests; Compiling src/llm/io_processing/onyx/onyx_tool_parser.cpp; 33s local ... (8 actions running)
+[1,858 / 2,141] 1 / 6 tests; Compiling src/llm/io_processing/hermes3/generation_config_builder.cpp; 12s local ... (8 actions running)
+[1,864 / 2,141] 1 / 6 tests; Compiling src/llm/io_processing/hermes3/generation_config_builder.cpp; 13s local ... (8 actions running)
+[1,876 / 2,149] 1 / 6 tests; Compiling src/llm/io_processing/hermes3/generation_config_builder.cpp; 14s local ... (8 actions running)
+[1,883 / 2,149] 1 / 6 tests; Compiling src/llm/io_processing/hermes3/generation_config_builder.cpp; 15s local ... (8 actions running)
+[1,890 / 2,149] 1 / 6 tests; Compiling src/llm/io_processing/hermes3/generation_config_builder.cpp; 16s local ... (7 actions running)
+[1,894 / 2,149] 1 / 6 tests; Compiling src/llm/io_processing/hermes3/generation_config_builder.cpp; 17s local ... (8 actions running)
+[1,905 / 2,151] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 6s local ... (8 actions running)
+[1,910 / 2,151] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 7s local ... (8 actions running)
+[1,918 / 2,154] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 8s local ... (8 actions running)
+[1,930 / 2,158] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 9s local ... (7 actions running)
+[1,939 / 2,160] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 10s local ... (8 actions running)
+[1,947 / 2,162] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 11s local ... (8 actions running)
+[1,962 / 2,168] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 12s local ... (8 actions running)
+[1,971 / 2,170] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 13s local ... (8 actions running)
+[1,979 / 2,172] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 14s local ... (8 actions running)
+[1,987 / 2,174] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 15s local ... (8 actions running)
+[1,989 / 2,174] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 16s local ... (8 actions running)
+[1,992 / 2,174] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 17s local ... (8 actions running)
+[2,004 / 2,178] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 18s local ... (6 actions running)
+[2,011 / 2,180] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 19s local ... (8 actions running)
+[2,015 / 2,182] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 20s local ... (8 actions running)
+[2,017 / 2,182] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 21s local ... (8 actions running)
+[2,025 / 2,184] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 22s local ... (8 actions running)
+[2,031 / 2,186] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 23s local ... (8 actions running)
+[2,037 / 2,188] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 24s local ... (8 actions running)
+[2,043 / 2,188] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 25s local ... (8 actions running)
+[2,058 / 2,196] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 26s local ... (8 actions running)
+[2,064 / 2,196] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 27s local ... (8 actions running)
+[2,071 / 2,198] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 28s local ... (8 actions running)
+[2,080 / 2,204] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 29s local ... (8 actions running)
+[2,081 / 2,204] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 30s local ... (8 actions running)
+[2,084 / 2,206] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 31s local ... (8 actions running)
+[2,089 / 2,210] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 32s local ... (8 actions running)
+[2,093 / 2,212] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 33s local ... (8 actions running)
+[2,098 / 2,216] 1 / 6 tests; Compiling src/llm/io_processing/minicpm5/minicpm5_tool_parser.cpp; 34s local ... (8 actions running)
+[2,103 / 2,222] 1 / 6 tests; Compiling src/llm/io_processing/phi4/generation_config_builder.cpp; 11s local ... (8 actions running)
+[2,109 / 2,226] 1 / 6 tests; Compiling src/llm/io_processing/phi4/generation_config_builder.cpp; 12s local ... (8 actions running)
+[2,116 / 2,230] 1 / 6 tests; Compiling src/llm/io_processing/phi4/generation_config_builder.cpp; 13s local ... (8 actions running)
+[2,121 / 2,234] 1 / 6 tests; Compiling src/llm/io_processing/phi4/generation_config_builder.cpp; 14s local ... (8 actions running)
+[2,133 / 2,242] 1 / 6 tests; Compiling src/llm/io_processing/phi4/generation_config_builder.cpp; 15s local ... (7 actions running)
+[2,136 / 2,242] 1 / 6 tests; Compiling src/llm/io_processing/phi4/generation_config_builder.cpp; 16s local ... (8 actions running)
+[2,148 / 2,250] 1 / 6 tests; Compiling src/llm/io_processing/phi4/generation_config_builder.cpp; 17s local ... (7 actions running)
+[2,155 / 2,256] 1 / 6 tests; Compiling src/llm/io_processing/phi4/generation_config_builder.cpp; 18s local ... (8 actions running)
+[2,163 / 2,262] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 15s local ... (7 actions running)
+[2,167 / 2,264] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 16s local ... (8 actions, 7 running)
+[2,174 / 2,271] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 17s local ... (8 actions running)
+[2,177 / 2,273] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 18s local ... (8 actions running)
+[2,190 / 2,281] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 19s local ... (8 actions running)
+[2,201 / 2,287] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 20s local ... (8 actions running)
+[2,206 / 2,291] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 21s local ... (8 actions running)
+[2,216 / 2,297] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 22s local ... (8 actions, 7 running)
+[2,221 / 2,393] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 23s local ... (8 actions running)
+[2,226 / 2,395] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 24s local ... (8 actions running)
+[2,230 / 2,398] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 25s local ... (8 actions running)
+[2,241 / 2,404] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 26s local ... (8 actions running)
+[2,242 / 2,404] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 27s local ... (8 actions running)
+[2,258 / 2,412] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 28s local ... (8 actions running)
+[2,266 / 2,416] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 29s local ... (8 actions running)
+[2,273 / 2,418] 1 / 6 tests; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 30s local ... (8 actions running)
+[2,281 / 2,422] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_reasoning_parser.cpp; 24s local ... (7 actions running)
+[2,295 / 2,428] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_reasoning_parser.cpp; 25s local ... (8 actions running)
+[2,302 / 2,434] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_reasoning_parser.cpp; 26s local ... (8 actions running)
+[2,309 / 2,440] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_reasoning_parser.cpp; 27s local ... (8 actions running)
+[2,315 / 2,447] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_reasoning_parser.cpp; 28s local ... (8 actions running)
+[2,321 / 2,449] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_reasoning_parser.cpp; 29s local ... (8 actions running)
+[2,329 / 2,451] 1 / 6 tests; Compiling absl/strings/cord.cc; 1s local ... (8 actions running)
+[2,338 / 2,466] 1 / 6 tests; Compiling src/google/protobuf/compiler/importer.cc; 1s local ... (8 actions running)
+[2,344 / 2,468] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 2s local ... (8 actions running)
+[2,352 / 2,472] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 3s local ... (8 actions running)
+[2,356 / 2,472] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 4s local ... (8 actions, 7 running)
+[2,361 / 2,478] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 5s local ... (8 actions running)
+[2,366 / 2,478] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 6s local ... (8 actions running)
+[2,375 / 2,482] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 7s local ... (8 actions running)
+[2,379 / 2,488] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 8s local ... (8 actions running)
+[2,386 / 2,500] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 9s local ... (8 actions, 7 running)
+[2,390 / 2,500] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 10s local ... (8 actions, 7 running)
+[2,394 / 2,500] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 11s local ... (8 actions running)
+[2,398 / 2,502] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 12s local ... (8 actions running)
+[2,399 / 2,502] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 13s local ... (8 actions running)
+[2,403 / 2,502] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 14s local ... (8 actions running)
+[2,405 / 2,507] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 15s local ... (8 actions running)
+[2,408 / 2,507] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 16s local ... (7 actions running)
+[2,411 / 2,507] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 17s local ... (8 actions running)
+[2,420 / 2,510] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 18s local ... (8 actions running)
+[2,425 / 2,512] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 19s local ... (8 actions running)
+[2,432 / 2,519] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 20s local ... (8 actions running)
+[2,438 / 2,521] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 21s local ... (8 actions running)
+[2,442 / 2,536] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 22s local ... (8 actions running)
+[2,444 / 2,540] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 23s local ... (8 actions running)
+[2,450 / 2,540] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 24s local ... (8 actions, 7 running)
+[2,453 / 2,540] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 25s local ... (8 actions running)
+[2,457 / 2,540] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 26s local ... (8 actions running)
+[2,463 / 2,542] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 27s local ... (8 actions running)
+[2,469 / 2,542] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 28s local ... (7 actions running)
+[2,475 / 2,550] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 29s local ... (8 actions running)
+[2,481 / 2,552] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 30s local ... (8 actions running)
+[2,488 / 2,554] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 31s local ... (8 actions running)
+[2,493 / 2,556] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 32s local ... (8 actions running)
+[2,498 / 2,558] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 34s local ... (8 actions running)
+[2,503 / 2,568] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 35s local ... (8 actions running)
+[2,511 / 2,570] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 36s local ... (8 actions running)
+[2,514 / 2,570] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 37s local ... (8 actions running)
+[2,515 / 2,570] 1 / 6 tests; Compiling src/llm/io_processing/gemma4/gemma4_tool_parser.cpp; 38s local ... (8 actions running)
+[2,521 / 2,570] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 4s local ... (8 actions, 7 running)
+[2,526 / 2,574] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 5s local ... (8 actions running)
+[2,530 / 2,574] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 6s local ... (8 actions running)
+[2,531 / 2,574] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 7s local ... (8 actions running)
+[2,533 / 2,574] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 8s local ... (8 actions running)
+[2,539 / 2,576] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 9s local ... (7 actions running)
+[2,542 / 2,576] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 10s local ... (8 actions running)
+[2,545 / 2,576] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 11s local ... (8 actions running)
+[2,547 / 2,576] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 12s local ... (8 actions running)
+[2,548 / 2,576] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 13s local ... (8 actions running)
+[2,549 / 2,576] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 14s local ... (8 actions, 7 running)
+[2,551 / 2,576] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 15s local ... (8 actions, 7 running)
+[2,554 / 2,576] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 17s local ... (8 actions, 7 running)
+[2,555 / 2,576] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 18s local ... (8 actions running)
+[2,556 / 2,576] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 19s local ... (8 actions running)
+[2,557 / 2,576] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 20s local ... (8 actions running)
+[2,558 / 2,577] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 21s local ... (8 actions, 7 running)
+[2,558 / 2,577] 1 / 6 tests; Compiling src/llm/io_processing/output_parser.cpp; 23s local ... (8 actions running)
+FAIL: //src/test/llm/generation_config:gemma4_generation_contract_test (see C:/g54r2/f3bslrdg/execroot/ovms/bazel-out/x64_windows-opt/testlogs/src/test/llm/generation_config/gemma4_generation_contract_test/test.log)
+INFO: From Testing //src/test/llm/generation_config:gemma4_generation_contract_test:
+==================== Test output for //src/test/llm/generation_config:gemma4_generation_contract_test:
+Running main() from gmock_main.cc
+[==========] Running 18 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 1 test from Gemma4WhitespaceContractTest
+[ RUN      ] Gemma4WhitespaceContractTest.RealBuilderSerializesBoundInsideEveryToolSchema
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(38): error: Expected: (json.find("\"max_whitespace_cnt\": 2")) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+{"type": "triggered_tags", "triggers": ["<|tool_call>"], "tags": [{"type": "tag", "begin": "<|tool_call>call:echo", "content": {"type": "json_schema", "json_schema": {"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}}, "end": "<tool_call|>"}], "at_least_one": false, "stop_after_first": true}
+Google Test trace:
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(24): auto:single
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(38): error: Expected: (json.find("\"max_whitespace_cnt\": 2")) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+{"type": "triggered_tags", "triggers": ["<|tool_call>"], "tags": [{"type": "tag", "begin": "<|tool_call>call:echo", "content": {"type": "json_schema", "json_schema": {"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}}, "end": "<tool_call|>"}], "at_least_one": false, "stop_after_first": false}
+Google Test trace:
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(24): auto:parallel
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(38): error: Expected: (json.find("\"max_whitespace_cnt\": 2")) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+{"type": "or", "elements": [{"type": "tags_with_separator", "separator": "", "tags": [{"type": "tag", "begin": "<|tool_call>call:echo", "content": {"type": "json_schema", "json_schema": {"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}}, "end": "<tool_call|>"}], "at_least_one": true, "stop_after_first": true}, {"type": "sequence", "elements": [{"type": "tag", "begin": "<|channel>thought\n", "content": {"type": "any_text"}, "end": "<channel|>"}, {"type": "tags_with_separator", "separator": "", "tags": [{"type": "tag", "begin": "<|tool_call>call:echo", "content": {"type": "json_schema", "json_schema": {"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}}, "end": "<tool_call|>"}], "at_least_one": true, "stop_after_first": true}]}]}
+Google Test trace:
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(24): required:single
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(38): error: Expected: (json.find("\"max_whitespace_cnt\": 2")) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+{"type": "or", "elements": [{"type": "tags_with_separator", "separator": "", "tags": [{"type": "tag", "begin": "<|tool_call>call:echo", "content": {"type": "json_schema", "json_schema": {"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}}, "end": "<tool_call|>"}], "at_least_one": true, "stop_after_first": false}, {"type": "sequence", "elements": [{"type": "tag", "begin": "<|channel>thought\n", "content": {"type": "any_text"}, "end": "<channel|>"}, {"type": "tags_with_separator", "separator": "", "tags": [{"type": "tag", "begin": "<|tool_call>call:echo", "content": {"type": "json_schema", "json_schema": {"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}}, "end": "<tool_call|>"}], "at_least_one": true, "stop_after_first": false}]}]}
+Google Test trace:
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(24): required:parallel
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(38): error: Expected: (json.find("\"max_whitespace_cnt\": 2")) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+{"type": "or", "elements": [{"type": "tags_with_separator", "separator": "", "tags": [{"type": "tag", "begin": "<|tool_call>call:echo", "content": {"type": "json_schema", "json_schema": {"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}}, "end": "<tool_call|>"}], "at_least_one": true, "stop_after_first": true}, {"type": "sequence", "elements": [{"type": "tag", "begin": "<|channel>thought\n", "content": {"type": "any_text"}, "end": "<channel|>"}, {"type": "tags_with_separator", "separator": "", "tags": [{"type": "tag", "begin": "<|tool_call>call:echo", "content": {"type": "json_schema", "json_schema": {"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}}, "end": "<tool_call|>"}], "at_least_one": true, "stop_after_first": true}]}]}
+Google Test trace:
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(24): echo:single
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(38): error: Expected: (json.find("\"max_whitespace_cnt\": 2")) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+{"type": "or", "elements": [{"type": "tags_with_separator", "separator": "", "tags": [{"type": "tag", "begin": "<|tool_call>call:echo", "content": {"type": "json_schema", "json_schema": {"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}}, "end": "<tool_call|>"}], "at_least_one": true, "stop_after_first": false}, {"type": "sequence", "elements": [{"type": "tag", "begin": "<|channel>thought\n", "content": {"type": "any_text"}, "end": "<channel|>"}, {"type": "tags_with_separator", "separator": "", "tags": [{"type": "tag", "begin": "<|tool_call>call:echo", "content": {"type": "json_schema", "json_schema": {"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}}, "end": "<tool_call|>"}], "at_least_one": true, "stop_after_first": false}]}]}
+Google Test trace:
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(24): echo:parallel
+[  FAILED  ] Gemma4WhitespaceContractTest.RealBuilderSerializesBoundInsideEveryToolSchema (2 ms)
+[----------] 1 test from Gemma4WhitespaceContractTest (2 ms total)
+
+[----------] 17 tests from Gemma4GenerationContractTest
+[ RUN      ] Gemma4GenerationContractTest.AbsentToolsAndNonePreserveResponseFormat
+[       OK ] Gemma4GenerationContractTest.AbsentToolsAndNonePreserveResponseFormat (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.ValidationFallbackPolicyIsGemmaSpecific
+[       OK ] Gemma4GenerationContractTest.ValidationFallbackPolicyIsGemmaSpecific (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.HardChoicesAllowReasoningBeforeMandatoryToolSelection
+[WINDOWS DEBUG] Changed path: /ovms/src/test/llm_testing/OpenVINO/gemma-4-E4B-it-int4-ov to path: C:/g54r2/f3bslrdg/execroot/ovms//src/test/llm_testing/OpenVINO/gemma-4-E4B-it-int4-ov for Windows
+[       OK ] Gemma4GenerationContractTest.HardChoicesAllowReasoningBeforeMandatoryToolSelection (1443 ms)
+[ RUN      ] Gemma4GenerationContractTest.HardChoiceCannotBeClearedButAutoMayFallbackAfterValidationFailure
+[       OK ] Gemma4GenerationContractTest.HardChoiceCannotBeClearedButAutoMayFallbackAfterValidationFailure (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.AutoUsesTriggeredToolGrammarAndHardChoicesStayImmediateAndRepeatable
+[       OK ] Gemma4GenerationContractTest.AutoUsesTriggeredToolGrammarAndHardChoicesStayImmediateAndRepeatable (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.ParallelToolCallsControlsGrammarRepeatability
+[       OK ] Gemma4GenerationContractTest.ParallelToolCallsControlsGrammarRepeatability (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.AutoTriggeredGrammarValidatesWithGemmaTokenizer
+[WINDOWS DEBUG] Changed path: /ovms/src/test/llm_testing/OpenVINO/gemma-4-E4B-it-int4-ov to path: C:/g54r2/f3bslrdg/execroot/ovms//src/test/llm_testing/OpenVINO/gemma-4-E4B-it-int4-ov for Windows
+[       OK ] Gemma4GenerationContractTest.AutoTriggeredGrammarValidatesWithGemmaTokenizer (479 ms)
+[ RUN      ] Gemma4GenerationContractTest.OpenCodeQuestionSchemaIsEnforcedForAutoAndRequired
+[       OK ] Gemma4GenerationContractTest.OpenCodeQuestionSchemaIsEnforcedForAutoAndRequired (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.ImpossibleHardChoiceIsRejected
+[       OK ] Gemma4GenerationContractTest.ImpossibleHardChoiceIsRejected (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.ResponseFormatAndActiveToolsCannotSilentlyReplaceConstraints
+[       OK ] Gemma4GenerationContractTest.ResponseFormatAndActiveToolsCannotSilentlyReplaceConstraints (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.ObjectSchemaIsPassedWithoutLosingNestedConstraints
+[       OK ] Gemma4GenerationContractTest.ObjectSchemaIsPassedWithoutLosingNestedConstraints (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.RejectsToolNamesThatItsParserCannotExecute
+[       OK ] Gemma4GenerationContractTest.RejectsToolNamesThatItsParserCannotExecute (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.RejectsEmptyToolSchemasForAutoAndHardChoices
+[       OK ] Gemma4GenerationContractTest.RejectsEmptyToolSchemasForAutoAndHardChoices (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.GeneratedToolGrammarsNeverUseEmptyConstString
+[       OK ] Gemma4GenerationContractTest.GeneratedToolGrammarsNeverUseEmptyConstString (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.SingleToolParallelEnabledAllowsRepeatedSameToolGrammar
+[       OK ] Gemma4GenerationContractTest.SingleToolParallelEnabledAllowsRepeatedSameToolGrammar (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.PinnedXGrammarControlsSameToolMultiplicityWithStopAfterFirst
+src/test/llm/generation_config/gemma4_generation_contract_test.cpp(418): Skipped
+pinned xgrammar v0.1.31 probe environment is not configured
+[  SKIPPED ] Gemma4GenerationContractTest.PinnedXGrammarControlsSameToolMultiplicityWithStopAfterFirst (0 ms)
+[ RUN      ] Gemma4GenerationContractTest.SingleToolParallelDisabledPermitsSingleCall
+[       OK ] Gemma4GenerationContractTest.SingleToolParallelDisabledPermitsSingleCall (0 ms)
+[----------] 17 tests from Gemma4GenerationContractTest (1923 ms total)
+
+[----------] Global test environment tear-down
+[==========] 18 tests from 2 test suites ran. (1926 ms total)
+[  PASSED  ] 16 tests.
+[  SKIPPED ] 1 test, listed below:
+[  SKIPPED ] Gemma4GenerationContractTest.PinnedXGrammarControlsSameToolMultiplicityWithStopAfterFirst
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] Gemma4WhitespaceContractTest.RealBuilderSerializesBoundInsideEveryToolSchema
+
+ 1 FAILED TEST
+================================================================================
+[2,559 / 2,577] 2 / 6 tests, 1 failed; Compiling src/llm/io_processing/output_parser.cpp; 24s local ... (8 actions running)
+[2,560 / 2,578] 2 / 6 tests, 1 failed; Compiling src/llm/io_processing/output_parser.cpp; 25s local ... (8 actions, 7 running)
+[2,561 / 2,578] 3 / 6 tests, 1 failed; Compiling src/llm/io_processing/output_parser.cpp; 27s local ... (8 actions running)
+[2,562 / 2,579] 3 / 6 tests, 1 failed; Compiling src/llm/io_processing/output_parser.cpp; 28s local ... (8 actions, 7 running)
+[2,563 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/output_parser.cpp; 29s local ... (8 actions running)
+[2,564 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/lfm2/lfm2_tool_parser.cpp; 32s local ... (8 actions, 7 running)
+[2,565 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/qwen3coder/qwen3coder_tool_parser.cpp; 28s local ... (8 actions, 7 running)
+[2,566 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/qwen3coder/qwen3coder_tool_parser.cpp; 30s local ... (8 actions running)
+[2,567 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/qwen3coder/qwen3coder_tool_parser.cpp; 31s local ... (8 actions running)
+[2,568 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/llama3/tool_parser.cpp; 28s local ... (8 actions, 7 running)
+[2,569 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/llama3/tool_parser.cpp; 29s local ... (7 actions running)
+[2,570 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/phi4/tool_parser.cpp; 29s local ... (6 actions running)
+[2,572 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/mistral/tool_parser.cpp; 18s local ... (4 actions running)
+[2,573 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/gptoss/harmony.cpp; 20s local ... (3 actions running)
+[2,574 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/gptoss/reasoning_parser.cpp; 21s local ... (2 actions running)
+[2,575 / 2,579] 4 / 6 tests, 1 failed; Compiling src/llm/io_processing/gptoss/tool_parser.cpp; 20s local
+[2,577 / 2,579] 4 / 6 tests, 1 failed; Linking src/test/llm/gemma4_fast/gemma4_parser_contract_test.exe; 0s local ... (2 actions running)
+FAIL: //src/test/llm/gemma4_fast:gemma4_parser_contract_test (see C:/g54r2/f3bslrdg/execroot/ovms/bazel-out/x64_windows-opt/testlogs/src/test/llm/gemma4_fast/gemma4_parser_contract_test/test.log)
+[2,579 / 2,581] 5 / 6 tests, 2 failed; Testing //src/test/llm/gemma4_fast:gemma4_parser_contract_test; 1s local ... (2 actions running)
+INFO: From Testing //src/test/llm/gemma4_fast:gemma4_parser_contract_test:
+==================== Test output for //src/test/llm/gemma4_fast:gemma4_parser_contract_test:
+Running main() from gmock_main.cc
+[==========] Running 32 tests from 3 test suites.
+[----------] Global test environment set-up.
+[----------] 20 tests from Gemma4ParserFastContractTest
+[ RUN      ] Gemma4ParserFastContractTest.ParsesOpenCodeQuestionArrayOfObjectsRecursively
+[       OK ] Gemma4ParserFastContractTest.ParsesOpenCodeQuestionArrayOfObjectsRecursively (224 ms)
+[ RUN      ] Gemma4ParserFastContractTest.PreservesNestedScalarTypes
+[       OK ] Gemma4ParserFastContractTest.PreservesNestedScalarTypes (5 ms)
+[ RUN      ] Gemma4ParserFastContractTest.NativeDelimitedKeysDoNotLeakProtocolMarkers
+[       OK ] Gemma4ParserFastContractTest.NativeDelimitedKeysDoNotLeakProtocolMarkers (3 ms)
+[ RUN      ] Gemma4ParserFastContractTest.StringPayloadCannotBreakStructuralScanning
+[       OK ] Gemma4ParserFastContractTest.StringPayloadCannotBreakStructuralScanning (5 ms)
+[ RUN      ] Gemma4ParserFastContractTest.AcceptsParenthesizedArgumentsWhenAnchored
+[       OK ] Gemma4ParserFastContractTest.AcceptsParenthesizedArgumentsWhenAnchored (8 ms)
+[ RUN      ] Gemma4ParserFastContractTest.AcceptsColonNameVariantWhenAnchored
+[       OK ] Gemma4ParserFastContractTest.AcceptsColonNameVariantWhenAnchored (8 ms)
+[ RUN      ] Gemma4ParserFastContractTest.AcceptsDirectCallAfterReasoning
+[       OK ] Gemma4ParserFastContractTest.AcceptsDirectCallAfterReasoning (8 ms)
+[ RUN      ] Gemma4ParserFastContractTest.UnknownToolIsNotExecutable
+[       OK ] Gemma4ParserFastContractTest.UnknownToolIsNotExecutable (2 ms)
+[ RUN      ] Gemma4ParserFastContractTest.MalformedCallIsBoundedAndLaterValidCallSurvives
+[       OK ] Gemma4ParserFastContractTest.MalformedCallIsBoundedAndLaterValidCallSurvives (3 ms)
+[ RUN      ] Gemma4ParserFastContractTest.TruncatedArgumentsEmitNoToolCall
+[       OK ] Gemma4ParserFastContractTest.TruncatedArgumentsEmitNoToolCall (2 ms)
+[ RUN      ] Gemma4ParserFastContractTest.RepeatedSameFunctionCallsKeepCallLocalIdentity
+[       OK ] Gemma4ParserFastContractTest.RepeatedSameFunctionCallsKeepCallLocalIdentity (4 ms)
+[ RUN      ] Gemma4ParserFastContractTest.JsonStringEndMarkerIsPayload
+[       OK ] Gemma4ParserFastContractTest.JsonStringEndMarkerIsPayload (3 ms)
+[ RUN      ] Gemma4ParserFastContractTest.NativeStringEndMarkerIsPayload
+[       OK ] Gemma4ParserFastContractTest.NativeStringEndMarkerIsPayload (3 ms)
+[ RUN      ] Gemma4ParserFastContractTest.PreservesJsonEscapesAndWindowsPaths
+[       OK ] Gemma4ParserFastContractTest.PreservesJsonEscapesAndWindowsPaths (5 ms)
+[ RUN      ] Gemma4ParserFastContractTest.ReasoningBoundaryChunkKeepsText
+[       OK ] Gemma4ParserFastContractTest.ReasoningBoundaryChunkKeepsText (0 ms)
+[ RUN      ] Gemma4ParserFastContractTest.CompleteCallSurvivesEveryByteSplit
+[       OK ] Gemma4ParserFastContractTest.CompleteCallSurvivesEveryByteSplit (54 ms)
+[ RUN      ] Gemma4ParserFastContractTest.NonGemmaReasoningDoesNotTreatLiteralToolMarkerAsBoundary
+[       OK ] Gemma4ParserFastContractTest.NonGemmaReasoningDoesNotTreatLiteralToolMarkerAsBoundary (0 ms)
+[ RUN      ] Gemma4ParserFastContractTest.PreservesNumbersBeyondMachinePrecision
+[       OK ] Gemma4ParserFastContractTest.PreservesNumbersBeyondMachinePrecision (22 ms)
+[ RUN      ] Gemma4ParserFastContractTest.MalformedNumericLexemesNeverBecomeExecutableArguments
+[       OK ] Gemma4ParserFastContractTest.MalformedNumericLexemesNeverBecomeExecutableArguments (10 ms)
+[ RUN      ] Gemma4ParserFastContractTest.ManyCallsReleaseConsumedBufferAndKeepOwnedDeltas
+[       OK ] Gemma4ParserFastContractTest.ManyCallsReleaseConsumedBufferAndKeepOwnedDeltas (0 ms)
+[----------] 20 tests from Gemma4ParserFastContractTest (381 ms total)
+
+[----------] 6 tests from Gemma4ReasoningSemanticRefitTest
+[ RUN      ] Gemma4ReasoningSemanticRefitTest.CanonicalReasoningCloseTransitionsToTool
+[       OK ] Gemma4ReasoningSemanticRefitTest.CanonicalReasoningCloseTransitionsToTool (185 ms)
+[ RUN      ] Gemma4ReasoningSemanticRefitTest.RecoveryToolStartEndsOpenReasoningWithoutCanonicalCloser
+[       OK ] Gemma4ReasoningSemanticRefitTest.RecoveryToolStartEndsOpenReasoningWithoutCanonicalCloser (0 ms)
+[ RUN      ] Gemma4ReasoningSemanticRefitTest.RecoveryImplicitPromptReasoningCanTransitionDirectlyToTool
+[       OK ] Gemma4ReasoningSemanticRefitTest.RecoveryImplicitPromptReasoningCanTransitionDirectlyToTool (0 ms)
+[ RUN      ] Gemma4ReasoningSemanticRefitTest.RecoverySameChunkReasoningPrefixIsPreservedBeforeToolHandoff
+[       OK ] Gemma4ReasoningSemanticRefitTest.RecoverySameChunkReasoningPrefixIsPreservedBeforeToolHandoff (0 ms)
+[ RUN      ] Gemma4ReasoningSemanticRefitTest.RecoveryPartialToolMarkerIsHeldBackInsteadOfLeakingIntoReasoning
+[       OK ] Gemma4ReasoningSemanticRefitTest.RecoveryPartialToolMarkerIsHeldBackInsteadOfLeakingIntoReasoning (0 ms)
+[ RUN      ] Gemma4ReasoningSemanticRefitTest.RecoveryToolOpenerSurvivesEveryByteSplitWhileReasoningOwnsStream
+[       OK ] Gemma4ReasoningSemanticRefitTest.RecoveryToolOpenerSurvivesEveryByteSplitWhileReasoningOwnsStream (6 ms)
+[----------] 6 tests from Gemma4ReasoningSemanticRefitTest (194 ms total)
+
+[----------] 6 tests from Gemma4BareRecoveryContractTest
+[ RUN      ] Gemma4BareRecoveryContractTest.IncompleteCanonicalFrameTerminatesWithLengthDiagnosticAndNoDeltas
+src/test/llm/gemma4_fast/gemma4_recovery_contract_test.cpp(151): error: Expected: (diagnostic.find("pending_tool_frame=true")) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+src/test/llm/gemma4_fast/gemma4_recovery_contract_test.cpp(152): error: Expected: (diagnostic.find("finish_reason=LENGTH")) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+src/test/llm/gemma4_fast/gemma4_recovery_contract_test.cpp(153): error: Expected: (diagnostic.find("parser_phase=")) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+src/test/llm/gemma4_fast/gemma4_recovery_contract_test.cpp(154): error: Expected: (diagnostic.find("buffered_bytes=")) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+src/test/llm/gemma4_fast/gemma4_recovery_contract_test.cpp(155): error: Expected: (diagnostic.find("generated_tokens=" + std::to_string(encoded.get_size()))) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+src/test/llm/gemma4_fast/gemma4_recovery_contract_test.cpp(156): error: Expected: (diagnostic.find("tool_name=echo")) != (std::string::npos), actual: 18446744073709551615 vs 18446744073709551615
+[  FAILED  ] Gemma4BareRecoveryContractTest.IncompleteCanonicalFrameTerminatesWithLengthDiagnosticAndNoDeltas (185 ms)
+[ RUN      ] Gemma4BareRecoveryContractTest.AllowedToolNameFollowedByProseStaysContent
+[       OK ] Gemma4BareRecoveryContractTest.AllowedToolNameFollowedByProseStaysContent (1 ms)
+[ RUN      ] Gemma4BareRecoveryContractTest.LiteralCanonicalToolMarkerInProseStaysContent
+[       OK ] Gemma4BareRecoveryContractTest.LiteralCanonicalToolMarkerInProseStaysContent (0 ms)
+[ RUN      ] Gemma4BareRecoveryContractTest.RegistryAwareParserReleasesImpossibleBarePrefixAsContent
+[       OK ] Gemma4BareRecoveryContractTest.RegistryAwareParserReleasesImpossibleBarePrefixAsContent (0 ms)
+[ RUN      ] Gemma4BareRecoveryContractTest.BareCallRecoverySurvivesToolNameChunkSplit
+[       OK ] Gemma4BareRecoveryContractTest.BareCallRecoverySurvivesToolNameChunkSplit (0 ms)
+[ RUN      ] Gemma4BareRecoveryContractTest.SkipSpecialTokensStillPreservesCanonicalReasoningToToolHandoff
+[       OK ] Gemma4BareRecoveryContractTest.SkipSpecialTokensStillPreservesCanonicalReasoningToToolHandoff (3 ms)
+[----------] 6 tests from Gemma4BareRecoveryContractTest (192 ms total)
+
+[----------] Global test environment tear-down
+[==========] 32 tests from 3 test suites ran. (1066 ms total)
+[  PASSED  ] 31 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] Gemma4BareRecoveryContractTest.IncompleteCanonicalFrameTerminatesWithLengthDiagnosticAndNoDeltas
+
+ 1 FAILED TEST
+================================================================================
+INFO: Elapsed time: 598.589s, Critical Path: 65.25s
+INFO: 988 processes: 32 internal, 956 local.
+INFO: Build completed, 2 tests FAILED, 988 total actions
+//src/test/llm/gemma4_overlay:gemma4_chat_template_overlay_contract_test PASSED in 0.3s
+//src/test/llm/gemma4_overlay:gemma4_google_jinja_contract_test          PASSED in 0.3s
+//src/test/llm/generation_config:gemma4_prompt_state_generation_contract_test PASSED in 0.5s
+//src/test/llm/generation_config:openai_parallel_tool_calls_contract_test PASSED in 0.9s
+//src/test/llm/gemma4_fast:gemma4_parser_contract_test                   FAILED in 1.2s
+  C:/g54r2/f3bslrdg/execroot/ovms/bazel-out/x64_windows-opt/testlogs/src/test/llm/gemma4_fast/gemma4_parser_contract_test/test.log
+//src/test/llm/generation_config:gemma4_generation_contract_test         FAILED in 2.4s
+  C:/g54r2/f3bslrdg/execroot/ovms/bazel-out/x64_windows-opt/testlogs/src/test/llm/generation_config/gemma4_generation_contract_test/test.log
+
+Executed 6 out of 6 tests: 4 tests pass and 2 fail locally.
+There were tests whose specified size is too big. Use the --test_verbose_timeout_warnings command line option to see which ones these are.

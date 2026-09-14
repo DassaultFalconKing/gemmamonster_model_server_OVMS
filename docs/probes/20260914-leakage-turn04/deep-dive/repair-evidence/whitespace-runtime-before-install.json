@@ -1,0 +1,18 @@
+[
+  {
+    "Path": "C:\\g54r2\\openvino\\runtime\\bin\\intel64\\Release\\openvino.dll",
+    "Hash": "DEF53DD31213FBB75A3D054ED5A244B3E7A984BE30183A740787801A97C3AD2A"
+  },
+  {
+    "Path": "C:\\g54r2\\openvino\\runtime\\bin\\intel64\\Release\\openvino_genai.dll",
+    "Hash": "9D1639AF0DC911B25C34F409C0712CD8A0B88362FB8D7D3C09C1033DF2E0B60A"
+  },
+  {
+    "Path": "C:\\g54r2\\openvino\\runtime\\bin\\intel64\\Release\\openvino_intel_gpu_plugin.dll",
+    "Hash": "CA51F00BFD2781E4B83408387F07C2B8105AAA1BEF5045B579BCB051B1454B78"
+  },
+  {
+    "Path": "C:\\g54r2\\openvino\\runtime\\bin\\intel64\\Release\\openvino_tokenizers.dll",
+    "Hash": "EF29A1D5B477819BE3E5AB88A13E9FF7B250639A430F186D4B7C3532D9A49807"
+  }
+]
