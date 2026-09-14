@@ -1,0 +1,34 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Unrelated background context number 54. Unrelated background context number 54. Unrelated background context number 54. Unrelated background context number 54. Unrelated background context number 54. Unrelated background context number 54. Unrelated background context number 54. Unrelated background context number 54.  Now echo exactly this string: prompt-churn-item-54 about quantum entanglement."
+    }
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "echo",
+        "description": "Echo back the given text.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text to echo."
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 256,
+  "temperature": 1.0
+}
