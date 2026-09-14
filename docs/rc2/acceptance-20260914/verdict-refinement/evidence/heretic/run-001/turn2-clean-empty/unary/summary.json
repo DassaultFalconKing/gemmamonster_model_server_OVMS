@@ -1,0 +1,31 @@
+{
+  "http_status": 200,
+  "transport_error": null,
+  "finish_reason": "stop",
+  "message": {
+    "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+    "role": "assistant",
+    "tool_calls": []
+  },
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 293,
+    "completion_tokens": 23,
+    "total_tokens": 316
+  },
+  "timing": {
+    "ttfb_s": 1.072968899999978,
+    "ttft_s": null,
+    "total_s": 1.0730813999998645
+  },
+  "throughput": {
+    "prompt_tokens": 293,
+    "completion_tokens": 23,
+    "total_tokens": 316,
+    "tokens_per_second_wall": 21.433602334364295,
+    "tokens_per_second_after_ttft": null
+  },
+  "special_tokens": [],
+  "failure_classes": [],
+  "errors": []
+}

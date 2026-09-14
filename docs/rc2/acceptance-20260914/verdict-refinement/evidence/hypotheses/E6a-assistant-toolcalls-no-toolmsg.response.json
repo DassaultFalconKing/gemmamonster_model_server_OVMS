@@ -1,0 +1,1 @@
+{"choices":[{"finish_reason":"stop","index":0,"logprobs":null,"message":{"content":"OK","role":"assistant","tool_calls":[]}}],"created":1789390089,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":258,"completion_tokens":2,"total_tokens":260}}

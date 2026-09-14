@@ -1,0 +1,403 @@
+[
+  {
+    "offset_s": 0.11500770000020566,
+    "data": "{\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "role": "assistant",
+            "content": null
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.2271522000000914,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\"The\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": "The"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.2656034000001455,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" answer\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " answer"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.30816379999942,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" is **\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " is **"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.3901784999998199,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\"Paris\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": "Paris"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.43083369999931165,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\"**. \\n\\n\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": "**. \n\n"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.5488882999998168,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\"Would\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": "Would"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.5889913999999408,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" you\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " you"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.6304591999996774,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" like\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " like"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.671480099999826,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" to\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " to"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.709137599999849,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" try\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " try"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.7500380999999834,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" another\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " another"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.7885857000001124,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" one\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " one"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.8314333999996961,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\",\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": ","
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.8708067999996274,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" or\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " or"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.9105324000001929,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" perhaps\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " perhaps"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.9484314000001177,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" something\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " something"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 0.9892266999995627,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" more\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " more"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 1.0285733999999138,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\" difficult\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": " difficult"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 1.0285978000001705,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{\"content\":\"?\"},\"finish_reason\":null}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {
+            "content": "?"
+          },
+          "finish_reason": null
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 1.0286079999996218,
+    "data": "{\"choices\":[{\"index\":0,\"logprobs\":null,\"delta\":{},\"finish_reason\":\"stop\"}],\"created\":1789390709,\"model\":\"gemma4\",\"object\":\"chat.completion.chunk\"}",
+    "json": {
+      "choices": [
+        {
+          "index": 0,
+          "logprobs": null,
+          "delta": {},
+          "finish_reason": "stop"
+        }
+      ],
+      "created": 1789390709,
+      "model": "gemma4",
+      "object": "chat.completion.chunk"
+    }
+  },
+  {
+    "offset_s": 1.0286181000001307,
+    "data": "[DONE]"
+  }
+]

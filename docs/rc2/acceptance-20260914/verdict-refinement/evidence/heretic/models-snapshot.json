@@ -1,0 +1,36 @@
+{
+  "models_v1": {
+    "url": "http://127.0.0.1:18091/v1/models",
+    "status": 200,
+    "headers": {
+      "content-length": "98",
+      "connection": "close",
+      "content-type": "application/json; charset=utf-8",
+      "access-control-allow-methods": "*",
+      "access-control-allow-origin": "*",
+      "access-control-allow-headers": "*"
+    },
+    "timing": {
+      "ttfb_s": 0.012640300000384741,
+      "total_s": 0.012728300000162562
+    },
+    "transport_error": null
+  },
+  "models_v3": {
+    "url": "http://127.0.0.1:18091/v3/models",
+    "status": 200,
+    "headers": {
+      "content-length": "98",
+      "connection": "close",
+      "content-type": "application/json; charset=utf-8",
+      "access-control-allow-methods": "*",
+      "access-control-allow-origin": "*",
+      "access-control-allow-headers": "*"
+    },
+    "timing": {
+      "ttfb_s": 0.0006628000001001055,
+      "total_s": 0.0007353000000875909
+    },
+    "transport_error": null
+  }
+}

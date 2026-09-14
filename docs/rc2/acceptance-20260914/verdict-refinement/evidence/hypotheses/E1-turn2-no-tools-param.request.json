@@ -1,0 +1,31 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Ask me one simple test question using the question tool."
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "M8y6UPgkY",
+          "type": "function",
+          "function": {
+            "name": "question",
+            "arguments": "{\"questions\":[{\"question\":\"What is your favorite color?\",\"header\":\"Simple Quiz\",\"options\":[{\"label\":\"Blue\",\"description\":\"\"},{\"label\":\"Green\",\"description\":\"\"},{\"label\":\"Red\",\"description\":\"\"}]}]}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "M8y6UPgkY",
+      "content": "{\"answer\": \"A\"}"
+    }
+  ],
+  "temperature": 0.0,
+  "max_tokens": 256,
+  "stream": false
+}

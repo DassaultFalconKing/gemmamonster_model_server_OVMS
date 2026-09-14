@@ -1,0 +1,42 @@
+{
+  "source": "C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\rc2-roundtrip-forensics\\server-heretic\\server.stdout.log",
+  "copied_to": "C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\rc2-roundtrip-forensics\\heretic\\server-log.txt",
+  "counts": {
+    "ERROR": 0,
+    "FATAL": 0,
+    "exception": 0,
+    "CL_OUT_OF_RESOURCES": 0,
+    "GPU_CONTEXT_FATAL": 0,
+    "quarantine": 0,
+    "timeout": 0,
+    "xgrammar": 0,
+    "grammar": 0,
+    "tool": 1,
+    "stream": 1,
+    "executor": 36
+  },
+  "samples": {
+    "ERROR": [],
+    "FATAL": [],
+    "exception": [],
+    "CL_OUT_OF_RESOURCES": [],
+    "GPU_CONTEXT_FATAL": [],
+    "quarantine": [],
+    "timeout": [],
+    "xgrammar": [],
+    "grammar": [],
+    "tool": [
+      "[2026-09-14 14:58:03.562][20912][llm_calculator][info][servable_initializer.cpp:231] Auto-detected tool_parser: gemma4"
+    ],
+    "stream": [
+      "[2026-09-14 14:57:36.225][5296][serving][info][drogon_http_server.cpp:187] REST server listening on port 18091 with 8 unary threads and 8 streaming threads"
+    ],
+    "executor": [
+      "[2026-09-14 14:58:28.972][14628][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 57.1% of 38.0 MB;",
+      "[2026-09-14 14:58:29.132][14628][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;",
+      "[2026-09-14 14:58:29.498][14628][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 54.3% of 38.0 MB;",
+      "[2026-09-14 14:58:29.900][14628][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 57.1% of 38.0 MB;",
+      "[2026-09-14 14:58:30.177][14628][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;"
+    ]
+  }
+}

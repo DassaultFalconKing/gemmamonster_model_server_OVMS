@@ -1,0 +1,248 @@
+{
+  "pass": true,
+  "turn1_usable": true,
+  "turn1": {
+    "http_status": 200,
+    "transport_error": null,
+    "finish_reason": "tool_calls",
+    "message": {
+      "content": "",
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "id": "4QNCvrNWR",
+          "type": "function",
+          "function": {
+            "name": "question",
+            "arguments": "{\"questions\":[{\"question\":\"What is the capital of France?\",\"header\":\"Geography Quiz\",\"options\":[{\"label\":\"London\",\"description\":\"The capital of the UK\"},{\"label\":\"Paris\",\"description\":\"The capital of France\"},{\"label\":\"Berlin\",\"description\":\"The capital of Germany\"},{\"label\":\"Rome\",\"description\":\"The capital of Italy\"}],\"multiple\":false}]}"
+          }
+        }
+      ]
+    },
+    "tool_calls": [
+      {
+        "id": "4QNCvrNWR",
+        "type": "function",
+        "function": {
+          "name": "question",
+          "arguments": "{\"questions\":[{\"question\":\"What is the capital of France?\",\"header\":\"Geography Quiz\",\"options\":[{\"label\":\"London\",\"description\":\"The capital of the UK\"},{\"label\":\"Paris\",\"description\":\"The capital of France\"},{\"label\":\"Berlin\",\"description\":\"The capital of Germany\"},{\"label\":\"Rome\",\"description\":\"The capital of Italy\"}],\"multiple\":false}]}"
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 185,
+      "completion_tokens": 137,
+      "total_tokens": 322
+    },
+    "timing": {
+      "ttfb_s": 6.405347199999596,
+      "ttft_s": null,
+      "total_s": 6.405507200000102
+    },
+    "throughput": {
+      "prompt_tokens": 185,
+      "completion_tokens": 137,
+      "total_tokens": 322,
+      "tokens_per_second_wall": 21.38784575872428,
+      "tokens_per_second_after_ttft": null
+    },
+    "special_tokens": [],
+    "failure_classes": [],
+    "errors": []
+  },
+  "variants": {
+    "exact": {
+      "unary": {
+        "http_status": 200,
+        "transport_error": null,
+        "finish_reason": "stop",
+        "message": {
+          "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps a harder one?",
+          "role": "assistant",
+          "tool_calls": []
+        },
+        "tool_calls": [],
+        "usage": {
+          "prompt_tokens": 293,
+          "completion_tokens": 23,
+          "total_tokens": 316
+        },
+        "timing": {
+          "ttfb_s": 1.7132615999998961,
+          "ttft_s": null,
+          "total_s": 1.713348600000245
+        },
+        "throughput": {
+          "prompt_tokens": 293,
+          "completion_tokens": 23,
+          "total_tokens": 316,
+          "tokens_per_second_wall": 13.424004898942757,
+          "tokens_per_second_after_ttft": null
+        },
+        "special_tokens": [],
+        "failure_classes": [],
+        "errors": []
+      },
+      "stream": {
+        "http_status": 200,
+        "transport_error": null,
+        "finish_reason": "stop",
+        "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+        "reasoning_content": "",
+        "tool_calls": [],
+        "usage": {},
+        "timing": {
+          "ttfb_s": 0.12052500000027067,
+          "first_sse_event_s": 0.12055210000016814,
+          "ttft_s": 0.2232147000004261,
+          "last_sse_event_s": 1.2085304000001997,
+          "total_s": 1.208761300000333
+        },
+        "throughput": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null,
+          "tokens_per_second_wall": null,
+          "tokens_per_second_after_ttft": null
+        },
+        "special_tokens": [],
+        "failure_classes": [],
+        "errors": [],
+        "done": true,
+        "event_count": 21
+      }
+    },
+    "clean-null": {
+      "unary": {
+        "http_status": 200,
+        "transport_error": null,
+        "finish_reason": "stop",
+        "message": {
+          "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+          "role": "assistant",
+          "tool_calls": []
+        },
+        "tool_calls": [],
+        "usage": {
+          "prompt_tokens": 293,
+          "completion_tokens": 23,
+          "total_tokens": 316
+        },
+        "timing": {
+          "ttfb_s": 1.0299848999993628,
+          "ttft_s": null,
+          "total_s": 1.0301054000001386
+        },
+        "throughput": {
+          "prompt_tokens": 293,
+          "completion_tokens": 23,
+          "total_tokens": 316,
+          "tokens_per_second_wall": 22.327812280177255,
+          "tokens_per_second_after_ttft": null
+        },
+        "special_tokens": [],
+        "failure_classes": [],
+        "errors": []
+      },
+      "stream": {
+        "http_status": 200,
+        "transport_error": null,
+        "finish_reason": "stop",
+        "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+        "reasoning_content": "",
+        "tool_calls": [],
+        "usage": {},
+        "timing": {
+          "ttfb_s": 0.1225442999993902,
+          "first_sse_event_s": 0.12258049999945797,
+          "ttft_s": 0.24525189999985741,
+          "last_sse_event_s": 1.141968299999462,
+          "total_s": 1.1421521999991455
+        },
+        "throughput": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null,
+          "tokens_per_second_wall": null,
+          "tokens_per_second_after_ttft": null
+        },
+        "special_tokens": [],
+        "failure_classes": [],
+        "errors": [],
+        "done": true,
+        "event_count": 21
+      }
+    },
+    "clean-empty": {
+      "unary": {
+        "http_status": 200,
+        "transport_error": null,
+        "finish_reason": "stop",
+        "message": {
+          "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+          "role": "assistant",
+          "tool_calls": []
+        },
+        "tool_calls": [],
+        "usage": {
+          "prompt_tokens": 293,
+          "completion_tokens": 23,
+          "total_tokens": 316
+        },
+        "timing": {
+          "ttfb_s": 1.072968899999978,
+          "ttft_s": null,
+          "total_s": 1.0730813999998645
+        },
+        "throughput": {
+          "prompt_tokens": 293,
+          "completion_tokens": 23,
+          "total_tokens": 316,
+          "tokens_per_second_wall": 21.433602334364295,
+          "tokens_per_second_after_ttft": null
+        },
+        "special_tokens": [],
+        "failure_classes": [],
+        "errors": []
+      },
+      "stream": {
+        "http_status": 200,
+        "transport_error": null,
+        "finish_reason": "stop",
+        "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+        "reasoning_content": "",
+        "tool_calls": [],
+        "usage": {},
+        "timing": {
+          "ttfb_s": 0.1149504999993951,
+          "first_sse_event_s": 0.11500770000020566,
+          "ttft_s": 0.2271522000000914,
+          "last_sse_event_s": 1.0286181000001307,
+          "total_s": 1.028776399999515
+        },
+        "throughput": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null,
+          "tokens_per_second_wall": null,
+          "tokens_per_second_after_ttft": null
+        },
+        "special_tokens": [],
+        "failure_classes": [],
+        "errors": [],
+        "done": true,
+        "event_count": 21
+      }
+    }
+  },
+  "localization": {
+    "classification": [],
+    "likely_subsystems": [],
+    "exact_unary_nonempty": true,
+    "exact_stream_nonempty": true,
+    "clean_variants_that_recover": [
+      "clean-null",
+      "clean-empty"
+    ]
+  }
+}

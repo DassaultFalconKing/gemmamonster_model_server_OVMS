@@ -1,0 +1,14 @@
+{
+  "content": "",
+  "role": "assistant",
+  "tool_calls": [
+    {
+      "id": "4QNCvrNWR",
+      "type": "function",
+      "function": {
+        "name": "question",
+        "arguments": "{\"questions\":[{\"question\":\"What is the capital of France?\",\"header\":\"Geography Quiz\",\"options\":[{\"label\":\"London\",\"description\":\"The capital of the UK\"},{\"label\":\"Paris\",\"description\":\"The capital of France\"},{\"label\":\"Berlin\",\"description\":\"The capital of Germany\"},{\"label\":\"Rome\",\"description\":\"The capital of Italy\"}],\"multiple\":false}]}"
+      }
+    }
+  ]
+}

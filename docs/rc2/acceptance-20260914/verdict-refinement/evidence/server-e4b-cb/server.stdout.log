@@ -1,0 +1,34 @@
+"OpenVINO Model Server Environment Initialized"
+[2026-09-14 14:59:37.733][24444][serving][info][server.cpp:115] OpenVINO Model Server 2026.4.0.908d66956
+[2026-09-14 14:59:37.733][24444][serving][info][server.cpp:116] OpenVINO backend 2026.4.0-22955-227c33757d1-releases/2026/4
+[2026-09-14 14:59:37.733][24444][serving][info][server.cpp:119] OpenVINO GenAI backend 2026.4.0.0-3407-7ea2546852a
+[2026-09-14 14:59:37.733][24444][serving][info][pythoninterpretermodule.cpp:37] PythonInterpreterModule starting
+[2026-09-14 14:59:37.733][24444][serving][info][pythoninterpretermodule.cpp:40] Initializing python interpreter
+[2026-09-14 14:59:37.750][24444][serving][info][pythoninterpretermodule.cpp:59] PythonInterpreterModule started
+[2026-09-14 14:59:37.751][21224][modelmanager][info][servable_loading_queue.cpp:89] Started servable loading queue thread
+[2026-09-14 14:59:37.885][24444][modelmanager][info][modelmanager.cpp:252] Available devices for Open VINO: CPU, GPU, NPU
+[2026-09-14 14:59:37.887][24444][serving][info][capimodule.cpp:40] C-APIModule starting
+[2026-09-14 14:59:37.887][24444][serving][info][capimodule.cpp:42] C-APIModule started
+[2026-09-14 14:59:37.887][24444][serving][info][grpcservermodule.cpp:106] GRPCServerModule starting
+[2026-09-14 14:59:37.887][24444][serving][info][grpcservermodule.cpp:133] Binding gRPC server to address: 0.0.0.0:18092
+[2026-09-14 14:59:37.888][24444][serving][info][grpcservermodule.cpp:186] GRPCServerModule started
+[2026-09-14 14:59:37.888][24444][serving][info][grpcservermodule.cpp:187] Started gRPC server on port 18092
+[2026-09-14 14:59:37.888][24444][serving][info][httpservermodule.cpp:35] HTTPServerModule starting
+[2026-09-14 14:59:37.888][24444][serving][info][httpservermodule.cpp:39] Will start 8 REST workers
+[2026-09-14 14:59:37.889][11796][serving][info][drogon_http_server.cpp:157] Binding REST server to address: 0.0.0.0:18091
+[2026-09-14 14:59:37.939][24444][serving][info][drogon_http_server.cpp:187] REST server listening on port 18091 with 8 unary threads and 8 streaming threads
+[2026-09-14 14:59:37.939][24444][serving][info][http_server.cpp:242] API key not provided via --api_key_file or API_KEY environment variable. Authentication will be disabled.
+[2026-09-14 14:59:37.939][24444][serving][info][httpservermodule.cpp:52] HTTPServerModule started
+[2026-09-14 14:59:37.939][24444][serving][info][httpservermodule.cpp:53] Started REST server at 0.0.0.0:18091
+[2026-09-14 14:59:37.939][24444][serving][info][servablemanagermodule.cpp:51] ServableManagerModule starting
+[2026-09-14 14:59:37.958][21224][serving][info][mediapipegraphdefinition.cpp:643] MediapipeGraphDefinition initializing graph nodes
+[2026-09-14 14:59:37.958][21224][modelmanager][info][servable_initializer.cpp:688] Initializing Visual Language Model Continuous Batching servable
+[2026-09-14 14:59:51.849][21224][serving][error][servable_initializer.cpp:284] Error during llm node initialization for models_path: C:/llm/models/OpenVINO/gemma-4-E4B-it-int4-ov exception: Check 'ov::op::util::has_op_with_type<ov::op::v13::ScaledDotProductAttention>(model)' failed at src\core\src\pass\sdpa_to_paged_attention.cpp:84:
+No ScaledDotProductAttention operation observed in the graph, cannot perform the SDPAToPagedAttention transformation.
+
+[2026-09-14 14:59:51.849][21224][modelmanager][error][servable_initializer.cpp:693] Error during LLM node resources initialization: The LLM Node resource initialization failed
+[2026-09-14 14:59:51.849][21224][serving][error][llm_node_initializer.cpp:60] Failed to process LLM node graph gemma4
+[2026-09-14 14:59:51.849][21224][modelmanager][info][pipelinedefinitionstatus.hpp:61] Mediapipe: gemma4 state changed to: LOADING_PRECONDITION_FAILED after handling: ValidationFailedEvent: 
+[2026-09-14 14:59:51.849][24444][serving][info][servablemanagermodule.cpp:55] ServableManagerModule started
+[2026-09-14 14:59:51.849][7740][modelmanager][info][modelmanager.cpp:1213] Started cleaner thread
+[2026-09-14 14:59:51.849][5144][modelmanager][info][modelmanager.cpp:1184] Started model manager thread

@@ -1,0 +1,84 @@
+a9
+data: {"choices":[{"index":0,"delta":{"role":"assistant","content":null},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a7
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"The"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+ab
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" answer"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+aa
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" is **"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a9
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"Paris"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+ac
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"**. \n\n"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a9
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"Would"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a8
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" you"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a9
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" like"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a7
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" to"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a8
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" try"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+ac
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" another"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a8
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" one"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a5
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":","},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a7
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" or"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+ac
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" perhaps"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+ae
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" something"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a9
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" more"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+1fb
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" difficult"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"?"},"finish_reason":null}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+data: {"choices":[{"index":0,"logprobs":null,"delta":{},"finish_reason":"stop"}],"created":1789390709,"model":"gemma4","object":"chat.completion.chunk"}
+
+data: [DONE]
+
+
+0
+

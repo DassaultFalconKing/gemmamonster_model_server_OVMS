@@ -1,0 +1,8 @@
+{
+  "content-type": "text/event-stream",
+  "cache-control": "no-cache",
+  "connection": "keep-alive",
+  "access-control-allow-methods": "*",
+  "access-control-allow-origin": "*",
+  "access-control-allow-headers": "*"
+}

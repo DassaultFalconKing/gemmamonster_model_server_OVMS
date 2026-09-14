@@ -1,0 +1,95 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Ask me one simple test question using the question tool."
+    },
+    {
+      "content": "",
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "id": "4QNCvrNWR",
+          "type": "function",
+          "function": {
+            "name": "question",
+            "arguments": "{\"questions\":[{\"question\":\"What is the capital of France?\",\"header\":\"Geography Quiz\",\"options\":[{\"label\":\"London\",\"description\":\"The capital of the UK\"},{\"label\":\"Paris\",\"description\":\"The capital of France\"},{\"label\":\"Berlin\",\"description\":\"The capital of Germany\"},{\"label\":\"Rome\",\"description\":\"The capital of Italy\"}],\"multiple\":false}]}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "4QNCvrNWR",
+      "content": "{\"answer\":\"A\"}"
+    }
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "question",
+        "description": "Ask the user one or more interactive questions.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "questions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "question": {
+                    "type": "string"
+                  },
+                  "header": {
+                    "type": "string"
+                  },
+                  "options": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "label": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "label",
+                        "description"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "multiple": {
+                    "type": "boolean"
+                  },
+                  "custom": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "question",
+                  "header",
+                  "options"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "questions"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "temperature": 0.0,
+  "max_tokens": 256,
+  "stream": false
+}

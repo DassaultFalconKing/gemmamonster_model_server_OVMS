@@ -1,0 +1,1 @@
+{"ready": false, "pid": 356, "model": "C:/llm/models/OpenVINO/gemma-4-E4B-it-int4-ov", "pipeline": "VLM_CB/GPU"}

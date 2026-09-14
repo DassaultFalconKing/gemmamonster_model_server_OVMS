@@ -1,0 +1,22 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+        "role": "assistant",
+        "tool_calls": []
+      }
+    }
+  ],
+  "created": 1789390705,
+  "model": "gemma4",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 293,
+    "completion_tokens": 23,
+    "total_tokens": 316
+  }
+}

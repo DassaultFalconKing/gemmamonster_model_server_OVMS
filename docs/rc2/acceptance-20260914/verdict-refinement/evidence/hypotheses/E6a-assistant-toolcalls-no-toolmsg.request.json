@@ -1,0 +1,94 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Ask me one simple test question using the question tool."
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "7h0QYL6sD",
+          "type": "function",
+          "function": {
+            "name": "question",
+            "arguments": "{\"questions\":[{\"question\":\"What is your favorite color?\",\"header\":\"Simple Quiz\",\"options\":[{\"label\":\"Blue\",\"description\":\"\"},{\"label\":\"Green\",\"description\":\"\"},{\"label\":\"Red\",\"description\":\"\"}]}]}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Actually, never mind the tool. Just reply with exactly OK."
+    }
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "question",
+        "description": "Ask the user one or more interactive questions.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "questions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "question": {
+                    "type": "string"
+                  },
+                  "header": {
+                    "type": "string"
+                  },
+                  "options": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "label": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "label",
+                        "description"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "multiple": {
+                    "type": "boolean"
+                  },
+                  "custom": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "question",
+                  "header",
+                  "options"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "questions"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "temperature": 0.0,
+  "max_tokens": 64,
+  "stream": false
+}

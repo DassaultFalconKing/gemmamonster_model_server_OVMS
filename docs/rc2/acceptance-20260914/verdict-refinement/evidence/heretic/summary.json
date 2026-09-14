@@ -1,0 +1,350 @@
+{
+  "manifest": {
+    "generated_at_utc": "2026-09-14T12:58:16.449256+00:00",
+    "argv": [
+      "C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\roundtrip-forensics-wt\\ovms\\gemma4-diagnostic-pack\\roundtrip_probe.py",
+      "--base-url",
+      "http://127.0.0.1:18091/v3",
+      "--model",
+      "gemma4",
+      "--run-label",
+      "RC2-HERETIC",
+      "--artifact-path",
+      "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\ovms\\ovms.exe",
+      "--source-head",
+      "a2eaeb783dfd66f80c50070bf7050dd184b01364",
+      "--server-log",
+      "C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\rc2-roundtrip-forensics\\server-heretic\\server.stdout.log",
+      "--output-dir",
+      "C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\rc2-roundtrip-forensics\\heretic",
+      "--timeout",
+      "600",
+      "--max-tokens",
+      "256"
+    ],
+    "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+    "python_executable": "C:\\Users\\testc\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "hostname": "WIN-D52PPDAKV0F",
+    "pid": 3148,
+    "base_url": "http://127.0.0.1:18091/v3",
+    "chat_url": "http://127.0.0.1:18091/v3/chat/completions",
+    "model": "gemma4",
+    "timeout_s": 600.0,
+    "max_tokens": 256,
+    "prompt": "Ask me one simple test question using the question tool.",
+    "tool_result": {
+      "answer": "A"
+    },
+    "history_variants": [
+      "exact",
+      "clean-null",
+      "clean-empty"
+    ],
+    "repeat": 1,
+    "run_label": "RC2-HERETIC",
+    "source_head": "a2eaeb783dfd66f80c50070bf7050dd184b01364",
+    "artifact": {
+      "path": "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\ovms\\ovms.exe",
+      "size_bytes": 22964224,
+      "mtime_utc": "2026-09-13T23:14:13.635007+00:00",
+      "sha256": "11d74fd958d1cd2570682fa13562c1bfcf0973dabbf79a0378a8d0cdc886a4fb"
+    },
+    "pass": true,
+    "runs": 1,
+    "passed_runs": 1,
+    "failed_runs": 0,
+    "server_log": {
+      "source": "C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\rc2-roundtrip-forensics\\server-heretic\\server.stdout.log",
+      "copied_to": "C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\rc2-roundtrip-forensics\\heretic\\server-log.txt",
+      "counts": {
+        "ERROR": 0,
+        "FATAL": 0,
+        "exception": 0,
+        "CL_OUT_OF_RESOURCES": 0,
+        "GPU_CONTEXT_FATAL": 0,
+        "quarantine": 0,
+        "timeout": 0,
+        "xgrammar": 0,
+        "grammar": 0,
+        "tool": 1,
+        "stream": 1,
+        "executor": 36
+      },
+      "samples": {
+        "ERROR": [],
+        "FATAL": [],
+        "exception": [],
+        "CL_OUT_OF_RESOURCES": [],
+        "GPU_CONTEXT_FATAL": [],
+        "quarantine": [],
+        "timeout": [],
+        "xgrammar": [],
+        "grammar": [],
+        "tool": [
+          "[2026-09-14 14:58:03.562][20912][llm_calculator][info][servable_initializer.cpp:231] Auto-detected tool_parser: gemma4"
+        ],
+        "stream": [
+          "[2026-09-14 14:57:36.225][5296][serving][info][drogon_http_server.cpp:187] REST server listening on port 18091 with 8 unary threads and 8 streaming threads"
+        ],
+        "executor": [
+          "[2026-09-14 14:58:28.972][14628][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 57.1% of 38.0 MB;",
+          "[2026-09-14 14:58:29.132][14628][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;",
+          "[2026-09-14 14:58:29.498][14628][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 54.3% of 38.0 MB;",
+          "[2026-09-14 14:58:29.900][14628][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 57.1% of 38.0 MB;",
+          "[2026-09-14 14:58:30.177][14628][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;"
+        ]
+      }
+    }
+  },
+  "runs": [
+    {
+      "pass": true,
+      "turn1_usable": true,
+      "turn1": {
+        "http_status": 200,
+        "transport_error": null,
+        "finish_reason": "tool_calls",
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "id": "4QNCvrNWR",
+              "type": "function",
+              "function": {
+                "name": "question",
+                "arguments": "{\"questions\":[{\"question\":\"What is the capital of France?\",\"header\":\"Geography Quiz\",\"options\":[{\"label\":\"London\",\"description\":\"The capital of the UK\"},{\"label\":\"Paris\",\"description\":\"The capital of France\"},{\"label\":\"Berlin\",\"description\":\"The capital of Germany\"},{\"label\":\"Rome\",\"description\":\"The capital of Italy\"}],\"multiple\":false}]}"
+              }
+            }
+          ]
+        },
+        "tool_calls": [
+          {
+            "id": "4QNCvrNWR",
+            "type": "function",
+            "function": {
+              "name": "question",
+              "arguments": "{\"questions\":[{\"question\":\"What is the capital of France?\",\"header\":\"Geography Quiz\",\"options\":[{\"label\":\"London\",\"description\":\"The capital of the UK\"},{\"label\":\"Paris\",\"description\":\"The capital of France\"},{\"label\":\"Berlin\",\"description\":\"The capital of Germany\"},{\"label\":\"Rome\",\"description\":\"The capital of Italy\"}],\"multiple\":false}]}"
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 185,
+          "completion_tokens": 137,
+          "total_tokens": 322
+        },
+        "timing": {
+          "ttfb_s": 6.405347199999596,
+          "ttft_s": null,
+          "total_s": 6.405507200000102
+        },
+        "throughput": {
+          "prompt_tokens": 185,
+          "completion_tokens": 137,
+          "total_tokens": 322,
+          "tokens_per_second_wall": 21.38784575872428,
+          "tokens_per_second_after_ttft": null
+        },
+        "special_tokens": [],
+        "failure_classes": [],
+        "errors": []
+      },
+      "variants": {
+        "exact": {
+          "unary": {
+            "http_status": 200,
+            "transport_error": null,
+            "finish_reason": "stop",
+            "message": {
+              "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps a harder one?",
+              "role": "assistant",
+              "tool_calls": []
+            },
+            "tool_calls": [],
+            "usage": {
+              "prompt_tokens": 293,
+              "completion_tokens": 23,
+              "total_tokens": 316
+            },
+            "timing": {
+              "ttfb_s": 1.7132615999998961,
+              "ttft_s": null,
+              "total_s": 1.713348600000245
+            },
+            "throughput": {
+              "prompt_tokens": 293,
+              "completion_tokens": 23,
+              "total_tokens": 316,
+              "tokens_per_second_wall": 13.424004898942757,
+              "tokens_per_second_after_ttft": null
+            },
+            "special_tokens": [],
+            "failure_classes": [],
+            "errors": []
+          },
+          "stream": {
+            "http_status": 200,
+            "transport_error": null,
+            "finish_reason": "stop",
+            "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+            "reasoning_content": "",
+            "tool_calls": [],
+            "usage": {},
+            "timing": {
+              "ttfb_s": 0.12052500000027067,
+              "first_sse_event_s": 0.12055210000016814,
+              "ttft_s": 0.2232147000004261,
+              "last_sse_event_s": 1.2085304000001997,
+              "total_s": 1.208761300000333
+            },
+            "throughput": {
+              "prompt_tokens": null,
+              "completion_tokens": null,
+              "total_tokens": null,
+              "tokens_per_second_wall": null,
+              "tokens_per_second_after_ttft": null
+            },
+            "special_tokens": [],
+            "failure_classes": [],
+            "errors": [],
+            "done": true,
+            "event_count": 21
+          }
+        },
+        "clean-null": {
+          "unary": {
+            "http_status": 200,
+            "transport_error": null,
+            "finish_reason": "stop",
+            "message": {
+              "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+              "role": "assistant",
+              "tool_calls": []
+            },
+            "tool_calls": [],
+            "usage": {
+              "prompt_tokens": 293,
+              "completion_tokens": 23,
+              "total_tokens": 316
+            },
+            "timing": {
+              "ttfb_s": 1.0299848999993628,
+              "ttft_s": null,
+              "total_s": 1.0301054000001386
+            },
+            "throughput": {
+              "prompt_tokens": 293,
+              "completion_tokens": 23,
+              "total_tokens": 316,
+              "tokens_per_second_wall": 22.327812280177255,
+              "tokens_per_second_after_ttft": null
+            },
+            "special_tokens": [],
+            "failure_classes": [],
+            "errors": []
+          },
+          "stream": {
+            "http_status": 200,
+            "transport_error": null,
+            "finish_reason": "stop",
+            "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+            "reasoning_content": "",
+            "tool_calls": [],
+            "usage": {},
+            "timing": {
+              "ttfb_s": 0.1225442999993902,
+              "first_sse_event_s": 0.12258049999945797,
+              "ttft_s": 0.24525189999985741,
+              "last_sse_event_s": 1.141968299999462,
+              "total_s": 1.1421521999991455
+            },
+            "throughput": {
+              "prompt_tokens": null,
+              "completion_tokens": null,
+              "total_tokens": null,
+              "tokens_per_second_wall": null,
+              "tokens_per_second_after_ttft": null
+            },
+            "special_tokens": [],
+            "failure_classes": [],
+            "errors": [],
+            "done": true,
+            "event_count": 21
+          }
+        },
+        "clean-empty": {
+          "unary": {
+            "http_status": 200,
+            "transport_error": null,
+            "finish_reason": "stop",
+            "message": {
+              "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+              "role": "assistant",
+              "tool_calls": []
+            },
+            "tool_calls": [],
+            "usage": {
+              "prompt_tokens": 293,
+              "completion_tokens": 23,
+              "total_tokens": 316
+            },
+            "timing": {
+              "ttfb_s": 1.072968899999978,
+              "ttft_s": null,
+              "total_s": 1.0730813999998645
+            },
+            "throughput": {
+              "prompt_tokens": 293,
+              "completion_tokens": 23,
+              "total_tokens": 316,
+              "tokens_per_second_wall": 21.433602334364295,
+              "tokens_per_second_after_ttft": null
+            },
+            "special_tokens": [],
+            "failure_classes": [],
+            "errors": []
+          },
+          "stream": {
+            "http_status": 200,
+            "transport_error": null,
+            "finish_reason": "stop",
+            "content": "The answer is **Paris**. \n\nWould you like to try another one, or perhaps something more difficult?",
+            "reasoning_content": "",
+            "tool_calls": [],
+            "usage": {},
+            "timing": {
+              "ttfb_s": 0.1149504999993951,
+              "first_sse_event_s": 0.11500770000020566,
+              "ttft_s": 0.2271522000000914,
+              "last_sse_event_s": 1.0286181000001307,
+              "total_s": 1.028776399999515
+            },
+            "throughput": {
+              "prompt_tokens": null,
+              "completion_tokens": null,
+              "total_tokens": null,
+              "tokens_per_second_wall": null,
+              "tokens_per_second_after_ttft": null
+            },
+            "special_tokens": [],
+            "failure_classes": [],
+            "errors": [],
+            "done": true,
+            "event_count": 21
+          }
+        }
+      },
+      "localization": {
+        "classification": [],
+        "likely_subsystems": [],
+        "exact_unary_nonempty": true,
+        "exact_stream_nonempty": true,
+        "clean_variants_that_recover": [
+          "clean-null",
+          "clean-empty"
+        ]
+      }
+    }
+  ]
+}

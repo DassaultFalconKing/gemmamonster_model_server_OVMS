@@ -1,0 +1,49 @@
+{
+  "http_status": 200,
+  "transport_error": null,
+  "finish_reason": "tool_calls",
+  "message": {
+    "content": "",
+    "role": "assistant",
+    "tool_calls": [
+      {
+        "id": "4QNCvrNWR",
+        "type": "function",
+        "function": {
+          "name": "question",
+          "arguments": "{\"questions\":[{\"question\":\"What is the capital of France?\",\"header\":\"Geography Quiz\",\"options\":[{\"label\":\"London\",\"description\":\"The capital of the UK\"},{\"label\":\"Paris\",\"description\":\"The capital of France\"},{\"label\":\"Berlin\",\"description\":\"The capital of Germany\"},{\"label\":\"Rome\",\"description\":\"The capital of Italy\"}],\"multiple\":false}]}"
+        }
+      }
+    ]
+  },
+  "tool_calls": [
+    {
+      "id": "4QNCvrNWR",
+      "type": "function",
+      "function": {
+        "name": "question",
+        "arguments": "{\"questions\":[{\"question\":\"What is the capital of France?\",\"header\":\"Geography Quiz\",\"options\":[{\"label\":\"London\",\"description\":\"The capital of the UK\"},{\"label\":\"Paris\",\"description\":\"The capital of France\"},{\"label\":\"Berlin\",\"description\":\"The capital of Germany\"},{\"label\":\"Rome\",\"description\":\"The capital of Italy\"}],\"multiple\":false}]}"
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 185,
+    "completion_tokens": 137,
+    "total_tokens": 322
+  },
+  "timing": {
+    "ttfb_s": 6.405347199999596,
+    "ttft_s": null,
+    "total_s": 6.405507200000102
+  },
+  "throughput": {
+    "prompt_tokens": 185,
+    "completion_tokens": 137,
+    "total_tokens": 322,
+    "tokens_per_second_wall": 21.38784575872428,
+    "tokens_per_second_after_ttft": null
+  },
+  "special_tokens": [],
+  "failure_classes": [],
+  "errors": []
+}

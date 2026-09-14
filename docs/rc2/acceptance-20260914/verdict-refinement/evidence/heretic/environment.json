@@ -1,0 +1,52 @@
+{
+  "generated_at_utc": "2026-09-14T12:58:16.449256+00:00",
+  "argv": [
+    "C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\roundtrip-forensics-wt\\ovms\\gemma4-diagnostic-pack\\roundtrip_probe.py",
+    "--base-url",
+    "http://127.0.0.1:18091/v3",
+    "--model",
+    "gemma4",
+    "--run-label",
+    "RC2-HERETIC",
+    "--artifact-path",
+    "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\ovms\\ovms.exe",
+    "--source-head",
+    "a2eaeb783dfd66f80c50070bf7050dd184b01364",
+    "--server-log",
+    "C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\rc2-roundtrip-forensics\\server-heretic\\server.stdout.log",
+    "--output-dir",
+    "C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\rc2-roundtrip-forensics\\heretic",
+    "--timeout",
+    "600",
+    "--max-tokens",
+    "256"
+  ],
+  "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+  "python_executable": "C:\\Users\\testc\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "hostname": "WIN-D52PPDAKV0F",
+  "pid": 3148,
+  "base_url": "http://127.0.0.1:18091/v3",
+  "chat_url": "http://127.0.0.1:18091/v3/chat/completions",
+  "model": "gemma4",
+  "timeout_s": 600.0,
+  "max_tokens": 256,
+  "prompt": "Ask me one simple test question using the question tool.",
+  "tool_result": {
+    "answer": "A"
+  },
+  "history_variants": [
+    "exact",
+    "clean-null",
+    "clean-empty"
+  ],
+  "repeat": 1,
+  "run_label": "RC2-HERETIC",
+  "source_head": "a2eaeb783dfd66f80c50070bf7050dd184b01364",
+  "artifact": {
+    "path": "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\ovms\\ovms.exe",
+    "size_bytes": 22964224,
+    "mtime_utc": "2026-09-13T23:14:13.635007+00:00",
+    "sha256": "11d74fd958d1cd2570682fa13562c1bfcf0973dabbf79a0378a8d0cdc886a4fb"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "choices": [
+    {
+      "finish_reason": "tool_calls",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "id": "4QNCvrNWR",
+            "type": "function",
+            "function": {
+              "name": "question",
+              "arguments": "{\"questions\":[{\"question\":\"What is the capital of France?\",\"header\":\"Geography Quiz\",\"options\":[{\"label\":\"London\",\"description\":\"The capital of the UK\"},{\"label\":\"Paris\",\"description\":\"The capital of France\"},{\"label\":\"Berlin\",\"description\":\"The capital of Germany\"},{\"label\":\"Rome\",\"description\":\"The capital of Italy\"}],\"multiple\":false}]}"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "created": 1789390696,
+  "model": "gemma4",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 185,
+    "completion_tokens": 137,
+    "total_tokens": 322
+  }
+}
