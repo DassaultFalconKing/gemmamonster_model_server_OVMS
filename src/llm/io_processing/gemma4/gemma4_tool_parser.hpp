@@ -9,6 +9,7 @@
 //*****************************************************************************
 #pragma once
 
+#include <algorithm>
 #include <optional>
 #include <string>
 #include <unordered_set>
@@ -97,6 +98,16 @@ public:
                 parsingConfig.preambleStartTags.push_back(parenPreamble);
             }
         }
+    }
+
+    std::optional<PendingToolFrameDiagnostic> pendingToolFrameDiagnostic() const override {
+        if (currentState != State::ToolCallStarted && currentState != State::ToolCallParameters)
+            return std::nullopt;
+        const size_t start = currentState == State::ToolCallParameters && streamingPosition > 0
+            ? streamingPosition - 1 : streamingPosition;
+        return PendingToolFrameDiagnostic{
+            currentState == State::ToolCallParameters ? "ToolCallParameters" : "ToolCallStarted",
+            streamingContent.size() - std::min(start, streamingContent.size()), toolCall.name};
     }
 
     void resetState() override {

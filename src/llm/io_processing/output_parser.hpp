@@ -119,6 +119,9 @@ private:
 public:
     OutputParser() = delete;
     explicit OutputParser(ov::genai::Tokenizer& tokenizer, const std::string toolParserName, const std::string reasoningParserName, const ToolsSchemas_t& toolNameSchemaMap);
+    std::optional<BaseOutputParser::PendingToolFrameDiagnostic> pendingToolFrameDiagnostic() const {
+        return toolParser ? toolParser->pendingToolFrameDiagnostic() : std::nullopt;
+    }
 
     bool isToolParserAvailable() const;
     bool isReasoningParserAvailable() const;

@@ -83,6 +83,7 @@ public:
     ov::genai::StreamingStatus write(int64_t token) override;
     ov::genai::StreamingStatus write(const std::vector<int64_t>& tokens) override;
     void end() override;
+    void end(ov::genai::GenerationFinishReason finish_reason);
 
 private:
     std::shared_ptr<OutputParser> m_output_parser;
@@ -111,6 +112,7 @@ private:
 
     // All token IDs received by write() in order, used for end() trace logging.
     std::vector<int64_t> m_all_tokens;
+    size_t m_generated_tokens = 0;
 };
 
 }  // namespace ovms

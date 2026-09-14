@@ -132,6 +132,7 @@ std::optional<ov::genai::StreamingStatus> OVMSTextStreamer::handle_decoding_para
 }
 
 ov::genai::StreamingStatus OVMSTextStreamer::write(int64_t token) {
+    ++m_generated_tokens;
     if (llm_calculator_logger->should_log(spdlog::level::trace))
         m_all_tokens.push_back(token);
 
@@ -199,6 +200,10 @@ ov::genai::StreamingStatus OVMSTextStreamer::write(int64_t token, bool immediate
 }
 
 void OVMSTextStreamer::end() {
+    end(ov::genai::GenerationFinishReason::STOP);
+}
+
+void OVMSTextStreamer::end(ov::genai::GenerationFinishReason finish_reason) {
     if (llm_calculator_logger->should_log(spdlog::level::trace) && !m_all_tokens.empty()) {
         const ov::AnyMap no_skip_params{{ov::genai::skip_special_tokens.name(), false}};
         const std::string full_decode = m_tokenizer.decode(m_all_tokens, no_skip_params);
@@ -251,11 +256,13 @@ void OVMSTextStreamer::end() {
     const std::string final_text = m_tokens_cache.empty()
                                        ? std::string{}
                                        : m_tokenizer.decode(m_tokens_cache, m_additional_detokenization_params);
-    flush_chunk(final_text, m_printed_len, ov::genai::GenerationFinishReason::STOP);
+    flush_chunk(final_text, m_printed_len, finish_reason);
 
     m_tokens_cache.clear();
     m_decoded_lengths.clear();
     m_printed_len = 0;
+    m_generated_tokens = 0;
+    m_all_tokens.clear();
 }
 
 // -----------------------------------------------------------------------------
@@ -303,6 +310,15 @@ ov::genai::StreamingStatus OVMSTextStreamer::flush_chunk(
     }
 
     const bool isLast = (finish_reason != ov::genai::GenerationFinishReason::NONE);
+    if (isLast && m_output_parser) {
+        if (const auto pending = m_output_parser->pendingToolFrameDiagnostic()) {
+            SPDLOG_LOGGER_WARN(llm_calculator_logger,
+                "Incomplete tool frame: parser_phase={} finish_reason={} pending_tool_frame=true buffered_bytes={} generated_tokens={} tool_name={}",
+                pending->phase,
+                finish_reason == ov::genai::GenerationFinishReason::LENGTH ? "LENGTH" : "STOP",
+                pending->bufferedBytes, m_generated_tokens, pending->toolName);
+        }
+    }
     if (delta.has_value()) {
         return m_callback(std::move(*delta), isLast);
     }

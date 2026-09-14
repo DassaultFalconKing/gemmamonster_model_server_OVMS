@@ -36,6 +36,11 @@ TEST(Gemma4WhitespaceContractTest, RealBuilderSerializesBoundInsideEveryToolSche
                 return Structured::structural_tag_to_json(tag);
             }, root);
             EXPECT_NE(json.find("\"max_whitespace_cnt\": 2"), std::string::npos) << json;
+            if (const char* directory = std::getenv("GEMMA4_WHITESPACE_GRAMMAR_DIR")) {
+                std::filesystem::create_directories(directory);
+                const auto name = choice + (parallel ? "-parallel.json" : "-single.json");
+                std::ofstream(std::filesystem::path(directory) / name) << json;
+            }
         }
     }
 }
