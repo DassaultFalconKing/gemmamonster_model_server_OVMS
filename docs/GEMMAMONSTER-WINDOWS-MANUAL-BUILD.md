@@ -84,7 +84,7 @@ Canonical pre-flight authority:
 
 | Component | Required value |
 |---|---|
-| Bazel | `6.1.1` |
+| Bazel | `6.4.0` |
 | Python | `3.12.10` |
 | VS Build Tools | `C:\BuildTools` |
 | MSVC toolset | `14.44.35207` |
@@ -125,7 +125,12 @@ bazel --version
 C:\opt\Python312\python.exe --version
 ```
 
-Expected Bazel is `6.1.1`; expected Python is `3.12.10`.
+Expected Bazel is `6.4.0`; expected Python is `3.12.10`.
+
+Current acceptance uses Bazel 6.4.0 because 6.1.1 misidentifies the modern VC
+layout when `C:\BuildTools\VC` also contains `vcpkg`. Use the unmodified official
+6.4.0 executable; do not move vcpkg or patch Bazel's embedded tools. Historical
+reference build records remain historical; dependency pins are unchanged.
 
 ## 5. Bootstrap the canonical RC2 dependency root
 
@@ -256,7 +261,7 @@ Do not infer this capability merely because XGrammar 0.2.6 is present. The value
 bazel --output_user_root=C:/g54r2 shutdown
 ```
 
-If Bazel reports that `repository_rule.remotable` requires `--experimental_repo_remote_exec`, do not edit production code. First prove that the active Bazel is 6.1.1 and that this repository's `.bazelrc` is being read.
+If Bazel reports that `repository_rule.remotable` requires `--experimental_repo_remote_exec`, do not edit production code. First prove that the active Bazel is 6.4.0 and that this repository's `.bazelrc` is being read. For `sync` or `query`, pass `--experimental_repo_remote_exec` explicitly; the existing build flag does not apply to those commands.
 
 ## 9. Set the OVMS version metadata
 

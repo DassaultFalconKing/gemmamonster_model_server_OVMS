@@ -20,9 +20,9 @@ Assert-Contains "ValidateSet\([^\)]*maintainer-rc2[^\)]*rc1-parity[^\)]*\)" 'Too
 Assert-Contains "ToolchainProfile\s*=\s*'maintainer-rc2'" 'maintainer-rc2 remains the default profile'
 
 # Repository declaration and active Bazel are deliberately separate concepts.
-# The repository still carries .bazelversion=6.1.1 while the RC1 parity build
-# used the installer-provided C:\opt\bazel.exe 6.4.0.
-Assert-Contains "DECLARED_BAZEL_VERSION\s*=\s*'6\.1\.1'" 'profile data records repository Bazel declaration 6.1.1'
+# Current acceptance uses 6.4.0 to support the installed VC layout with vcpkg.
+Assert-Contains "DECLARED_BAZEL_VERSION\s*=\s*'6\.4\.0'" 'profile data records repository Bazel declaration 6.4.0'
+Assert-Contains "'maintainer-rc2'\s*=\s*\[ordered\]@\{\s*ACTIVE_BAZEL_VERSION\s*=\s*'6\.4\.0'" 'maintainer-rc2 resolves active Bazel 6.4.0'
 Assert-Contains "ACTIVE_BAZEL_VERSION\s*=\s*'6\.4\.0'" 'rc1-parity resolves active Bazel 6.4.0'
 
 # RC1 parity must select the shared historical dependency/build root.

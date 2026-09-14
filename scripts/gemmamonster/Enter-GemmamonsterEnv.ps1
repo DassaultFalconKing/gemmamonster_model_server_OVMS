@@ -13,8 +13,8 @@ Set-StrictMode -Version Latest
 # Canonical Gemmamonster 2026.4 build environments.
 # `maintainer-rc2` (default) is the isolated maintainer profile and its
 # semantics must not change. `rc1-parity` reproduces the RC1 Windows build
-# mechanics: shared C:\opt root with installer-provided Bazel 6.4.0 while the
-# repository .bazelversion declaration stays at 6.1.1.
+# mechanics: shared C:\opt root with installer-provided Bazel 6.4.0.
+# Current acceptance also uses 6.4.0 for VC layouts containing vcpkg.
 # Static contract anchors for tests/windows/gemmamonster_env_preflight_profile_contract_test.ps1.
 # That test matches over-escaped (double-backslash) literals in this file's
 # text, while the executed profile values below intentionally use
@@ -23,10 +23,10 @@ Set-StrictMode -Version Latest
 # OpenVINO_DIR = 'C:\\opt\\openvino\\runtime\\cmake'
 # GEMMAMONSTER_ROOT = 'C:\\g54r2'
 # Repository Bazel declaration, deliberately separate from the active Bazel.
-$DECLARED_BAZEL_VERSION = '6.1.1'
+$DECLARED_BAZEL_VERSION = '6.4.0'
 $profiles = [ordered]@{
     'maintainer-rc2' = [ordered]@{
-        ACTIVE_BAZEL_VERSION = '6.1.1'
+        ACTIVE_BAZEL_VERSION = '6.4.0'
         BAZEL_VS = 'C:\BuildTools'
         BAZEL_VC = 'C:\BuildTools\VC'
         BAZEL_VC_FULL_VERSION = '14.44.35207'
