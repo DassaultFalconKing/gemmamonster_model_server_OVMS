@@ -1,0 +1,16 @@
+diff --git a/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp b/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp
+--- a/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp
++++ b/src/cpp/src/sampling/structured_output/xgrammar_backend.cpp
+@@ -75,7 +75,11 @@ XGrammarStructuredOutput::XGrammarStructuredOutput(const ov::genai::Tokenizer::T
+         std::vector<int32_t>{static_cast<int32_t>(tokenizer_impl.m_eos_token_id)},
+         true
+     );
+-    m_grammar_compiler = std::make_unique<xgrammar::GrammarCompiler>(std::move(tokenizer_info));
++    m_grammar_compiler = std::make_unique<xgrammar::GrammarCompiler>(
++        std::move(tokenizer_info),
++        8,
++        false,
++        -1);
+     std::cout << "[XGrammarCache] init limit_bytes=" << m_grammar_compiler->CacheLimitBytes()
+               << " size_bytes=" << m_grammar_compiler->GetCacheSizeBytes() << std::endl;
+ }

@@ -1,4 +1,4 @@
-param([string]$RuntimeRoot = 'C:\g54r2')
+param([string]$RuntimeRoot = 'C:\g54r2', [switch]$CacheOff)
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $genai = Join-Path $RuntimeRoot 'openvino_genai_src'
@@ -32,6 +32,7 @@ foreach ($entry in @(@($genai,$genaiSha), @($xgrammar,$xgrammarSha))) {
 Apply-Patch $genai 'genai-gemma4-bounded-whitespace.patch'
 Apply-Patch $xgrammar 'xgrammar-subproject-install.patch'
 Apply-Patch $genai 'genai-xgrammar-cache-diagnostics.patch'
+if ($CacheOff) { Apply-Patch $genai 'genai-xgrammar-cache-off.patch' }
 Push-Location $repo
 try {
     & "$PSScriptRoot/Enter-GemmamonsterEnv.ps1" -RequireRuntimeRoot | Out-Null
