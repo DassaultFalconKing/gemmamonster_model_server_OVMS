@@ -1,0 +1,154 @@
+"OpenVINO Model Server Environment Initialized"
+[2026-09-14 13:53:06.098][21148][serving][info][server.cpp:115] OpenVINO Model Server 2026.4.0.908d66956
+[2026-09-14 13:53:06.098][21148][serving][info][server.cpp:116] OpenVINO backend 2026.4.0-22955-227c33757d1-releases/2026/4
+[2026-09-14 13:53:06.098][21148][serving][info][server.cpp:119] OpenVINO GenAI backend 2026.4.0.0-3407-7ea2546852a
+[2026-09-14 13:53:06.098][21148][serving][info][pythoninterpretermodule.cpp:37] PythonInterpreterModule starting
+[2026-09-14 13:53:06.098][21148][serving][info][pythoninterpretermodule.cpp:40] Initializing python interpreter
+[2026-09-14 13:53:06.113][21148][serving][info][pythoninterpretermodule.cpp:59] PythonInterpreterModule started
+[2026-09-14 13:53:06.114][5036][modelmanager][info][servable_loading_queue.cpp:89] Started servable loading queue thread
+[2026-09-14 13:53:06.251][21148][modelmanager][info][modelmanager.cpp:252] Available devices for Open VINO: CPU, GPU, NPU
+[2026-09-14 13:53:06.253][21148][serving][info][capimodule.cpp:40] C-APIModule starting
+[2026-09-14 13:53:06.253][21148][serving][info][capimodule.cpp:42] C-APIModule started
+[2026-09-14 13:53:06.253][21148][serving][info][grpcservermodule.cpp:106] GRPCServerModule starting
+[2026-09-14 13:53:06.253][21148][serving][info][grpcservermodule.cpp:133] Binding gRPC server to address: 0.0.0.0:18092
+[2026-09-14 13:53:06.254][21148][serving][info][grpcservermodule.cpp:186] GRPCServerModule started
+[2026-09-14 13:53:06.254][21148][serving][info][grpcservermodule.cpp:187] Started gRPC server on port 18092
+[2026-09-14 13:53:06.254][21148][serving][info][httpservermodule.cpp:35] HTTPServerModule starting
+[2026-09-14 13:53:06.254][21148][serving][info][httpservermodule.cpp:39] Will start 8 REST workers
+[2026-09-14 13:53:06.255][25916][serving][info][drogon_http_server.cpp:157] Binding REST server to address: 0.0.0.0:18091
+[2026-09-14 13:53:06.305][21148][serving][info][drogon_http_server.cpp:187] REST server listening on port 18091 with 8 unary threads and 8 streaming threads
+[2026-09-14 13:53:06.305][21148][serving][info][http_server.cpp:242] API key not provided via --api_key_file or API_KEY environment variable. Authentication will be disabled.
+[2026-09-14 13:53:06.306][21148][serving][info][httpservermodule.cpp:52] HTTPServerModule started
+[2026-09-14 13:53:06.306][21148][serving][info][httpservermodule.cpp:53] Started REST server at 0.0.0.0:18091
+[2026-09-14 13:53:06.306][21148][serving][info][servablemanagermodule.cpp:51] ServableManagerModule starting
+[2026-09-14 13:53:06.318][5036][serving][info][mediapipegraphdefinition.cpp:643] MediapipeGraphDefinition initializing graph nodes
+[2026-09-14 13:53:06.318][5036][modelmanager][info][servable_initializer.cpp:705] Initializing Visual Language Model Legacy servable
+[2026-09-14 13:53:13.758][5036][llm_calculator][info][servable_initializer.cpp:231] Auto-detected tool_parser: gemma4
+[2026-09-14 13:53:13.758][5036][llm_calculator][info][servable_initializer.cpp:241] Auto-detected reasoning_parser: gemma4
+[2026-09-14 13:53:13.760][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:53:13.760][5036][modelmanager][info][mediapipegraphdefinition.cpp:300] Mediapipe: gemma4 inputs: 
+name: input; mapping: ; shape: (); precision: UNDEFINED; layout: ...
+[2026-09-14 13:53:13.760][5036][modelmanager][info][mediapipegraphdefinition.cpp:301] Mediapipe: gemma4 outputs: 
+name: output; mapping: ; shape: (); precision: UNDEFINED; layout: ...
+[2026-09-14 13:53:13.760][5036][modelmanager][info][mediapipegraphdefinition.cpp:302] Mediapipe: gemma4 kfs pass through: false
+[2026-09-14 13:53:13.760][5036][modelmanager][info][pipelinedefinitionstatus.hpp:61] Mediapipe: gemma4 state changed to: AVAILABLE after handling: ValidationPassedEvent: 
+[2026-09-14 13:53:13.760][21148][serving][info][servablemanagermodule.cpp:55] ServableManagerModule started
+[2026-09-14 13:53:13.760][18516][modelmanager][info][modelmanager.cpp:1213] Started cleaner thread
+[2026-09-14 13:53:13.760][11316][modelmanager][info][modelmanager.cpp:1184] Started model manager thread
+[2026-09-14 13:53:14.644][23968][llm_calculator][info][servable.cpp:381] session-state: store disabled; OVMS_SESSION_STORE_DIR is unset
+[2026-09-14 13:53:14.647][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:53:22.724][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:53:30.434][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:53:31.048][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:53:31.169][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:53:33.468][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:53:33.481][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:53:37.997][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:53:38.009][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:53:42.558][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:53:42.581][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:53:46.674][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:53:46.686][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:54:04.714][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:54:04.728][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:54:21.024][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:54:21.037][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:54:33.425][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:54:33.458][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:54:39.317][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:54:39.337][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:54:52.633][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:54:52.652][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:55:08.938][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:55:08.968][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:55:13.540][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:55:40.265][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:55:56.774][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:55:56.786][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:56:01.433][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:56:01.444][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:56:06.103][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:56:06.112][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:56:18.618][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:56:28.510][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:56:32.768][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:56:32.786][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:56:37.053][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:56:37.060][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:56:41.211][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:56:41.218][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:56:45.462][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:56:45.468][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:56:49.755][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:56:49.762][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:56:54.019][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:56:54.025][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:56:58.186][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:56:58.194][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:02.424][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:02.441][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:06.697][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:06.705][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:11.095][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:11.101][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:15.369][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:15.376][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:19.656][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:19.663][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:23.888][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:23.895][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:28.229][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:28.235][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:32.624][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:32.631][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:36.952][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:36.958][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:41.253][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:41.260][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:45.525][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:45.531][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:49.758][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:49.764][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:54.054][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:54.062][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:57:58.343][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:57:58.350][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:02.630][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:02.637][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:06.910][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:06.916][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:11.192][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:11.200][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:15.436][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:15.453][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:19.619][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:19.625][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:23.843][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:23.850][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:28.121][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:28.137][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:32.372][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:32.378][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:36.718][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:36.725][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:41.069][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:41.076][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:45.504][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:45.511][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:49.799][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:49.805][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:53.964][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:53.981][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:58:58.278][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:58:58.285][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:59:02.619][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:59:02.637][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:59:06.907][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:59:06.914][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:59:11.130][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:59:11.137][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:59:15.534][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:59:15.541][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:59:19.896][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;
+[2026-09-14 13:59:19.902][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 1;
+[2026-09-14 13:59:20.517][5076][llm_executor][info][legacy_executor.cpp:76] All requests: 0;

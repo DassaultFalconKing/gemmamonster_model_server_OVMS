@@ -1,0 +1,9 @@
+{
+  "pass": true,
+  "http_status": 200,
+  "finish_reason": "stop",
+  "tool_names": [],
+  "tool_count": 0,
+  "bad_tokens": [],
+  "errors": []
+}

@@ -1,0 +1,132 @@
+{
+  "pass": false,
+  "base_url": "http://127.0.0.1:18091/v3",
+  "chat_url": "http://127.0.0.1:18091/v3/chat/completions",
+  "model": "gemma4",
+  "mode": "all",
+  "results": {
+    "none": {
+      "pass": true,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "tool_names": [],
+      "tool_count": 0,
+      "bad_tokens": [],
+      "errors": []
+    },
+    "auto_optional": {
+      "pass": true,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "tool_names": [],
+      "tool_count": 0,
+      "bad_tokens": [],
+      "errors": []
+    },
+    "auto_expected": {
+      "pass": true,
+      "http_status": 200,
+      "finish_reason": "tool_calls",
+      "tool_names": [
+        "echo"
+      ],
+      "tool_count": 1,
+      "bad_tokens": [],
+      "errors": []
+    },
+    "required": {
+      "pass": true,
+      "http_status": 200,
+      "finish_reason": "tool_calls",
+      "tool_names": [
+        "echo"
+      ],
+      "tool_count": 1,
+      "bad_tokens": [],
+      "errors": []
+    },
+    "named": {
+      "pass": true,
+      "http_status": 200,
+      "finish_reason": "tool_calls",
+      "tool_names": [
+        "echo"
+      ],
+      "tool_count": 1,
+      "bad_tokens": [],
+      "errors": []
+    },
+    "question_auto": {
+      "pass": true,
+      "http_status": 200,
+      "finish_reason": "tool_calls",
+      "tool_names": [
+        "question"
+      ],
+      "tool_count": 1,
+      "bad_tokens": [],
+      "errors": []
+    },
+    "question_required": {
+      "pass": true,
+      "http_status": 200,
+      "finish_reason": "tool_calls",
+      "tool_names": [
+        "question"
+      ],
+      "tool_count": 1,
+      "bad_tokens": [],
+      "errors": []
+    },
+    "question_named": {
+      "pass": true,
+      "http_status": 200,
+      "finish_reason": "tool_calls",
+      "tool_names": [
+        "question"
+      ],
+      "tool_count": 1,
+      "bad_tokens": [],
+      "errors": []
+    },
+    "parallel_required": {
+      "pass": true,
+      "http_status": 200,
+      "finish_reason": "tool_calls",
+      "tool_names": [
+        "echo",
+        "echo_second"
+      ],
+      "tool_count": 2,
+      "bad_tokens": [],
+      "errors": []
+    },
+    "question_stream": {
+      "pass": true,
+      "http_status": 200,
+      "bad_tokens": [],
+      "errors": []
+    },
+    "question_roundtrip": {
+      "pass": false,
+      "turn1": {
+        "pass": true,
+        "http_status": 200,
+        "finish_reason": "tool_calls",
+        "tool_names": [
+          "question"
+        ],
+        "tool_count": 1,
+        "bad_tokens": [],
+        "errors": []
+      },
+      "turn2_http_status": 200,
+      "turn2_finish_reason": "stop",
+      "turn2_tool_names": [],
+      "bad_tokens": [],
+      "errors": [
+        "turn2 produced neither content nor a tool call"
+      ]
+    }
+  }
+}

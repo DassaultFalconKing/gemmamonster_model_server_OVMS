@@ -1,0 +1,12 @@
+{
+  "pass": true,
+  "http_status": 200,
+  "finish_reason": "tool_calls",
+  "tool_names": [
+    "echo",
+    "echo_second"
+  ],
+  "tool_count": 2,
+  "bad_tokens": [],
+  "errors": []
+}

@@ -1,0 +1,11 @@
+{
+  "pid": 23904,
+  "executable": "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\ovms\\ovms.exe",
+  "command_line": "call setupvars.bat && ovms.exe --config_path C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\rc2-acceptance-20260914\\live-sanity\\config.json --rest_port 18091 --port 18092",
+  "rest_port": 18091,
+  "grpc_port": 18092,
+  "model": "gemma4",
+  "model_path": "C:/llm/models/OpenVINO/gemma-4-E4B-it-int4-ov",
+  "profile": "VLM-CPU (smoke parity)",
+  "chat_template_mode": "model-default (no overlay)"
+}

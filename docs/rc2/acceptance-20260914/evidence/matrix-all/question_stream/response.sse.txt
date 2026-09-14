@@ -1,0 +1,16 @@
+1eb
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"tool_calls":[{"id":"CBRreB9rA","type":"function","index":0,"function":{"name":"question","arguments":"{\"questions\":[{\"question\":\"What is your favorite color?\",\"header\":\"Simple Quiz\",\"options\":[{\"label\":\"Blue\",\"description\":\"\"},{\"label\":\"Green\",\"description\":\"\"},{\"label\":\"Red\",\"description\":\"\"}]}]}"}}]},"finish_reason":null}],"created":1789386879,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+a9
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"<eos>"},"finish_reason":null}],"created":1789386879,"model":"gemma4","object":"chat.completion.chunk"}
+
+
+ae
+data: {"choices":[{"index":0,"logprobs":null,"delta":{},"finish_reason":"tool_calls"}],"created":1789386879,"model":"gemma4","object":"chat.completion.chunk"}
+
+data: [DONE]
+
+
+0
+

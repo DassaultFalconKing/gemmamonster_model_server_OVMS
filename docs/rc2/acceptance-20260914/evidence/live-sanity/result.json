@@ -1,0 +1,6 @@
+{
+  "server_start": "PASS",
+  "model_load": "PASS",
+  "plain_chat": "PASS",
+  "plain_http": 200
+}
