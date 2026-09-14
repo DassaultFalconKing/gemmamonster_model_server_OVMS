@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9206c20..c1be0ca 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -96,14 +96,14 @@ endif()
+ if(NOT SKBUILD)
+   install(TARGETS xgrammar)
+   install(
+-    DIRECTORY ${CMAKE_SOURCE_DIR}/include/xgrammar
++    DIRECTORY ${PROJECT_SOURCE_DIR}/include/xgrammar
+     DESTINATION include
+     FILES_MATCHING
+     PATTERN "*.h"
+   )
+   # Install DLPack headers from the submodule
+   install(
+-    DIRECTORY ${CMAKE_SOURCE_DIR}/3rdparty/dlpack/include/dlpack
++    DIRECTORY ${PROJECT_SOURCE_DIR}/3rdparty/dlpack/include/dlpack
+     DESTINATION include
+     FILES_MATCHING
+     PATTERN "*.h"
