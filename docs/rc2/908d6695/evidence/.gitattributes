@@ -1,0 +1,3 @@
+# Preserve raw service output, including CRLF and trailing whitespace.
+*.log -text -whitespace
+*.response.json -text -whitespace

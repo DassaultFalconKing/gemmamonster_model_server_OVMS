@@ -1,0 +1,57 @@
+Argument provided: Using install path g54r2
+No argument provided. Using default expunge = 0
+No argument provided. Using default ENABLE_INTEGRITYCHECK = 0
+[INFO] Using MSVC "C:\BuildTools"
+[INFO] directory exists C:\g54r2
+[INFO] directory exists C:\opt
+[INFO] Installing wget ...
+[INFO] ::::::::::::::::::::::: wget installed already in C:\opt\wget.exe 
+[INFO] Wget installed in C:\opt\wget.exe
+Installing msys ...
+[INFO] Msys bash already installed in: C:\opt\msys64\usr\bin\bash.exe
+[INFO]   OV_USE_BINARY=1
+[INFO]   OV_SOURCE_BRANCH=227c33757d1ef95d4da506d00686f923fdd2a535
+[INFO]   OV_TOKENIZERS_BRANCH=a04accf6282d9b304214b492694b18c3979f667a
+[INFO]   OV_GENAI_BRANCH=7ea2546852a382cd16bd22dea0cfad2db70ed744
+[INFO]   OV_SOURCE_ORG=openvinotoolkit
+[INFO]   OV_GENAI_ORG=openvinotoolkit
+[INFO]   OV_TOKENIZERS_ORG=openvinotoolkit
+[INFO]   GENAI_PACKAGE_URL_WINDOWS=https://storage.openvinotoolkit.org/repositories/openvino_genai/packages/pre-release/2026.4.0.0rc2/openvino_genai_windows_2026.4.0.0rc2_x86_64.zip
+[INFO] OV_USE_BINARY=1
+[INFO] Installing GenAI: openvino_genai_windows_2026.4.0.0rc2_x86_64 ...
+[INFO] file exists C:\g54r2\openvino_genai_windows_2026.4.0.0rc2_x86_64.zip 
+[INFO] directory exists C:\g54r2\openvino_genai_windows_2026.4.0.0rc2_x86_64 
+symbolic link created for C:\g54r2\openvino <<===>> C:\g54r2\openvino_genai_windows_2026.4.0.0rc2_x86_64
+[INFO] GenAI installed: C:\g54r2\openvino_genai_windows_2026.4.0.0rc2_x86_64
+[INFO] Installing OpenCL headers ...
+[INFO] ::::::::::::::::::::::: OpenCL is already installed in: C:\opt\opencl
+[INFO] OpenCL headers installed: C:\opt\opencl
+[INFO] Installing BoringSSL ...
+"[INFO] BoringSSL: "0.32.1
+[INFO] ::::::::::::::::::::::: BoringSSL already installed in C:\opt\boringSSL-SwiftPM 
+[INFO] BoringSSL installed: C:\opt\boringSSL-SwiftPM
+[INFO] Installing bazel ...
+[INFO] ::::::::::::::::::::::: bazel already installed
+[INFO] Bazel installed: bazel-6.4.0-windows-x86_64.exe
+[INFO] Installing python 3.12.10 ...
+[INFO] ::::::::::::::::::::::: C:\opt\python312 already installed
+Python 3.12.10
+Looking in links: c:\Users\testc\AppData\Local\Temp\tmpi2ypuihr
+Requirement already satisfied: pip in c:\opt\python312\lib\site-packages (26.2.1)
+Requirement already satisfied: pip in C:\opt\Python312\Lib\site-packages (26.2.1)
+Requirement already satisfied: numpy==2.2.5 in C:\opt\Python312\Lib\site-packages (2.2.5)
+Requirement already satisfied: Jinja2==3.1.6 in C:\opt\Python312\Lib\site-packages (3.1.6)
+Requirement already satisfied: MarkupSafe==3.0.2 in C:\opt\Python312\Lib\site-packages (3.0.2)
+Requirement already satisfied: pytest==8.3.5 in C:\opt\Python312\Lib\site-packages (8.3.5)
+Requirement already satisfied: colorama in C:\opt\Python312\Lib\site-packages (from pytest==8.3.5) (0.4.6)
+Requirement already satisfied: iniconfig in C:\opt\Python312\Lib\site-packages (from pytest==8.3.5) (2.3.0)
+Requirement already satisfied: packaging in C:\opt\Python312\Lib\site-packages (from pytest==8.3.5) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in C:\opt\Python312\Lib\site-packages (from pytest==8.3.5) (1.6.0)
+[INFO] Python 3.12.10 installed: C:\opt\python312
+[INFO] Installing curl ...
+[INFO] file exists C:\opt\curl-8.21.0_7-win64-mingw.zip 
+[INFO] directory exists C:\opt\curl-8.21.0_7-win64-mingw 
+[INFO] file exists C:\opt\curl-8.21.0_7-win64-mingw\bin\libcurl-x64.lib 
+[INFO] Installing OpenCV 4.14.0 ...
+"[INFO] OpenCV installed in: "C:\opt\opencv_4.14.0
+[INFO] Dependencies installed 

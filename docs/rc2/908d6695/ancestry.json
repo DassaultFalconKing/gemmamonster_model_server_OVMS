@@ -1,0 +1,52 @@
+{
+  "candidate_sha": "908d669563f57535ab4eb747989e9ab33dfd5267",
+  "candidate_tree": "02c16e2fbc8b8b2fc51b6ef14b50c11d061f715f",
+  "candidate_parents": [
+    "ae4ddfd79d156604b1803031972f0b596540d789"
+  ],
+  "relationships": {
+    "9e34371": {
+      "sha": "9e34371da956b2bbb2579f20523dccac2d03ab74",
+      "is_ancestor_of_candidate": true,
+      "merge_base": "9e34371da956b2bbb2579f20523dccac2d03ab74"
+    },
+    "3e7664c": {
+      "sha": "3e7664c263cca42545e35fe1f1cb3fecbd18408b",
+      "is_ancestor_of_candidate": false,
+      "merge_base": "9e34371da956b2bbb2579f20523dccac2d03ab74"
+    },
+    "202d5e8": {
+      "sha": "202d5e898d86af6dffd5e53fdc4e875f9de4ebed",
+      "is_ancestor_of_candidate": false,
+      "merge_base": "e894bac71dc02616a68b669af7445a0f8fdb3361"
+    },
+    "82a8a4ec": {
+      "sha": "82a8a4ec72928abad78f9180e67fbb91563e1c08",
+      "is_ancestor_of_candidate": false,
+      "merge_base": "e894bac71dc02616a68b669af7445a0f8fdb3361"
+    },
+    "e894bac7": {
+      "sha": "e894bac71dc02616a68b669af7445a0f8fdb3361",
+      "is_ancestor_of_candidate": true,
+      "merge_base": "e894bac71dc02616a68b669af7445a0f8fdb3361"
+    },
+    "e8c12202": {
+      "sha": "e8c1220205a7aff6ce24ba9f1f6aca89c8b19b51",
+      "is_ancestor_of_candidate": true,
+      "merge_base": "e8c1220205a7aff6ce24ba9f1f6aca89c8b19b51"
+    },
+    "9a162626": {
+      "sha": "9a1626260614f68a6282b6799842d5152f0dcdff",
+      "is_ancestor_of_candidate": true,
+      "merge_base": "9a1626260614f68a6282b6799842d5152f0dcdff"
+    },
+    "cadfcfae": {
+      "sha": "cadfcfae370b15040c0af6b5cfdc3b471e844b40",
+      "is_ancestor_of_candidate": true,
+      "merge_base": "cadfcfae370b15040c0af6b5cfdc3b471e844b40"
+    }
+  },
+  "remote": "https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS.git",
+  "branch_snapshot": "origin/HEAD -> origin/integration/gemmamonster-rc2-clean-20260913\n  origin/integration/gemmamonster-rc2-clean-20260913",
+  "commit_count_since_shared_base": 149
+}

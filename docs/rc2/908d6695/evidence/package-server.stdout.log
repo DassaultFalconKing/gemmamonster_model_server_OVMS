@@ -1,0 +1,42 @@
+"OpenVINO Model Server Environment Initialized"
+[2026-09-14 13:26:55.191][23212][serving][info][server.cpp:115] OpenVINO Model Server 2026.4.0.908d66956
+[2026-09-14 13:26:55.191][23212][serving][info][server.cpp:116] OpenVINO backend 2026.4.0-22955-227c33757d1-releases/2026/4
+[2026-09-14 13:26:55.191][23212][serving][info][server.cpp:119] OpenVINO GenAI backend 2026.4.0.0-3407-7ea2546852a
+[2026-09-14 13:26:55.191][23212][serving][info][pythoninterpretermodule.cpp:37] PythonInterpreterModule starting
+[2026-09-14 13:26:55.191][23212][serving][info][pythoninterpretermodule.cpp:40] Initializing python interpreter
+[2026-09-14 13:26:55.204][23212][serving][info][pythoninterpretermodule.cpp:59] PythonInterpreterModule started
+[2026-09-14 13:26:55.205][25500][modelmanager][info][servable_loading_queue.cpp:89] Started servable loading queue thread
+[2026-09-14 13:26:55.351][23212][modelmanager][info][modelmanager.cpp:252] Available devices for Open VINO: CPU, GPU, NPU
+[2026-09-14 13:26:55.353][23212][serving][info][capimodule.cpp:40] C-APIModule starting
+[2026-09-14 13:26:55.353][23212][serving][info][capimodule.cpp:42] C-APIModule started
+[2026-09-14 13:26:55.353][23212][serving][info][grpcservermodule.cpp:106] GRPCServerModule starting
+[2026-09-14 13:26:55.353][23212][serving][info][grpcservermodule.cpp:133] Binding gRPC server to address: 0.0.0.0:18087
+[2026-09-14 13:26:55.354][23212][serving][info][grpcservermodule.cpp:186] GRPCServerModule started
+[2026-09-14 13:26:55.354][23212][serving][info][grpcservermodule.cpp:187] Started gRPC server on port 18087
+[2026-09-14 13:26:55.354][23212][serving][info][httpservermodule.cpp:35] HTTPServerModule starting
+[2026-09-14 13:26:55.354][23212][serving][info][httpservermodule.cpp:39] Will start 8 REST workers
+[2026-09-14 13:26:55.355][26748][serving][info][drogon_http_server.cpp:157] Binding REST server to address: 0.0.0.0:18086
+[2026-09-14 13:26:55.405][23212][serving][info][drogon_http_server.cpp:187] REST server listening on port 18086 with 8 unary threads and 8 streaming threads
+[2026-09-14 13:26:55.405][23212][serving][info][http_server.cpp:242] API key not provided via --api_key_file or API_KEY environment variable. Authentication will be disabled.
+[2026-09-14 13:26:55.406][23212][serving][info][httpservermodule.cpp:52] HTTPServerModule started
+[2026-09-14 13:26:55.406][23212][serving][info][httpservermodule.cpp:53] Started REST server at 0.0.0.0:18086
+[2026-09-14 13:26:55.406][23212][serving][info][servablemanagermodule.cpp:51] ServableManagerModule starting
+[2026-09-14 13:26:55.408][25500][serving][info][model.cpp:40] Getting model from C:\git\ovms-9e34371-clean-20260914\src\test\dummy
+[2026-09-14 13:26:55.408][25500][serving][info][model.cpp:47] Model downloaded to C:\git\ovms-9e34371-clean-20260914\src\test\dummy
+[2026-09-14 13:26:55.408][25500][serving][info][model.cpp:141] Will add model: dummy; version: 1 ...
+[2026-09-14 13:26:55.408][25500][serving][info][modelversionstatus.cpp:129] STATUS CHANGE: Version 1 of model dummy status change. New status: ( "state": "START", "error_code": "OK" )
+[2026-09-14 13:26:55.408][25500][serving][info][modelinstance.cpp:1333] Loading model: dummy, version: 1, from path: C:\git\ovms-9e34371-clean-20260914\src\test\dummy\1, with target device: CPU ...
+[2026-09-14 13:26:55.408][25500][serving][info][modelversionstatus.cpp:129] STATUS CHANGE: Version 1 of model dummy status change. New status: ( "state": "START", "error_code": "OK" )
+[2026-09-14 13:26:55.408][25500][serving][info][modelversionstatus.cpp:129] STATUS CHANGE: Version 1 of model dummy status change. New status: ( "state": "LOADING", "error_code": "OK" )
+[2026-09-14 13:26:55.417][25500][modelmanager][info][modelinstance.cpp:780] Input name: b; mapping_name: b; shape: (1,10); precision: FP32; layout: N...
+[2026-09-14 13:26:55.417][25500][modelmanager][info][modelinstance.cpp:843] Output name: a; mapping_name: a; shape: (1,10); precision: FP32; layout: N...
+[2026-09-14 13:26:55.434][25500][modelmanager][info][modelinstance.cpp:1678] Number of OpenVINO streams: 1
+[2026-09-14 13:26:55.434][25500][modelmanager][info][modelinstance.cpp:1068] Plugin config for device: CPU
+[2026-09-14 13:26:55.434][25500][modelmanager][info][modelinstance.cpp:1072] OVMS set plugin settings key: PERFORMANCE_HINT; value: LATENCY;
+[2026-09-14 13:26:55.434][25500][serving][info][modelinstance.cpp:1203] Loaded model dummy; version: 1; batch size: 1; No of InferRequests: 1
+[2026-09-14 13:26:55.434][25500][serving][info][modelversionstatus.cpp:129] STATUS CHANGE: Version 1 of model dummy status change. New status: ( "state": "AVAILABLE", "error_code": "OK" )
+[2026-09-14 13:26:55.434][25500][serving][info][model.cpp:87] Updating default version for model: dummy, from: 0
+[2026-09-14 13:26:55.434][25500][serving][info][model.cpp:97] Updated default version for model: dummy, to: 1
+[2026-09-14 13:26:55.434][23212][serving][info][servablemanagermodule.cpp:55] ServableManagerModule started
+[2026-09-14 13:26:55.435][11112][modelmanager][info][modelmanager.cpp:1184] Started model manager thread
+[2026-09-14 13:26:55.435][13556][modelmanager][info][modelmanager.cpp:1213] Started cleaner thread

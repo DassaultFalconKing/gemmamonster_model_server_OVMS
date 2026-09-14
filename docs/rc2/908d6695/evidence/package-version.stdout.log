@@ -1,0 +1,5 @@
+"OpenVINO Model Server Environment Initialized"
+OpenVINO Model Server 2026.4.0.908d66956
+OpenVINO backend 2026.4.0-22955-227c33757d1-releases/2026/4
+OpenVINO GenAI backend 2026.4.0.0-3407-7ea2546852a
+Bazel build flags: --config=win_mp_on_py_on

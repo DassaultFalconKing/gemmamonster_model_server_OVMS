@@ -1,0 +1,149 @@
+9c7c1faacb76af655b844e98b4a9201af1fb5b0b 2026-09-07T09:51:49+02:00 WA for anonymous access in github (#4513)
+cecee313b799029bf03df768e6f617671f90f20a 2026-09-07T09:58:49+02:00 Fix kokoro task detection (#4477)
+ba59b95c2a9055632a666d196b7452305b8fd3e3 2026-09-07T12:00:51+02:00 Audio tests related changes for kokoro and qwen3-asr (#4507)
+d04e398105c5ff01924592358d629df012b678f4 2026-09-07T14:00:26+02:00 Disable input count validation flag (#4492)
+feba3c8983ac655203e0925599687a086194ca39 2026-09-07T14:30:08+02:00 Tool definition - response removing input processing | Qwen3-Next, Qwen3-Coder-Next and more (#4506)
+07e8aac8d3d4ac4b3ae2810f249b3a05bd366fad 2026-09-07T16:35:54+02:00 Add idle servable management preview (#4486)
+88dc3e88a46f00e03fab283689f1d70b459eec2a 2026-09-07T16:39:47+02:00 update ov to version 2026.4 rc2 (#4512)
+9601fc1b0f6f4d76be605f29fdee9e20f49c66e3 2026-09-07T16:41:12+02:00 Update NPU driver (#4514)
+5fe145e54064d7a048fd7cdc9603f4bde6f0f175 2026-09-07T16:48:12+02:00 Fix qwen3coder tool parser keeping quotes in function and parameter names (#4502)
+a114cfa8ed64e72337a83f55a018c1f8b0c65f0b 2026-09-07T18:34:32+02:00 Fix responses funtion call output (#4431)
+9eb93f15fecb848d399f17c7a6a6626e5a1498d7 2026-09-08T13:03:06+02:00 Reasoning effort top level OpenAI API support (#4518)
+ee773f6fd6f57c50d02fcc739cfd72ee7b9af7e1 2026-09-10T17:33:31+02:00 docs(gemmamonster): plan latest-2026.4 protocol refit
+611bb52c443041a8b13021f98ce289c1310ccb49 2026-09-10T17:36:04+02:00 test(gemma4): add latest-2026.4 reasoning refit target
+895a55f36fa597eec90b85b7a7ee7111c03e1d9d 2026-09-10T17:36:27+02:00 test(gemma4): specify reasoning boundary refit contracts
+6c42277a9c1a500810b6c40cc0d09700489b3648 2026-09-10T17:40:47+02:00 refactor(gemma4): refit model-native reasoning parser onto 2026.4
+04089498f9c1d6b6dfbbd446978a4f6d23038b60 2026-09-10T17:40:59+02:00 refactor(gemma4): parse reasoning natively on 2026.4
+f4dc17d6f46091a1312f1b2df278fc034c2b1104 2026-09-10T17:41:14+02:00 refactor(gemma4): add parser-owned boundary contracts on 2026.4
+e3535f9befcf36b3bb067a87f5b767d4f20f73fd 2026-09-10T17:41:41+02:00 refactor(gemma4): refit hardened native tool parser onto 2026.4
+184602f2b45eb81e9529766221e55a312e75059c 2026-09-10T17:42:46+02:00 refactor(gemma4): port hardened native argument state machine to 2026.4
+77abdb5207f23d2a14af2a803510c94f7cf17696 2026-09-10T17:43:49+02:00 refactor(gemma4): refit parser-owned routing and reasoning handoff
+87f68a2eb41ca6b831fb1a04377d6b83e2fe689c 2026-09-10T17:44:29+02:00 docs(gemmamonster): keep latest maintainer 2026.4 rc2 pins
+ecf838087ba6e05bca11c8391ba36ef4c7d9d5fc 2026-09-10T17:47:26+02:00 test(gemma4): add 2026.4 parallel policy contract target
+a8654f0157b34f879f644d66cabf531c735bed1b 2026-09-10T17:47:44+02:00 test(gemma4): specify parallel tool policy on 2026.4
+94a2df797374eb0635d37d4570e69dec27aef3dc 2026-09-10T17:47:58+02:00 refactor(gemma4): carry parallel tool policy on 2026.4
+30a25edf7cf852f57a42581fcbbbfa08cc9a074f 2026-09-10T17:48:11+02:00 refactor(gemma4): expose fail-closed structured output policy on 2026.4
+463f0c8b66b826efcc30f30d4703cb5d9e905256 2026-09-10T17:48:38+02:00 refactor(gemma4): refit structural tool grammar onto 2026.4 rc2
+f63814cac96cdbdf149e6556c94b856a797fff1e 2026-09-10T17:51:09+02:00 refactor(gemma4): normalize refit core to exact protocol blobs
+055667ece41731c547638309e061f2bf584fe157 2026-09-10T17:52:00+02:00 refactor(gemma4): refit OpenAI parallel tool policy onto 2026.4
+42afd7ddd2dabeed36f664f66a3f5e88f5498414 2026-09-10T18:27:49+02:00 test(gemma4): pin repeated same-tool generation contract
+cd44c60f39391ef3e9fe17b91a6f92bd1dc9fb28 2026-09-10T18:28:26+02:00 temporary
+4c14520a267e77457dc1408e4e22bc0bd2e49b11 2026-09-10T18:28:53+02:00 do-not-use
+41632c3ee2d92230ddad5a54024b19ccb43e3b43 2026-09-10T18:29:00+02:00 temporary repair staging
+5592aa04d3526f7f7eb5d9b7759c4dabaed4952b 2026-09-10T18:29:32+02:00 fix(test): restore exact fde0762 generation contract
+477ff43cc098170f5ede3ab43884ae28043bdb32 2026-09-10T18:29:57+02:00 fix(gemma4): refit exact repeated same-tool grammar onto 2026.4 rc2
+697787fdd596022a8ab28d949ae98c1a6d8b857f 2026-09-10T18:30:41+02:00 test(gemma4): pin prompt-state and template overlay contracts
+2f15aeafe09c08cf60c27aa59f3c96bd9750526d 2026-09-10T18:31:14+02:00 refactor(gemma4): refit post-render prompt-state adaptation onto 2026.4 rc2
+fa6292618c57240b9e4974635d50260532116cb7 2026-09-10T18:32:05+02:00 test(gemma4): pin full parser recovery and streamer contracts from fde0762
+41eee9bcd9d2d1b9f786204d317826e513b158c5 2026-09-10T18:32:24+02:00 fix(gemma4): refit special-token phase handoff onto 2026.4 rc2
+dbb17a686a56cf7ce4392d9fc3ff390d195dd47e 2026-09-10T18:36:08+02:00 refactor(gemma4): align final tool parser and routing with accepted fde0762
+bd1e586cdb903de1f9ab623aa1dfc5d36f08b0e6 2026-09-10T18:39:25+02:00 refactor(llm): restore proven persistent session continuity on 2026.4 rc2
+0d6f486586a365ab634680a95901ea1f97943b27 2026-09-10T18:41:39+02:00 chore(gemmamonster): add stable 2026.4 package workflow
+f791a9c2bbf1ff26c5fd62cf6e65dd24c3767092 2026-09-10T19:09:15+02:00 test(gemmamonster): define stable candidate provenance contract
+792bb5acad074c63b812f03e18ef5104bfc2cb4b 2026-09-10T19:09:29+02:00 refactor(gemmamonster): centralize exact 2026.4 runtime profiles
+b636d1ba565bfc8c8c775950d8cafe1613401489 2026-09-10T19:09:51+02:00 feat(gemmamonster): add exact stable candidate verifier
+49973813a42c0c3fa0327c66b0e8ed0ad348bc96 2026-09-10T19:10:51+02:00 feat(gemmamonster): harden stable builder provenance and runtime A/B
+8db4916fb0850095016c7264a34860730a20987b 2026-09-10T19:11:19+02:00 feat(gemmamonster): fail closed on runtime module provenance
+9f73fa16e2b598188a49958b7406a2fdc9cdf106 2026-09-10T19:12:10+02:00 test(gemmamonster): add explicit stable source contract runner
+80c753ef282c82b94f5a680c34d16ab016e9550b 2026-09-10T19:12:23+02:00 test(gemmamonster): refit standalone package contract to stable envelope
+13bf347836ee7ac547876220d99954378d402834 2026-09-10T19:13:32+02:00 fix(gemmamonster): restore build-mutated source files byte-exact
+d3e4cacb72d910d58686863ea07a173794b61903 2026-09-10T19:14:14+02:00 chore(gemmamonster): add adversarial stable refit audit gate
+bffcf8b2b701268a048822881097b80fd98950c6 2026-09-10T19:15:35+02:00 docs(gemmamonster): make stable refit build handoff reproducible
+97741ef4d18fceac2b5da17b06cc1a33bc120874 2026-09-10T19:20:14+02:00 fix(gemmamonster): trust PowerShell verifier exceptions
+644813b727e80c7c1dc023ef7e05e9264c9bb51f 2026-09-10T19:20:26+02:00 fix(gemmamonster): remove stale verifier exit-code check
+ebe105ff858816fd181e64a442aaceec147c456c 2026-09-10T19:21:11+02:00 docs(gemmamonster): restore exact provenance Bericht from fde0762
+028ec42a9ae9e12aec735f1fab7526ab0a6f9dcc 2026-09-10T19:22:03+02:00 chore(gemmamonster): require exact fde provenance Bericht in audit
+69b9f6af38e0c9d85d1c8243b20255584c852ba6 2026-09-10T19:24:35+02:00 test(gemmamonster): preserve fail-closed hard tool choice contract
+0adee88bc53f2ea93d1bcaaaf46be790d35b7cdb 2026-09-10T19:25:09+02:00 docs(gemmamonster): make first Windows build non-destructive
+27bd3b0e886ff07cc3caff1456911c80eec035b1 2026-09-10T19:27:18+02:00 test(gemmamonster): require exact runtime version fingerprints
+2f9fbb16e20b7d427fd5c32b45f70da2369c1c13 2026-09-10T19:27:44+02:00 feat(gemmamonster): verify exact OpenVINO and GenAI runtime fingerprints
+dc668c1667a58c3a399a76e3df5c7678b8cdcc80 2026-09-10T19:31:16+02:00 fix(gemmamonster): bind source contracts to selected runtime profile
+3a49286125b15000234c12be15f597359206c3b6 2026-09-11T01:15:18+02:00 docs(gemmamonster): define internal delta event ownership model
+f043bcc6b3961e13183c8aa63d3e8dd42ddd9dbb 2026-09-11T01:16:53+02:00 docs(gemmamonster): distinguish upstream delta substrate from refit ownership
+16df6acd96efea26bfa3d5df8f0c47b71c332b15 2026-09-11T01:18:26+02:00 docs(gemmamonster): inventory capital 2026.4 refit architecture
+00d3841830212243fc3c9d97ab0ac0b1f96dd47a 2026-09-10T20:00:34+02:00 fix(gemmamonster): make stable refit audit invocable
+55d0c345cb89e69951debda8fee490c3db08473e 2026-09-10T20:04:11+02:00 fix(gemmamonster): serialize stable audit report reliably
+88e69b6151c8f6771cd0d6ef24365d6f44e09d87 2026-09-10T20:05:18+02:00 fix(gemmamonster): bind builder git arguments
+e93d501e6e5672549fbbcb8099df5eabfe721525 2026-09-10T20:06:43+02:00 fix(windows): honor configured Bazel Visual Studio root
+90bfa67c38a17843e33024b3bae097e13f5df949 2026-09-10T20:13:01+02:00 fix(drogon): select configured Python on Windows
+56d28532cb9ead75045727e20c79572aed35ee2e 2026-09-10T20:49:21+02:00 feat(gemmamonster): bundle pinned Optimum CLI tooling
+13e60df99fe8534b3e4a67096abbea7e0b883e83 2026-09-10T20:49:35+02:00 fix(windows): propagate Bazel build failures
+0532c884c1580c81b10d697ca655ebedc0aff470 2026-09-10T20:50:33+02:00 fix(drogon): recognize versioned Windows OS names
+5b0738253e068408b5f9f1faf8c03aabddaa8c48 2026-09-10T20:52:09+02:00 fix(windows): use OpenCV 4.14 vc17 layout
+cadfcfae370b15040c0af6b5cfdc3b471e844b40 2026-09-10T22:56:22+02:00 fix(gemmamonster): build RC2 against isolated dep root, not C:\opt
+9d85ea6afe218742b8614409b4ce9b4d0b7dec92 2026-09-10T22:57:58+02:00 fix(gemmamonster): tolerate bazel execroot link in post-build clean check
+7124cfc5773578fee8360dd540ca0541669d7b0c 2026-09-11T00:23:57+02:00 fix(gemmamonster): run packaged --version with setupvars env
+982aad3dc7e8545134dad7d98a83aa75ee2f9cf4 2026-09-11T00:41:02+02:00 fix(gemmamonster): tolerate bazel execroot link in source-contract clean check
+794296b7c2af312a8cccdcd01e0ded8fca3b1d95 2026-09-11T01:09:43+02:00 fix(gemmamonster): open test_platform_utils to src/test subtree
+865c87204e87119c01379eab4a91b5762ff6936d 2026-09-11T01:10:17+02:00 fix(gemmamonster): give contract tests explicit runtime PATH and PYTHONHOME
+8dc4caabf14331d7b99d446a7fec632b7744a000 2026-09-11T01:10:29+02:00 feat(gemmamonster): two candidate flavors, lean default plus opt-in optimum bundle
+c5b1c9a515774003a30de14d7d6fedbb20a46c4c 2026-09-11T01:11:04+02:00 chore(gemmamonster): ignore bazel execroot convenience links
+d836566710d930808004b49729cd8fce7705b3e5 2026-09-11T01:25:19+02:00 docs(gemmamonster): pay down Delta-vs-JSON comment debt in output_parser.hpp
+e8c1220205a7aff6ce24ba9f1f6aca89c8b19b51 2026-09-11T01:29:58+02:00 fix(gemma4): repair parser and grammar contracts
+9a1626260614f68a6282b6799842d5152f0dcdff 2026-09-11T01:45:20+02:00 test(gemma4): prove single-tag grammar multiplicity
+ea90b6859144a4d1f8ba49cbd04554dfe8e20e4a 2026-09-11T02:13:34+02:00 fix(gemmamonster): run package version checks with setupvars env, gate optimum-cli on flavor
+e60a6627a3a9a87297eb3b1739055ee891972bd0 2026-09-11T02:58:54+02:00 fix(gemmamonster): launcher spawns ovms with full setupvars env
+baa303e0bc34f66f434118d2ef279a263932c6bd 2026-09-11T02:59:02+02:00 test(gemmamonster): add comparable speed benchmark harness
+b480b8eb8db3ace5ed38450a7647eaf31e0ab2e5 2026-09-11T03:13:36+02:00 fix(gemmamonster): launcher puts packaged python on spawned server PATH
+a9d7cb8cac9b7a336324de65839df94ec1f10c5c 2026-09-11T03:20:54+02:00 fix(gemmamonster): provenance pins the 4 shipped DLLs, driver shims informational
+4e48080e45499e7caccbf97df7820b709370feaa 2026-09-11T03:50:06+02:00 docs: freeze known-good Gemma4 tool-calling combo
+d9c065998feae4d09ad06db0ac2e6dfdcd0505e0 2026-09-11T03:51:18+02:00 docs: record known-good source and build provenance
+2ed8aa624a5182f1188c864160d7715d6163ef59 2026-09-11T04:09:38+02:00 docs: position Project Gemmamonster OVMS fork
+94785076acb43dacaac5f7752ca550a76c6234ac 2026-09-11T22:25:52+02:00 docs(gemmamonster): add canonical current-state anchor
+894537899fbc12caa90bfd15cfa4e3a4c2348f3c 2026-09-11T22:26:20+02:00 docs(gemmamonster): pin canonical current-state snapshot
+7593b58b8a01d2066d0f0409ed80fdc2630970dc 2026-09-11T22:26:46+02:00 docs(gemmamonster): finalize canonical state index
+ef98371ce679c2b9213d2488c3583b823f77ad78 2026-09-11T22:54:08+02:00 build(gemmamonster): add fail-closed environment preflight
+c6cdef5843afa454c077f618874e7023f3e1b50f 2026-09-11T22:54:35+02:00 docs(gemmamonster): require sanitized environment preflight
+5beebaa7ecb478729b251223181896a64ed821ef 2026-09-11T23:07:38+02:00 docs(gemmamonster): add canonical Windows manual build runbook
+8a54214fed2a0cb01ad17159364996f8787a92fa 2026-09-11T23:08:03+02:00 docs(gemmamonster): link canonical manual build runbook
+fee6b119b24a08f8dec0255fc3a7ff4115f189fb 2026-09-12T22:32:47+02:00 chore(worklog): bootstrap RC2 semantic-refit execution
+49e720b7fba42f14c82a7585237d5458a12d8763 2026-09-12T22:33:09+02:00 docs(worklog): close RC2 bootstrap session
+9b06b9ef02d08623e3c79b7841be3ef0ca070a8d 2026-09-12T22:49:30+02:00 docs(gemmamonster): review RC1 provenance and define B parity recipe
+2a1a6f19b69956c43250d2c4ca29fcf614907c55 2026-09-12T22:49:52+02:00 docs(worklog): record RC1 provenance erratum and B parity gate
+44cb6b2d4d33b6936c0997d91dc24ace7115e0ae 2026-09-12T22:50:38+02:00 test(gemmamonster): specify RC1 parity preflight profile contract
+5fd06fd2c87de73ac638c2ed8f3edd3c7152dd10 2026-09-12T22:51:04+02:00 docs(worklog): record RC1 forensic review and B parity RED gate
+d679614a879f0cf4410035847d794a3d4f553949 2026-09-12T23:17:46+02:00 docs(gemmamonster): pin RC2 B-parity build recipe
+bb963eac70a911ea075e459a2f91d2fb4705810a 2026-09-12T23:18:16+02:00 docs(gemmamonster): define B-parity acceptance and tuning ladder
+d36d437b683b9befcf1024eefbb9cff9ecaf0211 2026-09-12T23:18:47+02:00 docs(worklog): pin B-parity build and acceptance handoff
+58a0cfd5cf73262fd4e7be2f2be0baef155f90e3 2026-09-12T23:19:01+02:00 docs(worklog): record B-parity build and acceptance plan
+5b70bee14a1f2c1fbc5bf530d6afe3417de5944a 2026-09-12T23:50:06+02:00 gemmamonster: add rc1-parity toolchain profile to env preflight
+31c3bcd34054758cac54c969bb00f75b43894bf9 2026-09-12T23:50:18+02:00 gemmamonster: port RC1 three-file Windows build parity patch
+4bdc46d9737a028762dbe9bcaa37133ae83fc9b1 2026-09-12T23:50:44+02:00 docs(worklog): checkpoint B-parity build session through parity commits
+c0c04bbe1bde38aac273682525be3f94b473aeed 2026-09-13T00:44:40+02:00 docs(worklog): record B-parity build outcome - build PASS, ovms_test FAIL, no package
+958d08e202b82fe9173a611982498075cfb9e0ca 2026-09-13T01:08:37+02:00 docs(worklog): clarify test failures are substrate/CLI layer, not Gemma4 refit
+a395746186a72285a710868a178d60972c8fe989 2026-09-13T01:10:24+02:00 test(gemmamonster): harden RC2 Windows ovms_test gate
+7fcb024f14637b763ce4dbdd400a0a1cbb847226 2026-09-13T01:10:40+02:00 fix(test): keep RC2 Windows gate compatible with Windows PowerShell
+9d9bc612dba63eb1878f71ada026a347b70d715e 2026-09-13T01:11:29+02:00 docs(worklog): death-test failures are stale tests, default repo path proven
+d29972f65f4855f795ed529517fad30c4282401e 2026-09-13T01:12:42+02:00 docs(worklog): correct death-test verdict to env var, record gate run
+9f9a9edf7e4e62ceebfd4b6fd50386379db7ec88 2026-09-13T01:42:32+02:00 docs(worklog): root-cause report - H1 rejected by experiment, H2 open, no package
+4fa90bae380cf864f34d1db294d16d8c2abd42fd 2026-09-13T01:49:54+02:00 fix(capi): make async inference guard teardown deterministic
+bcf476ee60677b3764d4db61d9c04293f70dffaa 2026-09-13T01:50:46+02:00 fix(capi): minimize async lifetime guard diff
+59189254e4c36da586e20271da77fa24788a89cc 2026-09-13T01:51:39+02:00 docs(agent): add next-session validation prompt
+158d5a517c309bdeed4866567a2fde0a7051c6c5 2026-09-13T01:59:36+02:00 docs(worklog): guard-fix validation - hypothesis REJECTED, same crash signature
+d7b797cb97e0f8bdb8304b28c90a892ea3fa6b55 2026-09-13T01:59:54+02:00 docs(worklog): confirm Gate3 crash test name
+4a6666200d27f6616da8cd30e394ee9dddf72c8c 2026-09-13T02:04:20+02:00 test(capi): pin Windows async stress worker contract
+3e9bd4326572562fa1f1cfd3e360280b449fb091 2026-09-13T02:05:21+02:00 noop
+03e4a76f24d8431bcf2dd590bc8ea689d439c447 2026-09-13T02:06:41+02:00 noop2
+4362e9b3d11e2dbde7049c0aa5fd086f4dd98c21 2026-09-13T02:06:56+02:00 revert(capi): drop rejected async guard experiment
+5def2c3c0b12a31243a68e6c2d62f286cc2ea63d 2026-09-13T02:10:12+02:00 fix(test): make async C-API stress Windows-safe
+a0d1b6d8c9883265edbddde3d507e536048249d5 2026-09-13T02:10:41+02:00 test(capi): validate Windows-safe async stress path
+20f8d23a5edd8c892ef184dac06f39b55efb82ac 2026-09-13T02:11:36+02:00 fix(test): parse non-void stress helpers
+d3ab23977306258033d461eec09abc7a4ec76155 2026-09-13T02:12:28+02:00 docs(agent): hand off Windows-safe stress validation
+df4e99d004c829e528aabe9bcdc6b888b7f9550c 2026-09-13T14:18:24+02:00 docs(worklog): point CURRENT at Windows-safe stress validation
+dacc6c948ad19b8d7a968604b81d030e48eb7d66 2026-09-13T14:26:04+02:00 test(windows): pin CVS-176244 skip lifecycle contract
+c3bbe1568053b3d35a11ae6b9c31b7251fbdea90 2026-09-13T14:27:17+02:00 fix(test): enforce Windows stress skips in fixture setup
+ca9b8efa49c4eedc5f1b1ce94e817b2870b5fd77 2026-09-13T14:28:05+02:00 fix(test): move Windows sporadic skips into fixture setup
+f2323dc5f8a1a92bcc007f7f3e84c7e4c819e6f6 2026-09-13T14:29:27+02:00 docs(handoff): validate corrected Windows stress skip hooks
+689bbd512bf180d567599baf7155eaf0d514e4ee 2026-09-13T14:30:08+02:00 docs(worklog): record Windows stress skip contract hardening
+19f432ef3a6e744280e90f81a2011d724bc6047e 2026-09-13T16:56:10+02:00 fix(test): make Windows CVS-176244 skips skip-safe
+e7cd10a9c20877fd3b82fabd363a744583d69099 2026-09-13T17:11:41+02:00 docs(worklog): order-bisection session - original crash gone, D1 skip-path AV proven and fixed
+215eb1b3c08e55253748d0e0d617917354eed1c6 2026-09-13T19:36:24+02:00 fix(test): require available graph before starting stream unloader
+b264c0a00ac3f4d2e1f8f290c80dbbb1bf9a77e0 2026-09-13T19:43:05+02:00 fix(test): use CPU for string model API fixtures
+7758aafec85ab9da64bf1ccdc8cffddb5587e345 2026-09-13T19:45:45+02:00 fix(embeddings): report OpenVINO resource initialization failures
+88ac984e2ad7e70586728ced16212b364404e762 2026-09-13T19:50:36+02:00 fix(rerank): report OpenVINO resource initialization failures
+d7bc3496b77618cc3d3cf6c389ecedab6a517c9b 2026-09-13T19:58:37+02:00 fix(stt): report OpenVINO resource initialization failures
+06980ea76f3bfcc0adbbc75770762c38863f4bb2 2026-09-13T20:03:05+02:00 fix(test): use CPU for FP32 streaming CLI fixture
+ccb145e8ffe80ca67b0f633de2484017f2ba67e1 2026-09-13T20:05:47+02:00 fix(test): align assisted decoding graphs with CPU reference
+9e34371da956b2bbb2579f20523dccac2d03ab74 2026-09-13T21:38:43+02:00 docs(rc2): separate product build from test executable
+ae4ddfd79d156604b1803031972f0b596540d789 2026-09-14T00:30:53+02:00 fix(test): use recommended target device in LLM default-options check
+908d669563f57535ab4eb747989e9ab33dfd5267 2026-09-14T00:30:58+02:00 docs(worklog): record Windows autonomous stabilization 2026-09-13

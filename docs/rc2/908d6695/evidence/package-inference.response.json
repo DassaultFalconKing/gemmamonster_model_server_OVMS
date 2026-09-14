@@ -1,0 +1,10 @@
+{
+    "model_name": "dummy",
+    "model_version": "1",
+    "outputs": [{
+            "name": "a",
+            "shape": [1, 10],
+            "datatype": "FP32",
+            "data": [2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0]
+        }]
+}

@@ -1,0 +1,29 @@
+{
+  "ready": "PASS",
+  "chat": {
+    "http_status": 200,
+    "status": "PASS",
+    "response": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "4",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1789385310,
+      "model": "gemma4",
+      "object": "chat.completion",
+      "usage": {
+        "prompt_tokens": 23,
+        "completion_tokens": 2,
+        "total_tokens": 25
+      }
+    }
+  }
+}

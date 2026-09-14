@@ -1,0 +1,62 @@
+[
+    {
+        "ModuleName":  "openvino_genai.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\openvino_genai.dll"
+    },
+    {
+        "ModuleName":  "python312.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\python\\python312.dll"
+    },
+    {
+        "ModuleName":  "opencv_world4140.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\opencv_world4140.dll"
+    },
+    {
+        "ModuleName":  "tbb12.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\tbb12.dll"
+    },
+    {
+        "ModuleName":  "openvino.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\openvino.dll"
+    },
+    {
+        "ModuleName":  "openvino_tokenizers.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\openvino_tokenizers.dll"
+    },
+    {
+        "ModuleName":  "openvino_auto_plugin.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\openvino_auto_plugin.dll"
+    },
+    {
+        "ModuleName":  "openvino_auto_batch_plugin.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\openvino_auto_batch_plugin.dll"
+    },
+    {
+        "ModuleName":  "openvino_intel_cpu_plugin.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\openvino_intel_cpu_plugin.dll"
+    },
+    {
+        "ModuleName":  "openvino_intel_gpu_plugin.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\openvino_intel_gpu_plugin.dll"
+    },
+    {
+        "ModuleName":  "openvino_hetero_plugin.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\openvino_hetero_plugin.dll"
+    },
+    {
+        "ModuleName":  "openvino_intel_npu_plugin.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\openvino_intel_npu_plugin.dll"
+    },
+    {
+        "ModuleName":  "openvino_intel_npu_compiler_loader.dll",
+        "FileName":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\npu.inf_amd64_597e96d1fdad31a4\\openvino_intel_npu_compiler_loader.dll"
+    },
+    {
+        "ModuleName":  "openvino_intel_npu_compiler_loader.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\openvino_intel_npu_compiler_loader.dll"
+    },
+    {
+        "ModuleName":  "openvino_ir_frontend.dll",
+        "FileName":  "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\extracted\\ovms\\openvino_ir_frontend.dll"
+    }
+]

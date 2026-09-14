@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-09-14",
+  "candidate_source_sha": "908d669563f57535ab4eb747989e9ab33dfd5267",
+  "candidate_tree": "02c16e2fbc8b8b2fc51b6ef14b50c11d061f715f",
+  "embedded_version": "2026.4.0.908d66956",
+  "binary_sha256": "11d74fd958d1cd2570682fa13562c1bfcf0973dabbf79a0378a8d0cdc886a4fb",
+  "zip_sha256": "a2944b151f68c05140980d543c5067a0932047a7020fb9dccc13cdca65af23d4",
+  "zip_size_bytes": 140027849,
+  "runtime_files": 2949,
+  "runtime_profile": "maintainer-rc2",
+  "original_manifest_complete": false,
+  "repack_binary_changed": false,
+  "full_acceptance": "NOT_ESTABLISHED",
+  "external_models_bundled": false,
+  "tests": {
+    "package_smoke": "PASS",
+    "wondernutts_gpu_vlm_cb_single_chat": "PASS",
+    "e4b_cpu_vlm_cb": "FAIL",
+    "tool_calling_campaign": "NOT_RUN"
+  },
+  "dependency_pins": {
+    "openvino": "227c33757d1ef95d4da506d00686f923fdd2a535",
+    "genai": "7ea2546852a382cd16bd22dea0cfad2db70ed744",
+    "tokenizers": "a04accf6282d9b304214b492694b18c3979f667a"
+  }
+}

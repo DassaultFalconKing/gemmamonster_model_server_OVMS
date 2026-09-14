@@ -1,0 +1,45 @@
+{
+  "archive_roundtrip": "PASS",
+  "file_count": 2949,
+  "binary_sha256": "11d74fd958d1cd2570682fa13562c1bfcf0973dabbf79a0378a8d0cdc886a4fb",
+  "archive_sha256": "a2944b151f68c05140980d543c5067a0932047a7020fb9dccc13cdca65af23d4",
+  "source_candidate": "C:\\gemmamonster-artifacts\\candidates\\2026.4\\908d6695-maintainer-rc2-rc2-product-20260913T223554Z",
+  "version": {
+    "exit_code": 0,
+    "status": "PASS"
+  },
+  "help": {
+    "exit_code": 0,
+    "status": "PASS"
+  },
+  "server_ready": "PASS",
+  "inference": {
+    "status": "PASS",
+    "response": {
+      "model_name": "dummy",
+      "model_version": "1",
+      "outputs": [
+        {
+          "name": "a",
+          "shape": [
+            1,
+            10
+          ],
+          "datatype": "FP32",
+          "data": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0
+          ]
+        }
+      ]
+    }
+  }
+}
