@@ -1,0 +1,1 @@
+007 simple-tool_007 fp=bd07c36af379fa25* choice=auto t=0 max=256 ptc= ms=1561 :: HTTP200 finish=tool_calls calls=1 clen=0 calltag=False ptok=102 ctok=26 :: alive=True ws=15813 priv=15971 freeKB=4477204 

@@ -1,0 +1,1 @@
+009 simple-tool_009 fp=624b2815707e94e1* choice=auto t=0 max=256 ptc= ms=1465 :: HTTP200 finish=tool_calls calls=1 clen=0 calltag=False ptok=87 ctok=23 :: alive=True ws=15815 priv=15974 freeKB=4525220 

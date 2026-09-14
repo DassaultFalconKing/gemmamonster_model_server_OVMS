@@ -1,0 +1,1 @@
+023 mid-tool_023 fp=ace3fe5d95c5c105* choice=auto t=0 max=256 ptc= ms=1988 :: HTTP200 finish=tool_calls calls=1 clen=0 calltag=False ptok=220 ctok=30 :: alive=True ws=15950 priv=16108 freeKB=4508468 

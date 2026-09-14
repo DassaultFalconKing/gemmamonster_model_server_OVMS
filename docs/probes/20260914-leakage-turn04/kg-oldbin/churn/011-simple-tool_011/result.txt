@@ -1,0 +1,1 @@
+011 simple-tool_011 fp=2801bf777be40a43* choice=auto t=0 max=256 ptc= ms=1593 :: HTTP200 finish=tool_calls calls=1 clen=0 calltag=False ptok=119 ctok=24 :: alive=True ws=15829 priv=15985 freeKB=4518680 

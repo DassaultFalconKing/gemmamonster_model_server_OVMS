@@ -1,0 +1,1 @@
+010 simple-tool_010 fp=f005d7897e7ce9a2* choice=required t=0 max=256 ptc=False ms=1927 :: HTTP200 finish=tool_calls calls=1 clen=0 calltag=False ptok=107 ctok=33 :: alive=True ws=15821 priv=15978 freeKB=4534540 

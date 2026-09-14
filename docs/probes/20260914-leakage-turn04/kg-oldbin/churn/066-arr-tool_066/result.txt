@@ -1,0 +1,1 @@
+066 arr-tool_066 fp=47dd7e535c47b833* choice=auto t=1 max=256 ptc= ms=11 :: HARD_FAIL: Response status code does not indicate success: 400 (Bad Request). :: alive=True ws=15957 priv=16112 freeKB=4812868 

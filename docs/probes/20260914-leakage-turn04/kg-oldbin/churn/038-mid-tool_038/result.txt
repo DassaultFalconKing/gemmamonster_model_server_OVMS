@@ -1,0 +1,1 @@
+038 mid-tool_038 fp=250c193a4686168e* choice=auto t=0 max=256 ptc= ms=12 :: HARD_FAIL: Response status code does not indicate success: 400 (Bad Request). :: alive=True ws=16002 priv=16157 freeKB=4457488 

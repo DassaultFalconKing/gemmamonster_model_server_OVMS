@@ -1,0 +1,4 @@
+
+{
+  "error": "Mediapipe execution failed. MP status - INVALID_ARGUMENT: CalculatorGraph::Run() failed: \nCalculator::Process() for node \u0022LLMExecutor\u0022 failed: Request processing failed, check its correctness."
+}
