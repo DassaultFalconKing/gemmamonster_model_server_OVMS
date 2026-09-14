@@ -63,6 +63,15 @@
 
 namespace ovms {
 namespace {
+void finishTextStreamer(const std::shared_ptr<ov::genai::TextStreamer>& streamer,
+    ov::genai::GenerationFinishReason reason) {
+    if (auto ovmsStreamer = std::dynamic_pointer_cast<OVMSTextStreamer>(streamer))
+        ovmsStreamer->end(reason);
+    else
+        streamer->end();
+}
+}  // namespace
+namespace {
 
 constexpr const char* SESSION_HEADER = "x-ovms-session-id";
 
@@ -784,7 +793,7 @@ absl::Status GenAiServable::prepareCompleteResponse(std::shared_ptr<GenAiServabl
         if (numOutputs == 1) {
             // Single sequence: reuse the OVMSTextStreamer and deltaChannel built in parseRequest.
             executionContext->textStreamer->write(output.generated_ids);
-            executionContext->textStreamer->end(output.finish_reason);
+            finishTextStreamer(executionContext->textStreamer, output.finish_reason);
             localDeltas = executionContext->deltaChannel.drain();
         } else {
             // Multiple sequences: each beam requires its own independent stateful streamer
@@ -851,7 +860,7 @@ absl::Status GenAiServable::preparePartialResponse(std::shared_ptr<GenAiServable
         OVMS_PROFILE_SCOPE("Generation of last streaming response");
         // end() flushes held-back tokens and passes the actual terminal reason. Any resulting
         // Document is pushed into deltaChannel by the callback.
-        executionContext->textStreamer->end(finishReason);
+        finishTextStreamer(executionContext->textStreamer, finishReason);
     }
 
     // Drain all deltas accumulated during this write()/end() cycle.

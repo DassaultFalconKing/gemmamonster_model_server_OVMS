@@ -173,87 +173,19 @@ The relevant `windows_openvino` and `windows_genai` paths must not point to the 
 
 A mixed tree is a provenance failure even if compilation succeeds.
 
-## 7. Current acceptance only: rebuild GenAI with XGrammar 0.2.6
+## 7. Current acceptance only: bleeding-edge XGrammar
 
-Skip this entire section when reproducing the frozen known-good `9a162626` reference. Frozen known-good uses the stock GenAI `v0.1.31` XGrammar pin.
+Frozen known-good `9a162626` keeps stock GenAI and XGrammar `v0.1.31`. Current repair uses GenAI base `7ea2546852a382cd16bd22dea0cfad2db70ed744` plus the tracked schema API patch, and XGrammar `9aa840b6d16abf094f3e8e2ac9c10465b77656c9` with recursively pinned submodules.
 
-For current acceptance, start from exact GenAI `7ea254...`:
-
-```powershell
-$genaiSrc   = 'C:\g54r2\openvino_genai_src'
-$genaiBuild = 'C:\g54r2\openvino_genai_build'
-
-Remove-Item $genaiSrc   -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item $genaiBuild -Recurse -Force -ErrorAction SilentlyContinue
-
-git clone --recursive https://github.com/openvinotoolkit/openvino.genai.git $genaiSrc
-git -C $genaiSrc checkout 7ea2546852a382cd16bd22dea0cfad2db70ed744
-git -C $genaiSrc submodule update --init --recursive
-
-if ((git -C $genaiSrc rev-parse HEAD).Trim() -ne '7ea2546852a382cd16bd22dea0cfad2db70ed744') {
-    throw 'Wrong GenAI checkout'
-}
-```
-
-Patch only the XGrammar fetch pin:
+Use existing checkouts at `C:\g54r2\openvino_genai_src` and `C:\g54r2\whitespace-xgrammar-reference`. The script checks both SHA values, synchronizes recursive dependencies, applies the versioned patches, builds the C++ runtime and installs matching headers and DLLs into `C:\g54r2\openvino`.
 
 ```powershell
-$p = "$genaiSrc\src\cpp\CMakeLists.txt"
-$s = [IO.File]::ReadAllText($p)
-$old = 'set(XGRAMMAR_VERSION v0.1.31)'
-$new = 'set(XGRAMMAR_VERSION bc09a30ec10ba30a6c1ab0c79eaeba3ca518d11f)'
-
-if (-not $s.Contains($old)) {
-    throw 'Expected GenAI v0.1.31 XGrammar pin not found'
-}
-
-$s = $s.Replace($old, $new)
-[IO.File]::WriteAllText($p, $s, [Text.UTF8Encoding]::new($false))
+.\scripts\gemmamonster\build-whitespace-genai.ps1
 ```
 
-Configure, build and install it into the same `C:\g54r2\openvino` tree:
+Python bindings are disabled for this C++ product. TVM-FFI is therefore outside the active dependency graph. The XGrammar patch corrects header installation when used as a CMake subproject.
 
-```powershell
-cmd.exe /d /c @"
-call C:\g54r2\openvino\setupvars.bat &&
-cmake -S C:\g54r2\openvino_genai_src ^
-      -B C:\g54r2\openvino_genai_build ^
-      -G "Visual Studio 17 2022" ^
-      -A x64 ^
-      -DCMAKE_BUILD_TYPE=Release ^
-      -DBUILD_TOKENIZERS=OFF ^
-      -DENABLE_SAMPLES=OFF ^
-      -DENABLE_TOOLS=OFF ^
-      -DENABLE_TESTS=OFF ^
-      -DENABLE_XGRAMMAR=ON &&
-cmake --build C:\g54r2\openvino_genai_build --config Release --parallel &&
-cmake --install C:\g54r2\openvino_genai_build --config Release --prefix C:\g54r2\openvino
-"@
-if ($LASTEXITCODE -ne 0) { throw "GenAI/XGrammar build failed: $LASTEXITCODE" }
-```
-
-Then prove the fetched XGrammar identity:
-
-```powershell
-$xg = (git -C C:\g54r2\openvino_genai_build\_deps\xgrammar-src rev-parse HEAD).Trim()
-if ($xg -ne 'bc09a30ec10ba30a6c1ab0c79eaeba3ca518d11f') {
-    throw "Wrong XGrammar: $xg"
-}
-```
-
-### Required whitespace-cap gate
-
-Before spending time on the OVMS build, verify that the active local acceptance source actually contains the `max_whitespace_cnt=2` integration:
-
-```powershell
-$hits = @(git grep -n 'max_whitespace_cnt')
-$hits
-if ($hits.Count -eq 0) {
-    throw 'Current acceptance source does not expose the required max_whitespace_cnt integration'
-}
-```
-
-Do not infer this capability merely because XGrammar 0.2.6 is present. The value must actually reach the structural JSON-schema grammar path.
+The actual JSONSchema node carries `max_whitespace_cnt=2` only for Gemma4 tool arguments. Default JSONSchema callers remain unbounded. Verify serialization and C++ matcher acceptance before promoting a candidate.
 
 ## 8. Stop stale Bazel state
 
