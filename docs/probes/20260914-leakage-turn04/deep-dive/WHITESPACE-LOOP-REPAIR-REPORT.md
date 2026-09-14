@@ -1,5 +1,17 @@
 # Whitespace-loop repair report — 2026-09-14
 
+## Toolchain update after the blocked attempt
+
+At the user's authorization, commit `fdd349b33eb0e60721d0c8f6b78f9402abc31068`
+updates current acceptance to official Bazel 6.4.0. The preflight profile contract
+was observed RED before the update and GREEN afterward. Clean
+`Enter-GemmamonsterEnv.ps1 -RequireRuntimeRoot` reports PASS with the unmodified
+`C:\opt\bazel.exe` 6.4.0. Configure-only sync exits 0; generated x64 MSVC
+cl/link/lib/ml64 paths resolve to the existing 14.44.35207 tools. The vcpkg layout
+blocker below is therefore resolved. RC2 dependency pins remain unchanged.
+OVMS compilation and repair unit/live acceptance have not been rerun by this
+toolchain-only update; the following report records the earlier blocked attempt.
+
 **OVERALL: BLOCKED / NOT ACCEPTED.** Only test contracts and this investigation
 record were committed. No production repair was implemented because the required
 TDD RED execution is blocked by the canonical Windows compiler configuration.
