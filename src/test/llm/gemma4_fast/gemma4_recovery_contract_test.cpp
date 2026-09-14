@@ -24,6 +24,9 @@
 #include <utility>
 #include <variant>
 #include <vector>
+#include <sstream>
+#include <spdlog/sinks/ostream_sink.h>
+#include "../../../logging.hpp"
 
 #include "../../../llm/io_processing/output_parser.hpp"
 #include "../../../llm/io_processing/gemma4/gemma4_tool_parser.hpp"
@@ -40,6 +43,29 @@ const std::string tokenizerPath = "/ovms/src/test/llm_testing/OpenVINO/gemma-4-E
 #endif
 
 const std::string questionSchema = R"({"type":"object","properties":{"questions":{"type":"array"}}})";
+
+class TerminalLogCapture {
+    std::vector<spdlog::sink_ptr> savedSinks = llm_calculator_logger->sinks();
+    spdlog::level::level_enum savedLevel = llm_calculator_logger->level();
+public:
+    std::ostringstream output;
+    TerminalLogCapture() {
+        llm_calculator_logger->sinks() = {std::make_shared<spdlog::sinks::ostream_sink_mt>(output)};
+        llm_calculator_logger->set_level(spdlog::level::warn);
+    }
+    ~TerminalLogCapture() {
+        llm_calculator_logger->sinks() = savedSinks;
+        llm_calculator_logger->set_level(savedLevel);
+    }
+};
+
+// Let the baseline compile and exercise its STOP-only end(). The repaired
+// overload must consume the real terminal reason, rather than infer a budget.
+template <typename T>
+auto finishWithReason(T& streamer, ov::genai::GenerationFinishReason reason, int)
+    -> decltype(streamer.end(reason), void()) { streamer.end(reason); }
+template <typename T>
+void finishWithReason(T& streamer, ov::genai::GenerationFinishReason, long) { streamer.end(); }
 
 class Gemma4BareRecoveryContractTest : public ::testing::Test {
 protected:
@@ -100,6 +126,35 @@ protected:
 
 std::unique_ptr<ov::genai::Tokenizer> Gemma4BareRecoveryContractTest::tokenizer;
 }  // namespace
+
+TEST_F(Gemma4BareRecoveryContractTest, IncompleteCanonicalFrameTerminatesWithLengthDiagnosticAndNoDeltas) {
+    ToolsSchemas_t tools;
+    tools.emplace("echo", ToolSchemaWrapper{nullptr,
+        R"({"type":"object","properties":{"text":{"type":"string"}},"required":["text"]})"});
+    auto parser = std::make_shared<OutputParser>(*tokenizer, "gemma4", "gemma4", tools);
+    TerminalLogCapture capture;
+    std::vector<Delta> deltas;
+    OVMSTextStreamer streamer(*tokenizer, parser, true,
+        [&deltas](Delta delta, bool) {
+            deltas.push_back(std::move(delta));
+            return ov::genai::StreamingStatus::RUNNING;
+        }, {{ov::genai::skip_special_tokens.name(), true}});
+    const std::string frame = "<|tool_call>call:echo{\n\n\n\n";
+    const auto encoded = tokenizer->encode(frame, ov::genai::add_special_tokens(false)).input_ids;
+    streamer.write(std::vector<int64_t>(encoded.data<int64_t>(), encoded.data<int64_t>() + encoded.get_size()));
+    finishWithReason(streamer, ov::genai::GenerationFinishReason::LENGTH, 0);
+    for (const auto& delta : deltas) {
+        EXPECT_FALSE(std::holds_alternative<ToolCallDelta>(delta));
+        EXPECT_FALSE(std::holds_alternative<ContentDelta>(delta));
+    }
+    const auto diagnostic = capture.output.str();
+    EXPECT_NE(diagnostic.find("pending_tool_frame=true"), std::string::npos) << diagnostic;
+    EXPECT_NE(diagnostic.find("finish_reason=LENGTH"), std::string::npos) << diagnostic;
+    EXPECT_NE(diagnostic.find("parser_phase="), std::string::npos) << diagnostic;
+    EXPECT_NE(diagnostic.find("buffered_bytes="), std::string::npos) << diagnostic;
+    EXPECT_NE(diagnostic.find("generated_tokens=" + std::to_string(encoded.get_size())), std::string::npos) << diagnostic;
+    EXPECT_NE(diagnostic.find("tool_name=echo"), std::string::npos) << diagnostic;
+}
 
 TEST_F(Gemma4BareRecoveryContractTest, AllowedToolNameFollowedByProseStaysContent) {
     OutputParser parser(*tokenizer, "gemma4", "gemma4", questionTools());
