@@ -34,6 +34,14 @@ try {
     & "$PSScriptRoot/Enter-GemmamonsterEnv.ps1" -RequireRuntimeRoot | Out-Null
     $build = Join-Path $RuntimeRoot 'openvino_genai_build'
     $runtime = Join-Path $RuntimeRoot 'openvino'
+    $versionHeader = Get-Content "$runtime/runtime/include/openvino/core/version.hpp" -Raw
+    if ($versionHeader -notmatch '#define OPENVINO_VERSION_MAJOR 2026\b' -or
+        $versionHeader -notmatch '#define OPENVINO_VERSION_MINOR 4\b' -or
+        $versionHeader -notmatch '#define OPENVINO_VERSION_PATCH 0\b') {
+        throw 'Runtime must remain OpenVINO 2026.4.0'
+    }
+    $protected = @('openvino.dll','openvino_intel_gpu_plugin.dll','openvino_tokenizers.dll') |
+        ForEach-Object { Get-FileHash "$runtime/runtime/bin/intel64/Release/$_" -Algorithm SHA256 }
     $cmdFile = Join-Path $RuntimeRoot 'build-whitespace-genai.cmd'
     $commands = @"
 @echo off
@@ -48,12 +56,18 @@ cmake --install "$build" --config Release --prefix "$runtime"
     [IO.File]::WriteAllText($cmdFile, $commands, [Text.UTF8Encoding]::new($false))
     & cmd.exe /d /c $cmdFile
     if ($LASTEXITCODE -ne 0) { throw "GenAI build/install failed: $LASTEXITCODE" }
+    foreach ($module in $protected) {
+        if ((Get-FileHash $module.Path -Algorithm SHA256).Hash -ne $module.Hash) {
+            throw "Protected 2026.4 runtime module changed: $($module.Path)"
+        }
+    }
     $provenance = [ordered]@{
         genai_base = $genaiSha
         xgrammar_head = $xgrammarSha
         xgrammar_submodules = @(& git -C $xgrammar submodule status --recursive)
         patches = @(Get-ChildItem "$PSScriptRoot/patches/*.patch" | Get-FileHash -Algorithm SHA256 | Select-Object Path,Hash)
         installed_genai = Get-FileHash "$runtime/runtime/bin/intel64/Release/openvino_genai.dll" -Algorithm SHA256 | Select-Object Path,Hash
+        protected_runtime_modules = @($protected | Select-Object Path,Hash)
     }
     $provenance | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $RuntimeRoot 'whitespace-dependencies.json')
 } finally { Pop-Location }
