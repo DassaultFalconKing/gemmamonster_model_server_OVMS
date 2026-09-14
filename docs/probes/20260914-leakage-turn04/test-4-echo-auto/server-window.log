@@ -1,0 +1,61 @@
+
+[2026-09-14 16:29:42.347][728][llm_calculator][debug][servable_initializer.cpp:209] Using the chat template from: C:/llm/models/OpenVINO/Wondernutts/gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov\chat_template.jinja
+[2026-09-14 16:29:42.348][728][llm_calculator][debug][servable_initializer.cpp:222] Chat template capabilities: supportsToolCalls=true, requiresObjectArguments=false, parseToolResponseJsonContent=true, missnamedReasoningField=, supportsResponseFieldInToolDefinition=true
+[2026-09-14 16:29:42.348][728][llm_calculator][info][servable_initializer.cpp:231] Auto-detected tool_parser: gemma4
+[2026-09-14 16:29:42.348][728][llm_calculator][info][servable_initializer.cpp:241] Auto-detected reasoning_parser: gemma4
+[2026-09-14 16:29:42.352][728][llm_calculator][debug][probe.cpp:128] Dry-run probe overrides requiresObjectArguments: false -> true
+[2026-09-14 16:29:42.355][17552][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 16:29:42.384][728][serving][debug][mediapipegraphdefinition.cpp:321] Created graph queue with size 8 for mediapipe: gemma4
+[2026-09-14 16:29:42.384][728][modelmanager][debug][mediapipegraphdefinition.cpp:299] Finished validation of mediapipe: gemma4
+[2026-09-14 16:29:42.386][728][modelmanager][info][mediapipegraphdefinition.cpp:300] Mediapipe: gemma4 inputs: 
+name: input; mapping: ; shape: (); precision: UNDEFINED; layout: ...
+[2026-09-14 16:29:42.386][728][modelmanager][info][mediapipegraphdefinition.cpp:301] Mediapipe: gemma4 outputs: 
+name: output; mapping: ; shape: (); precision: UNDEFINED; layout: ...
+[2026-09-14 16:29:42.386][728][modelmanager][info][mediapipegraphdefinition.cpp:302] Mediapipe: gemma4 kfs pass through: false
+[2026-09-14 16:29:42.386][728][modelmanager][debug][pipelinedefinitionstatus.hpp:52] Mediapipe: gemma4 state: BEGIN handling: ValidationPassedEvent: 
+[2026-09-14 16:29:42.386][728][modelmanager][info][pipelinedefinitionstatus.hpp:61] Mediapipe: gemma4 state changed to: AVAILABLE after handling: ValidationPassedEvent: 
+[2026-09-14 16:29:42.387][15024][serving][info][servablemanagermodule.cpp:55] ServableManagerModule started
+[2026-09-14 16:29:42.387][8640][modelmanager][info][modelmanager.cpp:1184] Started model manager thread
+[2026-09-14 16:29:42.387][10804][modelmanager][info][modelmanager.cpp:1213] Started cleaner thread
+[2026-09-14 16:29:48.758][7280][serving][debug][drogon_http_server.cpp:104] Request URI working in drogon thread pool
+[2026-09-14 16:29:48.758][7280][serving][debug][http_server.cpp:167] REST request /v3/models
+[2026-09-14 16:29:48.758][7280][serving][debug][http_server.cpp:178] Processing HTTP request: GET /v3/models body: 0 bytes
+[2026-09-14 16:30:01.779][3152][serving][debug][drogon_http_server.cpp:104] Request URI working in drogon thread pool
+[2026-09-14 16:30:01.779][3152][serving][debug][http_server.cpp:167] REST request /v3/models
+[2026-09-14 16:30:01.779][3152][serving][debug][http_server.cpp:178] Processing HTTP request: GET /v3/models body: 0 bytes
+[2026-09-14 16:30:33.989][23084][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 16:30:33.989][23084][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 16:30:33.989][23084][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 737 bytes
+[2026-09-14 16:30:33.989][23084][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 16:30:33.989][23084][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 16:30:33.989][23084][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 16:30:33.990][23084][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 16:30:33.990][23084][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 16:30:33.990][26796][llm_calculator][debug][servable.cpp:1030] Request body: {"tool_choice":"auto","max_tokens":256,"messages":[{"content":"Please execute the echo tool with text set to 'hello clean control'.","role":"user"}],"tools":[{"function":{"name":"echo","parameters":{"additionalProperties":false,"properties":{"text":{"type":"string","description":"Text to echo."}},"required":["text"],"type":"object"},"description":"Echo back the given text."},"type":"function"}],"model":"gemma4","temperature":0}
+[2026-09-14 16:30:33.990][26796][llm_calculator][debug][servable.cpp:1031] Request uri: /v3/chat/completions
+[2026-09-14 16:30:33.990][26796][llm_calculator][debug][servable.cpp:1033] Request header: host=127.0.0.1:18091
+[2026-09-14 16:30:33.990][26796][llm_calculator][debug][servable.cpp:1033] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 16:30:33.991][26796][llm_calculator][debug][servable.cpp:1033] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 16:30:33.991][26796][llm_calculator][debug][servable.cpp:1033] Request header: content-length=737
+[2026-09-14 16:30:33.991][26796][llm_calculator][debug][servable.cpp:1033] Request header: content-type=application/json
+[2026-09-14 16:30:33.991][26796][llm_calculator][info][servable.cpp:381] session-state: store disabled; OVMS_SESSION_STORE_DIR is unset
+[2026-09-14 16:30:33.991][26796][llm_calculator][debug][servable.cpp:564] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 16:30:33.991][26796][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 16:30:33.991][26796][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 16:30:34.051][26796][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:echo{, <|tool_call>call:echo(, <|tool_call>:echo{, <|tool_call>:echo(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 16:30:34.185][26796][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 16:30:34.185][26796][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 9 us
+[2026-09-14 16:30:34.185][26796][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 1 us
+[2026-09-14 16:30:34.185][26796][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 10 us
+[2026-09-14 16:30:34.185][26796][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 1 us
+[2026-09-14 16:30:34.185][26796][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 12 us
+[2026-09-14 16:30:34.187][26796][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 1577 us
+[2026-09-14 16:30:34.212][26796][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 25324 us
+[2026-09-14 16:30:34.212][26796][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 16:30:34.229][26796][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 16:30:35.902][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 54.5% of 12.0 MB;
+[2026-09-14 16:30:36.322][17552][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 16:30:36.339][26796][llm_calculator][debug][servable.cpp:824] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"ZPmwd0Q2o","type":"function","function":{"name":"echo","arguments":"{\"text\":\"hello clean control\"}"}}]}}],"created":1789396233,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":82,"completion_tokens":19,"total_tokens":101}}
+[2026-09-14 16:30:36.339][26796][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 82 | output_token_count: 19 | total_token_count: 101 | prepare_embeddings_time_ms: 15.715 | llm_ttft_ms: 1108.615 | ttft_ms: 1124.330 | prefill_speed_tps: 73.966 | image_slice_count: 0
+[2026-09-14 16:30:36.339][23084][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4

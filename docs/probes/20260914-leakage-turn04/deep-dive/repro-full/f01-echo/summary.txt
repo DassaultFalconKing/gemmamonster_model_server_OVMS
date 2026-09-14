@@ -1,0 +1,1 @@
+f01-echo: HTTP 200 finish=tool_calls calls=1 args={"text":"hello clean control"} ptok=82 ctok=19 pchunks=24

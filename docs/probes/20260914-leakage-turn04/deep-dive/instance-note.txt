@@ -1,0 +1,1 @@
+PID 16708 single TRACE instance; restarted after dual-instance OOM risk; same binary/SHA/graph/ports

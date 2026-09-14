@@ -1,0 +1,18 @@
+{
+  "type": "function",
+  "function": {
+    "name": "exa_web_search_exa",
+    "description": "Search the web.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  }
+}

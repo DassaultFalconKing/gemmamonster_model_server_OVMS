@@ -1,0 +1,8 @@
+{
+  "pid": 14440,
+  "executable_path": "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\ovms\\ovms.exe",
+  "command_line": "ovms.exe  --config_path C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\rc2-roundtrip-forensics\\server-heretic\\config.json --rest_port 18091 --port 18092",
+  "rest_port": 18091,
+  "grpc_port": 18092,
+  "parent_pid": 25004
+}

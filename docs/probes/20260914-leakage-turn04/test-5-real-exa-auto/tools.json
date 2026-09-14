@@ -1,0 +1,28 @@
+{
+  "type": "function",
+  "function": {
+    "name": "exa_web_search_exa",
+    "description": "Search the web for any topic and get clean, ready-to-use content.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Natural language search query."
+        },
+        "objective": {
+          "type": "string",
+          "description": "Goal for this search turn."
+        },
+        "numResults": {
+          "type": "integer",
+          "description": "Number of search results to return."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

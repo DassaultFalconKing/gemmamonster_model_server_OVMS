@@ -1,0 +1,8 @@
+{
+  "pid": 11220,
+  "executable_path": "C:\\git\\artifacts\\ovms-908d6695-rc2-repacked-20260914\\ovms\\ovms.exe",
+  "command_line": "ovms.exe  --config_path \"C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\gemmamonster-leakage-20260914\\server-fresh\\config.json\" --rest_port 18091 --port 18092 --log_level DEBUG ",
+  "rest_port": 18091,
+  "grpc_port": 18092,
+  "log_level": "DEBUG"
+}

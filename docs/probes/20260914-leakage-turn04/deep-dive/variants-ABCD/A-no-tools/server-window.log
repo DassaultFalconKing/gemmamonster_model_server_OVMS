@@ -1,0 +1,136 @@
+[2026-09-14 16:58:54.425][18916][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 437 | output_token_count: 21 | total_token_count: 458 | prepare_embeddings_time_ms: 4.829 | llm_ttft_ms: 276.859 | ttft_ms: 281.688 | prefill_speed_tps: 1578.418 | image_slice_count: 0
+[2026-09-14 16:58:54.425][18916][llm_calculator][trace][http_llm_calculator.cc:192] LLMCalculator  [Node: LLMExecutor] Response prepared, sending it down the graph
+[2026-09-14 16:58:54.425][18916][llm_calculator][trace][http_llm_calculator.cc:226] LLMCalculator  [Node: LLMExecutor] Process end
+[2026-09-14 16:58:54.425][15228][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 16:58:54.465][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:58:54.465][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:58:54.465][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:58:55.466][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:58:55.466][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:58:55.466][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:58:56.466][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:58:56.467][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:58:56.467][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:58:57.467][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:58:57.467][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:58:57.467][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:58:58.468][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:58:58.468][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:58:58.468][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:58:59.468][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:58:59.469][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:58:59.469][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:00.469][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:00.469][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:00.469][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:01.471][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:01.471][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:01.471][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:02.472][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:02.472][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:02.472][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:03.472][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:03.473][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:03.473][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:04.474][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:04.474][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:04.474][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:05.475][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:05.475][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:05.475][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:06.477][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:06.477][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:06.477][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:07.478][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:07.478][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:07.478][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:08.479][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:08.479][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:08.479][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:09.481][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:09.481][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:09.481][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:10.482][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:10.482][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:10.482][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:11.482][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:11.483][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:11.483][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:12.322][1848][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 16:59:12.322][1848][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 16:59:12.322][1848][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 2138 bytes
+[2026-09-14 16:59:12.322][1848][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 16:59:12.322][1848][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 16:59:12.322][1848][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 16:59:12.322][1848][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 16:59:12.322][1848][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 16:59:12.322][18892][llm_calculator][trace][http_llm_calculator.cc:110] LLMCalculator  [Node: LLMExecutor] Process start
+[2026-09-14 16:59:12.323][18892][llm_calculator][debug][servable.cpp:1030] Request body: {"model":"gemma4","messages":[{"role":"user","content":"Call the echo tool exactly once per turn with the next list item as text, in order, starting with sweep-item-1. After each tool result, continue with the next item on the following turn. Do not write any text, only call the tool. List: sweep-item-1, sweep-item-2, sweep-item-3, sweep-item-4, sweep-item-5, sweep-item-6, sweep-item-7, sweep-item-8, sweep-item-9, sweep-item-10, sweep-item-11, sweep-item-12, sweep-item-13, sweep-item-14, sweep-item-15, sweep-item-16, sweep-item-17, sweep-item-18, sweep-item-19, sweep-item-20, sweep-item-21, sweep-item-22, sweep-item-23, sweep-item-24, sweep-item-25, sweep-item-26, sweep-item-27, sweep-item-28, sweep-item-29, sweep-item-30, sweep-item-31, sweep-item-32."},{"role":"assistant","content":"","tool_calls":[{"id":"kE5OKddRu","type":"function","function":{"name":"echo","arguments":"{\"text\":\"sweep-item-1\"}"}}]},{"role":"tool","tool_call_id":"kE5OKddRu","content":"{\"echoed\":\"sweep-item-1\"}"},{"role":"assistant","content":"","tool_calls":[{"id":"BsLFuzZgE","type":"function","function":{"name":"echo","arguments":"{\"text\":\"sweep-item-2\"}"}}]},{"role":"tool","tool_call_id":"BsLFuzZgE","content":"{\"echoed\":\"sweep-item-2\"}"},{"role":"assistant","content":"","tool_calls":[{"id":"4kpispD6d","type":"function","function":{"name":"echo","arguments":"{\"text\":\"sweep-item-3\"}"}}]},{"role":"tool","tool_call_id":"4kpispD6d","content":"{\"echoed\":\"sweep-item-3\"}"}],"max_tokens":256,"temperature":0}
+[2026-09-14 16:59:12.323][18892][llm_calculator][debug][servable.cpp:1031] Request uri: /v3/chat/completions
+[2026-09-14 16:59:12.323][18892][llm_calculator][debug][servable.cpp:1033] Request header: host=127.0.0.1:18091
+[2026-09-14 16:59:12.323][18892][llm_calculator][debug][servable.cpp:1033] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.7.0
+[2026-09-14 16:59:12.323][18892][llm_calculator][debug][servable.cpp:1033] Request header: accept-encoding=gzip, deflate, br, zstd
+[2026-09-14 16:59:12.323][18892][llm_calculator][debug][servable.cpp:1033] Request header: content-type=application/json
+[2026-09-14 16:59:12.323][18892][llm_calculator][debug][servable.cpp:1033] Request header: content-length=2138
+[2026-09-14 16:59:12.323][18892][llm_calculator][debug][servable.cpp:564] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 16:59:12.323][18892][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 16:59:12.323][18892][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 16:59:12.325][18892][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 16:59:12.325][18892][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 16:59:12.325][18892][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyContentArrayNormalizationProcessor
+[2026-09-14 16:59:12.325][18892][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 11 us
+[2026-09-14 16:59:12.325][18892][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyToolCallsArrayRemovingProcessor
+[2026-09-14 16:59:12.325][18892][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 5 us
+[2026-09-14 16:59:12.325][18892][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ImageDecodingProcessor
+[2026-09-14 16:59:12.325][18892][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 10 us
+[2026-09-14 16:59:12.325][18892][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TextContentNormalizationProcessor
+[2026-09-14 16:59:12.325][18892][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 3 us
+[2026-09-14 16:59:12.325][18892][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateAdapter
+[2026-09-14 16:59:12.325][18892][llm_calculator][trace][chat_template_adapter.cpp:116] Applying chat template adaptations: supportsToolCalls=true, requiresObjectArguments=true, parseToolResponseJsonContent=true, missnamedReasoningField=, supportsResponseFieldInToolDefinition=true
+[2026-09-14 16:59:12.325][18892][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 54 us
+[2026-09-14 16:59:12.325][18892][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateProcessor
+[2026-09-14 16:59:12.325][18892][llm_calculator][trace][chat_template_processor.cpp:156] Chat history messages: [{"role":"user","content":"Call the echo tool exactly once per turn with the next list item as text, in order, starting with sweep-item-1. After each tool result, continue with the next item on the following turn. Do not write any text, only call the tool. List: sweep-item-1, sweep-item-2, sweep-item-3, sweep-item-4, sweep-item-5, sweep-item-6, sweep-item-7, sweep-item-8, sweep-item-9, sweep-item-10, sweep-item-11, sweep-item-12, sweep-item-13, sweep-item-14, sweep-item-15, sweep-item-16, sweep-item-17, sweep-item-18, sweep-item-19, sweep-item-20, sweep-item-21, sweep-item-22, sweep-item-23, sweep-item-24, sweep-item-25, sweep-item-26, sweep-item-27, sweep-item-28, sweep-item-29, sweep-item-30, sweep-item-31, sweep-item-32."},{"role":"assistant","content":"","tool_calls":[{"id":"kE5OKddRu","type":"function","function":{"name":"echo","arguments":{"text":"sweep-item-1"}}}]},{"role":"tool","tool_call_id":"kE5OKddRu","content":{"echoed":"sweep-item-1"}},{"role":"assistant","content":"","tool_calls":[{"id":"BsLFuzZgE","type":"function","function":{"name":"echo","arguments":{"text":"sweep-item-2"}}}]},{"role":"tool","tool_call_id":"BsLFuzZgE","content":{"echoed":"sweep-item-2"}},{"role":"assistant","content":"","tool_calls":[{"id":"4kpispD6d","type":"function","function":{"name":"echo","arguments":{"text":"sweep-item-3"}}}]},{"role":"tool","tool_call_id":"4kpispD6d","content":{"echoed":"sweep-item-3"}}]
+[2026-09-14 16:59:12.325][18892][llm_calculator][trace][chat_template_processor.cpp:157] chatHistory.get_extra_context(): {}
+[2026-09-14 16:59:12.325][18892][llm_calculator][trace][chat_template_processor.cpp:158] tools: <none>
+[2026-09-14 16:59:12.325][18892][llm_calculator][trace][chat_template_processor.cpp:159] chatTemplateKwargs: <none>
+[2026-09-14 16:59:12.326][18892][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 1128 us
+[2026-09-14 16:59:12.326][18892][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TokenizationProcessor
+[2026-09-14 16:59:12.327][18892][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 728 us
+[2026-09-14 16:59:12.327][18892][llm_calculator][trace][servable.cpp:752] prompt_token_ids: [2, 105, 2364, 107, 7029, 506, 9263, 5904, 7121, 3622, 810, 2490, 607, 506, 2148, 1694, 4188, 618, 1816, 236764, 528, 1900, 236764, 6250, 607, 41371, 236772, 1582, 236772, 236770, 236761, 4210, 1546, 5904, 1354, 236764, 4102, 607, 506, 2148, 4188, 580, 506, 2269, 2490, 236761, 3574, 711, 4903, 1027, 1816, 236764, 1186, 2246, 506, 5904, 236761, 4361, 236787, 41371, 236772, 1582, 236772, 236770, 236764, 41371, 236772, 1582, 236772, 236778, 236764, 41371, 236772, 1582, 236772, 236800, 236764, 41371, 236772, 1582, 236772, 236812, 236764, 41371, 236772, 1582, 236772, 236810, 236764, 41371, 236772, 1582, 236772, 236825, 236764, 41371, 236772, 1582, 236772, 236832, 236764, 41371, 236772, 1582, 236772, 236828, 236764, 41371, 236772, 1582, 236772, 236819, 236764, 41371, 236772, 1582, 236772, 236770, 236771, 236764, 41371, 236772, 1582, 236772, 236770, 236770, 236764, 41371, 236772, 1582, 236772, 236770, 236778, 236764, 41371, 236772, 1582, 236772, 236770, 236800, 236764, 41371, 236772, 1582, 236772, 236770, 236812, 236764, 41371, 236772, 1582, 236772, 236770, 236810, 236764, 41371, 236772, 1582, 236772, 236770, 236825, 236764, 41371, 236772, 1582, 236772, 236770, 236832, 236764, 41371, 236772, 1582, 236772, 236770, 236828, 236764, 41371, 236772, 1582, 236772, 236770, 236819, 236764, 41371, 236772, 1582, 236772, 236778, 236771, 236764, 41371, 236772, 1582, 236772, 236778, 236770, 236764, 41371, 236772, 1582, 236772, 236778, 236778, 236764, 41371, 236772, 1582, 236772, 236778, 236800, 236764, 41371, 236772, 1582, 236772, 236778, 236812, 236764, 41371, 236772, 1582, 236772, 236778, 236810, 236764, 41371, 236772, 1582, 236772, 236778, 236825, 236764, 41371, 236772, 1582, 236772, 236778, 236832, 236764, 41371, 236772, 1582, 236772, 236778, 236828, 236764, 41371, 236772, 1582, 236772, 236778, 236819, 236764, 41371, 236772, 1582, 236772, 236800, 236771, 236764, 41371, 236772, 1582, 236772, 236800, 236770, 236764, 41371, 236772, 1582, 236772, 236800, 236778, 236761, 106, 107, 105, 4368, 107, 48, 6639, 236787, 17454, 236782, 1005, 236787, 52, 167729, 236772, 1582, 236772, 236770, 52, 236783, 49, 50, 6275, 236787, 17454, 236782, 17454, 524, 236787, 52, 167729, 236772, 1582, 236772, 236770, 52, 236783, 51, 48, 6639, 236787, 17454, 236782, 1005, 236787, 52, 167729, 236772, 1582, 236772, 236778, 52, 236783, 49, 50, 6275, 236787, 17454, 236782, 17454, 524, 236787, 52, 167729, 236772, 1582, 236772, 236778, 52, 236783, 51, 48, 6639, 236787, 17454, 236782, 1005, 236787, 52, 167729, 236772, 1582, 236772, 236800, 52, 236783, 49, 50, 6275, 236787, 17454, 236782, 17454, 524, 236787, 52, 167729, 236772, 1582, 236772, 236800, 52, 236783, 51, 100, 45518, 107, 101]
+[2026-09-14 16:59:12.327][18892][llm_calculator][trace][servable.cpp:753] Pipeline input text: <bos><|turn>user
+Call the echo tool exactly once per turn with the next list item as text, in order, starting with sweep-item-1. After each tool result, continue with the next item on the following turn. Do not write any text, only call the tool. List: sweep-item-1, sweep-item-2, sweep-item-3, sweep-item-4, sweep-item-5, sweep-item-6, sweep-item-7, sweep-item-8, sweep-item-9, sweep-item-10, sweep-item-11, sweep-item-12, sweep-item-13, sweep-item-14, sweep-item-15, sweep-item-16, sweep-item-17, sweep-item-18, sweep-item-19, sweep-item-20, sweep-item-21, sweep-item-22, sweep-item-23, sweep-item-24, sweep-item-25, sweep-item-26, sweep-item-27, sweep-item-28, sweep-item-29, sweep-item-30, sweep-item-31, sweep-item-32.<turn|>
+<|turn>model
+<|tool_call>call:echo{text:<|"|>sweep-item-1<|"|>}<tool_call|><|tool_response>response:echo{echoed:<|"|>sweep-item-1<|"|>}<tool_response|><|tool_call>call:echo{text:<|"|>sweep-item-2<|"|>}<tool_call|><|tool_response>response:echo{echoed:<|"|>sweep-item-2<|"|>}<tool_response|><|tool_call>call:echo{text:<|"|>sweep-item-3<|"|>}<tool_call|><|tool_response>response:echo{echoed:<|"|>sweep-item-3<|"|>}<tool_response|><|channel>thought
+<channel|>
+[2026-09-14 16:59:12.327][18892][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 16:59:12.333][18892][llm_calculator][trace][servable.cpp:78] Notifying executor thread
+[2026-09-14 16:59:12.333][18892][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 16:59:12.483][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:12.484][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:12.484][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:13.485][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:59:13.485][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:59:13.485][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:59:13.548][6300][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 56.8% of 47.8 MB;
+[2026-09-14 16:59:13.874][18892][llm_calculator][trace][http_llm_calculator.cc:187] LLMCalculator  [Node: LLMExecutor] Received complete execution results, preparing response
+[2026-09-14 16:59:13.874][6300][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 16:59:13.875][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="call", finish_reason=0, token IDs=[6639]
+[2026-09-14 16:59:13.876][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 1 tokens, text=":", finish_reason=0, token IDs=[236787]
+[2026-09-14 16:59:13.876][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 1 tokens, text="echo", finish_reason=0, token IDs=[17454]
+[2026-09-14 16:59:13.876][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 1 tokens, text="{", finish_reason=0, token IDs=[236782]
+[2026-09-14 16:59:13.877][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 1 tokens, text="text", finish_reason=0, token IDs=[1005]
+[2026-09-14 16:59:13.877][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 2 tokens, text=":", finish_reason=0, token IDs=[236787, 52]
+[2026-09-14 16:59:13.878][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 1 tokens, text="sweep", finish_reason=0, token IDs=[167729]
+[2026-09-14 16:59:13.878][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 1 tokens, text="-", finish_reason=0, token IDs=[236772]
+[2026-09-14 16:59:13.878][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 1 tokens, text="item", finish_reason=0, token IDs=[1582]
+[2026-09-14 16:59:13.879][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 1 tokens, text="-", finish_reason=0, token IDs=[236772]
+[2026-09-14 16:59:13.879][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 2 tokens, text="4", finish_reason=0, token IDs=[236812, 52]
+[2026-09-14 16:59:13.880][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 3 tokens, text="}", finish_reason=0, token IDs=[236783, 49, 50]
+[2026-09-14 16:59:13.880][18892][llm_calculator][trace][ovms_text_streamer.cpp:214] OVMSTextStreamer: 17 tokens generated; full decode (skip_special=false): "<|tool_call>call:echo{text:<|"|>sweep-item-4<|"|>}<tool_call|><|tool_response>"; ids: [48, 6639, 236787, 17454, 236782, 1005, 236787, 52, 167729, 236772, 1582, 236772, 236812, 52, 236783, 49, 50]
+[2026-09-14 16:59:13.885][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=CONTENT] called with 0 tokens, text="", finish_reason=1, token IDs=[]
+[2026-09-14 16:59:13.885][18892][llm_calculator][debug][servable.cpp:824] Complete unary response: {"choices":[{"finish_reason":"stop","index":0,"logprobs":null,"message":{"content":"call:echo{text:sweep-item-4}","role":"assistant","tool_calls":[]}}],"created":1789397952,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":382,"completion_tokens":17,"total_tokens":399}}
+[2026-09-14 16:59:13.885][18892][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 382 | output_token_count: 17 | total_token_count: 399 | prepare_embeddings_time_ms: 4.236 | llm_ttft_ms: 924.389 | ttft_ms: 928.625 | prefill_speed_tps: 413.246 | image_slice_count: 0
+[2026-09-14 16:59:13.885][18892][llm_calculator][trace][http_llm_calculator.cc:192] LLMCalculator  [Node: LLMExecutor] Response prepared, sending it down the graph
+[2026-09-14 16:59:13.885][18892][llm_calculator][trace][http_llm_calculator.cc:226] LLMCalculator  [Node: LLMExecutor] Process end
+[2026-09-14 16:59:13.885][1848][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4

@@ -1,0 +1,62 @@
+[2026-09-14 16:32:06.760][6196][llm_calculator][debug][servable.cpp:1033] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 16:32:06.760][6196][llm_calculator][debug][servable.cpp:1033] Request header: content-length=1236
+[2026-09-14 16:32:06.760][6196][llm_calculator][debug][servable.cpp:1033] Request header: content-type=application/json
+[2026-09-14 16:32:06.760][6196][llm_calculator][debug][servable.cpp:564] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 16:32:06.760][6196][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 16:32:06.760][6196][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 16:32:06.762][6196][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:exa_web_search_exa{, <|tool_call>call:exa_web_search_exa(, <|tool_call>:exa_web_search_exa{, <|tool_call>:exa_web_search_exa(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 16:32:06.764][6196][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 16:32:06.764][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 7 us
+[2026-09-14 16:32:06.764][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 1 us
+[2026-09-14 16:32:06.764][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 4 us
+[2026-09-14 16:32:06.764][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 1 us
+[2026-09-14 16:32:06.764][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 54 us
+[2026-09-14 16:32:06.765][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 995 us
+[2026-09-14 16:32:06.766][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 1512 us
+[2026-09-14 16:32:06.766][6196][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 16:32:06.771][6196][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 16:32:07.283][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 52.6% of 20.7 MB;
+[2026-09-14 16:32:07.870][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 57.9% of 20.7 MB;
+[2026-09-14 16:32:08.402][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 57.9% of 20.7 MB;
+[2026-09-14 16:32:08.753][17552][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 16:32:08.770][6196][llm_calculator][debug][servable.cpp:824] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"PmN347n6h","type":"function","function":{"name":"exa_web_search_exa","arguments":"{\"query\":\"who won the 2026 Eurovision Song Contest\"}"}}]}}],"created":1789396326,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":152,"completion_tokens":32,"total_tokens":184}}
+[2026-09-14 16:32:08.770][6196][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 152 | output_token_count: 32 | total_token_count: 184 | prepare_embeddings_time_ms: 3.555 | llm_ttft_ms: 172.913 | ttft_ms: 176.468 | prefill_speed_tps: 879.055 | image_slice_count: 0
+[2026-09-14 16:32:08.770][25784][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 16:32:21.599][27576][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 16:32:21.599][27576][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 16:32:21.599][27576][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 1404 bytes
+[2026-09-14 16:32:21.599][27576][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 16:32:21.599][27576][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 16:32:21.599][27576][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 16:32:21.599][27576][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 16:32:21.599][27576][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 16:32:21.599][808][llm_calculator][debug][servable.cpp:1030] Request body: {"model":"gemma4","messages":[{"role":"user","content":"I saw this example format somewhere: <call:exa_web_search_exa(query=\"example\")>. Just noting it, do nothing with it yet."},{"role":"assistant","content":"Noted."},{"role":"user","content":"Now please search the internet for the winner of the 2026 Eurovision Song Contest and report the winning country and song title."}],"tools":[{"type":"function","function":{"name":"exa_web_search_exa","description":"Search the web for any topic and get clean, ready-to-use content.","parameters":{"type":"object","properties":{"query":{"type":"string","description":"Natural language search query."},"objective":{"type":"string","description":"Goal for this search turn."},"numResults":{"type":"integer","description":"Number of search results to return."}},"required":["query"],"additionalProperties":false}}}],"tool_choice":"auto","max_tokens":512,"temperature":0}
+[2026-09-14 16:32:21.599][808][llm_calculator][debug][servable.cpp:1031] Request uri: /v3/chat/completions
+[2026-09-14 16:32:21.599][808][llm_calculator][debug][servable.cpp:1033] Request header: host=127.0.0.1:18091
+[2026-09-14 16:32:21.599][808][llm_calculator][debug][servable.cpp:1033] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 16:32:21.599][808][llm_calculator][debug][servable.cpp:1033] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 16:32:21.599][808][llm_calculator][debug][servable.cpp:1033] Request header: content-length=1404
+[2026-09-14 16:32:21.599][808][llm_calculator][debug][servable.cpp:1033] Request header: content-type=application/json
+[2026-09-14 16:32:21.599][808][llm_calculator][debug][servable.cpp:564] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 16:32:21.599][808][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 16:32:21.600][808][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 16:32:21.601][808][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:exa_web_search_exa{, <|tool_call>call:exa_web_search_exa(, <|tool_call>:exa_web_search_exa{, <|tool_call>:exa_web_search_exa(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 16:32:21.602][808][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 16:32:21.602][808][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 4 us
+[2026-09-14 16:32:21.602][808][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 1 us
+[2026-09-14 16:32:21.602][808][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 5 us
+[2026-09-14 16:32:21.602][808][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 1 us
+[2026-09-14 16:32:21.602][808][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 12 us
+[2026-09-14 16:32:21.603][808][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 1052 us
+[2026-09-14 16:32:21.636][808][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 32070 us
+[2026-09-14 16:32:21.636][808][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 16:32:21.642][808][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 16:32:22.414][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 52.0% of 27.2 MB;
+[2026-09-14 16:32:22.916][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 56.0% of 27.2 MB;
+[2026-09-14 16:32:23.439][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 56.0% of 27.2 MB;
+[2026-09-14 16:32:23.861][17552][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 16:32:23.873][808][llm_calculator][debug][servable.cpp:824] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"AwrUs8rut","type":"function","function":{"name":"exa_web_search_exa","arguments":"{\"query\":\"who won the 2026 Eurovision Song Contest\"}"}}]}}],"created":1789396341,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":199,"completion_tokens":32,"total_tokens":231}}
+[2026-09-14 16:32:23.873][808][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 199 | output_token_count: 32 | total_token_count: 231 | prepare_embeddings_time_ms: 5.028 | llm_ttft_ms: 594.654 | ttft_ms: 599.682 | prefill_speed_tps: 334.648 | image_slice_count: 0
+[2026-09-14 16:32:23.873][27576][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4

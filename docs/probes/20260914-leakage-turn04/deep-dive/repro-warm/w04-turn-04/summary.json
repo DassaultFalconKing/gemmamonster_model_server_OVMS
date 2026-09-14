@@ -1,0 +1,9 @@
+{
+  "http": "HTTP 200",
+  "finish_reason": "tool_calls",
+  "tool_calls_count": 1,
+  "tool_arguments": "{\"text\":\"sweep-item-4\"}",
+  "prompt_tokens": 437,
+  "completion_tokens": 21,
+  "parsechunk_lines": 32
+}

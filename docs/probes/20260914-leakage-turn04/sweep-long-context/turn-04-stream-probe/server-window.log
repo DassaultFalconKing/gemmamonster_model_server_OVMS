@@ -1,0 +1,91 @@
+[2026-09-14 16:34:56.715][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 90.8% of 94.6 MB;
+[2026-09-14 16:34:57.167][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 90.8% of 94.6 MB;
+[2026-09-14 16:34:57.640][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 92.0% of 94.6 MB;
+[2026-09-14 16:34:58.097][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 93.1% of 94.6 MB;
+[2026-09-14 16:34:58.566][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 93.1% of 94.6 MB;
+[2026-09-14 16:34:59.028][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 94.3% of 94.6 MB;
+[2026-09-14 16:34:59.501][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 94.3% of 94.6 MB;
+[2026-09-14 16:34:59.960][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 95.4% of 94.6 MB;
+[2026-09-14 16:35:00.418][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 96.6% of 94.6 MB;
+[2026-09-14 16:35:00.891][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 96.6% of 94.6 MB;
+[2026-09-14 16:35:01.368][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 97.7% of 94.6 MB;
+[2026-09-14 16:35:01.812][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 98.9% of 94.6 MB;
+[2026-09-14 16:35:02.261][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 98.9% of 94.6 MB;
+[2026-09-14 16:35:02.747][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 100.0% of 94.6 MB;
+[2026-09-14 16:35:03.202][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 100.0% of 94.6 MB;
+[2026-09-14 16:35:03.899][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 85.4% of 112.0 MB;
+[2026-09-14 16:35:04.312][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 86.4% of 112.0 MB;
+[2026-09-14 16:35:04.725][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 86.4% of 112.0 MB;
+[2026-09-14 16:35:05.156][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 87.4% of 112.0 MB;
+[2026-09-14 16:35:05.603][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 88.3% of 112.0 MB;
+[2026-09-14 16:35:06.046][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 88.3% of 112.0 MB;
+[2026-09-14 16:35:06.469][17552][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 16:35:07.579][12800][llm_calculator][debug][servable.cpp:824] Complete unary response: {"choices":[{"finish_reason":"length","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[]}}],"created":1789396454,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":437,"completion_tokens":1024,"total_tokens":1461}}
+[2026-09-14 16:35:07.579][12800][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 437 | output_token_count: 1024 | total_token_count: 1461 | prepare_embeddings_time_ms: 6.199 | llm_ttft_ms: 171.701 | ttft_ms: 177.900 | prefill_speed_tps: 2545.125 | image_slice_count: 0
+[2026-09-14 16:35:07.579][25784][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 16:35:19.137][27576][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 16:35:19.137][27576][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 16:35:19.137][27576][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 2675 bytes
+[2026-09-14 16:35:19.137][27576][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 16:35:19.137][27576][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 16:35:19.137][27576][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 16:35:19.137][27576][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 16:35:19.139][9724][serving][debug][drogon_http_async_writer_impl.cpp:50] DrogonHttpAsyncWriterImpl::PartialReplyBegin::Schedule begin
+[2026-09-14 16:35:19.139][9724][serving][debug][mediapipegraphexecutor.hpp:409] Start streaming mediapipe graph: gemma4 execution (queue path)
+[2026-09-14 16:35:19.140][6196][llm_calculator][debug][servable.cpp:1030] Request body: {"model":"gemma4","messages":[{"role":"user","content":"Call the echo tool exactly once per turn with the next list item as text, in order, starting with sweep-item-1. After each tool result, continue with the next item on the following turn. Do not write any text, only call the tool. List: sweep-item-1, sweep-item-2, sweep-item-3, sweep-item-4, sweep-item-5, sweep-item-6, sweep-item-7, sweep-item-8, sweep-item-9, sweep-item-10, sweep-item-11, sweep-item-12, sweep-item-13, sweep-item-14, sweep-item-15, sweep-item-16, sweep-item-17, sweep-item-18, sweep-item-19, sweep-item-20, sweep-item-21, sweep-item-22, sweep-item-23, sweep-item-24, sweep-item-25, sweep-item-26, sweep-item-27, sweep-item-28, sweep-item-29, sweep-item-30, sweep-item-31, sweep-item-32."},{"role":"assistant","content":"","tool_calls":[{"id":"kE5OKddRu","type":"function","function":{"name":"echo","arguments":"{\"text\":\"sweep-item-1\"}"}}]},{"role":"tool","tool_call_id":"kE5OKddRu","content":"{\"echoed\":\"sweep-item-1\"}"},{"role":"assistant","content":"","tool_calls":[{"id":"BsLFuzZgE","type":"function","function":{"name":"echo","arguments":"{\"text\":\"sweep-item-2\"}"}}]},{"role":"tool","tool_call_id":"BsLFuzZgE","content":"{\"echoed\":\"sweep-item-2\"}"},{"role":"assistant","content":"","tool_calls":[{"id":"4kpispD6d","type":"function","function":{"name":"echo","arguments":"{\"text\":\"sweep-item-3\"}"}}]},{"role":"tool","tool_call_id":"4kpispD6d","content":"{\"echoed\":\"sweep-item-3\"}"}],"tools":[{"type":"function","function":{"name":"echo","description":"Echo back the given text.","parameters":{"type":"object","properties":{"text":{"type":"string","description":"Text to echo."}},"required":["text"],"additionalProperties":false}}}],"tool_choice":"auto","max_tokens":256,"temperature":0,"stream":true}
+[2026-09-14 16:35:19.140][6196][llm_calculator][debug][servable.cpp:1031] Request uri: /v3/chat/completions
+[2026-09-14 16:35:19.140][6196][llm_calculator][debug][servable.cpp:1033] Request header: host=127.0.0.1:18091
+[2026-09-14 16:35:19.140][6196][llm_calculator][debug][servable.cpp:1033] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 16:35:19.140][6196][llm_calculator][debug][servable.cpp:1033] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 16:35:19.140][6196][llm_calculator][debug][servable.cpp:1033] Request header: content-length=2675
+[2026-09-14 16:35:19.140][6196][llm_calculator][debug][servable.cpp:1033] Request header: content-type=application/json
+[2026-09-14 16:35:19.140][6196][llm_calculator][debug][servable.cpp:564] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 16:35:19.140][6196][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 16:35:19.140][6196][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 16:35:19.143][6196][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:echo{, <|tool_call>call:echo(, <|tool_call>:echo{, <|tool_call>:echo(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 16:35:19.144][6196][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 16:35:19.144][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 8 us
+[2026-09-14 16:35:19.144][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 5 us
+[2026-09-14 16:35:19.144][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 11 us
+[2026-09-14 16:35:19.144][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 3 us
+[2026-09-14 16:35:19.144][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 57 us
+[2026-09-14 16:35:19.146][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 2151 us
+[2026-09-14 16:35:19.147][6196][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 777 us
+[2026-09-14 16:35:19.147][6196][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 16:35:19.159][6196][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 16:35:19.319][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 27.2% of 112.0 MB;
+[2026-09-14 16:35:19.852][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 27.2% of 112.0 MB;
+[2026-09-14 16:35:20.312][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 28.2% of 112.0 MB;
+[2026-09-14 16:35:20.879][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 29.1% of 112.0 MB;
+[2026-09-14 16:35:21.470][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 29.1% of 112.0 MB;
+[2026-09-14 16:35:21.961][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 30.1% of 112.0 MB;
+[2026-09-14 16:35:22.454][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 31.1% of 112.0 MB;
+[2026-09-14 16:35:22.999][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 31.1% of 112.0 MB;
+[2026-09-14 16:35:23.586][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 32.0% of 112.0 MB;
+[2026-09-14 16:35:24.256][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 32.0% of 112.0 MB;
+[2026-09-14 16:35:24.954][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 33.0% of 112.0 MB;
+[2026-09-14 16:35:25.437][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 34.0% of 112.0 MB;
+[2026-09-14 16:35:25.932][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 34.0% of 112.0 MB;
+[2026-09-14 16:35:26.468][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 35.0% of 112.0 MB;
+[2026-09-14 16:35:27.155][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 35.9% of 112.0 MB;
+[2026-09-14 16:35:27.644][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 35.9% of 112.0 MB;
+[2026-09-14 16:35:28.085][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 36.9% of 112.0 MB;
+[2026-09-14 16:35:28.527][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 36.9% of 112.0 MB;
+[2026-09-14 16:35:28.969][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 37.9% of 112.0 MB;
+[2026-09-14 16:35:29.450][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 38.8% of 112.0 MB;
+[2026-09-14 16:35:29.933][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 38.8% of 112.0 MB;
+[2026-09-14 16:35:30.411][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 39.8% of 112.0 MB;
+[2026-09-14 16:35:30.897][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 40.8% of 112.0 MB;
+[2026-09-14 16:35:31.368][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 40.8% of 112.0 MB;
+[2026-09-14 16:35:31.833][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 41.7% of 112.0 MB;
+[2026-09-14 16:35:32.349][17552][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 41.7% of 112.0 MB;
+[2026-09-14 16:35:32.619][17552][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 16:35:32.737][6196][llm_calculator][debug][servable.cpp:923] Generated complete streaming response: data: {"choices":[{"index":0,"logprobs":null,"delta":{},"finish_reason":"length"}],"created":1789396519,"model":"gemma4","object":"chat.completion.chunk"}
+
+data: [DONE]
+
+
+[2026-09-14 16:35:32.737][6196][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 437 | output_token_count: 256 | total_token_count: 693 | prepare_embeddings_time_ms: 9.304 | llm_ttft_ms: 163.280 | ttft_ms: 172.584 | prefill_speed_tps: 2676.377 | image_slice_count: 0
+[2026-09-14 16:35:32.737][9724][serving][debug][mediapipegraphexecutor.hpp:514] Graph gemma4: Done streaming execution (queue path)
+[2026-09-14 16:35:32.738][9724][serving][debug][drogon_http_async_writer_impl.cpp:56] DrogonHttpAsyncWriterImpl::PartialReplyBegin::Schedule end

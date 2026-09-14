@@ -1,0 +1,300 @@
+[2026-09-14 16:41:34.388][27552][serving][trace][env_guard.cpp:31] Setting environment variable: OPENVINO_LOG_LEVEL to: 4
+[2026-09-14 16:41:34.389][27552][serving][info][server.cpp:115] OpenVINO Model Server 2026.4.0.908d66956
+[2026-09-14 16:41:34.389][27552][serving][info][server.cpp:116] OpenVINO backend 2026.4.0-22955-227c33757d1-releases/2026/4
+[2026-09-14 16:41:34.389][27552][serving][info][server.cpp:119] OpenVINO GenAI backend 2026.4.0.0-3407-7ea2546852a
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:121] Bazel build flags: --config=win_mp_on_py_on
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:122] CLI parameters passed to ovms server
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:144] config_path: C:\Users\testc\AppData\Local\Temp\opencode\gemmamonster-leakage-20260914\server-trace\config.json
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:146] gRPC port: 18094
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:147] REST port: 18093
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:148] gRPC bind address: 0.0.0.0
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:149] REST bind address: 0.0.0.0
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:150] REST workers: 8
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:151] gRPC workers: 1
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:152] gRPC channel arguments: 
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:153] log level: TRACE
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:154] log path: 
+[2026-09-14 16:41:34.389][27552][serving][trace][server.cpp:155] API key: 
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:156] file system poll wait milliseconds: 1000
+[2026-09-14 16:41:34.389][27552][serving][debug][server.cpp:157] model_repository_path: 
+[2026-09-14 16:41:34.389][27552][serving][info][pythoninterpretermodule.cpp:37] PythonInterpreterModule starting
+[2026-09-14 16:41:34.389][27552][serving][info][pythoninterpretermodule.cpp:40] Initializing python interpreter
+[2026-09-14 16:41:34.430][27552][serving][debug][python_backend.cpp:46] Creating python backend
+[2026-09-14 16:41:34.435][27552][serving][info][pythoninterpretermodule.cpp:59] PythonInterpreterModule started
+[2026-09-14 16:41:34.436][27552][modelmanager][debug][mediapipefactory.cpp:44] Registered Calculators: AddHeaderCalculator, AlignmentPointsRectsCalculator, AnnotationOverlayCalculator, AnomalyCalculator, AnomalySerializationCalculator, AssociationNormRectCalculator, BeginLoopDetectionCalculator, BeginLoopFloatCalculator, BeginLoopGpuBufferCalculator, BeginLoopImageCalculator, BeginLoopImageFrameCalculator, BeginLoopIntCalculator, BeginLoopMatrixCalculator, BeginLoopMatrixVectorCalculator, BeginLoopModelApiDetectionCalculator, BeginLoopNormalizedLandmarkListVectorCalculator, BeginLoopNormalizedRectCalculator, BeginLoopRectanglePredictionCalculator, BeginLoopStringCalculator, BeginLoopTensorCalculator, BeginLoopUint64tCalculator, BoxDetectorCalculator, BoxTrackerCalculator, CallbackCalculator, CallbackPacketCalculator, CallbackWithHeaderCalculator, ClassificationCalculator, ClassificationListVectorHasMinSizeCalculator, ClassificationListVectorSizeCalculator, ClassificationSerializationCalculator, ClipDetectionVectorSizeCalculator, ClipNormalizedRectVectorSizeCalculator, ColorConvertCalculator, ConcatenateBoolVectorCalculator, ConcatenateClassificationListCalculator, ConcatenateClassificationListVectorCalculator, ConcatenateDetectionVectorCalculator, ConcatenateFloatVectorCalculator, ConcatenateImageVectorCalculator, ConcatenateInt32VectorCalculator, ConcatenateJointListCalculator, ConcatenateLandmarListVectorCalculator, ConcatenateLandmarkListCalculator, ConcatenateLandmarkListVectorCalculator, ConcatenateLandmarkVectorCalculator, ConcatenateNormalizedLandmarkListCalculator, ConcatenateNormalizedLandmarkListVectorCalculator, ConcatenateRenderDataVectorCalculator, ConcatenateStringVectorCalculator, ConcatenateTensorVectorCalculator, ConcatenateTfLiteTensorVectorCalculator, ConcatenateUInt64VectorCalculator, ConstantSidePacketCalculator, CountingSourceCalculator, CropCalculator, DefaultSidePacketCalculator, DequantizeByteArrayCalculator, DetectionCalculator, DetectionClassificationCombinerCalculator, DetectionClassificationResultCalculator, DetectionClassificationSerializationCalculator, DetectionExtractionCalculator, DetectionLabelIdToTextCalculator, DetectionLetterboxRemovalCalculator, DetectionProjectionCalculator, DetectionSegmentationCombinerCalculator, DetectionSegmentationResultCalculator, DetectionSegmentationSerializationCalculator, DetectionSerializationCalculator, DetectionsToRectsCalculator, DetectionsToRenderDataCalculator, EmbeddingsCalculatorOV, EmptyLabelCalculator, EmptyLabelClassificationCalculator, EmptyLabelDetectionCalculator, EmptyLabelRotatedDetectionCalculator, EmptyLabelSegmentationCalculator, EndLoopAffineMatrixCalculator, EndLoopBooleanCalculator, EndLoopClassificationListCalculator, EndLoopDetectionCalculator, EndLoopFloatCalculator, EndLoopGpuBufferCalculator, EndLoopImageCalculator, EndLoopImageFrameCalculator, EndLoopImageSizeCalculator, EndLoopLandmarkListVectorCalculator, EndLoopMatrixCalculator, EndLoopModelApiDetectionClassificationCalculator, EndLoopModelApiDetectionSegmentationCalculator, EndLoopNormalizedLandmarkListVectorCalculator, EndLoopNormalizedRectCalculator, EndLoopPolygonPredictionsCalculator, EndLoopRectanglePredictionsCalculator, EndLoopRenderDataCalculator, EndLoopTensorCalculator, EndLoopTfLiteTensorCalculator, FaceLandmarksToRenderDataCalculator, FeatureDetectorCalculator, FlowLimiterCalculator, FlowPackagerCalculator, FlowToImageCalculator, FromImageCalculator, GateCalculator, GetClassificationListVectorItemCalculator, GetDetectionVectorItemCalculator, GetLandmarkListVectorItemCalculator, GetNormalizedLandmarkListVectorItemCalculator, GetNormalizedRectVectorItemCalculator, GetRectVectorItemCalculator, GraphProfileCalculator, HandDetectionsFromPoseToRectsCalculator, HandLandmarksToRectCalculator, HttpLLMCalculator, HttpSerializationCalculator, ImageCloneCalculator, ImageCroppingCalculator, ImageGenCalculator, ImagePropertiesCalculator, ImageToTensorCalculator, ImageTransformationCalculator, ImmediateMuxCalculator, InferenceCalculatorCpu, InstanceSegmentationCalculator, InverseMatrixCalculator, IrisToRenderDataCalculator, KeypointDetectionCalculator, LandmarkLetterboxRemovalCalculator, LandmarkListVectorSizeCalculator, LandmarkProjectionCalculator, LandmarkVisibilityCalculator, LandmarksRefinementCalculator, LandmarksSmoothingCalculator, LandmarksToDetectionCalculator, LandmarksToRenderDataCalculator, MakePairCalculator, MatrixMultiplyCalculator, MatrixSubtractCalculator, MatrixToVectorCalculator, MediaPipeInternalSidePacketToPacketStreamCalculator, MergeCalculator, MergeDetectionsToVectorCalculator, MergeGpuBuffersToVectorCalculator, MergeImagesToVectorCalculator, ModelInferHttpRequestCalculator, ModelInferRequestImageCalculator, MotionAnalysisCalculator, MuxCalculator, NonMaxSuppressionCalculator, NonZeroCalculator, NormalizedLandmarkListVectorHasMinSizeCalculator, NormalizedRectVectorHasMinSizeCalculator, OpenCvEncodedImageToImageFrameCalculator, OpenCvImageEncoderCalculator, OpenCvPutTextCalculator, OpenCvVideoDecoderCalculator, OpenCvVideoEncoderCalculator, OpenVINOConverterCalculator, OpenVINOInferenceAdapterCalculator, OpenVINOInferenceCalculator, OpenVINOModelServerSessionCalculator, OpenVINOTensorsToClassificationCalculator, OpenVINOTensorsToDetectionsCalculator, OverlayCalculator, PacketGeneratorWrapperCalculator, PacketInnerJoinCalculator, PacketPresenceCalculator, PacketResamplerCalculator, PacketSequencerCalculator, PacketThinnerCalculator, PassThroughCalculator, PreviousLoopbackCalculator, PyTensorOvTensorConverterCalculator, PythonExecutorCalculator, QuantizeFloatVectorCalculator, RectToRenderDataCalculator, RectToRenderScaleCalculator, RectTransformationCalculator, RefineLandmarksFromHeatmapCalculator, RerankCalculatorOV, ResourceProviderCalculator, RoiTrackingCalculator, RotatedDetectionCalculator, RotatedDetectionSerializationCalculator, RoundRobinDemuxCalculator, S2tCalculator, SegmentationCalculator, SegmentationSerializationCalculator, SegmentationSmoothingCalculator, SequenceShiftCalculator, SerializationCalculator, SetLandmarkVisibilityCalculator, SidePacketToStreamCalculator, SplitAffineMatrixVectorCalculator, SplitClassificationListVectorCalculator, SplitDetectionVectorCalculator, SplitFloatVectorCalculator, SplitImageVectorCalculator, SplitJointListCalculator, SplitLandmarkListCalculator, SplitLandmarkVectorCalculator, SplitMatrixVectorCalculator, SplitNormalizedLandmarkListCalculator, SplitNormalizedLandmarkListVectorCalculator, SplitNormalizedRectVectorCalculator, SplitTensorVectorCalculator, SplitTfLiteTensorVectorCalculator, SplitUint64tVectorCalculator, SsdAnchorsCalculator, StreamToSidePacketCalculator, StringToInt32Calculator, StringToInt64Calculator, StringToIntCalculator, StringToUint32Calculator, StringToUint64Calculator, StringToUintCalculator, SwitchDemuxCalculator, SwitchMuxCalculator, T2sCalculator, TensorsToClassificationCalculator, TensorsToDetectionsCalculator, TensorsToFloatsCalculator, TensorsToLandmarksCalculator, TensorsToSegmentationCalculator, TfLiteConverterCalculator, TfLiteCustomOpResolverCalculator, TfLiteInferenceCalculator, TfLiteModelCalculator, TfLiteTensorsToDetectionsCalculator, TfLiteTensorsToFloatsCalculator, TfLiteTensorsToLandmarksCalculator, ThresholdingCalculator, ToImageCalculator, TrackedDetectionManagerCalculator, UpdateFaceLandmarksCalculator, VideoPreStreamCalculator, VisibilityCopyCalculator, VisibilitySmoothingCalculator, WarpAffineCalculator, WarpAffineCalculatorCpu, WorldLandmarkProjectionCalculator
+
+[2026-09-14 16:41:34.436][27552][modelmanager][debug][mediapipefactory.cpp:44] Registered Subgraphs: FaceDetection, FaceDetectionFrontDetectionToRoi, FaceDetectionFrontDetectionsToRoi, FaceDetectionShortRange, FaceDetectionShortRangeByRoiCpu, FaceDetectionShortRangeCpu, FaceLandmarkCpu, FaceLandmarkFrontCpu, FaceLandmarkLandmarksToRoi, FaceLandmarksFromPoseCpu, FaceLandmarksFromPoseToRecropRoi, FaceLandmarksModelLoader, FaceLandmarksToRoi, FaceTracking, HandLandmarkCpu, HandLandmarkModelLoader, HandLandmarksFromPoseCpu, HandLandmarksFromPoseToRecropRoi, HandLandmarksLeftAndRightCpu, HandLandmarksToRoi, HandRecropByRoiCpu, HandTracking, HandVisibilityFromHandLandmarksFromPose, HandWristForPose, HolisticLandmarkCpu, HolisticTrackingToRenderData, InferenceCalculator, IrisLandmarkCpu, IrisLandmarkLandmarksToRoi, IrisLandmarkLeftAndRightCpu, IrisRendererCpu, PoseDetectionCpu, PoseDetectionToRoi, PoseLandmarkByRoiCpu, PoseLandmarkCpu, PoseLandmarkFiltering, PoseLandmarkModelLoader, PoseLandmarksAndSegmentationInverseProjection, PoseLandmarksToRoi, PoseSegmentationFiltering, SwitchContainer, TensorsToFaceLandmarks, TensorsToFaceLandmarksWithAttention, TensorsToPoseLandmarksAndSegmentation
+
+[2026-09-14 16:41:34.436][27552][modelmanager][debug][mediapipefactory.cpp:44] Registered InputStreamHandlers: BarrierInputStreamHandler, DefaultInputStreamHandler, EarlyCloseInputStreamHandler, FixedSizeInputStreamHandler, ImmediateInputStreamHandler, MuxInputStreamHandler, SyncSetInputStreamHandler, TimestampAlignInputStreamHandler
+
+[2026-09-14 16:41:34.436][27552][modelmanager][debug][mediapipefactory.cpp:44] Registered OutputStreamHandlers: InOrderOutputStreamHandler
+
+[2026-09-14 16:41:34.437][3744][modelmanager][info][servable_loading_queue.cpp:89] Started servable loading queue thread
+[2026-09-14 16:41:34.718][27552][modelmanager][info][modelmanager.cpp:252] Available devices for Open VINO: CPU, GPU, NPU
+[2026-09-14 16:41:34.718][27552][modelmanager][debug][ov_utils.hpp:91] Logging OpenVINO Core plugin: CPU; plugin configuration
+[2026-09-14 16:41:34.719][27552][modelmanager][debug][ov_utils.hpp:126] OpenVINO Core plugin: CPU; plugin configuration: { AVAILABLE_DEVICES: , COMPATIBILITY_CHECK: NOT_APPLICABLE, CPU_DENORMALS_OPTIMIZATION: NO, CPU_SPARSE_WEIGHTS_DECOMPRESSION_RATE: 1, DEVICE_ARCHITECTURE: intel64, DEVICE_ID: , DEVICE_TYPE: integrated, DYNAMIC_QUANTIZATION_GROUP_SIZE: 32, ENABLE_CPU_PINNING: YES, ENABLE_CPU_RESERVATION: NO, ENABLE_HYPER_THREADING: YES, ENABLE_TENSOR_PARALLEL: NO, ENABLE_WEIGHTLESS: NO, EXECUTION_DEVICES: CPU, EXECUTION_MODE_HINT: PERFORMANCE, FULL_DEVICE_NAME: Intel(R) Core(TM) Ultra 7 258V, INFERENCE_NUM_THREADS: 0, INFERENCE_PRECISION_HINT: f32, KEY_CACHE_GROUP_SIZE: 0, KEY_CACHE_PRECISION: u8, KV_CACHE_PRECISION: u8, LOG_LEVEL: LOG_NONE, MODEL_DISTRIBUTION_POLICY: , NUM_STREAMS: 1, OPTIMIZATION_CAPABILITIES: BF16 FP32 FP16 INT8 BIN EXPORT_IMPORT, PERFORMANCE_HINT: LATENCY, PERFORMANCE_HINT_NUM_REQUESTS: 0, PERF_COUNT: NO, RANGE_FOR_ASYNC_INFER_REQUESTS: 1 1 1, RANGE_FOR_STREAMS: 1 8, SCHEDULING_CORE_TYPE: ANY_CORE, TBB_PARTITIONER: NONE, VALUE_CACHE_GROUP_SIZE: 0, VALUE_CACHE_PRECISION: u8, WEIGHTS_PATH:  }
+[2026-09-14 16:41:34.719][27552][modelmanager][debug][ov_utils.hpp:91] Logging OpenVINO Core plugin: GPU; plugin configuration
+[2026-09-14 16:41:34.720][27552][modelmanager][debug][ov_utils.hpp:126] OpenVINO Core plugin: GPU; plugin configuration: { ACTIVATIONS_SCALE_FACTOR: -1, AVAILABLE_DEVICES: 0, CACHE_DIR: , CACHE_ENCRYPTION_CALLBACKS: , CACHE_MODE: optimize_speed, COMPATIBILITY_CHECK: NOT_APPLICABLE, COMPILATION_NUM_THREADS: 8, CONFIG_FILE: , DEVICE_ARCHITECTURE: GPU: vendor=0x8086 arch=v20.4.4, DEVICE_GOPS: {f16:31948.8,f32:3993.6,i8:63897.6,u8:63897.6}, DEVICE_ID: 0, DEVICE_LUID: da1f010000000000, DEVICE_PCI_INFO: {domain: 0 bus: 0 device: 0x2 function: 0}, DEVICE_TYPE: integrated, DEVICE_UUID: 8680a064040000000002000000000000, DYNAMIC_QUANTIZATION_GROUP_SIZE: 0, ENABLE_CPU_PINNING: NO, ENABLE_CPU_RESERVATION: NO, EXECUTION_MODE_HINT: PERFORMANCE, FULL_DEVICE_NAME: Intel(R) Arc(TM) 140V GPU (16GB) (iGPU), GPU_CACHELINE_SIZE: 256, GPU_DEVICE_ID: 0x64a0, GPU_DEVICE_MAX_ALLOC_MEM_SIZE: 27224272896, GPU_DEVICE_TOTAL_MEM_SIZE: 27224272896, GPU_DISABLE_WINOGRAD_CONVOLUTION: NO, GPU_ENABLE_LARGE_ALLOCATIONS: NO, GPU_ENABLE_LOOP_UNROLLING: YES, GPU_ENABLE_LORA_OPERATION: YES, GPU_ENABLE_SDPA_OPTIMIZATION: YES, GPU_EXECUTION_UNITS_COUNT: 64, GPU_HOST_TASK_PRIORITY: MEDIUM, GPU_MEMORY_STATISTICS: {cl_mem:0,unknown:0,usm_device:0,usm_host:0,usm_shared:0}, GPU_QUEUE_PRIORITY: MEDIUM, GPU_QUEUE_THROTTLE: MEDIUM, GPU_UARCH_VERSION: 20.4.4, INFERENCE_PRECISION_HINT: f16, KV_CACHE_PRECISION: dynamic, MAX_BATCH_SIZE: 1, MODEL_PRIORITY: MEDIUM, MODEL_PTR: 0000000000000000, NUM_STREAMS: 1, OFFLOAD_RATIO: 0, OPTIMAL_BATCH_SIZE: 1, OPTIMIZATION_CAPABILITIES: FP32 BIN FP16 INT8 GPU_HW_MATMUL GPU_USM_MEMORY EXPORT_IMPORT, PERFORMANCE_HINT: LATENCY, PERFORMANCE_HINT_NUM_REQUESTS: 0, PERF_COUNT: NO, RANGE_FOR_ASYNC_INFER_REQUESTS: 1 2 1, RANGE_FOR_STREAMS: 1 2, WEIGHTS_PATH:  }
+[2026-09-14 16:41:34.720][27552][modelmanager][debug][ov_utils.hpp:91] Logging OpenVINO Core plugin: NPU; plugin configuration
+[2026-09-14 16:41:34.722][27552][modelmanager][debug][ov_utils.hpp:126] OpenVINO Core plugin: NPU; plugin configuration: { AVAILABLE_DEVICES: 4000, CACHE_DIR: , CACHE_ENCRYPTION_CALLBACKS: , CACHE_MODE: optimize_speed, COMPATIBILITY_CHECK: NOT_APPLICABLE, COMPILATION_NUM_THREADS: 8, DEVICE_ARCHITECTURE: 4000, DEVICE_GOPS: {bf16:0,f16:23347.2,f32:0,i8:46694.4,u8:46694.4}, DEVICE_ID: , DEVICE_LUID: f631010000000000, DEVICE_PCI_INFO: {domain: 0 bus: 0 device: 0xb function: 0}, DEVICE_TYPE: integrated, DEVICE_UUID: 80d1d11eb73811eab3de0242ac130004, EXECUTION_DEVICES: NPU, EXECUTION_MODE_HINT: PERFORMANCE, FULL_DEVICE_NAME: Intel(R) AI Boost, INFERENCE_PRECISION_HINT: f16, LOG_LEVEL: LOG_ERROR, MODEL_PRIORITY: MEDIUM, MODEL_PTR: 0000000000000000, NPU_BYPASS_UMD_CACHING: NO, NPU_COMPILATION_MODE_PARAMS: , NPU_COMPILER_DYNAMIC_QUANTIZATION: NO, NPU_COMPILER_TYPE: PREFER_PLUGIN, NPU_COMPILER_VERSION: 524291, NPU_DEFER_WEIGHTS_LOAD: NO, NPU_DEVICE_ALLOC_MEM_SIZE: 0, NPU_DEVICE_TOTAL_MEM_SIZE: 17179869184, NPU_DISABLE_IDLE_MEMORY_PRUNING: NO, NPU_DRIVER_VERSION: 1005540, NPU_ENABLE_STRIDES_FOR: , NPU_MAX_TILES: 6, NPU_PLATFORM: AUTO_DETECT, NPU_QDQ_OPTIMIZATION: NO, NPU_QDQ_OPTIMIZATION_AGGRESSIVE: NO, NPU_RUN_INFERENCES_SEQUENTIALLY: NO, NPU_TILES: -1, NPU_TURBO: NO, NUM_STREAMS: AUTO, OPTIMAL_NUMBER_OF_INFER_REQUESTS: 1, OPTIMIZATION_CAPABILITIES: FP16 INT8 EXPORT_IMPORT, PERFORMANCE_HINT: LATENCY, PERFORMANCE_HINT_NUM_REQUESTS: 1, PERF_COUNT: NO, RANGE_FOR_ASYNC_INFER_REQUESTS: 1 8 1, RANGE_FOR_STREAMS: 0 8, WEIGHTS_PATH: , WORKLOAD_TYPE: DEFAULT }
+[2026-09-14 16:41:34.723][27552][serving][info][capimodule.cpp:40] C-APIModule starting
+[2026-09-14 16:41:34.723][27552][serving][info][capimodule.cpp:42] C-APIModule started
+[2026-09-14 16:41:34.723][27552][serving][info][grpcservermodule.cpp:106] GRPCServerModule starting
+[2026-09-14 16:41:34.723][27552][serving][info][grpcservermodule.cpp:133] Binding gRPC server to address: 0.0.0.0:18094
+[2026-09-14 16:41:34.723][27552][serving][debug][grpcservermodule.cpp:141] setting grpc channel argument grpc.max_concurrent_streams: 8
+[2026-09-14 16:41:34.727][27552][serving][debug][grpcservermodule.cpp:154] setting grpc MaxThreads ResourceQuota 64
+[2026-09-14 16:41:34.727][27552][serving][debug][grpcservermodule.cpp:158] setting grpc Memory ResourceQuota 2147483648
+[2026-09-14 16:41:34.727][27552][serving][debug][grpcservermodule.cpp:165] Starting gRPC servers: 1
+[2026-09-14 16:41:34.730][27552][serving][info][grpcservermodule.cpp:186] GRPCServerModule started
+[2026-09-14 16:41:34.730][27552][serving][info][grpcservermodule.cpp:187] Started gRPC server on port 18094
+[2026-09-14 16:41:34.730][27552][serving][info][httpservermodule.cpp:35] HTTPServerModule starting
+[2026-09-14 16:41:34.730][27552][serving][info][httpservermodule.cpp:39] Will start 8 REST workers
+[2026-09-14 16:41:34.730][27552][serving][debug][drogon_http_server.cpp:41] Starting http thread pool for streaming (8 threads)
+[2026-09-14 16:41:34.731][27552][serving][debug][drogon_http_server.cpp:43] Thread pool started
+[2026-09-14 16:41:34.731][27552][serving][debug][drogon_http_server.cpp:60] DROGON_LOG_LEVEL env var not set, using default log level INFO
+[2026-09-14 16:41:34.731][27552][serving][debug][drogon_http_server.cpp:85] DrogonHttpServer::startAcceptingRequests()
+[2026-09-14 16:41:34.732][27552][serving][debug][drogon_http_server.cpp:174] Waiting for drogon to become ready on port 18093...
+[2026-09-14 16:41:34.734][21540][serving][debug][drogon_http_server.cpp:123] Starting to listen on port 18093
+[2026-09-14 16:41:34.734][21540][serving][debug][drogon_http_server.cpp:124] Thread pool size for unary (8 drogon threads)
+[2026-09-14 16:41:34.734][21540][serving][info][drogon_http_server.cpp:157] Binding REST server to address: 0.0.0.0:18093
+[2026-09-14 16:41:34.784][27552][serving][debug][drogon_http_server.cpp:183] Drogon run procedure took: 51.811 ms
+[2026-09-14 16:41:34.784][27552][serving][info][drogon_http_server.cpp:187] REST server listening on port 18093 with 8 unary threads and 8 streaming threads
+[2026-09-14 16:41:34.784][27552][serving][info][http_server.cpp:242] API key not provided via --api_key_file or API_KEY environment variable. Authentication will be disabled.
+[2026-09-14 16:41:34.785][27552][serving][info][httpservermodule.cpp:52] HTTPServerModule started
+[2026-09-14 16:41:34.785][27552][serving][info][httpservermodule.cpp:53] Started REST server at 0.0.0.0:18093
+[2026-09-14 16:41:34.785][27552][serving][info][servablemanagermodule.cpp:51] ServableManagerModule starting
+[2026-09-14 16:41:34.785][27552][serving][debug][schema.cpp:563] Loading configuration from C:\Users\testc\AppData\Local\Temp\opencode\gemmamonster-leakage-20260914\server-trace\config.json for: 1 time
+[2026-09-14 16:41:34.803][27552][modelmanager][debug][modelmanager.cpp:777] Configuration file doesn't have monitoring property.
+[2026-09-14 16:41:34.803][27552][modelmanager][debug][modelmanager.cpp:1011] Reading metric config only once per server start.
+[2026-09-14 16:41:34.803][27552][serving][debug][mediapipegraphconfig.cpp:100] base_path not defined in config so it will be set to default based on main config directory: C:\Users\testc\AppData\Local\Temp\opencode\gemmamonster-leakage-20260914\server-trace\gemma4\
+[2026-09-14 16:41:34.811][27552][serving][debug][mediapipegraphconfig.cpp:136] Mediapipe graph gemma4 group_name set to gemma4
+[2026-09-14 16:41:34.811][27552][modelmanager][debug][modelmanager.cpp:891] Subconfig path: C:\Users\testc\AppData\Local\Temp\opencode\gemmamonster-leakage-20260914\server-trace\gemma4\subconfig.json provided for graph: gemma4 does not exist. Loading subconfig models will be skipped.
+[2026-09-14 16:41:34.812][27552][modelmanager][debug][modelmanager.cpp:588] Configuration file doesn't have custom node libraries property.
+[2026-09-14 16:41:34.812][27552][modelmanager][debug][pipeline_config_parser.cpp:254] Configuration file doesn't have pipelines property.
+[2026-09-14 16:41:34.813][27552][serving][debug][mediapipegraphconfig.cpp:159] Content of file C:\Users\testc\AppData\Local\Temp\opencode\gemmamonster-leakage-20260914\server-trace\gemma4-graph.pbtxt:
+# RC2 heretic run 2026-09-14: parity with wondernutts-test smoke (GPU, VLM_CB).
+# OVMS_GRAPH_QUEUE_MAX_SIZE: AUTO
+    input_stream: "HTTP_REQUEST_PAYLOAD:input"
+    output_stream: "HTTP_RESPONSE_PAYLOAD:output"
+    node: {
+    name: "LLMExecutor"
+    calculator: "HttpLLMCalculator"
+    input_stream: "LOOPBACK:loopback"
+    input_stream: "HTTP_REQUEST_PAYLOAD:input"
+    input_side_packet: "LLM_NODE_RESOURCES:llm"
+    input_side_packet: "LLM_NODE_EXECUTION_CONTEXTS:llm_ctx"
+    output_stream: "LOOPBACK:loopback"
+    output_stream: "HTTP_RESPONSE_PAYLOAD:output"
+    input_stream_info: {
+        tag_index: 'LOOPBACK:0',
+        back_edge: true
+    }
+    node_options: {
+        [type.googleapis.com / mediapipe.LLMCalculatorOptions]: {
+            max_num_seqs:256,
+            device: "GPU",
+            models_path: "C:/llm/models/OpenVINO/Wondernutts/gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov",
+            enable_prefix_caching: true,
+            cache_size: 0,
+            pipeline_type: VLM_CB,
+        }
+    }
+    input_stream_handler {
+        input_stream_handler: "SyncSetInputStreamHandler",
+        options {
+        [mediapipe.SyncSetInputStreamHandlerOptions.ext] {
+            sync_set {
+            tag_index: "LOOPBACK:0"
+            }
+        }
+        }
+    }
+    }
+
+[2026-09-14 16:41:34.813][3744][modelmanager][debug][servable_loading_queue.cpp:109] Processing 4 task for: gemma4
+[2026-09-14 16:41:34.818][3744][modelmanager][debug][mediapipegraphdefinition.cpp:231] Started validation of mediapipe: gemma4
+[2026-09-14 16:41:34.819][3744][serving][trace][mediapipegraphdefinition.cpp:203] Will try to load pbtxt config: # RC2 heretic run 2026-09-14: parity with wondernutts-test smoke (GPU, VLM_CB).
+# OVMS_GRAPH_QUEUE_MAX_SIZE: AUTO
+    input_stream: "HTTP_REQUEST_PAYLOAD:input"
+    output_stream: "HTTP_RESPONSE_PAYLOAD:output"
+    node: {
+    name: "LLMExecutor"
+    calculator: "HttpLLMCalculator"
+    input_stream: "LOOPBACK:loopback"
+    input_stream: "HTTP_REQUEST_PAYLOAD:input"
+    input_side_packet: "LLM_NODE_RESOURCES:llm"
+    input_side_packet: "LLM_NODE_EXECUTION_CONTEXTS:llm_ctx"
+    output_stream: "LOOPBACK:loopback"
+    output_stream: "HTTP_RESPONSE_PAYLOAD:output"
+    input_stream_info: {
+        tag_index: 'LOOPBACK:0',
+        back_edge: true
+    }
+    node_options: {
+        [type.googleapis.com / mediapipe.LLMCalculatorOptions]: {
+            max_num_seqs:256,
+            device: "GPU",
+            models_path: "C:/llm/models/OpenVINO/Wondernutts/gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov",
+            enable_prefix_caching: true,
+            cache_size: 0,
+            pipeline_type: VLM_CB,
+        }
+    }
+    input_stream_handler {
+        input_stream_handler: "SyncSetInputStreamHandler",
+        options {
+        [mediapipe.SyncSetInputStreamHandlerOptions.ext] {
+            sync_set {
+            tag_index: "LOOPBACK:0"
+            }
+        }
+        }
+    }
+    }
+
+[2026-09-14 16:41:34.823][3744][serving][debug][mediapipegraphdefinition.cpp:99] Graph queue AUTO resolved to 8 for mediapipe: gemma4 (restWorkers=8, cores=8)
+[2026-09-14 16:41:34.824][3744][modelmanager][debug][mediapipe_utils.cpp:84] setting input stream: input packet type: UNKNOWN from: HTTP_REQUEST_PAYLOAD:input
+[2026-09-14 16:41:34.824][3744][modelmanager][debug][mediapipe_utils.cpp:84] setting output stream: output packet type: UNKNOWN from: HTTP_RESPONSE_PAYLOAD:output
+[2026-09-14 16:41:34.838][3744][serving][info][mediapipegraphdefinition.cpp:643] MediapipeGraphDefinition initializing graph nodes
+[2026-09-14 16:41:34.841][3744][modelmanager][info][servable_initializer.cpp:688] Initializing Visual Language Model Continuous Batching servable
+[2026-09-14 16:41:34.852][3744][serving][debug][servable_initializer.cpp:270] Setting tokenizer/detokenizer NUM_STREAMS to: 8
+Model: OV Tokenizer
+  NETWORK_NAME: tokenizer
+  OPTIMAL_NUMBER_OF_INFER_REQUESTS: 8
+  NUM_STREAMS: 8
+  INFERENCE_NUM_THREADS: 8
+  PERF_COUNT: NO
+  INFERENCE_PRECISION_HINT: f32
+  PERFORMANCE_HINT: THROUGHPUT
+  EXECUTION_MODE_HINT: PERFORMANCE
+  PERFORMANCE_HINT_NUM_REQUESTS: 0
+  ENABLE_CPU_PINNING: NO
+  ENABLE_CPU_RESERVATION: NO
+  SCHEDULING_CORE_TYPE: ANY_CORE
+  MODEL_DISTRIBUTION_POLICY: 
+  ENABLE_HYPER_THREADING: NO
+  EXECUTION_DEVICES: CPU
+  CPU_DENORMALS_OPTIMIZATION: NO
+  LOG_LEVEL: LOG_NONE
+  CPU_SPARSE_WEIGHTS_DECOMPRESSION_RATE: 1
+  ENABLE_TENSOR_PARALLEL: NO
+  TBB_PARTITIONER: STATIC
+  DYNAMIC_QUANTIZATION_GROUP_SIZE: 32
+  KV_CACHE_PRECISION: u8
+  KEY_CACHE_PRECISION: u8
+  VALUE_CACHE_PRECISION: u8
+  KEY_CACHE_GROUP_SIZE: 0
+  VALUE_CACHE_GROUP_SIZE: 0
+  RUNTIME_REQUIREMENTS: meta=1.0;ov=2026.4.0;isa=Intel AVX2 with Intel DL Boost, float16 and bfloat16 support
+EXECUTION_DEVICES:
+ CPU: Intel(R) Core(TM) Ultra 7 258V
+Model: OV Detokenizer
+  NETWORK_NAME: detokenizer
+  OPTIMAL_NUMBER_OF_INFER_REQUESTS: 8
+  NUM_STREAMS: 8
+  INFERENCE_NUM_THREADS: 8
+  PERF_COUNT: NO
+  INFERENCE_PRECISION_HINT: f32
+  PERFORMANCE_HINT: THROUGHPUT
+  EXECUTION_MODE_HINT: PERFORMANCE
+  PERFORMANCE_HINT_NUM_REQUESTS: 0
+  ENABLE_CPU_PINNING: NO
+  ENABLE_CPU_RESERVATION: NO
+  SCHEDULING_CORE_TYPE: ANY_CORE
+  MODEL_DISTRIBUTION_POLICY: 
+  ENABLE_HYPER_THREADING: NO
+  EXECUTION_DEVICES: CPU
+  CPU_DENORMALS_OPTIMIZATION: NO
+  LOG_LEVEL: LOG_NONE
+  CPU_SPARSE_WEIGHTS_DECOMPRESSION_RATE: 1
+  ENABLE_TENSOR_PARALLEL: NO
+  TBB_PARTITIONER: STATIC
+  DYNAMIC_QUANTIZATION_GROUP_SIZE: 32
+  KV_CACHE_PRECISION: u8
+  KEY_CACHE_PRECISION: u8
+  VALUE_CACHE_PRECISION: u8
+  KEY_CACHE_GROUP_SIZE: 0
+  VALUE_CACHE_GROUP_SIZE: 0
+  RUNTIME_REQUIREMENTS: meta=1.0;ov=2026.4.0;isa=Intel AVX2 with Intel DL Boost, float16 and bfloat16 support
+EXECUTION_DEVICES:
+ CPU: Intel(R) Core(TM) Ultra 7 258V
+Model: VLM vision embeddings model
+  NETWORK_NAME: Model0
+  OPTIMAL_NUMBER_OF_INFER_REQUESTS: 1
+  PERF_COUNT: NO
+  ENABLE_CPU_PINNING: NO
+  ENABLE_CPU_RESERVATION: NO
+  MODEL_PRIORITY: MEDIUM
+  GPU_HOST_TASK_PRIORITY: MEDIUM
+  GPU_QUEUE_PRIORITY: MEDIUM
+  GPU_ENABLE_LARGE_ALLOCATIONS: NO
+  GPU_QUEUE_THROTTLE: MEDIUM
+  GPU_ENABLE_LOOP_UNROLLING: YES
+  GPU_DISABLE_WINOGRAD_CONVOLUTION: NO
+  CACHE_DIR: 
+  CACHE_MODE: optimize_speed
+  PERFORMANCE_HINT: LATENCY
+  EXECUTION_MODE_HINT: PERFORMANCE
+  COMPILATION_NUM_THREADS: 8
+  NUM_STREAMS: 1
+  PERFORMANCE_HINT_NUM_REQUESTS: 0
+  INFERENCE_PRECISION_HINT: f16
+  DYNAMIC_QUANTIZATION_GROUP_SIZE: 18446744073709551615
+  ACTIVATIONS_SCALE_FACTOR: -1
+  KV_CACHE_PRECISION: f16
+  OFFLOAD_RATIO: 0
+  DEVICE_ID: 0
+  EXECUTION_DEVICES: GPU.0
+  RUNTIME_REQUIREMENTS: meta=1.0;ov=2026.4.0;desc=[driver=32.0.101.8991;ip=20.4.4;eus=64]
+EXECUTION_DEVICES:
+ GPU.0: Intel(R) Arc(TM) 140V GPU (16GB) (iGPU)
+[INFO] Combined processor_config.json not found in 'C:/llm/models/OpenVINO/Wondernutts/gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov' or missing image and video processor keys. Falling back to preprocessor_config.json and video_preprocessor_config.json.
+[INFO] video_preprocessor_config.json not found in 'C:/llm/models/OpenVINO/Wondernutts/gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov'. Falling back to preprocessor_config.json for video processing configuration.
+Model: text embeddings model
+  NETWORK_NAME: Model3
+  OPTIMAL_NUMBER_OF_INFER_REQUESTS: 1
+  PERF_COUNT: NO
+  ENABLE_CPU_PINNING: NO
+  ENABLE_CPU_RESERVATION: NO
+  MODEL_PRIORITY: MEDIUM
+  GPU_HOST_TASK_PRIORITY: MEDIUM
+  GPU_QUEUE_PRIORITY: MEDIUM
+  GPU_ENABLE_LARGE_ALLOCATIONS: NO
+  GPU_QUEUE_THROTTLE: MEDIUM
+  GPU_ENABLE_LOOP_UNROLLING: YES
+  GPU_DISABLE_WINOGRAD_CONVOLUTION: NO
+  CACHE_DIR: 
+  CACHE_MODE: optimize_speed
+  PERFORMANCE_HINT: LATENCY
+  EXECUTION_MODE_HINT: PERFORMANCE
+  COMPILATION_NUM_THREADS: 8
+  NUM_STREAMS: 1
+  PERFORMANCE_HINT_NUM_REQUESTS: 0
+  INFERENCE_PRECISION_HINT: f16
+  DYNAMIC_QUANTIZATION_GROUP_SIZE: 18446744073709551615
+  ACTIVATIONS_SCALE_FACTOR: -1
+  KV_CACHE_PRECISION: f16
+  OFFLOAD_RATIO: 0
+  DEVICE_ID: 0
+  EXECUTION_DEVICES: GPU.0
+  RUNTIME_REQUIREMENTS: meta=1.0;ov=2026.4.0;desc=[driver=32.0.101.8991;ip=20.4.4;eus=64]
+EXECUTION_DEVICES:
+ GPU.0: Intel(R) Arc(TM) 140V GPU (16GB) (iGPU)
+SchedulerConfig { 
+  max_num_batched_tokens: 256
+  num_kv_blocks: 0
+  cache_size: 0
+  num_linear_attention_blocks: 0
+  cache_interval_multiplier: unset
+  dynamic_split_fuse: true
+  use_cache_eviction: false
+  max_num_seqs: 256
+  enable_prefix_caching: true
+  use_sparse_attention: false
+ }
+[2026-09-14 16:42:31.736][25176][serving][debug][drogon_http_server.cpp:104] Request URI working in drogon thread pool
+[2026-09-14 16:42:31.749][25176][serving][debug][http_server.cpp:167] REST request /v3/models
+[2026-09-14 16:42:31.749][25176][serving][debug][http_server.cpp:178] Processing HTTP request: GET /v3/models body: 0 bytes
+[2026-09-14 16:42:52.392][15216][serving][debug][drogon_http_server.cpp:104] Request URI working in drogon thread pool
+[2026-09-14 16:42:52.404][15216][serving][debug][http_server.cpp:167] REST request /v3/models
+[2026-09-14 16:42:52.404][15216][serving][debug][http_server.cpp:178] Processing HTTP request: GET /v3/models body: 0 bytes

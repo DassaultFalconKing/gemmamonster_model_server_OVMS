@@ -1,0 +1,16 @@
+[2026-09-14 16:57:33.052][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="<|tool_call>", finish_reason=0, token IDs=[48]
+[2026-09-14 16:57:33.054][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="call", finish_reason=0, token IDs=[6639]
+[2026-09-14 16:57:33.055][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text=":", finish_reason=0, token IDs=[236787]
+[2026-09-14 16:57:33.056][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 3 tokens, text="echo{
+[2026-09-14 16:57:33.059][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 16:57:33.059][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="text":
+[2026-09-14 16:57:33.061][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 16:57:33.061][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="sweep", finish_reason=0, token IDs=[167729]
+[2026-09-14 16:57:33.062][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="-", finish_reason=0, token IDs=[236772]
+[2026-09-14 16:57:33.062][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="item", finish_reason=0, token IDs=[1582]
+[2026-09-14 16:57:33.063][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="-", finish_reason=0, token IDs=[236772]
+[2026-09-14 16:57:33.063][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="3"
+[2026-09-14 16:57:33.064][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="}", finish_reason=0, token IDs=[236783]
+[2026-09-14 16:57:33.065][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<tool_call|>", finish_reason=0, token IDs=[49]
+[2026-09-14 16:57:33.066][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<|tool_response>", finish_reason=0, token IDs=[50]
+[2026-09-14 16:57:33.066][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 0 tokens, text="", finish_reason=1, token IDs=[]

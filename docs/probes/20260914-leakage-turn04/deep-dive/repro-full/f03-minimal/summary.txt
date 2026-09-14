@@ -1,0 +1,1 @@
+f03-minimal: HTTP 200 finish=tool_calls calls=1 args={"query":"who won the 2026 Eurovision Song Contest"} ptok=89 ctok=32 pchunks=58

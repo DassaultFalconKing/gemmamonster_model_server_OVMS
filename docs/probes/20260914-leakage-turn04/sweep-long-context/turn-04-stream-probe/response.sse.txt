@@ -1,0 +1,7 @@
+data: {"choices":[{"index":0,"delta":{"role":"assistant","content":null},"finish_reason":null}],"created":1789396519,"model":"gemma4","object":"chat.completion.chunk"}
+
+data: {"choices":[{"index":0,"logprobs":null,"delta":{},"finish_reason":"length"}],"created":1789396519,"model":"gemma4","object":"chat.completion.chunk"}
+
+data: [DONE]
+
+

@@ -1,0 +1,12 @@
+AFTER RESTART - GEMMAMONSTER RC2 leakage probe 2026-09-14
+PID: 11220 (fresh; old PID 14440 gone)
+Executable: C:\git\artifacts\ovms-908d6695-rc2-repacked-20260914\ovms\ovms.exe
+SHA256: 11d74fd958d1cd2570682fa13562c1bfcf0973dabbf79a0378a8d0cdc886a4fb (identical to before-restart)
+Cmdline: ovms.exe --config_path "C:\Users\testc\AppData\Local\Temp\opencode\gemmamonster-leakage-20260914\server-fresh\config.json" --rest_port 18091 --port 18092 --log_level DEBUG
+REST: 18091 GRPC: 18092
+Model: gemma4 -> C:/llm/models/OpenVINO/Wondernutts/gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov (GPU, VLM_CB, max_num_seqs 256)
+tool_parser: gemma4 (auto-detected)
+reasoning_parser: gemma4 (auto-detected)
+OVMS version: 2026.4.0.908d66956
+chat_template: model chat_template.jinja, supportsToolCalls=true
+DEBUG logging: ON (--log_level DEBUG, штатный флаг, без изменения продукта)

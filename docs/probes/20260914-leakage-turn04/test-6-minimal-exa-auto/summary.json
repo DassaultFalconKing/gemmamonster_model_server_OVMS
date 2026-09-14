@@ -1,0 +1,10 @@
+{
+  "http": "HTTP 200",
+  "finish_reason": "tool_calls",
+  "content": "",
+  "tool_calls_count": 1,
+  "tool_names": "exa_web_search_exa",
+  "tool_arguments": "{\"query\":\"who won the 2026 Eurovision Song Contest\"}",
+  "has_literal_call_open": false,
+  "completion_tokens": 32
+}

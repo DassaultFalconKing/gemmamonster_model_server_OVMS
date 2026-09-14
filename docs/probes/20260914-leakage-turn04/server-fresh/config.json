@@ -1,0 +1,9 @@
+{
+  "mediapipe_config_list": [
+    {
+      "graph_path": "C:\\Users\\testc\\AppData\\Local\\Temp\\opencode\\gemmamonster-leakage-20260914\\server-fresh\\gemma4-graph.pbtxt",
+      "name": "gemma4"
+    }
+  ],
+  "model_config_list": []
+}

@@ -1,0 +1,1 @@
+f05-named: HTTP 200 finish=tool_calls calls=1 args={"query":"who won the 2026 Eurovision Song Contest"} ptok=152 ctok=32 pchunks=58

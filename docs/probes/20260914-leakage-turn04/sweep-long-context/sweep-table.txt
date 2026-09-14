@@ -1,0 +1,10 @@
+
+iter tool_turn finish_reason tool_calls_count tool_names tool_arguments          literal_call_open repeat_prev_sig empty
+                                                                                                                   _turn
+---- --------- ------------- ---------------- ---------- --------------          ----------------- --------------- -----
+   1         1 tool_calls                   1 echo       {"text":"sweep-item-1"}             False           False False
+   2         2 tool_calls                   1 echo       {"text":"sweep-item-2"}             False           False False
+   3         3 tool_calls                   1 echo       {"text":"sweep-item-3"}             False           False False
+   4         3 length                       0                                                False           False  True
+
+

@@ -1,0 +1,13 @@
+{
+  "http": "HTTP 200",
+  "max_tokens_sent": 256,
+  "finish_reason": "length",
+  "content_len": 0,
+  "content_excerpt": "",
+  "tool_calls_count": 0,
+  "tool_names": "",
+  "tool_arguments": "",
+  "has_literal_call_open": false,
+  "prompt_tokens": 437,
+  "completion_tokens": 256
+}

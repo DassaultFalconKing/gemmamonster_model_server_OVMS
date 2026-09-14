@@ -1,0 +1,1 @@
+f09-t3: HTTP 200 finish=tool_calls calls=1 args={"text":"sweep-item-3"} ptok=404 ctok=21 pchunks=32

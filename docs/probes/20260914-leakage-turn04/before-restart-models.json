@@ -1,0 +1,11 @@
+{
+  "data": [
+    {
+      "id": "gemma4",
+      "object": "model",
+      "created": 1789395909,
+      "owned_by": "OVMS"
+    }
+  ],
+  "object": "list"
+}

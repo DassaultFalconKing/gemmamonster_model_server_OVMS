@@ -1,0 +1,9 @@
+"OpenVINO Model Server Environment Initialized"
+[2026-09-14 15:10:07.335][19996][serving][info][server.cpp:115] OpenVINO Model Server 2026.4.0.908d66956
+[2026-09-14 15:10:07.335][19996][serving][info][server.cpp:116] OpenVINO backend 2026.4.0-22955-227c33757d1-releases/2026/4
+[2026-09-14 15:10:07.335][19996][serving][info][server.cpp:119] OpenVINO GenAI backend 2026.4.0.0-3407-7ea2546852a
+[2026-09-14 15:10:07.493][19996][modelmanager][info][modelmanager.cpp:252] Available devices for Open VINO: CPU, GPU, NPU
+[2026-09-14 15:10:35.037][25260][llm_calculator][info][servable_initializer.cpp:231] Auto-detected tool_parser: gemma4
+[2026-09-14 15:10:35.037][25260][llm_calculator][info][servable_initializer.cpp:241] Auto-detected reasoning_parser: gemma4
+[2026-09-14 15:10:35.040][25260][modelmanager][info][pipelinedefinitionstatus.hpp:61] Mediapipe: gemma4 state changed to: AVAILABLE after handling: ValidationPassedEvent: 
+[2026-09-14 15:24:09.646][11224][llm_calculator][info][servable.cpp:381] session-state: store disabled; OVMS_SESSION_STORE_DIR is unset

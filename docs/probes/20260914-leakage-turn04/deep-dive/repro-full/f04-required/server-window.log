@@ -1,0 +1,160 @@
+[2026-09-14 16:58:41.773][18892][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 16:58:41.775][18892][llm_calculator][trace][servable.cpp:78] Notifying executor thread
+[2026-09-14 16:58:41.775][18892][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 16:58:42.451][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:58:42.452][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:58:42.452][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:58:42.500][6300][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 13.6% of 47.8 MB;
+[2026-09-14 16:58:42.880][6300][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 15.9% of 47.8 MB;
+[2026-09-14 16:58:43.245][6300][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 15.9% of 47.8 MB;
+[2026-09-14 16:58:43.452][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:58:43.453][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:58:43.453][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:58:43.610][18892][llm_calculator][trace][http_llm_calculator.cc:187] LLMCalculator  [Node: LLMExecutor] Received complete execution results, preparing response
+[2026-09-14 16:58:43.610][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="<|tool_call>", finish_reason=0, token IDs=[48]
+[2026-09-14 16:58:43.610][6300][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 18.2% of 47.8 MB;
+[2026-09-14 16:58:43.610][6300][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 16:58:43.612][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="call", finish_reason=0, token IDs=[6639]
+[2026-09-14 16:58:43.612][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text=":", finish_reason=0, token IDs=[236787]
+[2026-09-14 16:58:43.612][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="exa", finish_reason=0, token IDs=[190564]
+[2026-09-14 16:58:43.613][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 16:58:43.613][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="web", finish_reason=0, token IDs=[5166]
+[2026-09-14 16:58:43.614][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 16:58:43.614][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="search", finish_reason=0, token IDs=[2305]
+[2026-09-14 16:58:43.615][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 16:58:43.615][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 3 tokens, text="exa{
+
+
+", finish_reason=0, token IDs=[190564, 236782, 109]
+[2026-09-14 16:58:43.617][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 16:58:43.617][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="query", finish_reason=0, token IDs=[3278]
+[2026-09-14 16:58:43.617][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="":", finish_reason=0, token IDs=[1083]
+[2026-09-14 16:58:43.618][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 16:58:43.618][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="who", finish_reason=0, token IDs=[14625]
+[2026-09-14 16:58:43.619][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" won", finish_reason=0, token IDs=[2810]
+[2026-09-14 16:58:43.619][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" the", finish_reason=0, token IDs=[506]
+[2026-09-14 16:58:43.619][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" ", finish_reason=0, token IDs=[236743]
+[2026-09-14 16:58:43.620][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 16:58:43.620][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="0", finish_reason=0, token IDs=[236771]
+[2026-09-14 16:58:43.620][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 16:58:43.621][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="6", finish_reason=0, token IDs=[236825]
+[2026-09-14 16:58:43.621][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" Eurovision", finish_reason=0, token IDs=[164264]
+[2026-09-14 16:58:43.621][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" Song", finish_reason=0, token IDs=[15960]
+[2026-09-14 16:58:43.621][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text=" Contest"
+", finish_reason=0, token IDs=[74293, 236775, 107]
+[2026-09-14 16:58:43.622][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="}", finish_reason=0, token IDs=[236783]
+[2026-09-14 16:58:43.622][18892][llm_calculator][trace][ovms_text_streamer.cpp:214] OVMSTextStreamer: 32 tokens generated; full decode (skip_special=false): "<|tool_call>call:exa_web_search_exa{
+
+
+"query":"who won the 2026 Eurovision Song Contest"
+}<tool_call|><|tool_response>"; ids: [48, 6639, 236787, 190564, 236779, 5166, 236779, 2305, 236779, 190564, 236782, 109, 236775, 3278, 1083, 236775, 14625, 2810, 506, 236743, 236778, 236771, 236778, 236825, 164264, 15960, 74293, 236775, 107, 236783, 49, 50]
+[2026-09-14 16:58:43.622][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<tool_call|>", finish_reason=0, token IDs=[49]
+[2026-09-14 16:58:43.623][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<|tool_response>", finish_reason=0, token IDs=[50]
+[2026-09-14 16:58:43.623][18892][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 0 tokens, text="", finish_reason=1, token IDs=[]
+[2026-09-14 16:58:43.623][18892][llm_calculator][debug][servable.cpp:824] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"1CdvTYGf3","type":"function","function":{"name":"exa_web_search_exa","arguments":"{\"query\":\"who won the 2026 Eurovision Song Contest\"}"}}]}}],"created":1789397921,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":89,"completion_tokens":32,"total_tokens":121}}
+[2026-09-14 16:58:43.623][18892][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 89 | output_token_count: 32 | total_token_count: 121 | prepare_embeddings_time_ms: 2.276 | llm_ttft_ms: 652.694 | ttft_ms: 654.970 | prefill_speed_tps: 136.358 | image_slice_count: 0
+[2026-09-14 16:58:43.623][18892][llm_calculator][trace][http_llm_calculator.cc:192] LLMCalculator  [Node: LLMExecutor] Response prepared, sending it down the graph
+[2026-09-14 16:58:43.623][18892][llm_calculator][trace][http_llm_calculator.cc:226] LLMCalculator  [Node: LLMExecutor] Process end
+[2026-09-14 16:58:43.623][15228][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 16:58:43.686][1848][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 16:58:43.686][1848][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 16:58:43.686][1848][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 1153 bytes
+[2026-09-14 16:58:43.686][1848][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 16:58:43.686][1848][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 16:58:43.686][1848][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 16:58:43.686][1848][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 16:58:43.686][1848][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 16:58:43.686][18896][llm_calculator][trace][http_llm_calculator.cc:110] LLMCalculator  [Node: LLMExecutor] Process start
+[2026-09-14 16:58:43.686][18896][llm_calculator][debug][servable.cpp:1030] Request body: {"model":"gemma4","messages":[{"role":"user","content":"Please search the internet for the winner of the 2026 Eurovision Song Contest and report the winning country and song title."}],"tools":[{"type":"function","function":{"name":"exa_web_search_exa","description":"Search the web for any topic and get clean, ready-to-use content.","parameters":{"type":"object","properties":{"query":{"type":"string","description":"Natural language search query."},"objective":{"type":"string","description":"Goal for this search turn."},"numResults":{"type":"integer","description":"Number of search results to return."}},"required":["query"],"additionalProperties":false}}}],"tool_choice":"required","max_tokens":512,"temperature":0}
+[2026-09-14 16:58:43.686][18896][llm_calculator][debug][servable.cpp:1031] Request uri: /v3/chat/completions
+[2026-09-14 16:58:43.686][18896][llm_calculator][debug][servable.cpp:1033] Request header: host=127.0.0.1:18091
+[2026-09-14 16:58:43.686][18896][llm_calculator][debug][servable.cpp:1033] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.7.0
+[2026-09-14 16:58:43.686][18896][llm_calculator][debug][servable.cpp:1033] Request header: accept-encoding=gzip, deflate, br, zstd
+[2026-09-14 16:58:43.686][18896][llm_calculator][debug][servable.cpp:1033] Request header: content-type=application/json
+[2026-09-14 16:58:43.686][18896][llm_calculator][debug][servable.cpp:1033] Request header: content-length=1153
+[2026-09-14 16:58:43.686][18896][llm_calculator][debug][servable.cpp:564] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 16:58:43.686][18896][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 16:58:43.687][18896][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 16:58:43.688][18896][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:exa_web_search_exa{, <|tool_call>call:exa_web_search_exa(, <|tool_call>:exa_web_search_exa{, <|tool_call>:exa_web_search_exa(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 16:58:43.690][18896][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 16:58:43.690][18896][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyContentArrayNormalizationProcessor
+[2026-09-14 16:58:43.690][18896][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 3 us
+[2026-09-14 16:58:43.690][18896][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyToolCallsArrayRemovingProcessor
+[2026-09-14 16:58:43.690][18896][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 0 us
+[2026-09-14 16:58:43.690][18896][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ImageDecodingProcessor
+[2026-09-14 16:58:43.690][18896][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 2 us
+[2026-09-14 16:58:43.690][18896][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TextContentNormalizationProcessor
+[2026-09-14 16:58:43.690][18896][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 0 us
+[2026-09-14 16:58:43.690][18896][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateAdapter
+[2026-09-14 16:58:43.690][18896][llm_calculator][trace][chat_template_adapter.cpp:116] Applying chat template adaptations: supportsToolCalls=true, requiresObjectArguments=true, parseToolResponseJsonContent=true, missnamedReasoningField=, supportsResponseFieldInToolDefinition=true
+[2026-09-14 16:58:43.690][18896][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 10 us
+[2026-09-14 16:58:43.690][18896][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateProcessor
+[2026-09-14 16:58:43.690][18896][llm_calculator][trace][chat_template_processor.cpp:156] Chat history messages: [{"role":"user","content":"Please search the internet for the winner of the 2026 Eurovision Song Contest and report the winning country and song title."}]
+[2026-09-14 16:58:43.690][18896][llm_calculator][trace][chat_template_processor.cpp:157] chatHistory.get_extra_context(): {}
+[2026-09-14 16:58:43.690][18896][llm_calculator][trace][chat_template_processor.cpp:158] tools: [{"type":"function","function":{"name":"exa_web_search_exa","description":"Search the web for any topic and get clean, ready-to-use content.","parameters":{"type":"object","properties":{"query":{"type":"string","description":"Natural language search query."},"objective":{"type":"string","description":"Goal for this search turn."},"numResults":{"type":"integer","description":"Number of search results to return."}},"required":["query"],"additionalProperties":false}}}]
+[2026-09-14 16:58:43.690][18896][llm_calculator][trace][chat_template_processor.cpp:159] chatTemplateKwargs: <none>
+[2026-09-14 16:58:43.691][18896][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 748 us
+[2026-09-14 16:58:43.691][18896][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TokenizationProcessor
+[2026-09-14 16:58:43.691][18896][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 767 us
+[2026-09-14 16:58:43.691][18896][llm_calculator][trace][servable.cpp:752] prompt_token_ids: [2, 105, 9731, 107, 46, 163688, 236787, 190564, 236779, 5166, 236779, 2305, 236779, 190564, 236782, 7777, 236787, 52, 8980, 506, 4108, 573, 1027, 10562, 532, 974, 3980, 236764, 5508, 236772, 1071, 236772, 1930, 3004, 236761, 52, 236764, 19031, 29616, 15921, 29616, 3744, 16340, 29616, 7777, 236787, 52, 4452, 529, 3927, 2536, 531, 994, 236761, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 87685, 29616, 7777, 236787, 52, 35559, 573, 672, 3927, 2490, 236761, 52, 236764, 2084, 236787, 52, 35410, 52, 1263, 3278, 29616, 7777, 236787, 52, 39905, 5192, 3927, 7609, 236761, 52, 236764, 2084, 236787, 52, 35410, 52, 5237, 15979, 24845, 52, 3278, 52, 1604, 2084, 236787, 52, 60688, 52, 1807, 47, 106, 107, 105, 2364, 107, 9366, 3927, 506, 8379, 573, 506, 13961, 529, 506, 236743, 236778, 236771, 236778, 236825, 164264, 15960, 74293, 532, 2072, 506, 11806, 2891, 532, 5410, 3822, 236761, 106, 107, 105, 4368, 107, 100, 45518, 107, 101]
+[2026-09-14 16:58:43.691][18896][llm_calculator][trace][servable.cpp:753] Pipeline input text: <bos><|turn>system
+<|tool>declaration:exa_web_search_exa{description:<|"|>Search the web for any topic and get clean, ready-to-use content.<|"|>,parameters:{properties:{numResults:{description:<|"|>Number of search results to return.<|"|>,type:<|"|>INTEGER<|"|>},objective:{description:<|"|>Goal for this search turn.<|"|>,type:<|"|>STRING<|"|>},query:{description:<|"|>Natural language search query.<|"|>,type:<|"|>STRING<|"|>}},required:[<|"|>query<|"|>],type:<|"|>OBJECT<|"|>}}<tool|><turn|>
+<|turn>user
+Please search the internet for the winner of the 2026 Eurovision Song Contest and report the winning country and song title.<turn|>
+<|turn>model
+<|channel>thought
+<channel|>
+[2026-09-14 16:58:43.692][18896][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 16:58:43.694][18896][llm_calculator][trace][servable.cpp:78] Notifying executor thread
+[2026-09-14 16:58:43.694][18896][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 16:58:44.454][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:58:44.454][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:58:44.454][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:58:44.689][6300][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 25.0% of 47.8 MB;
+[2026-09-14 16:58:45.066][6300][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 25.0% of 47.8 MB;
+[2026-09-14 16:58:45.434][6300][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 27.3% of 47.8 MB;
+[2026-09-14 16:58:45.454][18920][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 16:58:45.455][18920][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 16:58:45.455][18920][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 16:58:45.509][18896][llm_calculator][trace][http_llm_calculator.cc:187] LLMCalculator  [Node: LLMExecutor] Received complete execution results, preparing response
+[2026-09-14 16:58:45.509][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="<|tool_call>", finish_reason=0, token IDs=[48]
+[2026-09-14 16:58:45.509][6300][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 16:58:45.510][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="call", finish_reason=0, token IDs=[6639]
+[2026-09-14 16:58:45.511][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text=":", finish_reason=0, token IDs=[236787]
+[2026-09-14 16:58:45.511][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="exa", finish_reason=0, token IDs=[190564]
+[2026-09-14 16:58:45.511][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 16:58:45.512][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="web", finish_reason=0, token IDs=[5166]
+[2026-09-14 16:58:45.512][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 16:58:45.512][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="search", finish_reason=0, token IDs=[2305]
+[2026-09-14 16:58:45.512][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 16:58:45.513][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 3 tokens, text="exa{
+", finish_reason=0, token IDs=[190564, 236782, 107]
+[2026-09-14 16:58:45.513][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 16:58:45.514][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="query", finish_reason=0, token IDs=[3278]
+[2026-09-14 16:58:45.514][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="":", finish_reason=0, token IDs=[1083]
+[2026-09-14 16:58:45.514][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 16:58:45.514][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="who", finish_reason=0, token IDs=[14625]
+[2026-09-14 16:58:45.515][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" won", finish_reason=0, token IDs=[2810]
+[2026-09-14 16:58:45.515][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" the", finish_reason=0, token IDs=[506]
+[2026-09-14 16:58:45.516][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" ", finish_reason=0, token IDs=[236743]
+[2026-09-14 16:58:45.516][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 16:58:45.516][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="0", finish_reason=0, token IDs=[236771]
+[2026-09-14 16:58:45.517][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 16:58:45.517][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="6", finish_reason=0, token IDs=[236825]
+[2026-09-14 16:58:45.517][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" Eurovision", finish_reason=0, token IDs=[164264]
+[2026-09-14 16:58:45.518][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" Song", finish_reason=0, token IDs=[15960]
+[2026-09-14 16:58:45.518][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text=" Contest"
+", finish_reason=0, token IDs=[74293, 236775, 107]
+[2026-09-14 16:58:45.519][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="}", finish_reason=0, token IDs=[236783]
+[2026-09-14 16:58:45.519][18896][llm_calculator][trace][ovms_text_streamer.cpp:214] OVMSTextStreamer: 32 tokens generated; full decode (skip_special=false): "<|tool_call>call:exa_web_search_exa{
+"query":"who won the 2026 Eurovision Song Contest"
+}<tool_call|><|tool_response>"; ids: [48, 6639, 236787, 190564, 236779, 5166, 236779, 2305, 236779, 190564, 236782, 107, 236775, 3278, 1083, 236775, 14625, 2810, 506, 236743, 236778, 236771, 236778, 236825, 164264, 15960, 74293, 236775, 107, 236783, 49, 50]
+[2026-09-14 16:58:45.519][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<tool_call|>", finish_reason=0, token IDs=[49]
+[2026-09-14 16:58:45.519][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<|tool_response>", finish_reason=0, token IDs=[50]
+[2026-09-14 16:58:45.519][18896][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 0 tokens, text="", finish_reason=1, token IDs=[]
+[2026-09-14 16:58:45.520][18896][llm_calculator][debug][servable.cpp:824] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"sokiU4Jc2","type":"function","function":{"name":"exa_web_search_exa","arguments":"{\"query\":\"who won the 2026 Eurovision Song Contest\"}"}}]}}],"created":1789397923,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":152,"completion_tokens":32,"total_tokens":184}}
+[2026-09-14 16:58:45.520][18896][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 152 | output_token_count: 32 | total_token_count: 184 | prepare_embeddings_time_ms: 2.059 | llm_ttft_ms: 611.369 | ttft_ms: 613.428 | prefill_speed_tps: 248.622 | image_slice_count: 0
+[2026-09-14 16:58:45.520][18896][llm_calculator][trace][http_llm_calculator.cc:192] LLMCalculator  [Node: LLMExecutor] Response prepared, sending it down the graph
+[2026-09-14 16:58:45.520][18896][llm_calculator][trace][http_llm_calculator.cc:226] LLMCalculator  [Node: LLMExecutor] Process end
+[2026-09-14 16:58:45.520][1848][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4

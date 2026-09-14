@@ -1,0 +1,34 @@
+{
+  "tool_choice": "auto",
+  "max_tokens": 256,
+  "messages": [
+    {
+      "content": "Please execute the echo tool with text set to 'hello clean control'.",
+      "role": "user"
+    }
+  ],
+  "tools": [
+    {
+      "function": {
+        "name": "echo",
+        "parameters": {
+          "additionalProperties": false,
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text to echo."
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "type": "object"
+        },
+        "description": "Echo back the given text."
+      },
+      "type": "function"
+    }
+  ],
+  "model": "gemma4",
+  "temperature": 0
+}
