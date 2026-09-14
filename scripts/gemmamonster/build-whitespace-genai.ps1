@@ -48,4 +48,12 @@ cmake --install "$build" --config Release --prefix "$runtime"
     [IO.File]::WriteAllText($cmdFile, $commands, [Text.UTF8Encoding]::new($false))
     & cmd.exe /d /c $cmdFile
     if ($LASTEXITCODE -ne 0) { throw "GenAI build/install failed: $LASTEXITCODE" }
+    $provenance = [ordered]@{
+        genai_base = $genaiSha
+        xgrammar_head = $xgrammarSha
+        xgrammar_submodules = @(& git -C $xgrammar submodule status --recursive)
+        patches = @(Get-ChildItem "$PSScriptRoot/patches/*.patch" | Get-FileHash -Algorithm SHA256 | Select-Object Path,Hash)
+        installed_genai = Get-FileHash "$runtime/runtime/bin/intel64/Release/openvino_genai.dll" -Algorithm SHA256 | Select-Object Path,Hash
+    }
+    $provenance | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $RuntimeRoot 'whitespace-dependencies.json')
 } finally { Pop-Location }
