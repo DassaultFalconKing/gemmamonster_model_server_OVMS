@@ -246,13 +246,11 @@ void OVMSTextStreamer::end(ov::genai::GenerationFinishReason finish_reason) {
     for (const int64_t token : unprinted) {
         const auto status = write(token, /*immediate_flush=*/true);
         if (status != ov::genai::StreamingStatus::RUNNING) {
-            break;  // cancelled mid-drain; still deliver the STOP signal below
+            break;  // cancelled mid-drain; still deliver the terminal reason below
         }
     }
 
-    // Always deliver the STOP signal so parsers that rely on finishReason==STOP
-    // for cleanup receive it (e.g. hasPendingState flush in Lfm2ToolParser,
-    // argument string finalisation in Hermes3ToolParser).
+    // Deliver the actual terminal reason. The legacy no-argument end() retains STOP.
     const std::string final_text = m_tokens_cache.empty()
                                        ? std::string{}
                                        : m_tokenizer.decode(m_tokens_cache, m_additional_detokenization_params);
@@ -315,7 +313,8 @@ ov::genai::StreamingStatus OVMSTextStreamer::flush_chunk(
             SPDLOG_LOGGER_WARN(llm_calculator_logger,
                 "Incomplete tool frame: parser_phase={} finish_reason={} pending_tool_frame=true buffered_bytes={} generated_tokens={} tool_name={}",
                 pending->phase,
-                finish_reason == ov::genai::GenerationFinishReason::LENGTH ? "LENGTH" : "STOP",
+                finish_reason == ov::genai::GenerationFinishReason::LENGTH ? "LENGTH" :
+                    finish_reason == ov::genai::GenerationFinishReason::TOOL_CALL ? "TOOL_CALL" : "STOP",
                 pending->bufferedBytes, m_generated_tokens, pending->toolName);
         }
     }

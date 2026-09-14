@@ -35,7 +35,8 @@ namespace ovms {
 // Guarantees provided by OVMSTextStreamer:
 //   - Ordered delivery: tokens are passed to OutputParser in the exact generation order,
 //     one logical chunk at a time.
-//   - Final flush: end() ALWAYS calls parseChunk("", [], finishReason=STOP) after all tokens
+//   - Final flush: end(reason) calls parseChunk with the terminal reason after all tokens;
+//     the no-argument end() preserves STOP. This is done after all tokens
 //     have been processed.  This is the "at least one subsequent call after every phase
 //     transition" guarantee that OutputParser depends on to drain buffered remainders.
 //   - Phase-aware decode mode: after every write(), the streamer queries
