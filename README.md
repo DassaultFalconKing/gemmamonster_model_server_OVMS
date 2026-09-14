@@ -186,7 +186,7 @@ docker pull openvino/model_server:weekly        # pre-production version with al
 - [Docker Hub](https://hub.docker.com/r/openvino/model_server)
 - [Red Hat Ecosystem Catalog](https://catalog.redhat.com/software/containers/intel/openvino-model-server/607833052937385fc98515de)
 
-**Binary official packages** (Linux & Windows): [GitHub Releases](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/releases)
+**GEMMAMONSTER binary packages** (Windows x64): [Fork Releases](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/releases)
 
 
 Binary pre-production packages (Linux & Windows): [storage.openvinotoolkit.org](https://storage.openvinotoolkit.org/repositories/openvino_model_server/packages/weekly/)
