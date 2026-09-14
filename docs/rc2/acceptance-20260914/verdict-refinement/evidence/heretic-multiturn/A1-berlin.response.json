@@ -1,0 +1,1 @@
+{"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"2A27FSgrO","type":"function","function":{"name":"get_weather","arguments":"{\"city\":\"Berlin\"}"}}]}}],"created":1789392249,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":76,"completion_tokens":18,"total_tokens":94}}
