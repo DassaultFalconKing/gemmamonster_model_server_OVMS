@@ -1,0 +1,281 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Call the echo tool exactly once per turn with the next list item as text, in order, starting with sweep-item-1. After each tool result, continue with the next item on the following turn. Do not write any text, only call the tool. List: sweep-item-1, sweep-item-2, sweep-item-3, sweep-item-4, sweep-item-5, sweep-item-6, sweep-item-7, sweep-item-8, sweep-item-9, sweep-item-10, sweep-item-11, sweep-item-12, sweep-item-13, sweep-item-14, sweep-item-15, sweep-item-16, sweep-item-17, sweep-item-18, sweep-item-19, sweep-item-20, sweep-item-21, sweep-item-22, sweep-item-23, sweep-item-24, sweep-item-25, sweep-item-26, sweep-item-27, sweep-item-28, sweep-item-29, sweep-item-30, sweep-item-31, sweep-item-32."
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "FURTGl5UZ",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-1\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "FURTGl5UZ",
+      "content": "{\"echoed\":\"sweep-item-1\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "jzkIBZxXv",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-2\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "jzkIBZxXv",
+      "content": "{\"echoed\":\"sweep-item-2\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "gDG1msbdF",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-3\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "gDG1msbdF",
+      "content": "{\"echoed\":\"sweep-item-3\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "yY9SP2Lwh",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-4\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "yY9SP2Lwh",
+      "content": "{\"echoed\":\"sweep-item-4\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "GQ1TWUwxc",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-5\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "GQ1TWUwxc",
+      "content": "{\"echoed\":\"sweep-item-5\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "xJrCfm89G",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-6\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "xJrCfm89G",
+      "content": "{\"echoed\":\"sweep-item-6\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "OKGfFaP9K",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-7\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "OKGfFaP9K",
+      "content": "{\"echoed\":\"sweep-item-7\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "5pODtkDUe",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-8\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "5pODtkDUe",
+      "content": "{\"echoed\":\"sweep-item-8\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "T2eg6EVoJ",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-9\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "T2eg6EVoJ",
+      "content": "{\"echoed\":\"sweep-item-9\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "bRUvGyzDP",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-10\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "bRUvGyzDP",
+      "content": "{\"echoed\":\"sweep-item-10\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "G3vzTEAGk",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-11\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "G3vzTEAGk",
+      "content": "{\"echoed\":\"sweep-item-11\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "Sve1BQhSO",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-12\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "Sve1BQhSO",
+      "content": "{\"echoed\":\"sweep-item-12\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "W9dREdUSe",
+          "type": "function",
+          "function": {
+            "name": "echo",
+            "arguments": "{\"text\":\"sweep-item-13\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "W9dREdUSe",
+      "content": "{\"echoed\":\"sweep-item-13\"}"
+    }
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "echo",
+        "description": "Echo back the given text.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text to echo."
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 256,
+  "temperature": 0
+}

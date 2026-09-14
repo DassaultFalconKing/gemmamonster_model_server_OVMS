@@ -1,0 +1,3 @@
+[2026-09-14 19:52:50.111][21136][modelmanager][debug][mediapipegraphdefinition.cpp:299] Finished validation of mediapipe: gemma4
+[2026-09-14 19:52:50.111][21136][modelmanager][debug][pipelinedefinitionstatus.hpp:52] Mediapipe: gemma4 state: BEGIN handling: ValidationPassedEvent: 
+[2026-09-14 19:52:50.111][21136][modelmanager][info][pipelinedefinitionstatus.hpp:61] Mediapipe: gemma4 state changed to: AVAILABLE after handling: ValidationPassedEvent: 

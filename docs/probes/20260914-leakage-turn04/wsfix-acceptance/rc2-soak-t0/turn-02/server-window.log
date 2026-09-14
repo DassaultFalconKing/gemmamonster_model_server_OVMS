@@ -1,0 +1,217 @@
+                                    {{- '<|audio|>' -}}
+                                {%- elif part is mapping and 'type' in part and part['type'] == 'video' -%}
+                                    {{- '<|video|>' -}}
+                                {%- endif -%}
+                            {%- endfor -%}
+                        {%- else -%}
+                            {{- format_tool_response_block(ns_tname.name, tool_body) -}}
+                        {%- endif -%}
+                        {%- set ns_tr_out.flag = true -%}
+                        {%- set ns.prev_message_type = 'tool_response' -%}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endif -%}
+
+            {%- set captured_content -%}
+            {%- if 'content' in message and message['content'] is string -%}
+                {%- if role == 'model' -%}
+                    {{- strip_thinking(message['content']) -}}
+                {%- else -%}
+                    {{- message['content'] | trim -}}
+                {%- endif -%}
+            {%- elif 'content' in message and message['content'] is iterable and message['content'] is not string -%}
+                {%- for item in message['content'] -%}
+                    {%- if item is mapping and 'type' in item and item['type'] == 'text' and 'text' in item -%}
+                        {%- if role == 'model' -%}
+                            {{- strip_thinking(item['text']) -}}
+                        {%- else -%}
+                            {{- item['text'] | trim -}}
+                        {%- endif -%}
+                    {%- elif item is mapping and 'type' in item and item['type'] in ['image', 'image_url'] -%}
+                        {{- '<|image|>' -}}
+                    {%- elif item is mapping and 'type' in item and item['type'] in ['audio', 'input_audio'] -%}
+                        {{- '<|audio|>' -}}
+                    {%- elif item is mapping and 'type' in item and item['type'] == 'video' -%}
+                        {{- '<|video|>' -}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endif -%}
+            {%- endset -%}
+
+            {{- captured_content -}}
+            {%- set has_content = captured_content | trim | length > 0 -%}
+
+        {#- Forward-scan: find next non-tool message role for continuation detection -#}
+        {%- set next_nt = namespace(role=None, found=false) -%}
+        {%- for j in range(loop.index0 + 1, loop_messages | length) -%}
+            {%- if not next_nt.found -%}
+                {%- if loop_messages[j]['role'] != 'tool' -%}
+                    {%- set next_nt.role = loop_messages[j]['role'] -%}
+                    {%- set next_nt.found = true -%}
+                {%- endif -%}
+            {%- endif -%}
+        {%- endfor -%}
+
+        {%- set continues_into_next = (
+            role == 'model'
+            and next_nt.role == 'assistant'
+            and not message_has_tool_calls
+            and not ns_tr_out.flag
+        ) -%}
+
+        {%- if ns.prev_message_type == 'tool_call' and not ns_tr_out.flag -%}
+            {{- '<|tool_response>' -}}
+        {%- elif continues_into_next -%}
+            {{- '\n' -}}
+        {%- elif not (ns_tr_out.flag and not has_content) -%}
+            {{- '<turn|>\n' -}}
+        {%- endif -%}
+
+    {#- Track previous non-tool role for next iteration (avoids O(n) backward scan) -#}
+    {%- set ns.prev_non_tool_role = message['role'] -%}
+    {%- endif -%}
+{%- endfor -%}
+
+{%- if add_generation_prompt is defined and add_generation_prompt -%}
+    {%- if ns.prev_message_type != 'tool_response' and ns.prev_message_type != 'tool_call' -%}
+        {{- '<|turn>model\n' -}}
+    {%- endif -%}
+
+    {%- if not enable_thinking -%}
+        {#- Suppress thinking — but not when awaiting tool responses -#}
+        {%- if ns.prev_message_type != 'tool_call' -%}
+            {{- '<|channel>thought\n<channel|>' -}}
+        {%- endif -%}
+    {%- endif -%}
+{%- endif -%}
+
+[2026-09-14 19:52:50.104][21136][llm_calculator][debug][servable_initializer.cpp:209] Using the chat template from: C:/llm/models/OpenVINO/Wondernutts/gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov\chat_template.jinja
+[2026-09-14 19:52:50.105][21136][llm_calculator][debug][servable_initializer.cpp:222] Chat template capabilities: supportsToolCalls=true, requiresObjectArguments=false, parseToolResponseJsonContent=true, missnamedReasoningField=, supportsResponseFieldInToolDefinition=true
+[2026-09-14 19:52:50.105][21136][llm_calculator][info][servable_initializer.cpp:231] Auto-detected tool_parser: gemma4
+[2026-09-14 19:52:50.105][21136][llm_calculator][info][servable_initializer.cpp:241] Auto-detected reasoning_parser: gemma4
+[2026-09-14 19:52:50.107][21136][llm_calculator][debug][probe.cpp:128] Dry-run probe overrides requiresObjectArguments: false -> true
+[2026-09-14 19:52:50.108][10800][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 19:52:50.111][21136][serving][debug][mediapipegraphdefinition.cpp:321] Created graph queue with size 8 for mediapipe: gemma4
+[2026-09-14 19:52:50.111][21136][modelmanager][debug][mediapipegraphdefinition.cpp:299] Finished validation of mediapipe: gemma4
+[2026-09-14 19:52:50.111][21136][modelmanager][info][mediapipegraphdefinition.cpp:300] Mediapipe: gemma4 inputs: 
+name: input; mapping: ; shape: (); precision: UNDEFINED; layout: ...
+[2026-09-14 19:52:50.111][21136][modelmanager][info][mediapipegraphdefinition.cpp:301] Mediapipe: gemma4 outputs: 
+name: output; mapping: ; shape: (); precision: UNDEFINED; layout: ...
+[2026-09-14 19:52:50.111][21136][modelmanager][info][mediapipegraphdefinition.cpp:302] Mediapipe: gemma4 kfs pass through: false
+[2026-09-14 19:52:50.111][21136][modelmanager][debug][pipelinedefinitionstatus.hpp:52] Mediapipe: gemma4 state: BEGIN handling: ValidationPassedEvent: 
+[2026-09-14 19:52:50.111][21136][modelmanager][info][pipelinedefinitionstatus.hpp:61] Mediapipe: gemma4 state changed to: AVAILABLE after handling: ValidationPassedEvent: 
+[2026-09-14 19:52:50.112][18864][serving][info][servablemanagermodule.cpp:55] ServableManagerModule started
+[2026-09-14 19:52:50.112][18964][modelmanager][info][modelmanager.cpp:1184] Started model manager thread
+[2026-09-14 19:52:50.112][24476][modelmanager][info][modelmanager.cpp:1213] Started cleaner thread
+[2026-09-14 19:52:50.745][22704][serving][debug][drogon_http_server.cpp:104] Request URI working in drogon thread pool
+[2026-09-14 19:52:50.745][22704][serving][debug][http_server.cpp:167] REST request /v3/models
+[2026-09-14 19:52:50.745][22704][serving][debug][http_server.cpp:178] Processing HTTP request: GET /v3/models body: 0 bytes
+[2026-09-14 19:52:50.798][22588][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 19:52:50.798][22588][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 19:52:50.798][22588][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 737 bytes
+[2026-09-14 19:52:50.798][22588][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 19:52:50.798][22588][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 19:52:50.798][22588][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 19:52:50.798][22588][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 19:52:50.798][22588][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 19:52:50.799][5140][llm_calculator][debug][servable.cpp:1030] Request body: {"tool_choice":"auto","max_tokens":256,"messages":[{"content":"Please execute the echo tool with text set to 'hello clean control'.","role":"user"}],"tools":[{"function":{"name":"echo","parameters":{"additionalProperties":false,"properties":{"text":{"type":"string","description":"Text to echo."}},"required":["text"],"type":"object"},"description":"Echo back the given text."},"type":"function"}],"model":"gemma4","temperature":0}
+[2026-09-14 19:52:50.799][5140][llm_calculator][debug][servable.cpp:1031] Request uri: /v3/chat/completions
+[2026-09-14 19:52:50.799][5140][llm_calculator][debug][servable.cpp:1033] Request header: host=127.0.0.1:18091
+[2026-09-14 19:52:50.799][5140][llm_calculator][debug][servable.cpp:1033] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 19:52:50.799][5140][llm_calculator][debug][servable.cpp:1033] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 19:52:50.799][5140][llm_calculator][debug][servable.cpp:1033] Request header: content-length=737
+[2026-09-14 19:52:50.799][5140][llm_calculator][debug][servable.cpp:1033] Request header: content-type=application/json
+[2026-09-14 19:52:50.799][5140][llm_calculator][info][servable.cpp:381] session-state: store disabled; OVMS_SESSION_STORE_DIR is unset
+[2026-09-14 19:52:50.799][5140][llm_calculator][debug][servable.cpp:564] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 19:52:50.799][5140][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 19:52:50.801][5140][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 19:52:50.804][5140][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:echo{, <|tool_call>call:echo(, <|tool_call>:echo{, <|tool_call>:echo(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 19:52:50.890][5140][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 19:52:50.891][5140][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 5 us
+[2026-09-14 19:52:50.891][5140][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 1 us
+[2026-09-14 19:52:50.891][5140][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 4 us
+[2026-09-14 19:52:50.891][5140][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 0 us
+[2026-09-14 19:52:50.891][5140][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 9 us
+[2026-09-14 19:52:50.891][5140][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 561 us
+[2026-09-14 19:52:50.892][5140][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 1096 us
+[2026-09-14 19:52:50.892][5140][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 19:52:50.899][5140][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 19:52:52.135][10800][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 54.5% of 12.0 MB;
+[2026-09-14 19:52:52.482][10800][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 19:52:52.486][5140][llm_calculator][debug][servable.cpp:824] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"JkQKP5NvS","type":"function","function":{"name":"echo","arguments":"{\"text\":\"hello clean control\"}"}}]}}],"created":1789408370,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":82,"completion_tokens":19,"total_tokens":101}}
+[2026-09-14 19:52:52.486][5140][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 82 | output_token_count: 19 | total_token_count: 101 | prepare_embeddings_time_ms: 5.371 | llm_ttft_ms: 829.295 | ttft_ms: 834.666 | prefill_speed_tps: 98.879 | image_slice_count: 0
+[2026-09-14 19:52:52.487][22588][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 19:53:46.492][13420][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 19:53:46.493][13420][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 19:53:46.493][13420][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 1375 bytes
+[2026-09-14 19:53:46.493][13420][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 19:53:46.493][13420][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 19:53:46.493][13420][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 19:53:46.493][13420][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 19:53:46.493][13420][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 19:53:46.493][25316][llm_calculator][debug][servable.cpp:1030] Request body: {"model":"gemma4","messages":[{"role":"user","content":"Call the echo tool exactly once per turn with the next list item as text, in order, starting with sweep-item-1. After each tool result, continue with the next item on the following turn. Do not write any text, only call the tool. List: sweep-item-1, sweep-item-2, sweep-item-3, sweep-item-4, sweep-item-5, sweep-item-6, sweep-item-7, sweep-item-8, sweep-item-9, sweep-item-10, sweep-item-11, sweep-item-12, sweep-item-13, sweep-item-14, sweep-item-15, sweep-item-16, sweep-item-17, sweep-item-18, sweep-item-19, sweep-item-20, sweep-item-21, sweep-item-22, sweep-item-23, sweep-item-24, sweep-item-25, sweep-item-26, sweep-item-27, sweep-item-28, sweep-item-29, sweep-item-30, sweep-item-31, sweep-item-32."}],"tools":[{"type":"function","function":{"name":"echo","description":"Echo back the given text.","parameters":{"type":"object","properties":{"text":{"type":"string","description":"Text to echo."}},"required":["text"],"additionalProperties":false}}}],"tool_choice":"auto","max_tokens":256,"temperature":0}
+[2026-09-14 19:53:46.493][25316][llm_calculator][debug][servable.cpp:1031] Request uri: /v3/chat/completions
+[2026-09-14 19:53:46.493][25316][llm_calculator][debug][servable.cpp:1033] Request header: host=127.0.0.1:18091
+[2026-09-14 19:53:46.493][25316][llm_calculator][debug][servable.cpp:1033] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 19:53:46.493][25316][llm_calculator][debug][servable.cpp:1033] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 19:53:46.493][25316][llm_calculator][debug][servable.cpp:1033] Request header: content-length=1375
+[2026-09-14 19:53:46.493][25316][llm_calculator][debug][servable.cpp:1033] Request header: content-type=application/json
+[2026-09-14 19:53:46.493][25316][llm_calculator][debug][servable.cpp:564] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 19:53:46.493][25316][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 19:53:46.493][25316][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 19:53:46.495][25316][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:echo{, <|tool_call>call:echo(, <|tool_call>:echo{, <|tool_call>:echo(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 19:53:46.495][25316][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 19:53:46.495][25316][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 2 us
+[2026-09-14 19:53:46.495][25316][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 0 us
+[2026-09-14 19:53:46.495][25316][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 2 us
+[2026-09-14 19:53:46.495][25316][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 0 us
+[2026-09-14 19:53:46.495][25316][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 7 us
+[2026-09-14 19:53:46.496][25316][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 482 us
+[2026-09-14 19:53:46.496][25316][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 717 us
+[2026-09-14 19:53:46.496][25316][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 19:53:46.501][25316][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 19:53:47.204][10800][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 50.0% of 41.3 MB;
+[2026-09-14 19:53:47.960][10800][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 57.9% of 41.3 MB;
+[2026-09-14 19:53:48.321][10800][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 60.5% of 41.3 MB;
+[2026-09-14 19:53:48.430][10800][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 19:53:48.433][25316][llm_calculator][debug][servable.cpp:824] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"FURTGl5UZ","type":"function","function":{"name":"echo","arguments":"{\"text\":\"sweep-item-1\"}"}}]}}],"created":1789408426,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":338,"completion_tokens":23,"total_tokens":361}}
+[2026-09-14 19:53:48.433][25316][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 338 | output_token_count: 23 | total_token_count: 361 | prepare_embeddings_time_ms: 2.967 | llm_ttft_ms: 1115.456 | ttft_ms: 1118.423 | prefill_speed_tps: 303.015 | image_slice_count: 0
+[2026-09-14 19:53:48.433][13420][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 19:53:49.029][4632][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 19:53:49.029][4632][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 19:53:49.029][4632][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 1802 bytes
+[2026-09-14 19:53:49.029][4632][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 19:53:49.029][4632][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 19:53:49.029][4632][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 19:53:49.029][4632][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 19:53:49.029][4632][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 19:53:49.029][9172][llm_calculator][debug][servable.cpp:1030] Request body: {"model":"gemma4","messages":[{"role":"user","content":"Call the echo tool exactly once per turn with the next list item as text, in order, starting with sweep-item-1. After each tool result, continue with the next item on the following turn. Do not write any text, only call the tool. List: sweep-item-1, sweep-item-2, sweep-item-3, sweep-item-4, sweep-item-5, sweep-item-6, sweep-item-7, sweep-item-8, sweep-item-9, sweep-item-10, sweep-item-11, sweep-item-12, sweep-item-13, sweep-item-14, sweep-item-15, sweep-item-16, sweep-item-17, sweep-item-18, sweep-item-19, sweep-item-20, sweep-item-21, sweep-item-22, sweep-item-23, sweep-item-24, sweep-item-25, sweep-item-26, sweep-item-27, sweep-item-28, sweep-item-29, sweep-item-30, sweep-item-31, sweep-item-32."},{"role":"assistant","content":"","tool_calls":[{"id":"FURTGl5UZ","type":"function","function":{"name":"echo","arguments":"{\"text\":\"sweep-item-1\"}"}}]},{"role":"tool","tool_call_id":"FURTGl5UZ","content":"{\"echoed\":\"sweep-item-1\"}"}],"tools":[{"type":"function","function":{"name":"echo","description":"Echo back the given text.","parameters":{"type":"object","properties":{"text":{"type":"string","description":"Text to echo."}},"required":["text"],"additionalProperties":false}}}],"tool_choice":"auto","max_tokens":256,"temperature":0}
+[2026-09-14 19:53:49.029][9172][llm_calculator][debug][servable.cpp:1031] Request uri: /v3/chat/completions
+[2026-09-14 19:53:49.029][9172][llm_calculator][debug][servable.cpp:1033] Request header: host=127.0.0.1:18091
+[2026-09-14 19:53:49.029][9172][llm_calculator][debug][servable.cpp:1033] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 19:53:49.029][9172][llm_calculator][debug][servable.cpp:1033] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 19:53:49.029][9172][llm_calculator][debug][servable.cpp:1033] Request header: content-length=1802
+[2026-09-14 19:53:49.029][9172][llm_calculator][debug][servable.cpp:1033] Request header: content-type=application/json
+[2026-09-14 19:53:49.029][9172][llm_calculator][debug][servable.cpp:564] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 19:53:49.029][9172][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 19:53:49.029][9172][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 19:53:49.030][9172][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:echo{, <|tool_call>call:echo(, <|tool_call>:echo{, <|tool_call>:echo(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 19:53:49.031][9172][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 19:53:49.031][9172][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 2 us
+[2026-09-14 19:53:49.031][9172][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 2 us
+[2026-09-14 19:53:49.031][9172][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 4 us
+[2026-09-14 19:53:49.031][9172][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 1 us
+[2026-09-14 19:53:49.031][9172][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 743 us
+[2026-09-14 19:53:49.032][9172][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 649 us
+[2026-09-14 19:53:49.032][9172][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 441 us
+[2026-09-14 19:53:49.033][9172][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 19:53:49.037][9172][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 19:53:50.013][10800][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 60.0% of 43.5 MB;
+[2026-09-14 19:53:50.378][10800][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 62.5% of 43.5 MB;
+[2026-09-14 19:53:50.524][10800][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 19:53:50.527][9172][llm_calculator][debug][servable.cpp:824] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"jzkIBZxXv","type":"function","function":{"name":"echo","arguments":"{\"text\":\"sweep-item-2\"}"}}]}}],"created":1789408429,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":371,"completion_tokens":21,"total_tokens":392}}
+[2026-09-14 19:53:50.527][9172][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 371 | output_token_count: 21 | total_token_count: 392 | prepare_embeddings_time_ms: 3.438 | llm_ttft_ms: 734.245 | ttft_ms: 737.683 | prefill_speed_tps: 505.281 | image_slice_count: 0
+[2026-09-14 19:53:50.528][4632][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4

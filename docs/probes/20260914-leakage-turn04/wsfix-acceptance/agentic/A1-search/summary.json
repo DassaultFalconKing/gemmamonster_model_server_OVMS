@@ -1,0 +1,11 @@
+{
+  "finish": "tool_calls",
+  "calls": 1,
+  "names": "exa_web_search_exa",
+  "args": "{\"query\":\"who won the 2026 Eurovision Song Contest\"}",
+  "content_len": 0,
+  "content": "",
+  "has_call_tag": false,
+  "ptok": 143,
+  "ctok": 32
+}

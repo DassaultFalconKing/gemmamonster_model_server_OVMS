@@ -1,0 +1,1 @@
+{"choices":[{"finish_reason":"stop","index":0,"logprobs":null,"message":{"content":"The winner of the 2026 Eurovision Song Contest is **Austria** with the song \"**Hallucination**.\"","role":"assistant","tool_calls":[]}}],"created":1789408986,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":244,"completion_tokens":26,"total_tokens":270}}

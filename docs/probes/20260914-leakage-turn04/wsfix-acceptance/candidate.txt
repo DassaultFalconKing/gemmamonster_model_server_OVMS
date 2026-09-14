@@ -1,0 +1,1 @@
+candidate=17064400-maintainer-rc2-whitespace-fix-20260914T172941Z ovms.exe=AF921BB2 source=17064400 branch=fix/gemma4-whitespace-loop-20260914

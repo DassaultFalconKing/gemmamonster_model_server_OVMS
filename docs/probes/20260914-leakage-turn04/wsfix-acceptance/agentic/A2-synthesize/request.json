@@ -1,0 +1,65 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Search the internet for the winner of the 2026 Eurovision Song Contest."
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "OXuASyFPl",
+          "type": "function",
+          "function": {
+            "name": "exa_web_search_exa",
+            "arguments": "{\"query\":\"who won the 2026 Eurovision Song Contest\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "OXuASyFPl",
+      "content": "{\"results\":[{\"title\":\"Eurovision 2026 winner\",\"text\":\"Austria won the Eurovision Song Contest 2026 with the song Hallucination.\"}]}"
+    },
+    {
+      "role": "user",
+      "content": "Based on the search result, report the winning country and song title."
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 512,
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "exa_web_search_exa",
+        "description": "Search the web for any topic and get clean, ready-to-use content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Natural language search query."
+            },
+            "objective": {
+              "type": "string",
+              "description": "Goal for this search turn."
+            },
+            "numResults": {
+              "type": "integer",
+              "description": "Number of search results to return."
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

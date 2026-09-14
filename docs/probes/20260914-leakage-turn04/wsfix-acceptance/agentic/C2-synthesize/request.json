@@ -1,0 +1,62 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Find the capital city of Kazakhstan using web search."
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "PWjbjSE1v",
+          "type": "function",
+          "function": {
+            "name": "exa_web_search_exa",
+            "arguments": "{\"query\":\"capital city of Kazakhstan\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "PWjbjSE1v",
+      "content": "{\"results\":[{\"title\":\"Kazakhstan capital\",\"text\":\"The capital of Kazakhstan is Astana.\"}]}"
+    },
+    {
+      "role": "user",
+      "content": "What is the capital? Answer in one short sentence."
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 512,
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "exa_web_search_exa",
+        "description": "Search the web.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string"
+            },
+            "objective": {
+              "type": "string"
+            },
+            "numResults": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

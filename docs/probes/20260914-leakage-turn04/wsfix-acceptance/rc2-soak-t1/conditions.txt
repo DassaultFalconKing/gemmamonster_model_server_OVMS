@@ -1,0 +1,1 @@
+graph=standard-prefix-true max_num_seqs=256 device=GPU VLM_CB temp=1.0 top_p=0.95 top_k=64 max_tokens=256 parallel_tool_calls=false candidate=17064400

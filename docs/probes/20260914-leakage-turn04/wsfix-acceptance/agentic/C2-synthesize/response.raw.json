@@ -1,0 +1,1 @@
+{"choices":[{"finish_reason":"stop","index":0,"logprobs":null,"message":{"content":"The capital of Kazakhstan is Astana.","role":"assistant","tool_calls":[]}}],"created":1789409007,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":166,"completion_tokens":8,"total_tokens":174}}
