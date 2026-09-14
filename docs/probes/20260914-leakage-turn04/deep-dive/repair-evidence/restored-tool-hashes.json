@@ -1,0 +1,22 @@
+[
+  {
+    "Path": "C:\\opt\\bazel.exe",
+    "Hash": "FF94279F7DE7EC604C40B5D760F0DC10BDC880F07E915ADCED825F53E5F4FA1B"
+  },
+  {
+    "Path": "C:\\opt\\bazel-before-whitespace-repair-20260914.exe",
+    "Hash": "FF94279F7DE7EC604C40B5D760F0DC10BDC880F07E915ADCED825F53E5F4FA1B"
+  },
+  {
+    "Path": "C:\\opt\\bazel-6.1.1-windows-x86_64.exe",
+    "Hash": "1D997D344936A1D98784AE58DB1152D083569556F85CD845E6E340EE855357F9"
+  },
+  {
+    "Path": "C:\\git\\artifacts\\windows_cc_configure-before-whitespace-repair.bzl",
+    "Hash": "A23F795873DE477686CEC83C22339F68FB88D59180E5534B665A098DD16EFA50"
+  },
+  {
+    "Path": "C:\\g54r2\\f3bslrdg\\external\\bazel_tools\\tools\\cpp\\windows_cc_configure.bzl",
+    "Hash": "A23F795873DE477686CEC83C22339F68FB88D59180E5534B665A098DD16EFA50"
+  }
+]

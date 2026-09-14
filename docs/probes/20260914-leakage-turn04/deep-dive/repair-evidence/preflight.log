@@ -1,0 +1,34 @@
+
+ENV_PREFLIGHT      : PASS
+BRANCH             : fix/gemma4-whitespace-loop-20260914
+SOURCE_HEAD        : 5775cfe36506b8e7b75e86a4262f4241b95bcb41
+SOURCE_TREE        : 18e2422bf1b3a88a0d6622779a789e886faf0d38
+WORKTREE           : CLEAN
+BAZEL              : bazel 6.1.1
+BAZEL_PATH         : C:\opt\bazel.exe
+PYTHON             : Python 3.12.10
+PYTHON_PATH        : C:\opt\Python312\python.exe
+RUNTIME_ROOT       : C:\g54r2\openvino
+RUNTIME_ROOT_STATE : READY
+OPENVINO_SHA       : 227c33757d1ef95d4da506d00686f923fdd2a535
+GENAI_SHA          : 7ea2546852a382cd16bd22dea0cfad2db70ed744
+TOKENIZERS_SHA     : a04accf6282d9b304214b492694b18c3979f667a
+RUNTIME_PROFILE    : maintainer-rc2
+
+
+ENV_PREFLIGHT      : PASS
+BRANCH             : fix/gemma4-whitespace-loop-20260914
+SOURCE_HEAD        : 5775cfe36506b8e7b75e86a4262f4241b95bcb41
+SOURCE_TREE        : 18e2422bf1b3a88a0d6622779a789e886faf0d38
+WORKTREE           : CLEAN
+BAZEL              : bazel 6.1.1
+BAZEL_PATH         : C:\opt\bazel.exe
+PYTHON             : Python 3.12.10
+PYTHON_PATH        : C:\opt\Python312\python.exe
+RUNTIME_ROOT       : C:\g54r2\openvino
+RUNTIME_ROOT_STATE : READY
+OPENVINO_SHA       : 227c33757d1ef95d4da506d00686f923fdd2a535
+GENAI_SHA          : 7ea2546852a382cd16bd22dea0cfad2db70ed744
+TOKENIZERS_SHA     : a04accf6282d9b304214b492694b18c3979f667a
+RUNTIME_PROFILE    : maintainer-rc2
+

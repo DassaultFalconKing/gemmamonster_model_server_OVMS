@@ -1,0 +1,226 @@
+Python 3.12.10
+[setupvars.bat] OpenVINO environment initialized
+Setting vars for OpenCV 4.14.0 
+Append PYTHONPATH: C:\opt\opencv_4.14.0\\python_loader_is_not_installed 
+Starting local Bazel server and connecting to it...
+WARNING: The following configs were expanded more than once: [short_logs, v2, monolithic]. For repeatable flags, repeats are counted twice and may lead to unexpected behavior.
+INFO: Options provided by the client:
+  Inherited 'common' options: --isatty=0 --terminal_columns=80
+INFO: Options provided by the client:
+  Inherited 'build' options: --python_path=C:/opt/Python312/python.exe
+INFO: Reading rc options for 'test' from c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc:
+  Inherited 'build' options: --define=no_cuda=1 --spawn_strategy=standalone --genrule_strategy=standalone --define=grpc_no_ares=true --define=MEDIAPIPE_DISABLE_GPU=1 --define=MEDIAPIPE_DISABLE=0 --define=CLOUD_DISABLE=0 --define=PYTHON_DISABLE=0 --apple_platform_type=macos -c opt --copt=-O2 --copt=-DGRPC_BAZEL_BUILD --cxxopt=-D_GLIBCXX_USE_CXX11_ABI=1 --enable_platform_specific_config --experimental_repo_remote_exec --experimental_cc_shared_library --check_visibility=true --incompatible_strict_action_env --cxxopt=-DOVMS_DUMP_TO_FILE=0 --remote_upload_local_results=true
+INFO: Reading rc options for 'test' from c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc:
+  'test' options: --test_timeout=1200 --experimental_ui_max_stdouterr_bytes=304857600
+INFO: Found applicable config definition build:win_mp_on_py_on in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --config=windows --define=MEDIAPIPE_DISABLE=0 --define=PYTHON_DISABLE=0
+INFO: Found applicable config definition build:windows in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --host_cxxopt=/std:c++17 --cxxopt=/std:c++17 --noenable_bzlmod --define=use_fast_cpp_protos=true --define=allow_oversize_protos=true --announce_rc --noincompatible_remove_legacy_whole_archive --features=-force_no_whole_archive --define=with_xla_support=true --config=short_logs --config=v2 --define=no_aws_support=true --define=no_hdfs_support=true --experimental_link_static_libraries_once=false --incompatible_enforce_config_setting_visibility --config=monolithic --copt=/W0 --host_copt=/W0 --copt=/external:anglebrackets --host_copt=/external:anglebrackets --copt=/external:W0 --host_copt=/external:W0 --copt=/Zc:__cplusplus --host_copt=/Zc:__cplusplus --copt=/D_USE_MATH_DEFINES --host_copt=/D_USE_MATH_DEFINES --features=compiler_param_file --features=archive_param_file --copt=/d2ReducedOptimizeHugeFunctions --host_copt=/d2ReducedOptimizeHugeFunctions --copt=-DWIN32_LEAN_AND_MEAN --host_copt=-DWIN32_LEAN_AND_MEAN --copt=-DNOGDI --host_copt=-DNOGDI --copt=/Zc:preprocessor --host_copt=/Zc:preprocessor --linkopt=/OPT:REF --host_linkopt=/OPT:REF --linkopt=/OPT:ICF --host_linkopt=/OPT:ICF --action_env PYTHON_BIN_PATH=C:/opt/Python312/python.exe --action_env PYTHON_LIB_PATH=C:/opt/Python312/lib/site-packages --repo_env PYTHON_BIN_PATH=C:/opt/Python312/python.exe --python_path=C:/opt/Python312/python.exe --define=override_eigen_strong_inline=true --deleted_packages=tensorflow/core/tfrt/stubs,tensorflow/compiler/mlir/tfrt,tensorflow/compiler/mlir/tfrt/benchmarks,tensorflow/compiler/mlir/tfrt/ir,tensorflow/compiler/mlir/tfrt/ir/mlrt,tensorflow/compiler/mlir/tfrt/jit/python_binding,tensorflow/compiler/mlir/tfrt/jit/transforms,tensorflow/compiler/mlir/tfrt/python_tests,tensorflow/compiler/mlir/tfrt/tests,tensorflow/compiler/mlir/tfrt/tests/mlrt,tensorflow/compiler/mlir/tfrt/tests/ir,tensorflow/compiler/mlir/tfrt/tests/analysis,tensorflow/compiler/mlir/tfrt/tests/jit,tensorflow/compiler/mlir/tfrt/tests/lhlo_to_tfrt,tensorflow/compiler/mlir/tfrt/tests/lhlo_to_jitrt,tensorflow/compiler/mlir/tfrt/tests/tf_to_corert,tensorflow/compiler/mlir/tfrt/tests/tf_to_tfrt_data,tensorflow/compiler/mlir/tfrt/tests/saved_model,tensorflow/compiler/mlir/tfrt/transforms/lhlo_gpu_to_tfrt_gpu,tensorflow/compiler/mlir/tfrt/transforms/mlrt,tensorflow/core/runtime_fallback,tensorflow/core/runtime_fallback/conversion,tensorflow/core/runtime_fallback/kernel,tensorflow/core/runtime_fallback/opdefs,tensorflow/core/runtime_fallback/runtime,tensorflow/core/runtime_fallback/util,tensorflow/core/tfrt/mlrt,tensorflow/core/tfrt/mlrt/attribute,tensorflow/core/tfrt/mlrt/kernel,tensorflow/core/tfrt/mlrt/bytecode,tensorflow/core/tfrt/mlrt/interpreter,tensorflow/compiler/mlir/tfrt/translate/mlrt,tensorflow/compiler/mlir/tfrt/translate/mlrt/testdata,tensorflow/core/tfrt/gpu,tensorflow/core/tfrt/run_handler_thread_pool,tensorflow/core/tfrt/runtime,tensorflow/core/tfrt/saved_model,tensorflow/core/tfrt/graph_executor,tensorflow/core/tfrt/saved_model/tests,tensorflow/core/tfrt/tpu,tensorflow/core/tfrt/utils,tensorflow/core/tfrt/utils/debug,tensorflow/core/tfrt/saved_model/python,tensorflow/core/tfrt/graph_executor/python --override_repository=boringssl=C:\opt\boringSSL-SwiftPM --define=CLOUD_DISABLE=1 --define=PYTHON_DISABLE=1 --define=MEDIAPIPE_DISABLE=0 --action_env OpenVINO_DIR=c:/opt/openvino/runtime/cmake --action_env OpenCV_DIR=c:/opt/opencv_4.14.0 --repo_env=HERMETIC_PYTHON_VERSION=3.12
+INFO: Found applicable config definition build:short_logs in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --output_filter=DONT_MATCH_ANYTHING
+INFO: Found applicable config definition build:v2 in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --define=tf_api_version=2 --action_env=TF2_BEHAVIOR=1
+INFO: Found applicable config definition build:monolithic in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --define framework_shared_object=false --define tsl_protobuf_header_only=false
+INFO: Found applicable config definition build:windows in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --host_cxxopt=/std:c++17 --cxxopt=/std:c++17 --noenable_bzlmod --define=use_fast_cpp_protos=true --define=allow_oversize_protos=true --announce_rc --noincompatible_remove_legacy_whole_archive --features=-force_no_whole_archive --define=with_xla_support=true --config=short_logs --config=v2 --define=no_aws_support=true --define=no_hdfs_support=true --experimental_link_static_libraries_once=false --incompatible_enforce_config_setting_visibility --config=monolithic --copt=/W0 --host_copt=/W0 --copt=/external:anglebrackets --host_copt=/external:anglebrackets --copt=/external:W0 --host_copt=/external:W0 --copt=/Zc:__cplusplus --host_copt=/Zc:__cplusplus --copt=/D_USE_MATH_DEFINES --host_copt=/D_USE_MATH_DEFINES --features=compiler_param_file --features=archive_param_file --copt=/d2ReducedOptimizeHugeFunctions --host_copt=/d2ReducedOptimizeHugeFunctions --copt=-DWIN32_LEAN_AND_MEAN --host_copt=-DWIN32_LEAN_AND_MEAN --copt=-DNOGDI --host_copt=-DNOGDI --copt=/Zc:preprocessor --host_copt=/Zc:preprocessor --linkopt=/OPT:REF --host_linkopt=/OPT:REF --linkopt=/OPT:ICF --host_linkopt=/OPT:ICF --action_env PYTHON_BIN_PATH=C:/opt/Python312/python.exe --action_env PYTHON_LIB_PATH=C:/opt/Python312/lib/site-packages --repo_env PYTHON_BIN_PATH=C:/opt/Python312/python.exe --python_path=C:/opt/Python312/python.exe --define=override_eigen_strong_inline=true --deleted_packages=tensorflow/core/tfrt/stubs,tensorflow/compiler/mlir/tfrt,tensorflow/compiler/mlir/tfrt/benchmarks,tensorflow/compiler/mlir/tfrt/ir,tensorflow/compiler/mlir/tfrt/ir/mlrt,tensorflow/compiler/mlir/tfrt/jit/python_binding,tensorflow/compiler/mlir/tfrt/jit/transforms,tensorflow/compiler/mlir/tfrt/python_tests,tensorflow/compiler/mlir/tfrt/tests,tensorflow/compiler/mlir/tfrt/tests/mlrt,tensorflow/compiler/mlir/tfrt/tests/ir,tensorflow/compiler/mlir/tfrt/tests/analysis,tensorflow/compiler/mlir/tfrt/tests/jit,tensorflow/compiler/mlir/tfrt/tests/lhlo_to_tfrt,tensorflow/compiler/mlir/tfrt/tests/lhlo_to_jitrt,tensorflow/compiler/mlir/tfrt/tests/tf_to_corert,tensorflow/compiler/mlir/tfrt/tests/tf_to_tfrt_data,tensorflow/compiler/mlir/tfrt/tests/saved_model,tensorflow/compiler/mlir/tfrt/transforms/lhlo_gpu_to_tfrt_gpu,tensorflow/compiler/mlir/tfrt/transforms/mlrt,tensorflow/core/runtime_fallback,tensorflow/core/runtime_fallback/conversion,tensorflow/core/runtime_fallback/kernel,tensorflow/core/runtime_fallback/opdefs,tensorflow/core/runtime_fallback/runtime,tensorflow/core/runtime_fallback/util,tensorflow/core/tfrt/mlrt,tensorflow/core/tfrt/mlrt/attribute,tensorflow/core/tfrt/mlrt/kernel,tensorflow/core/tfrt/mlrt/bytecode,tensorflow/core/tfrt/mlrt/interpreter,tensorflow/compiler/mlir/tfrt/translate/mlrt,tensorflow/compiler/mlir/tfrt/translate/mlrt/testdata,tensorflow/core/tfrt/gpu,tensorflow/core/tfrt/run_handler_thread_pool,tensorflow/core/tfrt/runtime,tensorflow/core/tfrt/saved_model,tensorflow/core/tfrt/graph_executor,tensorflow/core/tfrt/saved_model/tests,tensorflow/core/tfrt/tpu,tensorflow/core/tfrt/utils,tensorflow/core/tfrt/utils/debug,tensorflow/core/tfrt/saved_model/python,tensorflow/core/tfrt/graph_executor/python --override_repository=boringssl=C:\opt\boringSSL-SwiftPM --define=CLOUD_DISABLE=1 --define=PYTHON_DISABLE=1 --define=MEDIAPIPE_DISABLE=0 --action_env OpenVINO_DIR=c:/opt/openvino/runtime/cmake --action_env OpenCV_DIR=c:/opt/opencv_4.14.0 --repo_env=HERMETIC_PYTHON_VERSION=3.12
+INFO: Found applicable config definition build:short_logs in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --output_filter=DONT_MATCH_ANYTHING
+INFO: Found applicable config definition build:v2 in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --define=tf_api_version=2 --action_env=TF2_BEHAVIOR=1
+INFO: Found applicable config definition build:monolithic in file c:\git\gemmamonster-2026.4-unified-20260911\.bazelrc: --define framework_shared_object=false --define tsl_protobuf_header_only=false
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+DEBUG: Rule 'rules_foreign_cc' indicated that a canonical reproducible form can be obtained by modifying arguments commit = "1fb8a1ed9100236590c2a9441d79811aefaabcf8"
+DEBUG: Repository rules_foreign_cc instantiated at:
+  C:/git/gemmamonster-2026.4-unified-20260911/WORKSPACE:223:15: in <toplevel>
+Repository rule git_repository defined at:
+  C:/g54r2/f3bslrdg/external/bazel_tools/tools/build_defs/repo/git.bzl:181:33: in <toplevel>
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+DEBUG: Rule 'pybind11_bazel' indicated that a canonical reproducible form can be obtained by modifying arguments sha256 = "b72c5b44135b90d1ffaba51e08240be0b91707ac60bea08bb4d84b47316211bb"
+DEBUG: Repository pybind11_bazel instantiated at:
+  C:/git/gemmamonster-2026.4-unified-20260911/WORKSPACE:334:13: in <toplevel>
+Repository rule http_archive defined at:
+  C:/g54r2/f3bslrdg/external/bazel_tools/tools/build_defs/repo/http.bzl:372:31: in <toplevel>
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/py/python_repo.bzl:107:10: Using hermetic Python 3.12
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'com_google_absl' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'pybind11_bazel' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'com_google_protobuf' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'com_github_gflags_gflags' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'boringssl' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'zlib' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'pybind11' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'upb' because it already exists.
+DEBUG: C:/g54r2/f3bslrdg/external/org_tensorflow/third_party/repo.bzl:132:14: 
+Warning: skipping import of repository 'com_github_glog_glog' because it already exists.
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+Loading: 
+DEBUG: Rule 'com_github_jupp0r_prometheus_cpp' indicated that a canonical reproducible form can be obtained by modifying arguments sha256 = "281b6d9a26da35375c9958954e03616d71ea28d57ec193b0e75c3e10ff3da55d"
+DEBUG: Repository com_github_jupp0r_prometheus_cpp instantiated at:
+  C:/git/gemmamonster-2026.4-unified-20260911/WORKSPACE:565:13: in <toplevel>
+Repository rule http_archive defined at:
+  C:/g54r2/f3bslrdg/external/bazel_tools/tools/build_defs/repo/http.bzl:372:31: in <toplevel>
+WARNING: The following configs were expanded more than once: [short_logs, v2, monolithic]. For repeatable flags, repeats are counted twice and may lead to unexpected behavior.
+Loading: 
+Loading: 0 packages loaded
+Analyzing: 6 targets (3 packages loaded, 0 targets configured)
+Analyzing: 6 targets (7 packages loaded, 6 targets configured)
+Analyzing: 6 targets (7 packages loaded, 6 targets configured)
+Analyzing: 6 targets (47 packages loaded, 9 targets configured)
+Analyzing: 6 targets (48 packages loaded, 9 targets configured)
+Analyzing: 6 targets (48 packages loaded, 9 targets configured)
+Analyzing: 6 targets (48 packages loaded, 9 targets configured)
+Analyzing: 6 targets (48 packages loaded, 9 targets configured)
+Analyzing: 6 targets (48 packages loaded, 9 targets configured)
+Analyzing: 6 targets (58 packages loaded, 327 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (59 packages loaded, 332 targets configured)
+Analyzing: 6 targets (79 packages loaded, 760 targets configured)
+Analyzing: 6 targets (93 packages loaded, 2959 targets configured)
+Analyzing: 6 targets (94 packages loaded, 3097 targets configured)
+DEBUG: Rule 'pybind11' indicated that a canonical reproducible form can be obtained by modifying arguments sha256 = "d475978da0cdc2d43b73f30910786759d593a9d8ee05b1b6846d1eb16c6d2e0c"
+DEBUG: Repository pybind11 instantiated at:
+  C:/git/gemmamonster-2026.4-unified-20260911/WORKSPACE:340:13: in <toplevel>
+Repository rule http_archive defined at:
+  C:/g54r2/f3bslrdg/external/bazel_tools/tools/build_defs/repo/http.bzl:372:31: in <toplevel>
+Analyzing: 6 targets (99 packages loaded, 3666 targets configured)
+Analyzing: 6 targets (106 packages loaded, 3865 targets configured)
+INFO: Analyzed 6 targets (135 packages loaded, 4816 targets configured).
+INFO: Found 6 test targets...
+ checking cached actions
+[0 / 773] [Prepa] Writing file src/test/llm/generation_config/gemma4_prompt_state_generation_contract_test.exe-2.params ... (4 actions, 0 running)
+ERROR: C:/g54r2/f3bslrdg/external/com_google_protobuf/BUILD:420:11: Compiling src/google/protobuf/compiler/code_generator.cc [for tool] failed: (Exit 1): vc_installation_error_x64.bat failed: error executing command (from target @com_google_protobuf//:protoc_lib) 
+  cd /d C:/g54r2/f3bslrdg/execroot/ovms
+  SET INCLUDE=msvc_not_found
+    SET PATH=msvc_not_found
+    SET PWD=/proc/self/cwd
+    SET RUNFILES_MANIFEST_ONLY=1
+    SET TEMP=msvc_not_found
+    SET TMP=msvc_not_found
+  external\local_config_cc\vc_installation_error_x64.bat @bazel-out/x64_windows-opt-exec-50AE0418/bin/external/com_google_protobuf/_objs/protoc_lib/code_generator.obj.params
+# Configuration: 97449227d5f550a3618479c05862d66e40b5efa44ee659e99175fe024877d043
+# Execution platform: @local_execution_config_platform//:platform
+ 
+The target you are compiling requires Visual C++ build tools. 
+Bazel couldn't find a valid Visual C++ build tools installation on your machine. 
+ 
+Visual C++ build tools seems to be installed at C:\BuildTools\VC 
+But Bazel can't find the following tools: 
+    VCVARSALL.BAT, cl.exe, link.exe, lib.exe, ml64.exe 
+for x64 target architecture 
+ 
+Please check your installation following https://bazel.build/docs/windows#using 
+ 
+ERROR: C:/g54r2/f3bslrdg/external/com_google_protobuf/BUILD:420:11: Compiling src/google/protobuf/compiler/plugin.pb.cc [for tool] failed: (Exit 1): vc_installation_error_x64.bat failed: error executing command (from target @com_google_protobuf//:protoc_lib) 
+  cd /d C:/g54r2/f3bslrdg/execroot/ovms
+  SET INCLUDE=msvc_not_found
+    SET PATH=msvc_not_found
+    SET PWD=/proc/self/cwd
+    SET RUNFILES_MANIFEST_ONLY=1
+    SET TEMP=msvc_not_found
+    SET TMP=msvc_not_found
+  external\local_config_cc\vc_installation_error_x64.bat @bazel-out/x64_windows-opt-exec-50AE0418/bin/external/com_google_protobuf/_objs/protoc_lib/plugin.pb.obj.params
+# Configuration: 97449227d5f550a3618479c05862d66e40b5efa44ee659e99175fe024877d043
+# Execution platform: @local_execution_config_platform//:platform
+ 
+The target you are compiling requires Visual C++ build tools. 
+Bazel couldn't find a valid Visual C++ build tools installation on your machine. 
+ 
+Visual C++ build tools seems to be installed at C:\BuildTools\VC 
+But Bazel can't find the following tools: 
+    VCVARSALL.BAT, cl.exe, link.exe, lib.exe, ml64.exe 
+for x64 target architecture 
+ 
+Please check your installation following https://bazel.build/docs/windows#using 
+ 
+ERROR: C:/g54r2/f3bslrdg/external/com_google_protobuf/BUILD:515:10: Compiling src/google/protobuf/compiler/main.cc [for tool] failed: (Exit 1): vc_installation_error_x64.bat failed: error executing command (from target @com_google_protobuf//:protoc) 
+  cd /d C:/g54r2/f3bslrdg/execroot/ovms
+  SET INCLUDE=msvc_not_found
+    SET PATH=msvc_not_found
+    SET PWD=/proc/self/cwd
+    SET RUNFILES_MANIFEST_ONLY=1
+    SET TEMP=msvc_not_found
+    SET TMP=msvc_not_found
+  external\local_config_cc\vc_installation_error_x64.bat @bazel-out/x64_windows-opt-exec-50AE0418/bin/external/com_google_protobuf/_objs/protoc/main.obj.params
+# Configuration: 97449227d5f550a3618479c05862d66e40b5efa44ee659e99175fe024877d043
+# Execution platform: @local_execution_config_platform//:platform
+ 
+The target you are compiling requires Visual C++ build tools. 
+Bazel couldn't find a valid Visual C++ build tools installation on your machine. 
+ 
+Visual C++ build tools seems to be installed at C:\BuildTools\VC 
+But Bazel can't find the following tools: 
+    VCVARSALL.BAT, cl.exe, link.exe, lib.exe, ml64.exe 
+for x64 target architecture 
+ 
+Please check your installation following https://bazel.build/docs/windows#using 
+ 
+ERROR: C:/g54r2/f3bslrdg/external/com_google_protobuf/BUILD:420:11: Compiling src/google/protobuf/compiler/java/java_generator_factory.cc [for tool] failed: (Exit 1): vc_installation_error_x64.bat failed: error executing command (from target @com_google_protobuf//:protoc_lib) 
+  cd /d C:/g54r2/f3bslrdg/execroot/ovms
+  SET INCLUDE=msvc_not_found
+    SET PATH=msvc_not_found
+    SET PWD=/proc/self/cwd
+    SET RUNFILES_MANIFEST_ONLY=1
+    SET TEMP=msvc_not_found
+    SET TMP=msvc_not_found
+  external\local_config_cc\vc_installation_error_x64.bat @bazel-out/x64_windows-opt-exec-50AE0418/bin/external/com_google_protobuf/_objs/protoc_lib/java_generator_factory.obj.params
+# Configuration: 97449227d5f550a3618479c05862d66e40b5efa44ee659e99175fe024877d043
+# Execution platform: @local_execution_config_platform//:platform
+ 
+The target you are compiling requires Visual C++ build tools. 
+Bazel couldn't find a valid Visual C++ build tools installation on your machine. 
+ 
+Visual C++ build tools seems to be installed at C:\BuildTools\VC 
+But Bazel can't find the following tools: 
+    VCVARSALL.BAT, cl.exe, link.exe, lib.exe, ml64.exe 
+for x64 target architecture 
+ 
+Please check your installation following https://bazel.build/docs/windows#using 
+ 
+INFO: Elapsed time: 258.023s, Critical Path: 0.17s
+INFO: 19 processes: 19 internal.
+FAILED: Build did NOT complete successfully
+//src/test/llm/gemma4_fast:gemma4_parser_contract_test                NO STATUS
+//src/test/llm/gemma4_overlay:gemma4_chat_template_overlay_contract_test NO STATUS
+//src/test/llm/gemma4_overlay:gemma4_google_jinja_contract_test       NO STATUS
+//src/test/llm/generation_config:gemma4_generation_contract_test      NO STATUS
+//src/test/llm/generation_config:openai_parallel_tool_calls_contract_test NO STATUS
+//src/test/llm/generation_config:gemma4_prompt_state_generation_contract_test FAILED TO BUILD
+
+Executed 0 out of 6 tests: 1 fails to build and 5 were skipped.

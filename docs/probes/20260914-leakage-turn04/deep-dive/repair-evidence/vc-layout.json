@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "Auxiliary"
+  },
+  {
+    "Name": "Redist"
+  },
+  {
+    "Name": "Tools"
+  },
+  {
+    "Name": "vcpkg"
+  }
+]
