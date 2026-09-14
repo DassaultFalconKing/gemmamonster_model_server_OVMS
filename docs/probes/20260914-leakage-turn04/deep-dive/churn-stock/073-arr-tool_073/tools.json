@@ -1,0 +1,1 @@
+{"type":"function","function":{"name":"tool_073","description":"Diagnostic tool tool_073.","parameters":{"type":"object","properties":{"scores":{"type":"array","description":"scores","items":{"type":"integer"}},"mode":{"type":"string","description":"mode","enum":["fast","slow"]}},"required":["mode"],"additionalProperties":false}}}

@@ -46,6 +46,30 @@ RELEASE_CANDIDATE=NONE from this matrix. A 256MiB cap cannot fix transient
   compile bursts (it bounds stored entries; B proved zero stored entries still die).
 ```
 
+## Addendum 2026-09-14 late: stock RC2 churn (dirty pool, pre-reboot commit A)
+
+STOCK_RC2_CHURN=same 120-churn vs stock binary 11d74fd9 (genai 9d1639af):
+  24 served distinct, all canonical; req 025 hung 18s -> CL_OUT_OF_RESOURCES
+  (oneDNN ocl errcode -5) -> process death. Req 025 schema trivial (4 props).
+  Same kill point as Build B (24 served, req 025). Evidence: deep-dive/churn-stock/.
+STOCK_LOOP_EVENTS=3x whitespace-loop (req 012/016/021, length+empty, HTTP200),
+  process SURVIVED all three and continued.
+
+REBUILT_GENAI_CORRELATION: SUPERSEDED (stock dies identically in the same pool era;
+  earlier 100% correlation was pool-state confounding, not a binary difference).
+WHITESPACE_LOOP_CAUSES_GPU_DEATH: DISPROVED (loop events are survivable soft events).
+DISTINCT_GRAMMAR_CHURN_CORRELATION: STRENGTHENED (deaths at 31 / 24 / 24 distinct
+  served across three binaries; homogeneous reuse immortal everywhere).
+PER_COMPILE_ACCUMULATION: OPEN / HIGH-CONFIDENCE HYPOTHESIS (mechanism detail —
+  real leak vs USM fragmentation vs compiler artifacts vs plugin state — unobserved).
+DIRTY_POOL_CONFOUND: OPEN (fresh-instance first-inference deaths unexplained).
+NEXT_DISCRIMINATOR: CLEAN_REBOOT_STOCK_120_CHURN (commit B, separate experiment).
+  Dies ~20-35 -> accumulation CONFIRMED. Passes 120/120 -> dirty-state-necessary,
+  per-compile theory WEAKENED.
+
+Note: this commit (A) is dirty-pool evidence by construction. Do NOT merge its
+conclusion with the post-reboot discriminator (commit B).
+
 ## Classification ledger
 
 - Persistent-unlimited-cache as OOM root cause: REJECTED (HIGH — B discriminates).

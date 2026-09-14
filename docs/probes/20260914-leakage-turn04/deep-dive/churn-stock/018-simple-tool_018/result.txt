@@ -1,0 +1,1 @@
+018 simple-tool_018 fp=e7641c9651e95b23* choice=auto t=0 max=256 ptc=False ms=1460 :: HTTP200 finish=tool_calls calls=1 clen=0 calltag=False ptok=92 ctok=24 :: alive=True ws=15845 priv=16008 freeKB=6141104 

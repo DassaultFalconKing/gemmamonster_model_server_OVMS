@@ -1,0 +1,39 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Use the designated tool for case 110 with input set to value-110."
+    }
+  ],
+  "tool_choice": "required",
+  "max_tokens": 512,
+  "temperature": 0,
+  "parallel_tool_calls": true,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "tool_110",
+        "description": "Diagnostic tool tool_110.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "string",
+              "description": "field input"
+            },
+            "n": {
+              "type": "integer",
+              "description": "field n"
+            }
+          },
+          "required": [
+            "input"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

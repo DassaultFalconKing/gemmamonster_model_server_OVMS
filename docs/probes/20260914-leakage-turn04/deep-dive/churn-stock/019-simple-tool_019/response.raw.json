@@ -1,0 +1,1 @@
+{"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"FSrcbUXRV","type":"function","function":{"name":"tool_019","arguments":"{\"alpha\":\"probe value 19\"}"}}]}}],"created":1789418096,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":103,"completion_tokens":24,"total_tokens":127}}

@@ -1,0 +1,1 @@
+{"type":"function","function":{"name":"tool_001","description":"Diagnostic tool tool_001.","parameters":{"type":"object","properties":{"alpha":{"type":"string","description":"field alpha"},"count":{"type":"integer","description":"field count"}},"required":["alpha"],"additionalProperties":false}}}

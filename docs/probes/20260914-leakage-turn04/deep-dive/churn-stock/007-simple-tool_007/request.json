@@ -1,0 +1,38 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Use tool_007 with alpha set to probe value 7."
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 256,
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "tool_007",
+        "description": "Diagnostic tool tool_007.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "alpha": {
+              "type": "string",
+              "description": "field alpha"
+            },
+            "count": {
+              "type": "integer",
+              "description": "field count"
+            }
+          },
+          "required": [
+            "alpha"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

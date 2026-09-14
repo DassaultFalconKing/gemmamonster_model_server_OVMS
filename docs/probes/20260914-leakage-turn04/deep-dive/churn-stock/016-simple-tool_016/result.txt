@@ -1,0 +1,1 @@
+016 simple-tool_016 fp=ba3b6e41d6cd0cb7* choice=auto t=1 max=256 ptc=False ms=11721 :: HTTP200 finish=length calls=0 clen=0 calltag=False ptok=107 ctok=256 SOFT_ANOMALY :: alive=True ws=15841 priv=16006 freeKB=6126552 

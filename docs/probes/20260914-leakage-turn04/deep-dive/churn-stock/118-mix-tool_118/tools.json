@@ -1,0 +1,1 @@
+{"type":"function","function":{"name":"tool_118","description":"Diagnostic tool tool_118.","parameters":{"type":"object","properties":{"input":{"type":"string","description":"field input"},"n":{"type":"integer","description":"field n"}},"required":["input"],"additionalProperties":false}}}
