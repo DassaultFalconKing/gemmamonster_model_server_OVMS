@@ -18,6 +18,28 @@
 using namespace ovms;
 using Structured = ov::genai::StructuredOutputConfig;
 
+TEST(Gemma4WhitespaceContractTest, RealBuilderSerializesBoundInsideEveryToolSchema) {
+    for (const std::string choice : {"auto", "required", "echo"}) {
+        for (bool parallel : {false, true}) {
+            SCOPED_TRACE(choice + (parallel ? ":parallel" : ":single"));
+            OpenAIRequest request;
+            request.toolChoice = choice;
+            request.parallelToolCalls = parallel;
+            request.toolNameSchemaMap.emplace("echo", ToolSchemaWrapper{nullptr,
+                R"({"type":"object","properties":{"text":{"type":"string"}},"required":["text"]})"});
+            Gemma4GenerationConfigBuilder builder({}, true, STANDARD);
+            builder.parseConfigFromRequest(request);
+            const auto config = builder.getConfig();
+            const auto& root = std::get<Structured::StructuralTag>(
+                config.structured_output_config.value().structural_tags_config.value());
+            const auto json = std::visit([](const auto& tag) {
+                return Structured::structural_tag_to_json(tag);
+            }, root);
+            EXPECT_NE(json.find("\"max_whitespace_cnt\": 2"), std::string::npos) << json;
+        }
+    }
+}
+
 namespace {
 const std::string emptySchema = R"({"type":"object","properties":{},"additionalProperties":false})";
 const std::string responseSchema = R"({"type":"structural_tag","format":{"type":"json_schema","json_schema":{"type":"object","properties":{"answer":{"type":"string"}}}}})";
