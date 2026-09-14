@@ -170,6 +170,7 @@ def refresh_metadata(root: Path, *, version: str = "1.0.0") -> dict[str, Any]:
     if issues or not name:
         raise ValueError(f"cannot refresh invalid skill frontmatter: {issues}")
 
+    # Ensure metadata paths are part of the declared distribution before either file exists.
     current = {rel(p, root) for p in payload_files(root)}
     current.update({"MANIFEST.json", "SHA256SUMS"})
     manifest = {
