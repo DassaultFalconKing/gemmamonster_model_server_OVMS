@@ -1,0 +1,1 @@
+030 mid-tool_030 fp=71f11d33c308bd8c* choice=auto t=1 max=256 ptc= ms=2128 :: HTTP200 finish=tool_calls calls=1 clen=0 calltag=False ptok=167 ctok=40 :: alive=True ws=587 priv=16256 freeKB=5575016 shared usage=16559 dedicated usage=0 total committed=17635.5

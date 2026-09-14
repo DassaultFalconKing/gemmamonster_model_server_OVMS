@@ -1,0 +1,9 @@
+\\msi\gpu adapter memory(luid_0x00000000_0x0001214c_phys_0)\shared usage = 16460.7
+\\msi\gpu adapter memory(luid_0x00000000_0x0001214c_phys_0)\dedicated usage = 0
+\\msi\gpu adapter memory(luid_0x00000000_0x0001214c_phys_0)\total committed = 17566.8
+\\msi\gpu adapter memory(luid_0x00000000_0x000139ce_phys_0)\shared usage = 0
+\\msi\gpu adapter memory(luid_0x00000000_0x000139ce_phys_0)\dedicated usage = 0
+\\msi\gpu adapter memory(luid_0x00000000_0x000139ce_phys_0)\total committed = 5
+\\msi\gpu adapter memory(luid_0x00000000_0x00013a25_phys_0)\shared usage = 0
+\\msi\gpu adapter memory(luid_0x00000000_0x00013a25_phys_0)\dedicated usage = 0
+\\msi\gpu adapter memory(luid_0x00000000_0x00013a25_phys_0)\total committed = 0

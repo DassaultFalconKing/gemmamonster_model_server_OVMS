@@ -1,0 +1,622 @@
+[2026-09-14 20:44:19.427][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="batch", finish_reason=0, token IDs=[13679]
+[2026-09-14 20:44:19.427][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" ", finish_reason=0, token IDs=[236743]
+[2026-09-14 20:44:19.428][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 20:44:19.428][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="6",
+", finish_reason=0, token IDs=[236825, 827, 107]
+[2026-09-14 20:44:19.428][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:19.429][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="i", finish_reason=0, token IDs=[236747]
+[2026-09-14 20:44:19.429][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:19.429][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="prop", finish_reason=0, token IDs=[11077]
+[2026-09-14 20:44:19.429][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:19.430][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 20:44:19.430][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="":", finish_reason=0, token IDs=[1083]
+[2026-09-14 20:44:19.430][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="26
+", finish_reason=0, token IDs=[236778, 236825, 107]
+[2026-09-14 20:44:19.431][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="}", finish_reason=0, token IDs=[236783]
+[2026-09-14 20:44:19.431][24688][llm_calculator][trace][ovms_text_streamer.cpp:219] OVMSTextStreamer: 37 tokens generated; full decode (skip_special=false): "<|tool_call>call:tool_026{
+"s_prop_1":"batch 26",
+"i_prop_2":26
+}<tool_call|><|tool_response>"; ids: [48, 6639, 236787, 13205, 236779, 236771, 236778, 236825, 236782, 107, 236775, 236751, 236779, 11077, 236779, 236770, 1083, 236775, 13679, 236743, 236778, 236825, 827, 107, 236775, 236747, 236779, 11077, 236779, 236778, 1083, 236778, 236825, 107, 236783, 49, 50]
+[2026-09-14 20:44:19.431][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<tool_call|>", finish_reason=0, token IDs=[49]
+[2026-09-14 20:44:19.431][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<|tool_response>", finish_reason=0, token IDs=[50]
+[2026-09-14 20:44:19.432][24688][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 0 tokens, text="", finish_reason=1, token IDs=[]
+[2026-09-14 20:44:19.432][24688][llm_calculator][debug][servable.cpp:833] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"TYDlQdCwQ","type":"function","function":{"name":"tool_026","arguments":"{\"s_prop_1\":\"batch 26\",\"i_prop_2\":26}"}}]}}],"created":1789411457,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":187,"completion_tokens":37,"total_tokens":224}}
+[2026-09-14 20:44:19.432][24688][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 187 | output_token_count: 37 | total_token_count: 224 | prepare_embeddings_time_ms: 2.550 | llm_ttft_ms: 577.518 | ttft_ms: 580.068 | prefill_speed_tps: 323.799 | image_slice_count: 0
+[2026-09-14 20:44:19.432][24688][llm_calculator][trace][http_llm_calculator.cc:192] LLMCalculator  [Node: LLMExecutor] Response prepared, sending it down the graph
+[2026-09-14 20:44:19.432][24688][llm_calculator][trace][http_llm_calculator.cc:226] LLMCalculator  [Node: LLMExecutor] Process end
+[2026-09-14 20:44:19.432][11828][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 20:44:19.437][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:19.437][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:19.437][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:19.584][8636][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 20:44:19.584][8636][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 20:44:19.584][8636][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 1326 bytes
+[2026-09-14 20:44:19.584][8636][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 20:44:19.584][8636][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 20:44:19.584][8636][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 20:44:19.585][8636][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 20:44:19.585][8636][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 20:44:19.585][16844][llm_calculator][trace][http_llm_calculator.cc:110] LLMCalculator  [Node: LLMExecutor] Process start
+[2026-09-14 20:44:19.585][16844][llm_calculator][debug][servable.cpp:1039] Request body: {"model":"gemma4","messages":[{"role":"user","content":"Use tool_027 to record batch 27 with all applicable fields."}],"tool_choice":"auto","max_tokens":256,"temperature":1.0,"tools":[{"type":"function","function":{"name":"tool_027","description":"Diagnostic tool tool_027.","parameters":{"type":"object","properties":{"i_prop_1":{"type":"integer","description":"field i1"},"b_prop_2":{"type":"boolean","description":"field b2"},"s_prop_3":{"type":"string","description":"field s3"},"i_prop_4":{"type":"integer","description":"field i4"},"b_prop_5":{"type":"boolean","description":"field b5"},"s_prop_6":{"type":"string","description":"field s6"}},"required":["s_prop_1"],"additionalProperties":false}}}]}
+[2026-09-14 20:44:19.585][16844][llm_calculator][debug][servable.cpp:1040] Request uri: /v3/chat/completions
+[2026-09-14 20:44:19.585][16844][llm_calculator][debug][servable.cpp:1042] Request header: host=127.0.0.1:18091
+[2026-09-14 20:44:19.585][16844][llm_calculator][debug][servable.cpp:1042] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 20:44:19.585][16844][llm_calculator][debug][servable.cpp:1042] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 20:44:19.585][16844][llm_calculator][debug][servable.cpp:1042] Request header: content-type=application/json
+[2026-09-14 20:44:19.585][16844][llm_calculator][debug][servable.cpp:1042] Request header: content-length=1326
+[2026-09-14 20:44:19.585][16844][llm_calculator][debug][servable.cpp:573] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 20:44:19.585][16844][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 20:44:19.585][16844][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 20:44:19.586][16844][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:tool_027{, <|tool_call>call:tool_027(, <|tool_call>:tool_027{, <|tool_call>:tool_027(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 20:44:19.586][16844][llm_calculator][debug][base_generation_config_builder.cpp:218] Randomizing rng_seed for multinomial sampling: 552546516.
+[2026-09-14 20:44:19.587][16844][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 20:44:19.587][16844][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyContentArrayNormalizationProcessor
+[2026-09-14 20:44:19.587][16844][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 3 us
+[2026-09-14 20:44:19.587][16844][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyToolCallsArrayRemovingProcessor
+[2026-09-14 20:44:19.587][16844][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 1 us
+[2026-09-14 20:44:19.587][16844][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ImageDecodingProcessor
+[2026-09-14 20:44:19.587][16844][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 3 us
+[2026-09-14 20:44:19.587][16844][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TextContentNormalizationProcessor
+[2026-09-14 20:44:19.587][16844][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 1 us
+[2026-09-14 20:44:19.587][16844][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateAdapter
+[2026-09-14 20:44:19.587][16844][llm_calculator][trace][chat_template_adapter.cpp:116] Applying chat template adaptations: supportsToolCalls=true, requiresObjectArguments=true, parseToolResponseJsonContent=true, missnamedReasoningField=, supportsResponseFieldInToolDefinition=true
+[2026-09-14 20:44:19.587][16844][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 16 us
+[2026-09-14 20:44:19.587][16844][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateProcessor
+[2026-09-14 20:44:19.587][16844][llm_calculator][trace][chat_template_processor.cpp:156] Chat history messages: [{"role":"user","content":"Use tool_027 to record batch 27 with all applicable fields."}]
+[2026-09-14 20:44:19.587][16844][llm_calculator][trace][chat_template_processor.cpp:157] chatHistory.get_extra_context(): {}
+[2026-09-14 20:44:19.587][16844][llm_calculator][trace][chat_template_processor.cpp:158] tools: [{"type":"function","function":{"name":"tool_027","description":"Diagnostic tool tool_027.","parameters":{"type":"object","properties":{"i_prop_1":{"type":"integer","description":"field i1"},"b_prop_2":{"type":"boolean","description":"field b2"},"s_prop_3":{"type":"string","description":"field s3"},"i_prop_4":{"type":"integer","description":"field i4"},"b_prop_5":{"type":"boolean","description":"field b5"},"s_prop_6":{"type":"string","description":"field s6"}},"required":["s_prop_1"],"additionalProperties":false}}}]
+[2026-09-14 20:44:19.587][16844][llm_calculator][trace][chat_template_processor.cpp:159] chatTemplateKwargs: <none>
+[2026-09-14 20:44:19.588][16844][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 835 us
+[2026-09-14 20:44:19.588][16844][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TokenizationProcessor
+[2026-09-14 20:44:19.589][16844][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 958 us
+[2026-09-14 20:44:19.589][16844][llm_calculator][trace][servable.cpp:761] prompt_token_ids: [2, 105, 9731, 107, 46, 163688, 236787, 13205, 236779, 236771, 236778, 236832, 236782, 7777, 236787, 52, 121723, 5904, 5904, 236779, 236771, 236778, 236832, 236761, 52, 236764, 19031, 29616, 15921, 29616, 236763, 236779, 11077, 236779, 236778, 29616, 7777, 236787, 52, 3593, 518, 236778, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236763, 236779, 11077, 236779, 236810, 29616, 7777, 236787, 52, 3593, 518, 236810, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236747, 236779, 11077, 236779, 236770, 29616, 7777, 236787, 52, 3593, 858, 236770, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236747, 236779, 11077, 236779, 236812, 29616, 7777, 236787, 52, 3593, 858, 236812, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236751, 236779, 11077, 236779, 236800, 29616, 7777, 236787, 52, 3593, 503, 236800, 52, 236764, 2084, 236787, 52, 35410, 52, 1263, 236751, 236779, 11077, 236779, 236825, 29616, 7777, 236787, 52, 3593, 503, 236825, 52, 236764, 2084, 236787, 52, 35410, 52, 5237, 15979, 24845, 52, 236751, 236779, 11077, 236779, 236770, 52, 1604, 2084, 236787, 52, 60688, 52, 1807, 47, 106, 107, 105, 2364, 107, 10896, 5904, 236779, 236771, 236778, 236832, 531, 3423, 12539, 236743, 236778, 236832, 607, 784, 11955, 6192, 236761, 106, 107, 105, 4368, 107, 100, 45518, 107, 101]
+[2026-09-14 20:44:19.589][16844][llm_calculator][trace][servable.cpp:762] Pipeline input text: <bos><|turn>system
+<|tool>declaration:tool_027{description:<|"|>Diagnostic tool tool_027.<|"|>,parameters:{properties:{b_prop_2:{description:<|"|>field b2<|"|>,type:<|"|>BOOLEAN<|"|>},b_prop_5:{description:<|"|>field b5<|"|>,type:<|"|>BOOLEAN<|"|>},i_prop_1:{description:<|"|>field i1<|"|>,type:<|"|>INTEGER<|"|>},i_prop_4:{description:<|"|>field i4<|"|>,type:<|"|>INTEGER<|"|>},s_prop_3:{description:<|"|>field s3<|"|>,type:<|"|>STRING<|"|>},s_prop_6:{description:<|"|>field s6<|"|>,type:<|"|>STRING<|"|>}},required:[<|"|>s_prop_1<|"|>],type:<|"|>OBJECT<|"|>}}<tool|><turn|>
+<|turn>user
+Use tool_027 to record batch 27 with all applicable fields.<turn|>
+<|turn>model
+<|channel>thought
+<channel|>
+[2026-09-14 20:44:19.589][16844][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 20:44:19.592][16844][llm_calculator][trace][servable.cpp:78] Notifying executor thread
+[2026-09-14 20:44:19.592][16844][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 20:44:20.349][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 40.6% of 34.8 MB;
+[2026-09-14 20:44:20.438][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:20.439][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:20.439][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:20.735][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 43.8% of 34.8 MB;
+[2026-09-14 20:44:21.113][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 43.8% of 34.8 MB;
+[2026-09-14 20:44:21.225][16844][llm_calculator][trace][http_llm_calculator.cc:187] LLMCalculator  [Node: LLMExecutor] Received complete execution results, preparing response
+[2026-09-14 20:44:21.225][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="<|tool_call>", finish_reason=0, token IDs=[48]
+[2026-09-14 20:44:21.226][19872][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 20:44:21.227][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="call", finish_reason=0, token IDs=[6639]
+[2026-09-14 20:44:21.227][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text=":", finish_reason=0, token IDs=[236787]
+[2026-09-14 20:44:21.228][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="tool", finish_reason=0, token IDs=[13205]
+[2026-09-14 20:44:21.228][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:21.228][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="0", finish_reason=0, token IDs=[236771]
+[2026-09-14 20:44:21.229][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 20:44:21.229][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 3 tokens, text="7{
+", finish_reason=0, token IDs=[236832, 236782, 107]
+[2026-09-14 20:44:21.230][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:21.230][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="s", finish_reason=0, token IDs=[236751]
+[2026-09-14 20:44:21.230][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:21.230][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="prop", finish_reason=0, token IDs=[11077]
+[2026-09-14 20:44:21.230][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:21.230][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="3", finish_reason=0, token IDs=[236800]
+[2026-09-14 20:44:21.230][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="":", finish_reason=0, token IDs=[1083]
+[2026-09-14 20:44:21.231][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:21.231][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="batch", finish_reason=0, token IDs=[13679]
+[2026-09-14 20:44:21.231][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" ", finish_reason=0, token IDs=[236743]
+[2026-09-14 20:44:21.231][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 20:44:21.231][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="7"
+", finish_reason=0, token IDs=[236832, 236775, 107]
+[2026-09-14 20:44:21.231][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="}", finish_reason=0, token IDs=[236783]
+[2026-09-14 20:44:21.231][16844][llm_calculator][trace][ovms_text_streamer.cpp:219] OVMSTextStreamer: 27 tokens generated; full decode (skip_special=false): "<|tool_call>call:tool_027{
+"s_prop_3":"batch 27"
+}<tool_call|><|tool_response>"; ids: [48, 6639, 236787, 13205, 236779, 236771, 236778, 236832, 236782, 107, 236775, 236751, 236779, 11077, 236779, 236800, 1083, 236775, 13679, 236743, 236778, 236832, 236775, 107, 236783, 49, 50]
+[2026-09-14 20:44:21.232][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<tool_call|>", finish_reason=0, token IDs=[49]
+[2026-09-14 20:44:21.232][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<|tool_response>", finish_reason=0, token IDs=[50]
+[2026-09-14 20:44:21.232][16844][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 0 tokens, text="", finish_reason=1, token IDs=[]
+[2026-09-14 20:44:21.232][16844][llm_calculator][debug][servable.cpp:833] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"0kDTp63by","type":"function","function":{"name":"tool_027","arguments":"{\"s_prop_3\":\"batch 27\"}"}}]}}],"created":1789411459,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":200,"completion_tokens":27,"total_tokens":227}}
+[2026-09-14 20:44:21.232][16844][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 200 | output_token_count: 27 | total_token_count: 227 | prepare_embeddings_time_ms: 2.040 | llm_ttft_ms: 597.167 | ttft_ms: 599.207 | prefill_speed_tps: 334.915 | image_slice_count: 0
+[2026-09-14 20:44:21.232][16844][llm_calculator][trace][http_llm_calculator.cc:192] LLMCalculator  [Node: LLMExecutor] Response prepared, sending it down the graph
+[2026-09-14 20:44:21.232][16844][llm_calculator][trace][http_llm_calculator.cc:226] LLMCalculator  [Node: LLMExecutor] Process end
+[2026-09-14 20:44:21.232][8636][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 20:44:21.388][15032][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 20:44:21.388][15032][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 20:44:21.388][15032][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 1471 bytes
+[2026-09-14 20:44:21.388][15032][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 20:44:21.388][15032][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 20:44:21.388][15032][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 20:44:21.388][15032][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 20:44:21.388][15032][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 20:44:21.388][9828][llm_calculator][trace][http_llm_calculator.cc:110] LLMCalculator  [Node: LLMExecutor] Process start
+[2026-09-14 20:44:21.388][9828][llm_calculator][debug][servable.cpp:1039] Request body: {"model":"gemma4","messages":[{"role":"user","content":"Use tool_028 to record batch 28 with all applicable fields."}],"tool_choice":"required","max_tokens":256,"temperature":0,"tools":[{"type":"function","function":{"name":"tool_028","description":"Diagnostic tool tool_028.","parameters":{"type":"object","properties":{"b_prop_1":{"type":"boolean","description":"field b1"},"s_prop_2":{"type":"string","description":"field s2"},"i_prop_3":{"type":"integer","description":"field i3"},"b_prop_4":{"type":"boolean","description":"field b4"},"s_prop_5":{"type":"string","description":"field s5"},"i_prop_6":{"type":"integer","description":"field i6"},"b_prop_7":{"type":"boolean","description":"field b7"}},"required":["s_prop_1","i_prop_2"],"additionalProperties":false}}}]}
+[2026-09-14 20:44:21.388][9828][llm_calculator][debug][servable.cpp:1040] Request uri: /v3/chat/completions
+[2026-09-14 20:44:21.388][9828][llm_calculator][debug][servable.cpp:1042] Request header: host=127.0.0.1:18091
+[2026-09-14 20:44:21.388][9828][llm_calculator][debug][servable.cpp:1042] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 20:44:21.388][9828][llm_calculator][debug][servable.cpp:1042] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 20:44:21.388][9828][llm_calculator][debug][servable.cpp:1042] Request header: content-type=application/json
+[2026-09-14 20:44:21.388][9828][llm_calculator][debug][servable.cpp:1042] Request header: content-length=1471
+[2026-09-14 20:44:21.388][9828][llm_calculator][debug][servable.cpp:573] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 20:44:21.388][9828][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 20:44:21.388][9828][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 20:44:21.390][9828][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:tool_028{, <|tool_call>call:tool_028(, <|tool_call>:tool_028{, <|tool_call>:tool_028(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 20:44:21.390][9828][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 20:44:21.390][9828][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyContentArrayNormalizationProcessor
+[2026-09-14 20:44:21.390][9828][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 4 us
+[2026-09-14 20:44:21.390][9828][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyToolCallsArrayRemovingProcessor
+[2026-09-14 20:44:21.390][9828][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 1 us
+[2026-09-14 20:44:21.390][9828][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ImageDecodingProcessor
+[2026-09-14 20:44:21.390][9828][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 4 us
+[2026-09-14 20:44:21.390][9828][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TextContentNormalizationProcessor
+[2026-09-14 20:44:21.390][9828][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 2 us
+[2026-09-14 20:44:21.390][9828][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateAdapter
+[2026-09-14 20:44:21.390][9828][llm_calculator][trace][chat_template_adapter.cpp:116] Applying chat template adaptations: supportsToolCalls=true, requiresObjectArguments=true, parseToolResponseJsonContent=true, missnamedReasoningField=, supportsResponseFieldInToolDefinition=true
+[2026-09-14 20:44:21.390][9828][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 19 us
+[2026-09-14 20:44:21.391][9828][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateProcessor
+[2026-09-14 20:44:21.391][9828][llm_calculator][trace][chat_template_processor.cpp:156] Chat history messages: [{"role":"user","content":"Use tool_028 to record batch 28 with all applicable fields."}]
+[2026-09-14 20:44:21.391][9828][llm_calculator][trace][chat_template_processor.cpp:157] chatHistory.get_extra_context(): {}
+[2026-09-14 20:44:21.391][9828][llm_calculator][trace][chat_template_processor.cpp:158] tools: [{"type":"function","function":{"name":"tool_028","description":"Diagnostic tool tool_028.","parameters":{"type":"object","properties":{"b_prop_1":{"type":"boolean","description":"field b1"},"s_prop_2":{"type":"string","description":"field s2"},"i_prop_3":{"type":"integer","description":"field i3"},"b_prop_4":{"type":"boolean","description":"field b4"},"s_prop_5":{"type":"string","description":"field s5"},"i_prop_6":{"type":"integer","description":"field i6"},"b_prop_7":{"type":"boolean","description":"field b7"}},"required":["s_prop_1","i_prop_2"],"additionalProperties":false}}}]
+[2026-09-14 20:44:21.391][9828][llm_calculator][trace][chat_template_processor.cpp:159] chatTemplateKwargs: <none>
+[2026-09-14 20:44:21.391][9828][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 919 us
+[2026-09-14 20:44:21.391][9828][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TokenizationProcessor
+[2026-09-14 20:44:21.393][9828][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 1147 us
+[2026-09-14 20:44:21.393][9828][llm_calculator][trace][servable.cpp:761] prompt_token_ids: [2, 105, 9731, 107, 46, 163688, 236787, 13205, 236779, 236771, 236778, 236828, 236782, 7777, 236787, 52, 121723, 5904, 5904, 236779, 236771, 236778, 236828, 236761, 52, 236764, 19031, 29616, 15921, 29616, 236763, 236779, 11077, 236779, 236770, 29616, 7777, 236787, 52, 3593, 518, 236770, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236763, 236779, 11077, 236779, 236812, 29616, 7777, 236787, 52, 3593, 518, 236812, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236763, 236779, 11077, 236779, 236832, 29616, 7777, 236787, 52, 3593, 518, 236832, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236747, 236779, 11077, 236779, 236800, 29616, 7777, 236787, 52, 3593, 858, 236800, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236747, 236779, 11077, 236779, 236825, 29616, 7777, 236787, 52, 3593, 858, 236825, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236751, 236779, 11077, 236779, 236778, 29616, 7777, 236787, 52, 3593, 503, 236778, 52, 236764, 2084, 236787, 52, 35410, 52, 1263, 236751, 236779, 11077, 236779, 236810, 29616, 7777, 236787, 52, 3593, 503, 236810, 52, 236764, 2084, 236787, 52, 35410, 52, 5237, 15979, 24845, 52, 236751, 236779, 11077, 236779, 236770, 52, 236764, 52, 236747, 236779, 11077, 236779, 236778, 52, 1604, 2084, 236787, 52, 60688, 52, 1807, 47, 106, 107, 105, 2364, 107, 10896, 5904, 236779, 236771, 236778, 236828, 531, 3423, 12539, 236743, 236778, 236828, 607, 784, 11955, 6192, 236761, 106, 107, 105, 4368, 107, 100, 45518, 107, 101]
+[2026-09-14 20:44:21.393][9828][llm_calculator][trace][servable.cpp:762] Pipeline input text: <bos><|turn>system
+<|tool>declaration:tool_028{description:<|"|>Diagnostic tool tool_028.<|"|>,parameters:{properties:{b_prop_1:{description:<|"|>field b1<|"|>,type:<|"|>BOOLEAN<|"|>},b_prop_4:{description:<|"|>field b4<|"|>,type:<|"|>BOOLEAN<|"|>},b_prop_7:{description:<|"|>field b7<|"|>,type:<|"|>BOOLEAN<|"|>},i_prop_3:{description:<|"|>field i3<|"|>,type:<|"|>INTEGER<|"|>},i_prop_6:{description:<|"|>field i6<|"|>,type:<|"|>INTEGER<|"|>},s_prop_2:{description:<|"|>field s2<|"|>,type:<|"|>STRING<|"|>},s_prop_5:{description:<|"|>field s5<|"|>,type:<|"|>STRING<|"|>}},required:[<|"|>s_prop_1<|"|>,<|"|>i_prop_2<|"|>],type:<|"|>OBJECT<|"|>}}<tool|><turn|>
+<|turn>user
+Use tool_028 to record batch 28 with all applicable fields.<turn|>
+<|turn>model
+<|channel>thought
+<channel|>
+[2026-09-14 20:44:21.393][9828][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 20:44:21.396][9828][llm_calculator][trace][servable.cpp:78] Notifying executor thread
+[2026-09-14 20:44:21.396][9828][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 20:44:21.440][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:21.441][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:21.441][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:22.252][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 46.9% of 34.8 MB;
+[2026-09-14 20:44:22.442][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:22.442][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:22.442][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:22.640][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 50.0% of 34.8 MB;
+[2026-09-14 20:44:23.025][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 50.0% of 34.8 MB;
+[2026-09-14 20:44:23.259][9828][llm_calculator][trace][http_llm_calculator.cc:187] LLMCalculator  [Node: LLMExecutor] Received complete execution results, preparing response
+[2026-09-14 20:44:23.259][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="<|tool_call>", finish_reason=0, token IDs=[48]
+[2026-09-14 20:44:23.259][19872][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 20:44:23.260][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="call", finish_reason=0, token IDs=[6639]
+[2026-09-14 20:44:23.260][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text=":", finish_reason=0, token IDs=[236787]
+[2026-09-14 20:44:23.260][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="tool", finish_reason=0, token IDs=[13205]
+[2026-09-14 20:44:23.260][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:23.261][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="0", finish_reason=0, token IDs=[236771]
+[2026-09-14 20:44:23.261][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 20:44:23.262][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 3 tokens, text="8{
+", finish_reason=0, token IDs=[236828, 236782, 107]
+[2026-09-14 20:44:23.262][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:23.262][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="i", finish_reason=0, token IDs=[236747]
+[2026-09-14 20:44:23.263][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:23.263][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="prop", finish_reason=0, token IDs=[11077]
+[2026-09-14 20:44:23.263][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:23.264][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="6", finish_reason=0, token IDs=[236825]
+[2026-09-14 20:44:23.264][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="":", finish_reason=0, token IDs=[1083]
+[2026-09-14 20:44:23.264][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 20:44:23.264][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="8,
+", finish_reason=0, token IDs=[236828, 236764, 107]
+[2026-09-14 20:44:23.265][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:23.265][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="b", finish_reason=0, token IDs=[236763]
+[2026-09-14 20:44:23.265][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:23.265][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="prop", finish_reason=0, token IDs=[11077]
+[2026-09-14 20:44:23.265][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:23.265][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="7", finish_reason=0, token IDs=[236832]
+[2026-09-14 20:44:23.266][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="":true
+", finish_reason=0, token IDs=[1083, 3397, 107]
+[2026-09-14 20:44:23.266][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="}", finish_reason=0, token IDs=[236783]
+[2026-09-14 20:44:23.266][9828][llm_calculator][trace][ovms_text_streamer.cpp:219] OVMSTextStreamer: 33 tokens generated; full decode (skip_special=false): "<|tool_call>call:tool_028{
+"i_prop_6":28,
+"b_prop_7":true
+}<tool_call|><|tool_response>"; ids: [48, 6639, 236787, 13205, 236779, 236771, 236778, 236828, 236782, 107, 236775, 236747, 236779, 11077, 236779, 236825, 1083, 236778, 236828, 236764, 107, 236775, 236763, 236779, 11077, 236779, 236832, 1083, 3397, 107, 236783, 49, 50]
+[2026-09-14 20:44:23.266][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<tool_call|>", finish_reason=0, token IDs=[49]
+[2026-09-14 20:44:23.266][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<|tool_response>", finish_reason=0, token IDs=[50]
+[2026-09-14 20:44:23.266][9828][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 0 tokens, text="", finish_reason=1, token IDs=[]
+[2026-09-14 20:44:23.266][9828][llm_calculator][debug][servable.cpp:833] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"oqlBY10Ge","type":"function","function":{"name":"tool_028","arguments":"{\"i_prop_6\":28,\"b_prop_7\":true}"}}]}}],"created":1789411461,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":229,"completion_tokens":33,"total_tokens":262}}
+[2026-09-14 20:44:23.266][9828][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 229 | output_token_count: 33 | total_token_count: 262 | prepare_embeddings_time_ms: 2.279 | llm_ttft_ms: 609.352 | ttft_ms: 611.631 | prefill_speed_tps: 375.809 | image_slice_count: 0
+[2026-09-14 20:44:23.266][9828][llm_calculator][trace][http_llm_calculator.cc:192] LLMCalculator  [Node: LLMExecutor] Response prepared, sending it down the graph
+[2026-09-14 20:44:23.266][9828][llm_calculator][trace][http_llm_calculator.cc:226] LLMCalculator  [Node: LLMExecutor] Process end
+[2026-09-14 20:44:23.266][15032][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 20:44:23.420][19720][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 20:44:23.420][19720][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 20:44:23.420][19720][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 1559 bytes
+[2026-09-14 20:44:23.420][19720][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 20:44:23.420][19720][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 20:44:23.420][19720][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 20:44:23.420][19720][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 20:44:23.420][19720][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 20:44:23.420][19276][llm_calculator][trace][http_llm_calculator.cc:110] LLMCalculator  [Node: LLMExecutor] Process start
+[2026-09-14 20:44:23.421][19276][llm_calculator][debug][servable.cpp:1039] Request body: {"model":"gemma4","messages":[{"role":"user","content":"Use tool_029 to record batch 29 with all applicable fields."}],"tool_choice":"auto","max_tokens":256,"temperature":0,"tools":[{"type":"function","function":{"name":"tool_029","description":"Diagnostic tool tool_029.","parameters":{"type":"object","properties":{"s_prop_1":{"type":"string","description":"field s1"},"i_prop_2":{"type":"integer","description":"field i2"},"b_prop_3":{"type":"boolean","description":"field b3"},"s_prop_4":{"type":"string","description":"field s4"},"i_prop_5":{"type":"integer","description":"field i5"},"b_prop_6":{"type":"boolean","description":"field b6"},"s_prop_7":{"type":"string","description":"field s7"},"i_prop_8":{"type":"integer","description":"field i8"}},"required":["s_prop_1"],"additionalProperties":false}}}]}
+[2026-09-14 20:44:23.421][19276][llm_calculator][debug][servable.cpp:1040] Request uri: /v3/chat/completions
+[2026-09-14 20:44:23.421][19276][llm_calculator][debug][servable.cpp:1042] Request header: host=127.0.0.1:18091
+[2026-09-14 20:44:23.421][19276][llm_calculator][debug][servable.cpp:1042] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 20:44:23.421][19276][llm_calculator][debug][servable.cpp:1042] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 20:44:23.421][19276][llm_calculator][debug][servable.cpp:1042] Request header: content-type=application/json
+[2026-09-14 20:44:23.421][19276][llm_calculator][debug][servable.cpp:1042] Request header: content-length=1559
+[2026-09-14 20:44:23.421][19276][llm_calculator][debug][servable.cpp:573] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 20:44:23.421][19276][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 20:44:23.421][19276][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 20:44:23.422][19276][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:tool_029{, <|tool_call>call:tool_029(, <|tool_call>:tool_029{, <|tool_call>:tool_029(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 20:44:23.422][19276][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 20:44:23.422][19276][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyContentArrayNormalizationProcessor
+[2026-09-14 20:44:23.422][19276][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 3 us
+[2026-09-14 20:44:23.422][19276][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyToolCallsArrayRemovingProcessor
+[2026-09-14 20:44:23.422][19276][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 0 us
+[2026-09-14 20:44:23.422][19276][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ImageDecodingProcessor
+[2026-09-14 20:44:23.422][19276][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 2 us
+[2026-09-14 20:44:23.422][19276][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TextContentNormalizationProcessor
+[2026-09-14 20:44:23.422][19276][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 0 us
+[2026-09-14 20:44:23.422][19276][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateAdapter
+[2026-09-14 20:44:23.422][19276][llm_calculator][trace][chat_template_adapter.cpp:116] Applying chat template adaptations: supportsToolCalls=true, requiresObjectArguments=true, parseToolResponseJsonContent=true, missnamedReasoningField=, supportsResponseFieldInToolDefinition=true
+[2026-09-14 20:44:23.422][19276][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 12 us
+[2026-09-14 20:44:23.422][19276][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateProcessor
+[2026-09-14 20:44:23.422][19276][llm_calculator][trace][chat_template_processor.cpp:156] Chat history messages: [{"role":"user","content":"Use tool_029 to record batch 29 with all applicable fields."}]
+[2026-09-14 20:44:23.422][19276][llm_calculator][trace][chat_template_processor.cpp:157] chatHistory.get_extra_context(): {}
+[2026-09-14 20:44:23.422][19276][llm_calculator][trace][chat_template_processor.cpp:158] tools: [{"type":"function","function":{"name":"tool_029","description":"Diagnostic tool tool_029.","parameters":{"type":"object","properties":{"s_prop_1":{"type":"string","description":"field s1"},"i_prop_2":{"type":"integer","description":"field i2"},"b_prop_3":{"type":"boolean","description":"field b3"},"s_prop_4":{"type":"string","description":"field s4"},"i_prop_5":{"type":"integer","description":"field i5"},"b_prop_6":{"type":"boolean","description":"field b6"},"s_prop_7":{"type":"string","description":"field s7"},"i_prop_8":{"type":"integer","description":"field i8"}},"required":["s_prop_1"],"additionalProperties":false}}}]
+[2026-09-14 20:44:23.422][19276][llm_calculator][trace][chat_template_processor.cpp:159] chatTemplateKwargs: <none>
+[2026-09-14 20:44:23.423][19276][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 901 us
+[2026-09-14 20:44:23.423][19276][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TokenizationProcessor
+[2026-09-14 20:44:23.424][19276][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 1122 us
+[2026-09-14 20:44:23.425][19276][llm_calculator][trace][servable.cpp:761] prompt_token_ids: [2, 105, 9731, 107, 46, 163688, 236787, 13205, 236779, 236771, 236778, 236819, 236782, 7777, 236787, 52, 121723, 5904, 5904, 236779, 236771, 236778, 236819, 236761, 52, 236764, 19031, 29616, 15921, 29616, 236763, 236779, 11077, 236779, 236800, 29616, 7777, 236787, 52, 3593, 518, 236800, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236763, 236779, 11077, 236779, 236825, 29616, 7777, 236787, 52, 3593, 518, 236825, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236747, 236779, 11077, 236779, 236778, 29616, 7777, 236787, 52, 3593, 858, 236778, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236747, 236779, 11077, 236779, 236810, 29616, 7777, 236787, 52, 3593, 858, 236810, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236747, 236779, 11077, 236779, 236828, 29616, 7777, 236787, 52, 3593, 858, 236828, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236751, 236779, 11077, 236779, 236770, 29616, 7777, 236787, 52, 3593, 503, 236770, 52, 236764, 2084, 236787, 52, 35410, 52, 1263, 236751, 236779, 11077, 236779, 236812, 29616, 7777, 236787, 52, 3593, 503, 236812, 52, 236764, 2084, 236787, 52, 35410, 52, 1263, 236751, 236779, 11077, 236779, 236832, 29616, 7777, 236787, 52, 3593, 503, 236832, 52, 236764, 2084, 236787, 52, 35410, 52, 5237, 15979, 24845, 52, 236751, 236779, 11077, 236779, 236770, 52, 1604, 2084, 236787, 52, 60688, 52, 1807, 47, 106, 107, 105, 2364, 107, 10896, 5904, 236779, 236771, 236778, 236819, 531, 3423, 12539, 236743, 236778, 236819, 607, 784, 11955, 6192, 236761, 106, 107, 105, 4368, 107, 100, 45518, 107, 101]
+[2026-09-14 20:44:23.425][19276][llm_calculator][trace][servable.cpp:762] Pipeline input text: <bos><|turn>system
+<|tool>declaration:tool_029{description:<|"|>Diagnostic tool tool_029.<|"|>,parameters:{properties:{b_prop_3:{description:<|"|>field b3<|"|>,type:<|"|>BOOLEAN<|"|>},b_prop_6:{description:<|"|>field b6<|"|>,type:<|"|>BOOLEAN<|"|>},i_prop_2:{description:<|"|>field i2<|"|>,type:<|"|>INTEGER<|"|>},i_prop_5:{description:<|"|>field i5<|"|>,type:<|"|>INTEGER<|"|>},i_prop_8:{description:<|"|>field i8<|"|>,type:<|"|>INTEGER<|"|>},s_prop_1:{description:<|"|>field s1<|"|>,type:<|"|>STRING<|"|>},s_prop_4:{description:<|"|>field s4<|"|>,type:<|"|>STRING<|"|>},s_prop_7:{description:<|"|>field s7<|"|>,type:<|"|>STRING<|"|>}},required:[<|"|>s_prop_1<|"|>],type:<|"|>OBJECT<|"|>}}<tool|><turn|>
+<|turn>user
+Use tool_029 to record batch 29 with all applicable fields.<turn|>
+<|turn>model
+<|channel>thought
+<channel|>
+[2026-09-14 20:44:23.425][19276][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 20:44:23.428][19276][llm_calculator][trace][servable.cpp:78] Notifying executor thread
+[2026-09-14 20:44:23.428][19276][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 20:44:23.443][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:23.443][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:23.443][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:24.212][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 50.0% of 34.8 MB;
+[2026-09-14 20:44:24.444][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:24.444][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:24.444][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:24.599][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 50.0% of 34.8 MB;
+[2026-09-14 20:44:24.977][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 53.1% of 34.8 MB;
+[2026-09-14 20:44:25.091][19276][llm_calculator][trace][http_llm_calculator.cc:187] LLMCalculator  [Node: LLMExecutor] Received complete execution results, preparing response
+[2026-09-14 20:44:25.091][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="<|tool_call>", finish_reason=0, token IDs=[48]
+[2026-09-14 20:44:25.091][19872][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 20:44:25.092][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="call", finish_reason=0, token IDs=[6639]
+[2026-09-14 20:44:25.092][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text=":", finish_reason=0, token IDs=[236787]
+[2026-09-14 20:44:25.092][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="tool", finish_reason=0, token IDs=[13205]
+[2026-09-14 20:44:25.093][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:25.093][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="0", finish_reason=0, token IDs=[236771]
+[2026-09-14 20:44:25.093][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 20:44:25.094][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 3 tokens, text="9{
+", finish_reason=0, token IDs=[236819, 236782, 107]
+[2026-09-14 20:44:25.095][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:25.095][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="s", finish_reason=0, token IDs=[236751]
+[2026-09-14 20:44:25.095][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:25.096][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="prop", finish_reason=0, token IDs=[11077]
+[2026-09-14 20:44:25.096][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:25.096][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="1", finish_reason=0, token IDs=[236770]
+[2026-09-14 20:44:25.096][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="":", finish_reason=0, token IDs=[1083]
+[2026-09-14 20:44:25.096][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:25.096][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="batch", finish_reason=0, token IDs=[13679]
+[2026-09-14 20:44:25.096][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" ", finish_reason=0, token IDs=[236743]
+[2026-09-14 20:44:25.097][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="2", finish_reason=0, token IDs=[236778]
+[2026-09-14 20:44:25.097][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="9"
+", finish_reason=0, token IDs=[236819, 236775, 107]
+[2026-09-14 20:44:25.097][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="}", finish_reason=0, token IDs=[236783]
+[2026-09-14 20:44:25.097][19276][llm_calculator][trace][ovms_text_streamer.cpp:219] OVMSTextStreamer: 27 tokens generated; full decode (skip_special=false): "<|tool_call>call:tool_029{
+"s_prop_1":"batch 29"
+}<tool_call|><|tool_response>"; ids: [48, 6639, 236787, 13205, 236779, 236771, 236778, 236819, 236782, 107, 236775, 236751, 236779, 11077, 236779, 236770, 1083, 236775, 13679, 236743, 236778, 236819, 236775, 107, 236783, 49, 50]
+[2026-09-14 20:44:25.097][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<tool_call|>", finish_reason=0, token IDs=[49]
+[2026-09-14 20:44:25.097][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<|tool_response>", finish_reason=0, token IDs=[50]
+[2026-09-14 20:44:25.097][19276][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 0 tokens, text="", finish_reason=1, token IDs=[]
+[2026-09-14 20:44:25.097][19276][llm_calculator][debug][servable.cpp:833] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"Wydz98USY","type":"function","function":{"name":"tool_029","arguments":"{\"s_prop_1\":\"batch 29\"}"}}]}}],"created":1789411463,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":240,"completion_tokens":27,"total_tokens":267}}
+[2026-09-14 20:44:25.097][19276][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 240 | output_token_count: 27 | total_token_count: 267 | prepare_embeddings_time_ms: 2.407 | llm_ttft_ms: 619.076 | ttft_ms: 621.483 | prefill_speed_tps: 387.674 | image_slice_count: 0
+[2026-09-14 20:44:25.097][19276][llm_calculator][trace][http_llm_calculator.cc:192] LLMCalculator  [Node: LLMExecutor] Response prepared, sending it down the graph
+[2026-09-14 20:44:25.097][19276][llm_calculator][trace][http_llm_calculator.cc:226] LLMCalculator  [Node: LLMExecutor] Process end
+[2026-09-14 20:44:25.098][19720][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 20:44:25.230][9912][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 20:44:25.230][9912][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 20:44:25.230][9912][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 1116 bytes
+[2026-09-14 20:44:25.231][9912][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 20:44:25.231][9912][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 20:44:25.231][9912][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 20:44:25.231][9912][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 20:44:25.231][9912][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 20:44:25.231][23940][llm_calculator][trace][http_llm_calculator.cc:110] LLMCalculator  [Node: LLMExecutor] Process start
+[2026-09-14 20:44:25.231][23940][llm_calculator][debug][servable.cpp:1039] Request body: {"model":"gemma4","messages":[{"role":"user","content":"Use tool_030 to record batch 30 with all applicable fields."}],"tool_choice":"auto","max_tokens":256,"temperature":1.0,"tools":[{"type":"function","function":{"name":"tool_030","description":"Diagnostic tool tool_030.","parameters":{"type":"object","properties":{"i_prop_1":{"type":"integer","description":"field i1"},"b_prop_2":{"type":"boolean","description":"field b2"},"s_prop_3":{"type":"string","description":"field s3"},"i_prop_4":{"type":"integer","description":"field i4"}},"required":["s_prop_1","i_prop_2"],"additionalProperties":false}}}]}
+[2026-09-14 20:44:25.231][23940][llm_calculator][debug][servable.cpp:1040] Request uri: /v3/chat/completions
+[2026-09-14 20:44:25.231][23940][llm_calculator][debug][servable.cpp:1042] Request header: host=127.0.0.1:18091
+[2026-09-14 20:44:25.231][23940][llm_calculator][debug][servable.cpp:1042] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 20:44:25.231][23940][llm_calculator][debug][servable.cpp:1042] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 20:44:25.231][23940][llm_calculator][debug][servable.cpp:1042] Request header: content-type=application/json
+[2026-09-14 20:44:25.231][23940][llm_calculator][debug][servable.cpp:1042] Request header: content-length=1116
+[2026-09-14 20:44:25.231][23940][llm_calculator][debug][servable.cpp:573] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 20:44:25.231][23940][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 20:44:25.231][23940][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 20:44:25.233][23940][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:tool_030{, <|tool_call>call:tool_030(, <|tool_call>:tool_030{, <|tool_call>:tool_030(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 20:44:25.233][23940][llm_calculator][debug][base_generation_config_builder.cpp:218] Randomizing rng_seed for multinomial sampling: 4177628787.
+[2026-09-14 20:44:25.233][23940][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 20:44:25.233][23940][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyContentArrayNormalizationProcessor
+[2026-09-14 20:44:25.233][23940][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 4 us
+[2026-09-14 20:44:25.233][23940][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyToolCallsArrayRemovingProcessor
+[2026-09-14 20:44:25.233][23940][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 1 us
+[2026-09-14 20:44:25.233][23940][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ImageDecodingProcessor
+[2026-09-14 20:44:25.233][23940][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 4 us
+[2026-09-14 20:44:25.233][23940][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TextContentNormalizationProcessor
+[2026-09-14 20:44:25.233][23940][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 1 us
+[2026-09-14 20:44:25.233][23940][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateAdapter
+[2026-09-14 20:44:25.233][23940][llm_calculator][trace][chat_template_adapter.cpp:116] Applying chat template adaptations: supportsToolCalls=true, requiresObjectArguments=true, parseToolResponseJsonContent=true, missnamedReasoningField=, supportsResponseFieldInToolDefinition=true
+[2026-09-14 20:44:25.233][23940][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 16 us
+[2026-09-14 20:44:25.233][23940][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateProcessor
+[2026-09-14 20:44:25.233][23940][llm_calculator][trace][chat_template_processor.cpp:156] Chat history messages: [{"role":"user","content":"Use tool_030 to record batch 30 with all applicable fields."}]
+[2026-09-14 20:44:25.233][23940][llm_calculator][trace][chat_template_processor.cpp:157] chatHistory.get_extra_context(): {}
+[2026-09-14 20:44:25.233][23940][llm_calculator][trace][chat_template_processor.cpp:158] tools: [{"type":"function","function":{"name":"tool_030","description":"Diagnostic tool tool_030.","parameters":{"type":"object","properties":{"i_prop_1":{"type":"integer","description":"field i1"},"b_prop_2":{"type":"boolean","description":"field b2"},"s_prop_3":{"type":"string","description":"field s3"},"i_prop_4":{"type":"integer","description":"field i4"}},"required":["s_prop_1","i_prop_2"],"additionalProperties":false}}}]
+[2026-09-14 20:44:25.233][23940][llm_calculator][trace][chat_template_processor.cpp:159] chatTemplateKwargs: <none>
+[2026-09-14 20:44:25.234][23940][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 850 us
+[2026-09-14 20:44:25.234][23940][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TokenizationProcessor
+[2026-09-14 20:44:25.235][23940][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 922 us
+[2026-09-14 20:44:25.235][23940][llm_calculator][trace][servable.cpp:761] prompt_token_ids: [2, 105, 9731, 107, 46, 163688, 236787, 13205, 236779, 236771, 236800, 236771, 236782, 7777, 236787, 52, 121723, 5904, 5904, 236779, 236771, 236800, 236771, 236761, 52, 236764, 19031, 29616, 15921, 29616, 236763, 236779, 11077, 236779, 236778, 29616, 7777, 236787, 52, 3593, 518, 236778, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236747, 236779, 11077, 236779, 236770, 29616, 7777, 236787, 52, 3593, 858, 236770, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236747, 236779, 11077, 236779, 236812, 29616, 7777, 236787, 52, 3593, 858, 236812, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236751, 236779, 11077, 236779, 236800, 29616, 7777, 236787, 52, 3593, 503, 236800, 52, 236764, 2084, 236787, 52, 35410, 52, 5237, 15979, 24845, 52, 236751, 236779, 11077, 236779, 236770, 52, 236764, 52, 236747, 236779, 11077, 236779, 236778, 52, 1604, 2084, 236787, 52, 60688, 52, 1807, 47, 106, 107, 105, 2364, 107, 10896, 5904, 236779, 236771, 236800, 236771, 531, 3423, 12539, 236743, 236800, 236771, 607, 784, 11955, 6192, 236761, 106, 107, 105, 4368, 107, 100, 45518, 107, 101]
+[2026-09-14 20:44:25.235][23940][llm_calculator][trace][servable.cpp:762] Pipeline input text: <bos><|turn>system
+<|tool>declaration:tool_030{description:<|"|>Diagnostic tool tool_030.<|"|>,parameters:{properties:{b_prop_2:{description:<|"|>field b2<|"|>,type:<|"|>BOOLEAN<|"|>},i_prop_1:{description:<|"|>field i1<|"|>,type:<|"|>INTEGER<|"|>},i_prop_4:{description:<|"|>field i4<|"|>,type:<|"|>INTEGER<|"|>},s_prop_3:{description:<|"|>field s3<|"|>,type:<|"|>STRING<|"|>}},required:[<|"|>s_prop_1<|"|>,<|"|>i_prop_2<|"|>],type:<|"|>OBJECT<|"|>}}<tool|><turn|>
+<|turn>user
+Use tool_030 to record batch 30 with all applicable fields.<turn|>
+<|turn>model
+<|channel>thought
+<channel|>
+[2026-09-14 20:44:25.235][23940][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 20:44:25.238][23940][llm_calculator][trace][servable.cpp:78] Notifying executor thread
+[2026-09-14 20:44:25.238][23940][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 20:44:25.445][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:25.446][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:25.446][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:26.087][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 34.4% of 34.8 MB;
+[2026-09-14 20:44:26.446][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:26.446][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:26.446][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:26.476][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 37.5% of 34.8 MB;
+[2026-09-14 20:44:26.857][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 40.6% of 34.8 MB;
+[2026-09-14 20:44:27.230][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 40.6% of 34.8 MB;
+[2026-09-14 20:44:27.341][23940][llm_calculator][trace][http_llm_calculator.cc:187] LLMCalculator  [Node: LLMExecutor] Received complete execution results, preparing response
+[2026-09-14 20:44:27.341][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="<|tool_call>", finish_reason=0, token IDs=[48]
+[2026-09-14 20:44:27.341][19872][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 20:44:27.342][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="call", finish_reason=0, token IDs=[6639]
+[2026-09-14 20:44:27.342][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text=":", finish_reason=0, token IDs=[236787]
+[2026-09-14 20:44:27.342][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="tool", finish_reason=0, token IDs=[13205]
+[2026-09-14 20:44:27.343][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:27.343][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="0", finish_reason=0, token IDs=[236771]
+[2026-09-14 20:44:27.343][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="3", finish_reason=0, token IDs=[236800]
+[2026-09-14 20:44:27.343][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 3 tokens, text="0{
+", finish_reason=0, token IDs=[236771, 236782, 107]
+[2026-09-14 20:44:27.343][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="	", finish_reason=0, token IDs=[255968]
+[2026-09-14 20:44:27.343][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:27.344][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="i", finish_reason=0, token IDs=[236747]
+[2026-09-14 20:44:27.344][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:27.344][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="prop", finish_reason=0, token IDs=[11077]
+[2026-09-14 20:44:27.344][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:27.344][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="1", finish_reason=0, token IDs=[236770]
+[2026-09-14 20:44:27.344][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="":", finish_reason=0, token IDs=[1083]
+[2026-09-14 20:44:27.344][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="3", finish_reason=0, token IDs=[236800]
+[2026-09-14 20:44:27.344][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="0,
+", finish_reason=0, token IDs=[236771, 236764, 107]
+[2026-09-14 20:44:27.345][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="	", finish_reason=0, token IDs=[255968]
+[2026-09-14 20:44:27.345][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:27.345][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="s", finish_reason=0, token IDs=[236751]
+[2026-09-14 20:44:27.345][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:27.345][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="prop", finish_reason=0, token IDs=[11077]
+[2026-09-14 20:44:27.345][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:27.346][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="3", finish_reason=0, token IDs=[236800]
+[2026-09-14 20:44:27.346][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="":", finish_reason=0, token IDs=[1083]
+[2026-09-14 20:44:27.346][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:27.346][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="batch", finish_reason=0, token IDs=[13679]
+[2026-09-14 20:44:27.346][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" ", finish_reason=0, token IDs=[236743]
+[2026-09-14 20:44:27.346][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="3", finish_reason=0, token IDs=[236800]
+[2026-09-14 20:44:27.346][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="0"
+", finish_reason=0, token IDs=[236771, 236775, 107]
+[2026-09-14 20:44:27.347][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="}", finish_reason=0, token IDs=[236783]
+[2026-09-14 20:44:27.347][23940][llm_calculator][trace][ovms_text_streamer.cpp:219] OVMSTextStreamer: 40 tokens generated; full decode (skip_special=false): "<|tool_call>call:tool_030{
+	"i_prop_1":30,
+	"s_prop_3":"batch 30"
+}<tool_call|><|tool_response>"; ids: [48, 6639, 236787, 13205, 236779, 236771, 236800, 236771, 236782, 107, 255968, 236775, 236747, 236779, 11077, 236779, 236770, 1083, 236800, 236771, 236764, 107, 255968, 236775, 236751, 236779, 11077, 236779, 236800, 1083, 236775, 13679, 236743, 236800, 236771, 236775, 107, 236783, 49, 50]
+[2026-09-14 20:44:27.348][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<tool_call|>", finish_reason=0, token IDs=[49]
+[2026-09-14 20:44:27.348][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<|tool_response>", finish_reason=0, token IDs=[50]
+[2026-09-14 20:44:27.348][23940][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 0 tokens, text="", finish_reason=1, token IDs=[]
+[2026-09-14 20:44:27.348][23940][llm_calculator][debug][servable.cpp:833] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"zaHY4rGiP","type":"function","function":{"name":"tool_030","arguments":"{\"i_prop_1\":30,\"s_prop_3\":\"batch 30\"}"}}]}}],"created":1789411465,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":167,"completion_tokens":40,"total_tokens":207}}
+[2026-09-14 20:44:27.348][23940][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 167 | output_token_count: 40 | total_token_count: 207 | prepare_embeddings_time_ms: 1.868 | llm_ttft_ms: 568.498 | ttft_ms: 570.366 | prefill_speed_tps: 293.757 | image_slice_count: 0
+[2026-09-14 20:44:27.348][23940][llm_calculator][trace][http_llm_calculator.cc:192] LLMCalculator  [Node: LLMExecutor] Response prepared, sending it down the graph
+[2026-09-14 20:44:27.348][23940][llm_calculator][trace][http_llm_calculator.cc:226] LLMCalculator  [Node: LLMExecutor] Process end
+[2026-09-14 20:44:27.348][9912][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 20:44:27.447][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:27.447][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:27.447][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:28.448][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:28.448][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:28.448][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:28.509][14556][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 20:44:28.509][14556][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 20:44:28.509][14556][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 1206 bytes
+[2026-09-14 20:44:28.509][14556][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 20:44:28.509][14556][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 20:44:28.509][14556][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 20:44:28.509][14556][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 20:44:28.509][14556][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 20:44:28.509][20764][llm_calculator][trace][http_llm_calculator.cc:110] LLMCalculator  [Node: LLMExecutor] Process start
+[2026-09-14 20:44:28.509][20764][llm_calculator][debug][servable.cpp:1039] Request body: {"model":"gemma4","messages":[{"role":"user","content":"Use tool_031 to record batch 31 with all applicable fields."}],"tool_choice":"auto","max_tokens":256,"temperature":0,"tools":[{"type":"function","function":{"name":"tool_031","description":"Diagnostic tool tool_031.","parameters":{"type":"object","properties":{"b_prop_1":{"type":"boolean","description":"field b1"},"s_prop_2":{"type":"string","description":"field s2"},"i_prop_3":{"type":"integer","description":"field i3"},"b_prop_4":{"type":"boolean","description":"field b4"},"s_prop_5":{"type":"string","description":"field s5"}},"required":["s_prop_1"],"additionalProperties":false}}}]}
+[2026-09-14 20:44:28.509][20764][llm_calculator][debug][servable.cpp:1040] Request uri: /v3/chat/completions
+[2026-09-14 20:44:28.509][20764][llm_calculator][debug][servable.cpp:1042] Request header: host=127.0.0.1:18091
+[2026-09-14 20:44:28.509][20764][llm_calculator][debug][servable.cpp:1042] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 20:44:28.509][20764][llm_calculator][debug][servable.cpp:1042] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 20:44:28.509][20764][llm_calculator][debug][servable.cpp:1042] Request header: content-type=application/json
+[2026-09-14 20:44:28.509][20764][llm_calculator][debug][servable.cpp:1042] Request header: content-length=1206
+[2026-09-14 20:44:28.509][20764][llm_calculator][debug][servable.cpp:573] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 20:44:28.509][20764][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 20:44:28.510][20764][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 20:44:28.511][20764][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:tool_031{, <|tool_call>call:tool_031(, <|tool_call>:tool_031{, <|tool_call>:tool_031(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 20:44:28.512][20764][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 20:44:28.512][20764][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyContentArrayNormalizationProcessor
+[2026-09-14 20:44:28.512][20764][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 3 us
+[2026-09-14 20:44:28.512][20764][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyToolCallsArrayRemovingProcessor
+[2026-09-14 20:44:28.512][20764][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 1 us
+[2026-09-14 20:44:28.512][20764][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ImageDecodingProcessor
+[2026-09-14 20:44:28.512][20764][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 3 us
+[2026-09-14 20:44:28.512][20764][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TextContentNormalizationProcessor
+[2026-09-14 20:44:28.512][20764][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 1 us
+[2026-09-14 20:44:28.512][20764][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateAdapter
+[2026-09-14 20:44:28.512][20764][llm_calculator][trace][chat_template_adapter.cpp:116] Applying chat template adaptations: supportsToolCalls=true, requiresObjectArguments=true, parseToolResponseJsonContent=true, missnamedReasoningField=, supportsResponseFieldInToolDefinition=true
+[2026-09-14 20:44:28.512][20764][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 26 us
+[2026-09-14 20:44:28.512][20764][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateProcessor
+[2026-09-14 20:44:28.512][20764][llm_calculator][trace][chat_template_processor.cpp:156] Chat history messages: [{"role":"user","content":"Use tool_031 to record batch 31 with all applicable fields."}]
+[2026-09-14 20:44:28.512][20764][llm_calculator][trace][chat_template_processor.cpp:157] chatHistory.get_extra_context(): {}
+[2026-09-14 20:44:28.512][20764][llm_calculator][trace][chat_template_processor.cpp:158] tools: [{"type":"function","function":{"name":"tool_031","description":"Diagnostic tool tool_031.","parameters":{"type":"object","properties":{"b_prop_1":{"type":"boolean","description":"field b1"},"s_prop_2":{"type":"string","description":"field s2"},"i_prop_3":{"type":"integer","description":"field i3"},"b_prop_4":{"type":"boolean","description":"field b4"},"s_prop_5":{"type":"string","description":"field s5"}},"required":["s_prop_1"],"additionalProperties":false}}}]
+[2026-09-14 20:44:28.512][20764][llm_calculator][trace][chat_template_processor.cpp:159] chatTemplateKwargs: <none>
+[2026-09-14 20:44:28.513][20764][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 850 us
+[2026-09-14 20:44:28.513][20764][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TokenizationProcessor
+[2026-09-14 20:44:28.514][20764][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 927 us
+[2026-09-14 20:44:28.514][20764][llm_calculator][trace][servable.cpp:761] prompt_token_ids: [2, 105, 9731, 107, 46, 163688, 236787, 13205, 236779, 236771, 236800, 236770, 236782, 7777, 236787, 52, 121723, 5904, 5904, 236779, 236771, 236800, 236770, 236761, 52, 236764, 19031, 29616, 15921, 29616, 236763, 236779, 11077, 236779, 236770, 29616, 7777, 236787, 52, 3593, 518, 236770, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236763, 236779, 11077, 236779, 236812, 29616, 7777, 236787, 52, 3593, 518, 236812, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236747, 236779, 11077, 236779, 236800, 29616, 7777, 236787, 52, 3593, 858, 236800, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236751, 236779, 11077, 236779, 236778, 29616, 7777, 236787, 52, 3593, 503, 236778, 52, 236764, 2084, 236787, 52, 35410, 52, 1263, 236751, 236779, 11077, 236779, 236810, 29616, 7777, 236787, 52, 3593, 503, 236810, 52, 236764, 2084, 236787, 52, 35410, 52, 5237, 15979, 24845, 52, 236751, 236779, 11077, 236779, 236770, 52, 1604, 2084, 236787, 52, 60688, 52, 1807, 47, 106, 107, 105, 2364, 107, 10896, 5904, 236779, 236771, 236800, 236770, 531, 3423, 12539, 236743, 236800, 236770, 607, 784, 11955, 6192, 236761, 106, 107, 105, 4368, 107, 100, 45518, 107, 101]
+[2026-09-14 20:44:28.514][20764][llm_calculator][trace][servable.cpp:762] Pipeline input text: <bos><|turn>system
+<|tool>declaration:tool_031{description:<|"|>Diagnostic tool tool_031.<|"|>,parameters:{properties:{b_prop_1:{description:<|"|>field b1<|"|>,type:<|"|>BOOLEAN<|"|>},b_prop_4:{description:<|"|>field b4<|"|>,type:<|"|>BOOLEAN<|"|>},i_prop_3:{description:<|"|>field i3<|"|>,type:<|"|>INTEGER<|"|>},s_prop_2:{description:<|"|>field s2<|"|>,type:<|"|>STRING<|"|>},s_prop_5:{description:<|"|>field s5<|"|>,type:<|"|>STRING<|"|>}},required:[<|"|>s_prop_1<|"|>],type:<|"|>OBJECT<|"|>}}<tool|><turn|>
+<|turn>user
+Use tool_031 to record batch 31 with all applicable fields.<turn|>
+<|turn>model
+<|channel>thought
+<channel|>
+[2026-09-14 20:44:28.514][20764][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 20:44:28.516][20764][llm_calculator][trace][servable.cpp:78] Notifying executor thread
+[2026-09-14 20:44:28.516][20764][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 20:44:29.321][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 37.5% of 34.8 MB;
+[2026-09-14 20:44:29.449][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:29.449][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:29.449][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:29.705][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 40.6% of 34.8 MB;
+[2026-09-14 20:44:30.091][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 40.6% of 34.8 MB;
+[2026-09-14 20:44:30.450][23652][modelmanager][trace][modelmanager.cpp:1186] Models configuration and filesystem check cycle begin
+[2026-09-14 20:44:30.450][23652][modelmanager][trace][modelmanager.cpp:1105] Checking if something changed with model versions
+[2026-09-14 20:44:30.450][23652][modelmanager][trace][modelmanager.cpp:1207] Models configuration and filesystem check cycle end
+[2026-09-14 20:44:30.468][19872][llm_executor][info][llm_executor.hpp:105] All requests: 1; Scheduled requests: 1; Cache type: dynamic, cache usage: 43.8% of 34.8 MB;
+[2026-09-14 20:44:30.503][20764][llm_calculator][trace][http_llm_calculator.cc:187] LLMCalculator  [Node: LLMExecutor] Received complete execution results, preparing response
+[2026-09-14 20:44:30.503][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="<|tool_call>", finish_reason=0, token IDs=[48]
+[2026-09-14 20:44:30.504][19872][llm_executor][info][llm_executor.hpp:128] All requests: 0; Scheduled requests: 0;
+[2026-09-14 20:44:30.505][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="call", finish_reason=0, token IDs=[6639]
+[2026-09-14 20:44:30.505][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text=":", finish_reason=0, token IDs=[236787]
+[2026-09-14 20:44:30.505][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="tool", finish_reason=0, token IDs=[13205]
+[2026-09-14 20:44:30.505][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:30.505][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="0", finish_reason=0, token IDs=[236771]
+[2026-09-14 20:44:30.506][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 1 tokens, text="3", finish_reason=0, token IDs=[236800]
+[2026-09-14 20:44:30.506][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=UNKNOWN] called with 3 tokens, text="1{
+", finish_reason=0, token IDs=[236770, 236782, 107]
+[2026-09-14 20:44:30.506][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:30.506][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="i", finish_reason=0, token IDs=[236747]
+[2026-09-14 20:44:30.506][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:30.507][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="prop", finish_reason=0, token IDs=[11077]
+[2026-09-14 20:44:30.507][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:30.507][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="3", finish_reason=0, token IDs=[236800]
+[2026-09-14 20:44:30.507][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="":", finish_reason=0, token IDs=[1083]
+[2026-09-14 20:44:30.507][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="3", finish_reason=0, token IDs=[236800]
+[2026-09-14 20:44:30.507][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="1,
+", finish_reason=0, token IDs=[236770, 236764, 107]
+[2026-09-14 20:44:30.507][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:30.508][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="s", finish_reason=0, token IDs=[236751]
+[2026-09-14 20:44:30.508][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:30.508][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="prop", finish_reason=0, token IDs=[11077]
+[2026-09-14 20:44:30.508][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="_", finish_reason=0, token IDs=[236779]
+[2026-09-14 20:44:30.508][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="5", finish_reason=0, token IDs=[236810]
+[2026-09-14 20:44:30.508][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="":", finish_reason=0, token IDs=[1083]
+[2026-09-14 20:44:30.508][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=""", finish_reason=0, token IDs=[236775]
+[2026-09-14 20:44:30.509][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="batch", finish_reason=0, token IDs=[13679]
+[2026-09-14 20:44:30.509][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text=" ", finish_reason=0, token IDs=[236743]
+[2026-09-14 20:44:30.509][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="3", finish_reason=0, token IDs=[236800]
+[2026-09-14 20:44:30.510][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 3 tokens, text="1"
+", finish_reason=0, token IDs=[236770, 236775, 107]
+[2026-09-14 20:44:30.510][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="}", finish_reason=0, token IDs=[236783]
+[2026-09-14 20:44:30.510][20764][llm_calculator][trace][ovms_text_streamer.cpp:219] OVMSTextStreamer: 38 tokens generated; full decode (skip_special=false): "<|tool_call>call:tool_031{
+"i_prop_3":31,
+"s_prop_5":"batch 31"
+}<tool_call|><|tool_response>"; ids: [48, 6639, 236787, 13205, 236779, 236771, 236800, 236770, 236782, 107, 236775, 236747, 236779, 11077, 236779, 236800, 1083, 236800, 236770, 236764, 107, 236775, 236751, 236779, 11077, 236779, 236810, 1083, 236775, 13679, 236743, 236800, 236770, 236775, 107, 236783, 49, 50]
+[2026-09-14 20:44:30.510][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<tool_call|>", finish_reason=0, token IDs=[49]
+[2026-09-14 20:44:30.511][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 1 tokens, text="<|tool_response>", finish_reason=0, token IDs=[50]
+[2026-09-14 20:44:30.511][20764][llm_calculator][trace][output_parser.cpp:383] OutputParser::parseChunk[PROCESSING_PHASE=TOOL_CALLS_PROCESSING_TOOL] called with 0 tokens, text="", finish_reason=1, token IDs=[]
+[2026-09-14 20:44:30.511][20764][llm_calculator][debug][servable.cpp:833] Complete unary response: {"choices":[{"finish_reason":"tool_calls","index":0,"logprobs":null,"message":{"content":"","role":"assistant","tool_calls":[{"id":"L6Bh7A410","type":"function","function":{"name":"tool_031","arguments":"{\"i_prop_3\":31,\"s_prop_5\":\"batch 31\"}"}}]}}],"created":1789411468,"model":"gemma4","object":"chat.completion","usage":{"prompt_tokens":180,"completion_tokens":38,"total_tokens":218}}
+[2026-09-14 20:44:30.511][20764][llm_calculator][debug][servable.cpp:73] Request processing metrics | input_token_count: 180 | output_token_count: 38 | total_token_count: 218 | prepare_embeddings_time_ms: 1.894 | llm_ttft_ms: 520.599 | ttft_ms: 522.493 | prefill_speed_tps: 345.755 | image_slice_count: 0
+[2026-09-14 20:44:30.511][20764][llm_calculator][trace][http_llm_calculator.cc:192] LLMCalculator  [Node: LLMExecutor] Response prepared, sending it down the graph
+[2026-09-14 20:44:30.511][20764][llm_calculator][trace][http_llm_calculator.cc:226] LLMCalculator  [Node: LLMExecutor] Process end
+[2026-09-14 20:44:30.511][14556][serving][debug][mediapipegraphexecutor.hpp:288] Received all output stream packets for graph: gemma4
+[2026-09-14 20:44:30.654][19592][serving][debug][drogon_http_server.cpp:99] Request URI /v3/chat/completions dispatched to streaming thread pool
+[2026-09-14 20:44:30.654][19592][serving][debug][http_server.cpp:167] REST request /v3/chat/completions
+[2026-09-14 20:44:30.654][19592][serving][debug][http_server.cpp:178] Processing HTTP request: POST /v3/chat/completions body: 1353 bytes
+[2026-09-14 20:44:30.654][19592][serving][debug][http_rest_api_handler.cpp:548] Model name from deduced from JSON: gemma4
+[2026-09-14 20:44:30.654][19592][serving][debug][single_version_servable_definition.cpp:38] Successfully waited for definition: gemma4
+[2026-09-14 20:44:30.654][19592][serving][debug][mediapipegraphdefinition.cpp:412] Creating Mediapipe graph executor: gemma4
+[2026-09-14 20:44:30.654][19592][serving][debug][mediapipegraphdefinition.cpp:427] Created Mediapipe graph executor: gemma4
+[2026-09-14 20:44:30.654][19592][serving][debug][mediapipegraphexecutor.hpp:221] Start unary KServe request mediapipe graph: gemma4 execution
+[2026-09-14 20:44:30.654][10876][llm_calculator][trace][http_llm_calculator.cc:110] LLMCalculator  [Node: LLMExecutor] Process start
+[2026-09-14 20:44:30.654][10876][llm_calculator][debug][servable.cpp:1039] Request body: {"model":"gemma4","messages":[{"role":"user","content":"Use tool_032 to record batch 32 with all applicable fields."}],"tool_choice":"required","max_tokens":256,"temperature":0,"tools":[{"type":"function","function":{"name":"tool_032","description":"Diagnostic tool tool_032.","parameters":{"type":"object","properties":{"s_prop_1":{"type":"string","description":"field s1"},"i_prop_2":{"type":"integer","description":"field i2"},"b_prop_3":{"type":"boolean","description":"field b3"},"s_prop_4":{"type":"string","description":"field s4"},"i_prop_5":{"type":"integer","description":"field i5"},"b_prop_6":{"type":"boolean","description":"field b6"}},"required":["s_prop_1","i_prop_2"],"additionalProperties":false}}}]}
+[2026-09-14 20:44:30.654][10876][llm_calculator][debug][servable.cpp:1040] Request uri: /v3/chat/completions
+[2026-09-14 20:44:30.654][10876][llm_calculator][debug][servable.cpp:1042] Request header: host=127.0.0.1:18091
+[2026-09-14 20:44:30.654][10876][llm_calculator][debug][servable.cpp:1042] Request header: user-agent=Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26200; en-US) PowerShell/7.6.6
+[2026-09-14 20:44:30.654][10876][llm_calculator][debug][servable.cpp:1042] Request header: accept-encoding=gzip, deflate, br
+[2026-09-14 20:44:30.654][10876][llm_calculator][debug][servable.cpp:1042] Request header: content-type=application/json
+[2026-09-14 20:44:30.654][10876][llm_calculator][debug][servable.cpp:1042] Request header: content-length=1353
+[2026-09-14 20:44:30.654][10876][llm_calculator][debug][servable.cpp:573] session-state: uri=/v3/chat/completions header_count=5 session_present=false store_enabled=false store_path=<unset>
+[2026-09-14 20:44:30.655][10876][llm_calculator][debug][http_llm_calculator.cc:131] LLMCalculator  [Node: LLMExecutor] Request loaded successfully
+[2026-09-14 20:44:30.655][10876][llm_calculator][debug][openai_completions.cpp:297] Parsed messages successfully
+[2026-09-14 20:44:30.656][10876][llm_calculator][debug][output_parser.cpp:251] OutputParser initialized with tool parser: "gemma4" (parsing config: StartTags: [<|tool_call>call:tool_032{, <|tool_call>call:tool_032(, <|tool_call>:tool_032{, <|tool_call>:tool_032(, ], EndTag: <tool_call|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {48: <|tool_call>, }, ImplicitStart: false, NeedsSpecialTokens: true), reasoning parser: "gemma4" (parsing config: StartTags: [<|channel>thought
+, ], EndTag: <channel|>, ContentTagsToErase: [], ResolvedStartTokenToTag: {100: <|channel>, }, ImplicitStart: false, NeedsSpecialTokens: true), defaultDecodingWithSpecialTokens=false
+[2026-09-14 20:44:30.656][10876][llm_calculator][debug][http_llm_calculator.cc:150] LLMCalculator  [Node: LLMExecutor] Request parsed successfully
+[2026-09-14 20:44:30.656][10876][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyContentArrayNormalizationProcessor
+[2026-09-14 20:44:30.656][10876][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyContentArrayNormalizationProcessor took 2 us
+[2026-09-14 20:44:30.656][10876][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::EmptyToolCallsArrayRemovingProcessor
+[2026-09-14 20:44:30.656][10876][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::EmptyToolCallsArrayRemovingProcessor took 0 us
+[2026-09-14 20:44:30.656][10876][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ImageDecodingProcessor
+[2026-09-14 20:44:30.656][10876][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ImageDecodingProcessor took 2 us
+[2026-09-14 20:44:30.656][10876][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TextContentNormalizationProcessor
+[2026-09-14 20:44:30.656][10876][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TextContentNormalizationProcessor took 0 us
+[2026-09-14 20:44:30.656][10876][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateAdapter
+[2026-09-14 20:44:30.656][10876][llm_calculator][trace][chat_template_adapter.cpp:116] Applying chat template adaptations: supportsToolCalls=true, requiresObjectArguments=true, parseToolResponseJsonContent=true, missnamedReasoningField=, supportsResponseFieldInToolDefinition=true
+[2026-09-14 20:44:30.656][10876][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateAdapter took 15 us
+[2026-09-14 20:44:30.656][10876][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::ChatTemplateProcessor
+[2026-09-14 20:44:30.656][10876][llm_calculator][trace][chat_template_processor.cpp:156] Chat history messages: [{"role":"user","content":"Use tool_032 to record batch 32 with all applicable fields."}]
+[2026-09-14 20:44:30.656][10876][llm_calculator][trace][chat_template_processor.cpp:157] chatHistory.get_extra_context(): {}
+[2026-09-14 20:44:30.656][10876][llm_calculator][trace][chat_template_processor.cpp:158] tools: [{"type":"function","function":{"name":"tool_032","description":"Diagnostic tool tool_032.","parameters":{"type":"object","properties":{"s_prop_1":{"type":"string","description":"field s1"},"i_prop_2":{"type":"integer","description":"field i2"},"b_prop_3":{"type":"boolean","description":"field b3"},"s_prop_4":{"type":"string","description":"field s4"},"i_prop_5":{"type":"integer","description":"field i5"},"b_prop_6":{"type":"boolean","description":"field b6"}},"required":["s_prop_1","i_prop_2"],"additionalProperties":false}}}]
+[2026-09-14 20:44:30.656][10876][llm_calculator][trace][chat_template_processor.cpp:159] chatTemplateKwargs: <none>
+[2026-09-14 20:44:30.657][10876][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::ChatTemplateProcessor took 675 us
+[2026-09-14 20:44:30.657][10876][llm_calculator][trace][input_processor.cpp:96] InputProcessor: executing class ovms::TokenizationProcessor
+[2026-09-14 20:44:30.658][10876][llm_calculator][debug][input_processor.cpp:104] InputProcessor: class ovms::TokenizationProcessor took 865 us
+[2026-09-14 20:44:30.658][10876][llm_calculator][trace][servable.cpp:761] prompt_token_ids: [2, 105, 9731, 107, 46, 163688, 236787, 13205, 236779, 236771, 236800, 236778, 236782, 7777, 236787, 52, 121723, 5904, 5904, 236779, 236771, 236800, 236778, 236761, 52, 236764, 19031, 29616, 15921, 29616, 236763, 236779, 11077, 236779, 236800, 29616, 7777, 236787, 52, 3593, 518, 236800, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236763, 236779, 11077, 236779, 236825, 29616, 7777, 236787, 52, 3593, 518, 236825, 52, 236764, 2084, 236787, 52, 166264, 1536, 52, 1263, 236747, 236779, 11077, 236779, 236778, 29616, 7777, 236787, 52, 3593, 858, 236778, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236747, 236779, 11077, 236779, 236810, 29616, 7777, 236787, 52, 3593, 858, 236810, 52, 236764, 2084, 236787, 52, 86752, 52, 1263, 236751, 236779, 11077, 236779, 236770, 29616, 7777, 236787, 52, 3593, 503, 236770, 52, 236764, 2084, 236787, 52, 35410, 52, 1263, 236751, 236779, 11077, 236779, 236812, 29616, 7777, 236787, 52, 3593, 503, 236812, 52, 236764, 2084, 236787, 52, 35410, 52, 5237, 15979, 24845, 52, 236751, 236779, 11077, 236779, 236770, 52, 236764, 52, 236747, 236779, 11077, 236779, 236778, 52, 1604, 2084, 236787, 52, 60688, 52, 1807, 47, 106, 107, 105, 2364, 107, 10896, 5904, 236779, 236771, 236800, 236778, 531, 3423, 12539, 236743, 236800, 236778, 607, 784, 11955, 6192, 236761, 106, 107, 105, 4368, 107, 100, 45518, 107, 101]
+[2026-09-14 20:44:30.658][10876][llm_calculator][trace][servable.cpp:762] Pipeline input text: <bos><|turn>system
+<|tool>declaration:tool_032{description:<|"|>Diagnostic tool tool_032.<|"|>,parameters:{properties:{b_prop_3:{description:<|"|>field b3<|"|>,type:<|"|>BOOLEAN<|"|>},b_prop_6:{description:<|"|>field b6<|"|>,type:<|"|>BOOLEAN<|"|>},i_prop_2:{description:<|"|>field i2<|"|>,type:<|"|>INTEGER<|"|>},i_prop_5:{description:<|"|>field i5<|"|>,type:<|"|>INTEGER<|"|>},s_prop_1:{description:<|"|>field s1<|"|>,type:<|"|>STRING<|"|>},s_prop_4:{description:<|"|>field s4<|"|>,type:<|"|>STRING<|"|>}},required:[<|"|>s_prop_1<|"|>,<|"|>i_prop_2<|"|>],type:<|"|>OBJECT<|"|>}}<tool|><turn|>
+<|turn>user
+Use tool_032 to record batch 32 with all applicable fields.<turn|>
+<|turn>model
+<|channel>thought
+<channel|>
+[2026-09-14 20:44:30.658][10876][llm_calculator][debug][http_llm_calculator.cc:157] LLMCalculator  [Node: LLMExecutor] Input for the pipeline prepared successfully
+[2026-09-14 20:44:30.661][10876][llm_calculator][trace][servable.cpp:78] Notifying executor thread
+[2026-09-14 20:44:30.661][10876][llm_calculator][debug][http_llm_calculator.cc:162] LLMCalculator  [Node: LLMExecutor] Pipeline execution scheduled successfully
+[2026-09-14 20:44:30.671][19872][llm_executor][error][llm_executor.hpp:132] Error occurred in LLM executor: Exception from src\inference\src\cpp\infer_request.cpp:224:
+Exception from src\plugins\intel_gpu\src\runtime\ocl\ocl_common.hpp:62:
+[GPU] CL_OUT_OF_RESOURCES exception.
+	Due to a driver bug, any subsequent OpenCL API call may cause the application to hang, so the GPU plugin may be unable to finish correctly.
+	The CL_OUT_OF_RESOURCES error typically occurs in two cases:
+	1. Insufficient memory for the current inference.
+	2. An out-of-bounds access to GPU memory from a kernel.
+	For case 1 (Insufficient Memory)	  - Try adjusting some model parameters (e.g., using a smaller batch size, lower inference precision, fewer streams, etc.) to 
+	    reduce the required memory size.
+	  - Alternatively, for Intel integrated Arc GPUs on Microsoft Windows 10 or 11 host systems with more than 10 GB of system memory, the 
+	    shared memory allocation can be increased via the Intel Graphics Software tool: 'Graphics > General > Shared GPU Memory Override', 
+	    as long as it is not already at its software-defined upper limit.
+	For case 2 (Out-of-Bounds Access):
+	  - Please submit a bug report to the OpenVINO team.
+	Additionally, please try updating the driver to the latest version.
+
+
+.

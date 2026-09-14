@@ -1,0 +1,10 @@
+\\msi\gpu process memory(pid_16656_luid_0x00000000_0x0001214c_phys_0)\shared usage = 15320.3
+\\msi\gpu process memory(pid_16656_luid_0x00000000_0x0001214c_phys_0)\dedicated usage = 0
+\\msi\gpu process memory(pid_16656_luid_0x00000000_0x0001214c_phys_0)\non local usage = 0
+\\msi\gpu process memory(pid_16656_luid_0x00000000_0x0001214c_phys_0)\local usage = 15320.3
+\\msi\gpu process memory(pid_16656_luid_0x00000000_0x0001214c_phys_0)\total committed = 15350
+\\msi\gpu process memory(pid_16656_luid_0x00000000_0x00013a25_phys_0)\shared usage = 0
+\\msi\gpu process memory(pid_16656_luid_0x00000000_0x00013a25_phys_0)\dedicated usage = 0
+\\msi\gpu process memory(pid_16656_luid_0x00000000_0x00013a25_phys_0)\non local usage = 0
+\\msi\gpu process memory(pid_16656_luid_0x00000000_0x00013a25_phys_0)\local usage = 0
+\\msi\gpu process memory(pid_16656_luid_0x00000000_0x00013a25_phys_0)\total committed = 0

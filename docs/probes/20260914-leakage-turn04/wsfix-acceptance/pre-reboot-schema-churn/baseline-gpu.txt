@@ -1,0 +1,14 @@
+
+Name          : Intel(R) Arc(TM) 140V GPU (16GB)
+DriverVersion : 32.0.101.8991
+AdapterRAM    : 4293918720
+
+Name          : DisplayLink USB Device
+DriverVersion : 11.2.3146.0
+AdapterRAM    : 
+
+Name          : DisplayLink USB Device
+DriverVersion : 11.2.3146.0
+AdapterRAM    : 
+
+

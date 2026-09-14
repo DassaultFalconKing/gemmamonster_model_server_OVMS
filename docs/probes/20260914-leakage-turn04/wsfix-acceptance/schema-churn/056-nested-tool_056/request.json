@@ -1,0 +1,55 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Use tool_056 to store contact 56 living in Paris."
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 256,
+  "temperature": 1.0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "tool_056",
+        "description": "Diagnostic tool tool_056.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "field name"
+            },
+            "address": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string",
+                  "description": "field city"
+                },
+                "zip": {
+                  "type": "string",
+                  "description": "field zip"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            },
+            "priority": {
+              "type": "integer",
+              "description": "field priority"
+            }
+          },
+          "required": [
+            "name",
+            "address"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

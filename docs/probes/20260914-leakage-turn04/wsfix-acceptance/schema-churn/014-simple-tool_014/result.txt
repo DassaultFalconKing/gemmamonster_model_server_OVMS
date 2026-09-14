@@ -1,0 +1,1 @@
+014 simple-tool_014 fp=0dfcb5acc5512c40* choice=auto t=0 max=256 ptc=False ms=1797 :: HTTP200 finish=tool_calls calls=1 clen=0 calltag=False ptok=123 ctok=29 :: alive=True ws=388 priv=16064 freeKB=5588388 

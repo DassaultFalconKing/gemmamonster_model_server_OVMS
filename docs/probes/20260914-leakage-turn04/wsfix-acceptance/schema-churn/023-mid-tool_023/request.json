@@ -1,0 +1,58 @@
+{
+  "model": "gemma4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Use tool_023 to record batch 23 with all applicable fields."
+    }
+  ],
+  "tool_choice": "auto",
+  "max_tokens": 256,
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "tool_023",
+        "description": "Diagnostic tool tool_023.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "s_prop_1": {
+              "type": "string",
+              "description": "field s1"
+            },
+            "i_prop_2": {
+              "type": "integer",
+              "description": "field i2"
+            },
+            "b_prop_3": {
+              "type": "boolean",
+              "description": "field b3"
+            },
+            "s_prop_4": {
+              "type": "string",
+              "description": "field s4"
+            },
+            "i_prop_5": {
+              "type": "integer",
+              "description": "field i5"
+            },
+            "b_prop_6": {
+              "type": "boolean",
+              "description": "field b6"
+            },
+            "s_prop_7": {
+              "type": "string",
+              "description": "field s7"
+            }
+          },
+          "required": [
+            "s_prop_1"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}
