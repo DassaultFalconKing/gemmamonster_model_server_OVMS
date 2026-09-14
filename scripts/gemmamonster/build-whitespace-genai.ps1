@@ -47,7 +47,7 @@ try {
 @echo off
 call "$runtime\setupvars.bat"
 if errorlevel 1 exit /b 1
-cmake -S "$genai" -B "$build" -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release -DBUILD_TOKENIZERS=OFF -DENABLE_SAMPLES=OFF -DENABLE_TOOLS=OFF -DENABLE_TESTS=OFF -DENABLE_XGRAMMAR=ON "-DFETCHCONTENT_SOURCE_DIR_XGRAMMAR=$xgrammar"
+cmake -S "$genai" -B "$build" -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release -DBUILD_TOKENIZERS=OFF -DENABLE_PYTHON=OFF -DENABLE_SAMPLES=OFF -DENABLE_TOOLS=OFF -DENABLE_TESTS=OFF -DENABLE_XGRAMMAR=ON "-DFETCHCONTENT_SOURCE_DIR_XGRAMMAR=$xgrammar"
 if errorlevel 1 exit /b 1
 cmake --build "$build" --config Release --parallel 4
 if errorlevel 1 exit /b 1
