@@ -3,7 +3,7 @@
 **Status:** ACTIVE / implementation in progress  
 **Updated:** 2026-09-15  
 **Working branch:** `staging/gemma4-upstream-refit-clean-20260915`  
-**Current checkpoint before this document commit:** `27b66eda147ccbbf90ea5251da4bafdd7cfd3d91`  
+**Current checkpoint before this document commit:** `cf6fc0412024a0f358048470da144abaa101046d`  
 **Upstream base:** `openvinotoolkit/model_server@a5136cb285482aaef5410a053b5ecd04ff9324ec`  
 **Authority dossier:** `docs/gemmamonster/COMPARATIVE-GEMMA4-PARSER-VERDICT.md`
 
@@ -32,6 +32,7 @@ This file is the recovery point for the post-#4103 Gemma4 upstream contribution 
 - [x] `251f4b58` — RED contract for reasoning-close -> tool-open special-token handoff.
 - [x] `f3410cfa` — refreshed comparative parser/generation/template dossier.
 - [x] `a887757a` — production special-token phase-handoff ordering fix.
+- [x] `58fe7b7` — hygiene: restored `../utils.hpp` declaration include lost from the connector-written parser rewrite; targeted parser build PASS.
 
 Important invariant: no hard-coded Gemma token IDs. Token boundaries remain tokenizer-resolved and generic streamer logic remains model-agnostic.
 
@@ -47,35 +48,29 @@ Important invariant: no hard-coded Gemma token IDs. Token boundaries remain toke
 - [x] `76c792ca` — GREEN: explicit reject of `response_format + active Gemma4 tools`; `tool_choice=none` leaves response format available.
 - [x] `92a30faf` — RED: hard tool policy must require successful structured-output validation and `required` without tools must fail.
 - [x] `27b66eda` — partial GREEN: base/builder contract now exposes `requiresValidStructuredOutput()`, hard Gemma policy is tracked explicitly, and hard choice without available schemas is rejected before the inactive-tools early return.
+- [x] `7d2ef35` — API-boundary RED: required malformed schema returned OK after GenAI validation failure; unavailable named choice escaped as `std::invalid_argument`; optional auto fallback remained OK.
+- [x] `cf6fc04` — API-boundary GREEN: parsing errors return `InvalidArgument`; mandatory grammar validation cannot fall back to unguided generation.
 
 ## 3. Current exact implementation state
 
-The builder half of the hard-validation contract is now implemented. The remaining unfinished boundary is `OpenAIApiHandler::extractInputRequest()`.
+The hard-validation API boundary is implemented and locally verified. `parseConfigFromRequest()` input errors become `InvalidArgument` status. When GenAI validation throws, `requiresValidStructuredOutput()` makes required/named requests fail at `extractInputRequest()`; optional `auto` still logs and removes its grammar. The RED validation cause was xgrammar `json_schema_converter.cc:898: Unsupported type "invalid_schema_type"` using a real tokenizer. After GREEN, both the three-case API filter and the complete `//src/test/llm/gemma4_generation:gemma4_generation_policy_test` target passed with `OVMS_TEST_TOKENIZER_PATH=C:/llm/models/runtime/gemma4-26-heretic-google-current`.
 
-The generic API path still does this on structured-output validation error:
+Current `upstream/main` is `e338fb74b53dc8ac1c48707903b85e3901adcbdc`, one commit after the pinned `a5136cb...` base. No rebase was performed. The next semantic task is `parallel_tool_calls`; source-wide API/input-processing regression and live Arc/Gemma4 acceptance remain separate gates.
 
-```cpp
-catch (const std::exception& e) {
-    SPDLOG_LOGGER_DEBUG(...);
-    configBuilder.unsetStructuredOutputConfig();
-}
-```
-
-That behavior remains acceptable for optional guided generation such as Gemma4 `auto`. It is a contract violation for `required` or named choice because it silently turns a hard constrained request into unconstrained generation.
-
-### Next patch, do this first after recovery or local fetch
+### Hard-validation boundary checkpoint
 
 - [x] Add default `virtual bool requiresValidStructuredOutput() const { return false; }` on `BaseGenerationConfigBuilder`.
 - [x] Track hard Gemma4 policy after request parsing: `required` or named choice => mandatory validation; `auto` => optional.
 - [x] Expose the accessor through `GenerationConfigBuilder`.
 - [x] Reject hard tool choice if no tool schemas are available.
-- [ ] Add an API-boundary RED test around structured-output validation behavior if a narrow fixture can be built without distorting production code.
-- [ ] Change `OpenAIApiHandler::extractInputRequest()` validation catch:
+- [x] Add an API-boundary RED test around structured-output validation behavior without distorting production code.
+- [x] Change `OpenAIApiHandler::extractInputRequest()` validation catch:
   - `configBuilder.requiresValidStructuredOutput() == true` => return `absl::InvalidArgumentError(...)` including validation cause;
   - optional policy => log and `unsetStructuredOutputConfig()` exactly as today.
-- [ ] Verify that no upper-layer exception translation is needed; `GenAiServable::parseRequest()` already propagates `StatusOr` errors and `HttpLLMCalculator` already handles request failures.
-- [ ] Run generation-policy tests and relevant API/input-processing tests.
-- [ ] Commit the API-boundary GREEN separately with full provenance body.
+- [x] Verify status propagation: `GenAiServable::parseRequest()` returns the `StatusOr` failure, and `HttpLLMCalculator` returns that status before input preparation or execution.
+- [x] Run the focused API-boundary cases and full generation-policy target: both PASS after GREEN.
+- [ ] Run the existing broader API/input-processing targets after target discovery and fixture setup.
+- [x] Commit the API-boundary GREEN separately with full provenance body.
 
 Do not merely leave an invalid hard grammar installed and hope a later GenAI call fails. Fail at the request boundary where the contract violation can be explained.
 
@@ -83,21 +78,21 @@ Do not merely leave an invalid hard grammar installed and hope a later GenAI cal
 
 The local agent must verify the connector-written branch before continuing implementation.
 
-- [ ] `git fetch --all --prune` and resolve `origin/staging/gemma4-upstream-refit-clean-20260915`.
-- [ ] Confirm fetched parent chain contains `92a30faf -> 6eb48031 -> 27b66eda` in that order before any new local commit.
-- [ ] Confirm current remote branch HEAD equals the SHA recorded at the top of this file or explain any later docs-only checkpoint commit.
-- [ ] Confirm the tree does **not** contain `docs/gemmamonster/.noop`.
-- [ ] Confirm the tree does **not** contain `src/llm/io_processing/gemma4/generation_policy.hpp`; a connector-only placeholder commit that created it was force-reset and must remain unreachable from the branch.
-- [ ] `git status --short` must be clean immediately after checkout/reset to remote.
-- [ ] Inspect the exact diff from `a5136cb285482aaef5410a053b5ecd04ff9324ec` before fixing anything.
-- [ ] Check files written through the connector for truncation, duplicated blocks, malformed include order, stale comments, accidental whole-file rewrites or style drift.
+- [x] `git fetch --all --prune` resolved `origin/staging/gemma4-upstream-refit-clean-20260915` at `d90a7e6769fa903d414d13a5617814efe07379b8`.
+- [x] Confirm fetched ancestry contains `92a30faf` and later `27b66eda` before local commits.
+- [x] Confirm fetched remote branch HEAD is `d90a7e6769fa903d414d13a5617814efe07379b8`, with docs checkpoints above the behavioral GREEN.
+- [x] Confirm fetched tree excludes `docs/gemmamonster/.noop`.
+- [x] Confirm fetched tree excludes `src/llm/io_processing/gemma4/generation_policy.hpp`.
+- [x] Worktree was clean immediately after checkout/reset to remote.
+- [x] Inspect exact `a5136cb...HEAD` diff; `git diff --check` passed before changes.
+- [ ] Complete style/buildifier review of connector-written files. No truncation or conflict markers were found; compiler exposed the missing parser include, repaired as `58fe7b7`.
 - [ ] In particular inspect:
   - `src/llm/io_processing/base_generation_config_builder.hpp`
   - `src/llm/io_processing/generation_config_builder.hpp`
   - `src/llm/apis/openai_api_handler.cpp`
   - `src/test/llm/gemma4_generation/gemma4_generation_policy_test.cpp`
   - Gemma4 parser/reasoning files changed earlier in this branch.
-- [ ] If connector-write damage is found, repair only the damage first and commit it as a dedicated hygiene commit. Do not mix semantic changes into that repair.
+- [x] Connector include damage was repaired in dedicated hygiene commit `58fe7b7`, with no semantic changes.
 
 ## 5. Generation TODO after hard-validation GREEN
 
