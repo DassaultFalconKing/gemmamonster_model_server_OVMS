@@ -6,6 +6,7 @@ cc_test(
     deps = [
         "@com_google_googletest//:gtest_main",
         "//src/llm:generation_config_builders",
+        "//src/llm:openai_completions_api_handler",
         "//third_party:genai",
     ],
     copts = COPTS_TESTS,

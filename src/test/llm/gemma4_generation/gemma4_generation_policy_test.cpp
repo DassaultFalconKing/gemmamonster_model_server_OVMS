@@ -10,10 +10,18 @@
 
 #include <gtest/gtest.h>
 
+#include <chrono>
+#include <cstdlib>
+#include <exception>
+#include <filesystem>
 #include <memory>
+#include <optional>
 #include <string>
 #include <variant>
 
+#include <rapidjson/document.h>
+
+#include "src/llm/apis/openai_completions.hpp"
 #include "src/llm/io_processing/generation_config_builder.hpp"
 
 using namespace ovms;
@@ -129,4 +137,87 @@ TEST(Gemma4GenerationPolicyTest, HardChoiceRequiresSuccessfulGrammarValidation) 
     GenerationConfigBuilder autoBuilder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
     autoBuilder.parseConfigFromRequest(weatherRequest("auto"));
     EXPECT_FALSE(autoBuilder.requiresValidStructuredOutput());
+}
+
+namespace {
+class Gemma4ApiValidationTest : public testing::Test {
+protected:
+    static std::unique_ptr<ov::genai::Tokenizer> tokenizer;
+
+    static void SetUpTestSuite() {
+        const char* localTokenizer = std::getenv("OVMS_TEST_TOKENIZER_PATH");
+        std::string path;
+        if (localTokenizer != nullptr) {
+            path = localTokenizer;
+        } else {
+            const std::string cwd = std::filesystem::current_path().string();
+            const size_t bazelOut = cwd.find("bazel-out");
+            const std::string workspace = bazelOut == std::string::npos ? cwd : cwd.substr(0, bazelOut);
+            path = workspace + "/src/test/llm_testing/HuggingFaceTB/SmolLM2-360M-Instruct";
+        }
+        tokenizer = std::make_unique<ov::genai::Tokenizer>(path);
+    }
+
+    static void TearDownTestSuite() {
+        tokenizer.reset();
+    }
+};
+
+std::unique_ptr<ov::genai::Tokenizer> Gemma4ApiValidationTest::tokenizer;
+
+constexpr const char* INVALID_REQUIRED_TOOL_REQUEST = R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":"required","tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"invalid_schema_type"}}}]})";
+constexpr const char* INVALID_AUTO_TOOL_REQUEST = R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":"auto","tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"invalid_schema_type"}}}]})";
+constexpr const char* MISSING_NAMED_TOOL_REQUEST = R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":{"type":"function","function":{"name":"missing"}},"tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"object"}}}]})";
+}  // namespace
+
+TEST_F(Gemma4ApiValidationTest, InvalidRequiredGrammarReturnsInvalidArgumentWithoutFallback) {
+    rapidjson::Document doc;
+    doc.Parse(INVALID_REQUIRED_TOOL_REQUEST);
+    ASSERT_FALSE(doc.HasParseError());
+    OpenAIChatCompletionsHandler handler(doc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+    ASSERT_TRUE(handler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+
+    GenerationConfigBuilder builder(ov::genai::GenerationConfig{}, "gemma4", true, DecodingMethod::STANDARD);
+    builder.parseConfigFromRequest(handler.getRequest());
+    std::string validationError;
+    try {
+        builder.validateStructuredOutputConfig(*tokenizer);
+    } catch (const std::exception& e) {
+        validationError = e.what();
+    }
+    ASSERT_FALSE(validationError.empty());
+    SCOPED_TRACE(validationError);
+
+    auto result = handler.extractInputRequest(builder);
+    EXPECT_EQ(result.status().code(), absl::StatusCode::kInvalidArgument);
+}
+
+TEST_F(Gemma4ApiValidationTest, InvalidAutoGrammarKeepsOptionalFallback) {
+    rapidjson::Document doc;
+    doc.Parse(INVALID_AUTO_TOOL_REQUEST);
+    ASSERT_FALSE(doc.HasParseError());
+    OpenAIChatCompletionsHandler handler(doc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+    ASSERT_TRUE(handler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+
+    GenerationConfigBuilder builder(ov::genai::GenerationConfig{}, "gemma4", true, DecodingMethod::STANDARD);
+    builder.parseConfigFromRequest(handler.getRequest());
+    ASSERT_THROW(builder.validateStructuredOutputConfig(*tokenizer), std::exception);
+
+    auto result = handler.extractInputRequest(builder);
+    ASSERT_TRUE(result.ok()) << result.status();
+    EXPECT_FALSE(result->generationConfig.structured_output_config.has_value());
+}
+
+TEST_F(Gemma4ApiValidationTest, InvalidNamedPolicyReturnsStatusInsteadOfThrowing) {
+    rapidjson::Document doc;
+    doc.Parse(MISSING_NAMED_TOOL_REQUEST);
+    ASSERT_FALSE(doc.HasParseError());
+    OpenAIChatCompletionsHandler handler(doc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+    ASSERT_TRUE(handler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+
+    GenerationConfigBuilder builder(ov::genai::GenerationConfig{}, "gemma4", true, DecodingMethod::STANDARD);
+    EXPECT_NO_THROW({
+        auto result = handler.extractInputRequest(builder);
+        EXPECT_EQ(result.status().code(), absl::StatusCode::kInvalidArgument);
+    });
 }
