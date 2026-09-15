@@ -370,8 +370,8 @@ ov::genai::ChatHistory& OpenAIApiHandler::getChatHistory() {
 }
 
 absl::StatusOr<InputRequest> OpenAIApiHandler::extractInputRequest(GenerationConfigBuilder& configBuilder) {
-    configBuilder.parseConfigFromRequest(request);
     try {
+        configBuilder.parseConfigFromRequest(request);
         configBuilder.adjustConfigForDecodingMethod();
     } catch (const std::invalid_argument& e) {
         return absl::InvalidArgumentError(e.what());
@@ -379,6 +379,9 @@ absl::StatusOr<InputRequest> OpenAIApiHandler::extractInputRequest(GenerationCon
     try {
         configBuilder.validateStructuredOutputConfig(tokenizer);
     } catch (const std::exception& e) {
+        if (configBuilder.requiresValidStructuredOutput()) {
+            return absl::InvalidArgumentError(absl::StrCat("Structured output validation failed for required generation policy: ", e.what()));
+        }
         SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "Tool guided generation will not be applied due to JSON schema validation failure: {}", e.what());
         configBuilder.unsetStructuredOutputConfig();
     }
