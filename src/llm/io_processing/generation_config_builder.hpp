@@ -42,9 +42,27 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
         return !toolChoice.empty() && toolChoice != "none" && toolChoice != "auto" && toolChoice != "required";
     }
 
+    static bool isSafeToolName(const std::string& name) {
+        // TODO: share one predicate with Gemma4ToolParser::saneToolName
+        // (src/llm/io_processing/gemma4/gemma4_tool_parser.cpp). Duplicated
+        // here to avoid a cross-component helper refactor in this change;
+        // both must accept exactly [A-Za-z0-9_.-]+.
+        if (name.empty())
+            return false;
+        for (unsigned char c : name) {
+            const bool ok = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_' || c == '-' || c == '.';
+            if (!ok)
+                return false;
+        }
+        return true;
+    }
+
     static ov::genai::StructuredOutputConfig::Tag buildToolTag(
         const std::string& toolName,
         const ToolSchemaWrapper& toolSchemaWrapper) {
+        if (!isSafeToolName(toolName)) {
+            throw std::invalid_argument("Gemma4 tool name '" + toolName + "' contains characters outside [A-Za-z0-9_.-]");
+        }
         if (toolSchemaWrapper.stringRepr.empty()) {
             throw std::invalid_argument("Gemma4 guided tool schema for '" + toolName + "' is empty");
         }
