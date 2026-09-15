@@ -14,39 +14,32 @@
 // limitations under the License.
 //*****************************************************************************
 #pragma once
+
+#include <optional>
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 
 #include "src/llm/io_processing/base_output_parser.hpp"
-#include "src/port/rapidjson_stringbuffer.hpp"
-#include "src/port/rapidjson_writer.hpp"
 
 namespace ovms {
+
 class Gemma4ToolParser : public BaseOutputParser {
-protected:
+public:
     static const std::string TOOL_CALL_START_TAG;
     static const std::string TOOL_CALL_END_TAG;
     static const std::string TOOL_CALL_NAME_PREFIX;
-
-    static const std::string TOOL_ARGS_START_INDICATOR;
-    static const std::string TOOL_ARGS_END_INDICATOR;
     static const std::string TOOL_ARGS_STRING_INDICATOR;
-    static const std::string TOOL_ARGS_SEPARATOR_STR;
     static const std::string TURN_END_TAG;
     static const std::string TOOL_RESPONSE_START_TAG;
 
-    static const int64_t botTokenId;
-    static const int64_t eotTokenId;
-    static const int64_t reasoningTokenId;
-    static const int64_t reasoningEndTokenId;
-
+protected:
     enum class State {
-        Content,             // Content -> ToolCallStarted (on TOOL_CALL_START_TAG)
-        ToolCallStarted,     // ToolCallStarted -> ToolCallParameters (on TOOL_ARGS_START_INDICATOR, emits name)
-        ToolCallParameters,  // ToolCallParameters -> ToolCallEnded (on TOOL_ARGS_END_INDICATOR, emits args)
-        ToolCallEnded,       // ToolCallEnded -> ToolCallStarted (on TOOL_CALL_NAME_PREFIX) | AfterToolCall (on end tag)
-        AfterToolCall        // AfterToolCall -> Content
+        Content,
+        ToolCallStarted,
+        ToolCallParameters,
+        ToolCallEnded,
+        AfterToolCall
     };
 
 public:
@@ -54,9 +47,9 @@ public:
 
     static OutputParsingConfig defaultParsingConfig() {
         OutputParsingConfig cfg;
-        cfg.startTags = {"<|tool_call>"};
-        cfg.tokenIdStartTags = {"<|tool_call>"};
-        cfg.endTag = "<tool_call|>";
+        cfg.startTags = {TOOL_CALL_START_TAG};
+        cfg.tokenIdStartTags = {TOOL_CALL_START_TAG};
+        cfg.endTag = TOOL_CALL_END_TAG;
         cfg.needsSpecialTokens = true;
         return cfg;
     }
@@ -72,21 +65,31 @@ public:
         currentState = State::Content;
         toolCall = {};
         toolCallIndex = -1;
+        currentArgsOpen = '{';
+        currentArgsClose = '}';
+        currentCallValid = true;
     }
 
-    std::optional<Delta> parseChunk(const std::string& chunk, const std::vector<int64_t>& tokens, ov::genai::GenerationFinishReason finishReason) override;
+    std::optional<Delta> parseChunk(const std::string& chunk,
+        const std::vector<int64_t>& tokens,
+        ov::genai::GenerationFinishReason finishReason) override;
 
+    // Compatibility helpers used by existing tests/callers. Executable calls use
+    // parseNativeArgumentsBody(), which fails closed instead of stringifying malformed values.
     static std::string normalizeArgStr(const std::string& arg);
     static std::string parseArrayParameter(const std::string& argumentStr);
     static std::string parseObjectParameter(const std::string& argumentStr);
 
 private:
-    void writeArgumentToWriter(const std::string& arg, rapidjson::Writer<rapidjson::StringBuffer>& writer);
+    static std::optional<std::string> parseNativeArgumentsBody(const std::string& argumentsBody);
+    static std::optional<size_t> findMatchingContainerEnd(
+        const std::string& text,
+        size_t openPos,
+        char openChar,
+        char closeChar,
+        size_t& malformedEndTag);
+    static std::string normalizeToolName(std::string rawName);
 
-    std::pair<std::string, std::string> parseSingleArgument(const std::string& argumentStr);
-    std::vector<std::pair<std::string, std::string>> parseArguments(const std::string& argumentsStr);
-
-    bool parseSingleToolCall(const std::string& toolStr, ToolCall& toolCall);
     bool parseNewContent();
     bool parseInContentState();
     bool parseInToolCallState();
@@ -101,5 +104,9 @@ private:
     State currentState{State::Content};
     ToolCall toolCall;
     int toolCallIndex{-1};
+    char currentArgsOpen{'{'};
+    char currentArgsClose{'}'};
+    bool currentCallValid{true};
 };
+
 }  // namespace ovms
