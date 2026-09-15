@@ -15,6 +15,7 @@
 //*****************************************************************************
 
 #include "gemma4_tool_parser.hpp"
+#include "../utils.hpp"
 
 #include <algorithm>
 #include <cctype>
