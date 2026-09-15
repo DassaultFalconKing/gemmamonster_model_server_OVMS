@@ -17,10 +17,12 @@
 #include "openai_api_handler.hpp"
 
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <limits>
 #include <memory>
 #include <stdexcept>
+#include <string>
 #include <unordered_map>
 #include "src/port/rapidjson_stringbuffer.hpp"
 #include "src/port/rapidjson_writer.hpp"
@@ -39,6 +41,32 @@ using namespace rapidjson;
 namespace ovms {
 
 constexpr size_t DEFAULT_MAX_STOP_WORDS = 16;  // same as deep-seek
+
+namespace {
+// Tool names must match generation grammar literals and the Gemma output parser
+// alphabet: [A-Za-z0-9_.-]+. Reject early so invalid names cannot reach optional
+// auto grammar compilation and silently become unguided generation.
+bool isSafeHttpToolName(const std::string& name) {
+    return !name.empty() && std::all_of(name.begin(), name.end(), [](unsigned char c) {
+        return std::isalnum(c) || c == '_' || c == '-' || c == '.';
+    });
+}
+
+// Reserved because request.toolChoice is a flat string that also encodes the
+// policy keywords none/auto/required. A declared or named tool with one of these
+// names would silently collide with policy selection.
+bool isReservedToolPolicyName(const std::string& name) {
+    return name == "none" || name == "auto" || name == "required";
+}
+
+absl::Status validateHttpToolName(const std::string& name) {
+    if (!isSafeHttpToolName(name))
+        return absl::InvalidArgumentError("Tool function name contains unsupported characters");
+    if (isReservedToolPolicyName(name))
+        return absl::InvalidArgumentError("Tool function name collides with reserved tool_choice policy keyword");
+    return absl::OkStatus();
+}
+}  // namespace
 
 ov::genai::JsonContainer rapidJsonValueToJsonContainer(const rapidjson::Value& value) {
     if (value.IsNull()) {
@@ -207,6 +235,8 @@ absl::Status OpenAIApiHandler::parseTools() {
                 if (nameIt != toolChoiceFunctionIt->value.GetObject().MemberEnd() && nameIt->value.IsString()) {
                     toolChoice = nameIt->value.GetString();
                     namedToolChoice = true;
+                    if (auto status = validateHttpToolName(toolChoice); !status.ok())
+                        return status;
                 } else {
                     return absl::InvalidArgumentError("tool_choice.function.name is not a valid string");
                 }
@@ -219,6 +249,8 @@ absl::Status OpenAIApiHandler::parseTools() {
                     }
                     toolChoice = nameIt->value.GetString();
                     namedToolChoice = true;
+                    if (auto status = validateHttpToolName(toolChoice); !status.ok())
+                        return status;
                 } else {
                     return absl::InvalidArgumentError("tool_choice.function is not a valid JSON object");
                 }
@@ -253,6 +285,8 @@ absl::Status OpenAIApiHandler::parseTools() {
                     return absl::InvalidArgumentError("Function object does not contain a valid name field");
                 }
                 functionName = nameIt->value.GetString();
+                if (auto status = validateHttpToolName(functionName); !status.ok())
+                    return status;
                 auto parametersIt = functionObj.GetObject().FindMember("parameters");
                 if (parametersIt != functionObj.GetObject().MemberEnd()) {
                     parametersValue = &parametersIt->value;
@@ -271,6 +305,8 @@ absl::Status OpenAIApiHandler::parseTools() {
                     return absl::InvalidArgumentError("Function object does not contain a valid name field");
                 }
                 functionName = nameIt->value.GetString();
+                if (auto status = validateHttpToolName(functionName); !status.ok())
+                    return status;
 
                 auto parametersIt = obj.FindMember("parameters");
                 if (parametersIt != obj.MemberEnd()) {
