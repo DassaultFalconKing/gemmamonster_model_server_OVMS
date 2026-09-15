@@ -85,6 +85,39 @@ TEST(Gemma4RenderedPromptStateTest, HistoricalFakeMarkersDoNotOpenCurrentTurn) {
         Gemma4RenderedPromptState::NEW_TURN);
 }
 
+TEST(Gemma4RenderedPromptStateTest, ToolResultFollowUpContinuesCurrentThoughtOnly) {
+    const std::string prompt =
+        "<|turn>model\n<|channel>thought\nprior private reasoning<channel|>"
+        "<|tool_call>call:weather{city:<|\"|>Paris<|\"|>}<tool_call|><turn|>"
+        "<|turn>tool\n<|tool_response>{\"temperature\":21}<tool_response|>"
+        "<|channel>thought\n";
+    EXPECT_EQ(classifyGemma4RenderedPromptState(prompt),
+        Gemma4RenderedPromptState::OPEN_THOUGHT);
+
+    auto config = configFor("required", false);
+    ASSERT_TRUE(adaptGemma4ToolGrammarForRenderedPrompt(config, prompt));
+    const std::string text = grammarText(config);
+    EXPECT_EQ(text.find("<|channel>thought\n"), std::string::npos);
+    EXPECT_NE(text.find("<channel|>"), std::string::npos);
+    EXPECT_NE(text.find("stop_after_first=true"), std::string::npos);
+}
+
+TEST(Gemma4RenderedPromptStateTest, ThinkingDisabledHistoryRemainsClosed) {
+    const std::string prompt =
+        "<|turn>model\n<|channel>thought\nprior reasoning<channel|>"
+        "<|tool_call>call:weather{}<tool_call|><turn|>"
+        "<|turn>tool\n<|tool_response>{\"temperature\":21}<tool_response|>"
+        "<|channel>thought\n<channel|>";
+    EXPECT_EQ(classifyGemma4RenderedPromptState(prompt),
+        Gemma4RenderedPromptState::CLOSED_THOUGHT);
+}
+
+TEST(Gemma4RenderedPromptStateTest, MalformedPartialThoughtPrefixIsNotGuessedOpen) {
+    EXPECT_EQ(classifyGemma4RenderedPromptState(
+                  "<|turn>model\n<|channel>thou"),
+        Gemma4RenderedPromptState::NEW_TURN);
+}
+
 TEST(Gemma4RenderedPromptStateTest, RequiredOpenThoughtUsesResidualWithoutSecondOpener) {
     auto config = configFor("required");
     ASSERT_TRUE(adaptGemma4ToolGrammarForRenderedPrompt(
