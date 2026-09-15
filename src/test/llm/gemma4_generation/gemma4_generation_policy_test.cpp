@@ -209,8 +209,8 @@ protected:
 
 std::unique_ptr<ov::genai::Tokenizer> Gemma4ApiValidationTest::tokenizer;
 
-constexpr const char* INVALID_REQUIRED_TOOL_REQUEST = R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":"required","tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"invalid_schema_type"}}}]})";
-constexpr const char* INVALID_AUTO_TOOL_REQUEST = R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":"auto","tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"invalid_schema_type"}}}]})";
+constexpr const char* INVALID_REQUIRED_TOOL_REQUEST = R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":"required","tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"object","properties":{"x":{"type":"invalid_schema_type"}}}}}]})";
+constexpr const char* INVALID_AUTO_TOOL_REQUEST = R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":"auto","tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"object","properties":{"x":{"type":"invalid_schema_type"}}}}}]})";
 constexpr const char* MISSING_NAMED_TOOL_REQUEST = R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":{"type":"function","function":{"name":"missing"}},"tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"object"}}}]})";
 
 template <typename Request>
