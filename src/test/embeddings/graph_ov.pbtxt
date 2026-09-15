@@ -23,7 +23,7 @@ node {
     input_side_packet: "EMBEDDINGS_NODE_RESOURCES:embeddings_servable"
       node_options: {
       [type.googleapis.com/mediapipe.EmbeddingsCalculatorOVOptions]: {
-        models_path: "/ovms/src/test/llm_testing/thenlper/gte-small/ov"
+        models_path: "C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\llm_testing/thenlper/gte-small/ov"
       }
     }
 }

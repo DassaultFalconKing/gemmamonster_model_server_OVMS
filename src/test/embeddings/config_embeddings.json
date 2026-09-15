@@ -3,33 +3,33 @@
     "mediapipe_config_list": [
     {
         "name":"embeddings_ov",
-        "base_path":"/ovms/src/test/embeddings/",
-        "graph_path":"/ovms/src/test/embeddings/graph_ov.pbtxt"
+        "base_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/",
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/graph_ov.pbtxt"
     },
     {
         "name":"embeddings_ov_no_norm",
-        "base_path":"/ovms/src/test/embeddings/",
-        "graph_path":"/ovms/src/test/embeddings/graph_ov_no_norm.pbtxt"
+        "base_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/",
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/graph_ov_no_norm.pbtxt"
     },
     {
         "name":"embeddings_ov_relative",
-        "base_path":"/ovms/src/test/embeddings/",
-        "graph_path":"/ovms/src/test/embeddings/graph_ov_relative.pbtxt"
+        "base_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/",
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/graph_ov_relative.pbtxt"
     },
     {
         "name":"embeddings_ov_pooling_mean",
-        "base_path":"/ovms/src/test/embeddings/",
-        "graph_path":"/ovms/src/test/embeddings/graph_ov_pooling_mean.pbtxt"
+        "base_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/",
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/graph_ov_pooling_mean.pbtxt"
     },
     {
         "name":"embeddings_ov_pooling_last",
-        "base_path":"/ovms/src/test/embeddings/",
-        "graph_path":"/ovms/src/test/embeddings/graph_ov_pooling_last.pbtxt"
+        "base_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/",
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/graph_ov_pooling_last.pbtxt"
     },
     {
         "name":"embeddings_ov_max_length",
-        "base_path":"/ovms/src/test/embeddings/",
-        "graph_path":"/ovms/src/test/embeddings/graph_ov_max_length.pbtxt"
+        "base_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/",
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\embeddings/graph_ov_max_length.pbtxt"
     }
     ]
 }

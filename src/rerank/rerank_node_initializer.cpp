@@ -16,6 +16,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include "openvino/core/except.hpp"
 
 #include "src/mediapipe_internal/graph_side_packets.hpp"
 #include "src/mediapipe_internal/node_initializer.hpp"
@@ -56,9 +57,15 @@ public:
         }
         mediapipe::RerankCalculatorOVOptions nodeOptions;
         nodeConfig.node_options(0).UnpackTo(&nodeOptions);
-        auto servable = std::make_shared<RerankServable>(nodeOptions.models_path(), nodeOptions.target_device(), nodeOptions.plugin_config(), basePath);
-        servable->initialize(nodeOptions.models_path(), nodeOptions.target_device(), nodeOptions.plugin_config(), basePath);
-        rerankServableMap.insert(std::pair<std::string, std::shared_ptr<RerankServable>>(nodeName, std::move(servable)));
+        try {
+            auto servable = std::make_shared<RerankServable>(nodeOptions.models_path(), nodeOptions.target_device(), nodeOptions.plugin_config(), basePath);
+            servable->initialize(nodeOptions.models_path(), nodeOptions.target_device(), nodeOptions.plugin_config(), basePath);
+            rerankServableMap.insert(std::pair<std::string, std::shared_ptr<RerankServable>>(nodeName, std::move(servable)));
+        } catch (const ov::Exception& e) {
+            SPDLOG_ERROR("Rerank node {} in graph {} failed to initialize from {} with base {}: {}",
+                nodeName, graphName, nodeOptions.models_path(), basePath, e.what());
+            return StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED;
+        }
         return StatusCode::OK;
     }
 };

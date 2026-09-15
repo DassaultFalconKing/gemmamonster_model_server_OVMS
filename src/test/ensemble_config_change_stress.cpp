@@ -52,14 +52,7 @@ void mediacreate<KFSRequest, KFSResponse>(std::unique_ptr<MediapipeGraphExecutor
 }
 #endif
 
-class StressPipelineConfigChanges : public ConfigChangeStressTest {
-public:
-    static void SetUpTestSuite() {
-#ifdef _WIN32
-        GTEST_SKIP() << "Skipping test on Windows, sporadic";  // CVS-176244
-#endif
-    }
-};
+class StressPipelineConfigChanges : public ConfigChangeStressTest {};
 
 #if (MEDIAPIPE_DISABLE == 0)
 class StressMediapipeChanges : public StressPipelineConfigChanges {
@@ -72,6 +65,9 @@ public:
         return modelName;
     }
     void SetUp() override {
+#ifdef _WIN32
+        GTEST_SKIP() << "Skipping test on Windows, sporadic";  // CVS-176244
+#endif
         SetUpCAPIServerInstance(createStressTestPipelineOneDummyConfig());
     }
 };
@@ -223,6 +219,9 @@ public:
         return modelName;
     }
     void SetUp() override {
+#ifdef _WIN32
+        GTEST_SKIP() << "Skipping test on Windows, sporadic";  // CVS-176244
+#endif
         SetUpCAPIServerInstance(createStressTestPipelineOneDummyConfig());
     }
 };

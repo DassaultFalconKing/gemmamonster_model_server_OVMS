@@ -1533,6 +1533,9 @@ TEST_F(MediapipeStreamFlowAddTest, InferOnSleepingGraph) {
 
     auto* definition = this->getMPDefinitionByName(this->modelName);
     ASSERT_NE(definition, nullptr);
+    // A registered definition can have failed validation. Do not start an
+    // unloader waiting for a response that an unavailable graph cannot produce.
+    ASSERT_TRUE(definition->isAvailable());
 
     MockedServerReaderWriter<::inference::ModelStreamInferResponse, ::inference::ModelInferRequest> stream;
     std::promise<void> startUnloading;

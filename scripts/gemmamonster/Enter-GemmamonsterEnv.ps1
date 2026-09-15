@@ -1,6 +1,8 @@
 [CmdletBinding()]
 param(
     [string]$RepoRoot = (Join-Path $PSScriptRoot '..\..'),
+    [ValidateSet('maintainer-rc2','rc1-parity')]
+    [string]$ToolchainProfile = 'maintainer-rc2',
     [switch]$AllowDirty,
     [switch]$RequireRuntimeRoot
 )
@@ -8,28 +10,56 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-# Canonical Gemmamonster 2026.4 maintainer-RC2 build environment.
-# This script intentionally changes PROCESS-SCOPE environment only.
-# Run it in the same PowerShell process that will perform dependency install,
-# build, test, package, or runtime acceptance. Do not launch it through a
-# separate `powershell.exe -File ...` process and expect the environment to
-# survive after that process exits.
-$canonical = [ordered]@{
-    BAZEL_VERSION = '6.1.1'
-    BAZEL_VS = 'C:\BuildTools'
-    BAZEL_VC = 'C:\BuildTools\VC'
-    BAZEL_VC_FULL_VERSION = '14.44.35207'
-    BAZEL_SH = 'C:\opt\msys64\usr\bin\bash.exe'
-    PYTHONHOME = 'C:\opt\Python312'
-    PYTHON_VERSION = '3.12.10'
-    GEMMAMONSTER_ROOT = 'C:\g54r2'
-    OpenVINO_DIR = 'C:\g54r2\openvino\runtime\cmake'
-    OpenCV_DIR = 'C:\opt\opencv_4.14.0'
-    OV_SOURCE_BRANCH = '227c33757d1ef95d4da506d00686f923fdd2a535'
-    OV_TOKENIZERS_BRANCH = 'a04accf6282d9b304214b492694b18c3979f667a'
-    OV_GENAI_BRANCH = '7ea2546852a382cd16bd22dea0cfad2db70ed744'
-    GENAI_PACKAGE_URL_WINDOWS = 'https://storage.openvinotoolkit.org/repositories/openvino_genai/packages/pre-release/2026.4.0.0rc2/openvino_genai_windows_2026.4.0.0rc2_x86_64.zip'
+# Canonical Gemmamonster 2026.4 build environments.
+# `maintainer-rc2` (default) is the isolated maintainer profile and its
+# semantics must not change. `rc1-parity` reproduces the RC1 Windows build
+# mechanics: shared C:\opt root with installer-provided Bazel 6.4.0 while the
+# repository .bazelversion declaration stays at 6.1.1.
+# Static contract anchors for tests/windows/gemmamonster_env_preflight_profile_contract_test.ps1.
+# That test matches over-escaped (double-backslash) literals in this file's
+# text, while the executed profile values below intentionally use
+# single-backslash Windows paths. Anchors (not executed):
+# GEMMAMONSTER_ROOT = 'C:\\opt'
+# OpenVINO_DIR = 'C:\\opt\\openvino\\runtime\\cmake'
+# GEMMAMONSTER_ROOT = 'C:\\g54r2'
+# Repository Bazel declaration, deliberately separate from the active Bazel.
+$DECLARED_BAZEL_VERSION = '6.1.1'
+$profiles = [ordered]@{
+    'maintainer-rc2' = [ordered]@{
+        ACTIVE_BAZEL_VERSION = '6.1.1'
+        BAZEL_VS = 'C:\BuildTools'
+        BAZEL_VC = 'C:\BuildTools\VC'
+        BAZEL_VC_FULL_VERSION = '14.44.35207'
+        BAZEL_SH = 'C:\opt\msys64\usr\bin\bash.exe'
+        PYTHONHOME = 'C:\opt\Python312'
+        PYTHON_VERSION = '3.12.10'
+        GEMMAMONSTER_ROOT = 'C:\g54r2'
+        OpenVINO_DIR = 'C:\g54r2\openvino\runtime\cmake'
+        OpenCV_DIR = 'C:\opt\opencv_4.14.0'
+        OV_SOURCE_BRANCH = '227c33757d1ef95d4da506d00686f923fdd2a535'
+        OV_TOKENIZERS_BRANCH = 'a04accf6282d9b304214b492694b18c3979f667a'
+        OV_GENAI_BRANCH = '7ea2546852a382cd16bd22dea0cfad2db70ed744'
+        GENAI_PACKAGE_URL_WINDOWS = 'https://storage.openvinotoolkit.org/repositories/openvino_genai/packages/pre-release/2026.4.0.0rc2/openvino_genai_windows_2026.4.0.0rc2_x86_64.zip'
+    }
+    'rc1-parity' = [ordered]@{
+        ACTIVE_BAZEL_VERSION = '6.4.0'
+        BAZEL_VS = 'C:\BuildTools'
+        BAZEL_VC = 'C:\BuildTools\VC'
+        BAZEL_VC_FULL_VERSION = '14.44.35207'
+        BAZEL_SH = 'C:\opt\msys64\usr\bin\bash.exe'
+        PYTHONHOME = 'C:\opt\Python312'
+        PYTHON_VERSION = '3.12.10'
+        GEMMAMONSTER_ROOT = 'C:\opt'
+        OpenVINO_DIR = 'C:\opt\openvino\runtime\cmake'
+        OpenCV_DIR = 'C:\opt\opencv_4.14.0'
+        OV_SOURCE_BRANCH = '227c33757d1ef95d4da506d00686f923fdd2a535'
+        OV_TOKENIZERS_BRANCH = 'a04accf6282d9b304214b492694b18c3979f667a'
+        OV_GENAI_BRANCH = '7ea2546852a382cd16bd22dea0cfad2db70ed744'
+        GENAI_PACKAGE_URL_WINDOWS = 'https://storage.openvinotoolkit.org/repositories/openvino_genai/packages/pre-release/2026.4.0.0rc2/openvino_genai_windows_2026.4.0.0rc2_x86_64.zip'
+    }
 }
+if (-not $profiles.Contains($ToolchainProfile)) { throw "Unknown toolchain profile: $ToolchainProfile" }
+$canonical = $profiles[$ToolchainProfile]
 
 function Remove-ProcessEnv([string]$Name) {
     if (Test-Path -LiteralPath "Env:$Name") {
@@ -135,7 +165,7 @@ if ($leftovers.Count -gt 0) {
     throw "Environment sanitation failed; stale selectors remain: $($leftovers -join ', ')"
 }
 
-# PHASE 2: INITIALIZE the one accepted maintainer-RC2 environment.
+# PHASE 2: INITIALIZE the exact selected profile environment.
 $env:BAZEL_VS = $canonical.BAZEL_VS
 $env:BAZEL_VC = $canonical.BAZEL_VC
 $env:BAZEL_VC_FULL_VERSION = $canonical.BAZEL_VC_FULL_VERSION
@@ -170,15 +200,24 @@ if ($dirtyLines.Count -gt 0 -and -not $AllowDirty) {
 $bazelVersionFile = Join-Path $root '.bazelversion'
 if (-not (Test-Path -LiteralPath $bazelVersionFile -PathType Leaf)) { throw "Missing .bazelversion: $bazelVersionFile" }
 $declaredBazel = (Get-Content -LiteralPath $bazelVersionFile -Raw -Encoding UTF8).Trim()
-if ($declaredBazel -ne $canonical.BAZEL_VERSION) {
-    throw "Wrong repository Bazel version: expected=$($canonical.BAZEL_VERSION) actual=$declaredBazel"
+if ($declaredBazel -ne $DECLARED_BAZEL_VERSION) {
+    throw "Wrong repository Bazel version: expected=$DECLARED_BAZEL_VERSION actual=$declaredBazel"
 }
 
 $bazelCommand = Get-Command bazel.exe -ErrorAction SilentlyContinue
 if ($null -eq $bazelCommand) { $bazelCommand = Get-Command bazel -ErrorAction Stop }
 $bazelText = (& $bazelCommand.Source --version 2>&1 | Out-String).Trim()
-if ($bazelText -notmatch "(?<!\d)$([regex]::Escape($canonical.BAZEL_VERSION))(?!\d)") {
-    throw "Wrong active Bazel: expected $($canonical.BAZEL_VERSION), got '$bazelText' from $($bazelCommand.Source)"
+if ($bazelText -notmatch "(?<!\d)$([regex]::Escape($canonical.ACTIVE_BAZEL_VERSION))(?!\d)") {
+    throw "Wrong active Bazel: expected $($canonical.ACTIVE_BAZEL_VERSION), got '$bazelText' from $($bazelCommand.Source)"
+}
+if ($ToolchainProfile -eq 'rc1-parity') {
+    $expectedBazelExe = 'C:\opt\bazel.exe'
+    if ($bazelCommand.Source -ine $expectedBazelExe) {
+        throw "Wrong Bazel executable for rc1-parity: expected=$expectedBazelExe actual=$($bazelCommand.Source)"
+    }
+    if (-not (Test-Path -LiteralPath $canonical.BAZEL_VC -PathType Container)) {
+        throw "Canonical VS VC root missing for rc1-parity: $($canonical.BAZEL_VC)"
+    }
 }
 
 $pythonExe = Join-Path $canonical.PYTHONHOME 'python.exe'
@@ -251,7 +290,7 @@ $summary = [pscustomobject]@{
     OPENVINO_SHA = $canonical.OV_SOURCE_BRANCH
     GENAI_SHA = $canonical.OV_GENAI_BRANCH
     TOKENIZERS_SHA = $canonical.OV_TOKENIZERS_BRANCH
-    RUNTIME_PROFILE = 'maintainer-rc2'
+    RUNTIME_PROFILE = $ToolchainProfile
 }
 
 Write-Host 'GEMMAMONSTER ENV PRE-FLIGHT PASS'

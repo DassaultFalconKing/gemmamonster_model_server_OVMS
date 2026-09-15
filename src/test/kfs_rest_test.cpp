@@ -170,6 +170,8 @@ public:
             (char*)"string",
             (char*)"--model_path",
             (char*)getGenericFullPathForSrcTest("/ovms/src/test/passthrough_string").c_str(),
+            (char*)"--target_device",
+            (char*)"CPU",
             (char*)"--log_level",
             (char*)"DEBUG",
             (char*)"--port",
@@ -177,7 +179,7 @@ public:
             nullptr};
         thread = std::make_unique<std::thread>(
             [&argv]() {
-                ASSERT_EQ(EXIT_SUCCESS, server->start(9, argv));
+                ASSERT_EQ(EXIT_SUCCESS, server->start(11, argv));
             });
         EnsureServerStartedWithTimeout(*server, 5);
     }

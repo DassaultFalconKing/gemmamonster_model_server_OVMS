@@ -3,7 +3,7 @@
     "mediapipe_config_list": [
         {
             "name": "gpt",
-            "graph_path": "/ovms/src/test/mediapipe/graph_gpt_with_queue.pbtxt"
+            "graph_path": "C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\mediapipe/graph_gpt_with_queue.pbtxt"
         }
     ]
 }
