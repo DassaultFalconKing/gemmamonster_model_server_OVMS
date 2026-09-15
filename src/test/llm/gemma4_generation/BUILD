@@ -30,3 +30,18 @@ cc_test(
     linkopts = COMMON_STATIC_LIBS_LINKOPTS,
     linkstatic = 1,
 )
+
+cc_test(
+    name = "gemma4_rendered_prompt_state_test",
+    srcs = ["gemma4_rendered_prompt_state_test.cpp"],
+    deps = [
+        "@com_google_googletest//:gtest_main",
+        "//src/llm:generation_config_builders",
+        "//src/llm:output_parsers",
+        "//third_party:genai",
+        "//third_party:openvino",
+    ],
+    copts = COPTS_TESTS,
+    local_defines = COMMON_LOCAL_DEFINES,
+    linkopts = COMMON_STATIC_LIBS_LINKOPTS,
+    linkstatic = 1,
