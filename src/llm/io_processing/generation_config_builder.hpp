@@ -36,6 +36,8 @@
 namespace ovms {
 
 class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
+    bool hardToolPolicy = false;
+
     static bool isNamedToolChoice(const std::string& toolChoice) {
         return !toolChoice.empty() && toolChoice != "none" && toolChoice != "auto" && toolChoice != "required";
     }
@@ -114,7 +116,13 @@ public:
         BaseGenerationConfigBuilder(baseConfig, enableToolGuidedGeneration, decodingMethod) {}
 
     void parseConfigFromRequest(const OpenAIRequest& request) override {
+        hardToolPolicy = false;
         BaseGenerationConfigBuilder::parseConfigFromRequest(request);
+
+        const bool hardChoice = request.toolChoice == "required" || isNamedToolChoice(request.toolChoice);
+        if (hardChoice && request.toolNameSchemaMap.empty()) {
+            throw std::invalid_argument("Gemma4 hard tool_choice requires at least one available tool schema");
+        }
 
         const bool activeTools = !request.toolNameSchemaMap.empty() && request.toolChoice != "none";
         if (request.responseFormat.has_value() && activeTools) {
@@ -125,7 +133,8 @@ public:
         }
 
         auto toolTags = buildToolTags(request);
-        if (request.toolChoice == "required" || isNamedToolChoice(request.toolChoice)) {
+        if (hardChoice) {
+            hardToolPolicy = true;
             setStructuralTagsConfig(buildRequiredToolGrammar(std::move(toolTags)));
             return;
         }
@@ -133,6 +142,10 @@ public:
         if ((request.toolChoice.empty() || request.toolChoice == "auto") && enableToolGuidedGeneration) {
             setStructuralTagsConfig(buildAutoToolGrammar(std::move(toolTags)));
         }
+    }
+
+    bool requiresValidStructuredOutput() const override {
+        return hardToolPolicy;
     }
 };
 
@@ -178,6 +191,10 @@ public:
 
     void unsetStructuredOutputConfig() {
         builder_impl->unsetStructuredOutputConfig();
+    }
+
+    bool requiresValidStructuredOutput() const {
+        return builder_impl->requiresValidStructuredOutput();
     }
 
     void parseConfigFromRequest(const OpenAIRequest& request) {
