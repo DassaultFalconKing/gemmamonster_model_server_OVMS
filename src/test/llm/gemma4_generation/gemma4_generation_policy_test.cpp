@@ -38,6 +38,15 @@ OpenAIRequest weatherRequest(const std::string& toolChoice) {
     return request;
 }
 
+OpenAIRequest singleToolRequest(const std::string& toolName, const std::string& toolChoice) {
+    OpenAIRequest request;
+    request.toolChoice = toolChoice;
+    request.toolNameSchemaMap.emplace(
+        toolName,
+        ToolSchemaWrapper{nullptr, R"({"type":"object","properties":{}})"});
+    return request;
+}
+
 const ov::genai::StructuredOutputConfig::StructuralTag* getStructuralTag(
     const ov::genai::GenerationConfig& config) {
     if (!config.structured_output_config || !config.structured_output_config->structural_tags_config)
@@ -127,6 +136,36 @@ TEST(Gemma4GenerationPolicyTest, RequiredWithoutToolsIsRejected) {
     ov::genai::GenerationConfig baseConfig;
     GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
     EXPECT_THROW(builder.parseConfigFromRequest(request), std::invalid_argument);
+}
+
+TEST(Gemma4GenerationPolicyTest, ValidToolNamesAreAcceptedInRequiredMode) {
+    for (const std::string name : {"weather", "foo_bar", "foo-bar", "foo.bar", "tool123"}) {
+        SCOPED_TRACE(name);
+        ov::genai::GenerationConfig baseConfig;
+        GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+        EXPECT_NO_THROW(builder.parseConfigFromRequest(singleToolRequest(name, "required")));
+    }
+}
+
+TEST(Gemma4GenerationPolicyTest, InvalidToolNamesAreRejectedInRequiredMode) {
+    for (const std::string name : {"foo bar", "foo:bar", "foo{bar", "foo<bar", "foo>bar", "foo\nbar", "<|tool_call>"}) {
+        SCOPED_TRACE(name);
+        ov::genai::GenerationConfig baseConfig;
+        GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+        EXPECT_THROW(builder.parseConfigFromRequest(singleToolRequest(name, "required")), std::invalid_argument);
+    }
+}
+
+TEST(Gemma4GenerationPolicyTest, InvalidToolNameIsRejectedForNamedChoice) {
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+    EXPECT_THROW(builder.parseConfigFromRequest(singleToolRequest("foo bar", "foo bar")), std::invalid_argument);
+}
+
+TEST(Gemma4GenerationPolicyTest, InvalidToolNameIsRejectedForAutoChoice) {
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+    EXPECT_THROW(builder.parseConfigFromRequest(singleToolRequest("foo:bar", "auto")), std::invalid_argument);
 }
 
 TEST(Gemma4GenerationPolicyTest, HardChoiceRequiresSuccessfulGrammarValidation) {
