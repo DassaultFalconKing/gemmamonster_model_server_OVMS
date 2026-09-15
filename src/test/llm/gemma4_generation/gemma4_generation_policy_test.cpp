@@ -36,6 +36,12 @@ const ov::genai::StructuredOutputConfig::StructuralTag* getStructuralTag(
     const auto& outer = *config.structured_output_config->structural_tags_config;
     return std::get_if<ov::genai::StructuredOutputConfig::StructuralTag>(&outer);
 }
+
+std::string structuralTagText(const ov::genai::StructuredOutputConfig::StructuralTag& grammar) {
+    return std::visit([](const auto& element) {
+        return ov::genai::StructuredOutputConfig::structural_tag_to_string(element);
+    }, grammar);
+}
 }  // namespace
 
 TEST(Gemma4GenerationPolicyTest, RequiredToolChoiceInstallsNativeStructuredGrammar) {
@@ -65,4 +71,22 @@ TEST(Gemma4GenerationPolicyTest, AutoUsesLazyNativeToolTrigger) {
     ASSERT_EQ((*triggered)->tags.size(), 1u);
     EXPECT_EQ((*triggered)->tags[0].begin, "<|tool_call>call:weather");
     EXPECT_EQ((*triggered)->tags[0].end, "<tool_call|>");
+}
+
+TEST(Gemma4GenerationPolicyTest, NamedChoiceRestrictsGrammarToSelectedTool) {
+    OpenAIRequest request = weatherRequest("weather");
+    request.toolNameSchemaMap.emplace(
+        "clock",
+        ToolSchemaWrapper{nullptr,
+            R"({"type":"object","properties":{"timezone":{"type":"string"}},"required":["timezone"]})"});
+
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder builder(baseConfig, "gemma4", false, DecodingMethod::STANDARD);
+    builder.parseConfigFromRequest(request);
+
+    const auto* grammar = getStructuralTag(builder.getConfig());
+    ASSERT_NE(grammar, nullptr);
+    const std::string text = structuralTagText(*grammar);
+    EXPECT_NE(text.find("<|tool_call>call:weather"), std::string::npos);
+    EXPECT_EQ(text.find("<|tool_call>call:clock"), std::string::npos);
 }
