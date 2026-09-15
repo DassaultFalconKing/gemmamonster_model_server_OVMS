@@ -1,13 +1,15 @@
 # Gemma4 Upstream Contribution Refit Plan
 
-**Status:** ACTIVE / implementation in progress  
-**Updated:** 2026-09-15 (local-agent session: parallel_tool_calls GREEN, tool-name validation GREEN, phantom-publication RED committed)  
+**Status:** SEMANTIC FEATURE WORK FROZEN pending Windows/live acceptance  
+**Updated:** 2026-09-15 (freeze session)  
 **Working branch:** `staging/gemma4-upstream-refit-clean-20260915`  
-**Current checkpoint before this document commit:** `fe894aad9` (local-agent session HEAD; full SHAs in §13)  
+**Freeze HEAD:** `36beda81ef0261392cb4ad16b602dfcdae031270`  
 **Upstream base:** `openvinotoolkit/model_server@a5136cb285482aaef5410a053b5ecd04ff9324ec`  
-**Authority dossier:** `docs/gemmamonster/COMPARATIVE-GEMMA4-PARSER-VERDICT.md`
+**Upstream main at freeze:** `e338fb74b53dc8ac1c48707903b85e3901adcbdc`  
+**Authority dossier:** `docs/gemmamonster/COMPARATIVE-GEMMA4-PARSER-VERDICT.md`  
+**Freeze record:** `docs/gemmamonster/GEMMA4-SEMANTIC-FREEZE-20260915.md`
 
-This file is the recovery point for the post-#4103 Gemma4 upstream contribution refit. If the implementation session is interrupted, do not infer the next step from old 2026.4/2026.5 branches. Re-resolve the branch and continue from the first unchecked item below.
+This file is the recovery point for the post-#4103 Gemma4 upstream contribution refit. Semantic feature work for the freeze scope is complete. Do not open new P1/P2 implementation from edge-case curiosity; record backlog only and proceed to Windows/live acceptance.
 
 ## 1. Non-negotiable design decisions
 
@@ -114,29 +116,40 @@ Source: llama.cpp native Gemma policy plus OpenAI parallel-tool semantics. Do no
 
 - [x] RED `447718b8d`: invalid tool names accepted into `<|tool_call>call:<name>` tags for required/named/auto.
 - [x] GREEN `547df8030`: `buildToolTag` rejects names outside `[A-Za-z0-9_.-]` with `std::invalid_argument` (fail-closed for all policies; auto cannot degrade to unguided sampling). Predicate duplicated with TODO referencing parser `saneToolName`; no shared-helper refactor.
+- [x] HTTP boundary alphabet + reserved policy-keyword collisions (`none`/`auto`/`required`): RED `585a6af8e` → GREEN `355ae00c1`.
+
+### Freeze-scope closure 2026-09-15 (STOP SEMANTIC FEATURE WORK)
+
+- [x] P0-B hard HTTP intent: RED `76c486675` → GREEN `3755dc85b`.
+- [x] P0-A transactional ToolCall publication: RED `fe894aad9` → GREEN `909e21f07` (+ F9 one-envelope multicall fail-closed).
+- [x] P0-C rendered thought state: RED `3c05feb29` → GREEN `c746a9b97`; multi-turn H1/H2/H4/H5 `30dfdbfd3`.
+- [x] P0-D chunk invariance / drain: GREEN `2b1dfb812` (`gemma4_chunk_invariance_test`).
+- [x] F7 object-root schemas + upstream array matrix: RED `31985d037` → GREEN `079eb6f66`.
+- [x] F10 bounded malformed candidates: RED `474bc82ac` → GREEN `36beda81e`.
+- [x] Freeze record: `docs/gemmamonster/GEMMA4-SEMANTIC-FREEZE-20260915.md` at HEAD `36beda81e`.
 
 ### Generation validation matrix
 
-- [ ] no tools + `auto` => no tool grammar.
-- [ ] no tools + `required` => request error.
-- [ ] `tool_choice=none` + tools => no tool grammar; response format remains usable.
-- [ ] named tool absent from registry => request error.
-- [ ] empty / malformed tool schema in hard mode => request error, never unguided fallback.
-- [ ] empty / malformed schema in auto => determine whether request reject or guided fallback from actual GenAI validation behavior; document observation before choosing.
-- [ ] direct `required` and thought-then-tool forms remain valid.
+- [x] no tools + `auto` => no tool grammar / inactive (HTTP normalizes to none when registry empty).
+- [x] no tools + `required` => request error (HTTP InvalidArgument).
+- [x] `tool_choice=none` + tools => no tool grammar; response format remains usable.
+- [x] named tool absent from registry => request error.
+- [x] empty / malformed tool schema in hard mode => request error, never unguided fallback.
+- [x] empty / malformed schema in auto => optional fallback retained where GenAI validation fails.
+- [x] direct `required` and thought-then-tool forms remain valid (incl. OPEN_THOUGHT residual).
 
 ## 6. Post-#4103 template adaptation TODO
 
 Target architecture: #4103 prepares runtime Jinja separately from tokenizer/Minja, but both render paths converge on final `req.promptText`. Reconciliation must happen after that convergence.
 
-- [ ] Re-read current `ChatTemplateProcessor` before patching; do not transplant old constructor/wiring.
-- [ ] Add RED contract for rendered prompt ending inside open Gemma thought channel after a tool response.
-- [ ] Add RED contract for template-emitted closed empty thought block when thinking is disabled.
-- [ ] Refit `adaptGemma4HardToolGrammarForRenderedPrompt()` as a post-render semantic operation.
-- [ ] Apply equally to prepared runtime-Jinja and tokenizer/Minja output.
-- [ ] Open-thought prompt + hard choice: allow thought continuation, but require eventual transition to an allowed native tool tag.
-- [ ] Closed/no-thought prompt: retain normal hard grammar.
-- [ ] Do not detect model state from model name alone when rendered prompt state is sufficient.
+- [x] Re-read current `ChatTemplateProcessor` before patching; do not transplant old constructor/wiring.
+- [x] Add RED contract for rendered prompt ending inside open Gemma thought channel after a tool response.
+- [x] Add RED contract for template-emitted closed empty thought block when thinking is disabled.
+- [x] Refit `adaptGemma4ToolGrammarForRenderedPrompt()` as a post-render semantic operation.
+- [x] Apply equally to prepared runtime-Jinja and tokenizer/Minja output (shared classifier on final prompt text).
+- [x] Open-thought prompt + hard choice: allow thought continuation, but require eventual transition to an allowed native tool tag.
+- [x] Closed/no-thought prompt: retain normal hard grammar.
+- [x] Do not detect model state from model name alone when rendered prompt state is sufficient.
 
 Authority: current Google Gemma4 template and Transformers prefix-aware response parsing.
 
@@ -153,26 +166,18 @@ Authority: current Google Gemma4 template and Transformers prefix-aware response
 
 Core parser semantic work is implemented, but before promotion:
 
-- [ ] Import/translate current upstream Gemma array regression from merged #4532 into our clean test matrix where not already covered.
+- [x] Import/translate current upstream Gemma array regression from merged #4532 into our clean test matrix where not already covered (`gemma4_f7_contract_test`).
 - [ ] Verify cross-chunk false-positive case: prose suffix + next chunk `call:known_tool{...}` remains content.
 - [ ] Verify actual logical newline + bare known call is recoverable.
-- [ ] Verify unknown tool never becomes executable.
-- [ ] Verify malformed numeric lexemes (`12foo`, `01`, `1.`, `1e`, `-x`) fail instead of becoming numbers/strings in executable calls.
-- [ ] Verify large integer lexeme remains byte-preserved.
-- [ ] Verify malformed call followed by valid call does not poison parser state.
-- [ ] Verify structural markers never leak to client content.
+- [x] Verify unknown tool never becomes executable.
+- [x] Verify malformed numeric lexemes (`12foo`, `01`, `1.`, `1e`, `-x`) fail instead of becoming numbers/strings in executable calls.
+- [x] Verify large integer lexeme remains byte-preserved.
+- [x] Verify malformed call followed by valid call does not poison parser state / consume public index.
+- [x] Verify structural markers never leak to client content for committed calls (F8 unknown-envelope content leakage remains backlog).
+- [x] Chunk-invariant tool/reasoning semantics (`gemma4_chunk_invariance_test`).
+- [x] Bounded malformed candidate guards (`gemma4_f10_guard_test`).
 
-Note (2026-09-15 session): contract tests for the above exist
-(`gemma4_upstream_refit_contract_test.cpp`) but were NOT executed here:
-they are linked only into the full `//src:ovms_test` binary, which was
-never built in this environment. The only parser-level tests executed
-this session are the new raw-Delta RED tests (`fe894aad9`,
-`//src/test/llm/gemma4_generation:gemma4_phantom_tool_call_test`):
-phantom `ToolCallDelta{id, name, ""}` publication on malformed input
-REPRODUCED (4 failing), unknown-tool header guard PASS, multi-call
-characterization PASS (bare second `call:` is executable, indices 0,1,
-no content leak). The transactional publication fix is deferred to
-Codex (see §13).
+Note (2026-09-15 freeze): standalone `//src/test/llm/gemma4_generation:*` targets are the authoritative local gate. Broad `//src:ovms_test` remains a separate promotion gate.
 
 ## 9. Build / source hygiene TODO
 
@@ -238,49 +243,10 @@ Escalate semantic forks as **observable experiments**, not library trivia. Usefu
 
 The user does not need to know every internal API. The valuable input is the observation that discriminates between parser, generator, template, streamer and API-policy failure.
 
-## 13. Local-agent session checkpoint 2026-09-15 (evening)
+## 13. Freeze session checkpoint 2026-09-15 (evening)
 
-Working branch HEAD after this session (all on `staging/gemma4-upstream-refit-clean-20260915`):
+Working branch HEAD after freeze: `36beda81ef0261392cb4ad16b602dfcdae031270`.
 
-- `18de2c26c` (pre-existing RED) test(gemma4): cover parallel tool call policy at HTTP boundary
-- `7be4b7aa4` (GREEN) fix(gemma4): plumb parallel_tool_calls into Gemma4 generation policy
-- `447718b8d` (RED) test(gemma4): reject unsafe tool names in generation policy
-- `547df8030` (GREEN) fix(gemma4): validate tool names before installing native grammar
-- `fe894aad9` (RED only) test(gemma4): expose phantom tool-call publication on malformed input
+See `docs/gemmamonster/GEMMA4-SEMANTIC-FREEZE-20260915.md` for the authoritative freeze record, closed scope, backlog, and next live-acceptance stage.
 
-Fetched HEAD at session start: `18de2c26cf80317113167712f40cd39b7e3b5987`.
-Upstream `main`: `e338fb74b53dc8ac1c48707903b85e3901adcbdc` (one commit past pinned base `a5136cb...`; no rebase performed).
-
-Evidence (Windows, `C:\opt\bazel.exe`, output root
-`C:\opt\bazel-gemma4-upstream-refit-20260915`, tokenizer
-`C:/llm/models/runtime/gemma4-26-heretic-google-current`):
-
-- `bazel test //src/test/llm/gemma4_generation:gemma4_generation_policy_test --test_output=errors` => PASS (21/21) after `7be4b7aa4` and `547df8030`.
-- `bazel test //src/test/llm/gemma4_generation:gemma4_phantom_tool_call_test --test_output=errors` => 4 PASS / 4 FAIL as designed:
-  - FAIL (phantom REPRODUCED): MalformedNumber (1 header, want 0), MalformedNested (1, want 0), MalformedThenValid (2 headers + valid index 1, want 1 header at 0), StreamingSplit (1, want 0);
-  - PASS: UnknownRegisteredTool (registry guard holds at header level), CanonicalTwoEnvelopes (2 calls idx 0,1), GarbageBetweenCalls (bare second `call:` IS executable, idx 0,1, garbage swallowed from content), AdjacentCalls (same).
-- `git diff --check` => PASS. buildifier not installed in this environment (no binary); BUILD edits follow the existing `cc_test` block style.
-- Broad parser/streamer regression via `//src:ovms_test` NOT run: binary was never built here and a full mediapipe/TF build is out of session scope. Only standalone `cc_test` targets under `src/test/llm/...` exist (the two gemma4_generation targets above).
-
-Build-environment note: the bazel server must be started with
-`BAZEL_SH=C:\opt\msys64\usr\bin\bash.exe`, `BAZEL_VS=C:\BuildTools`,
-`BAZEL_VC=C:\BuildTools\VC` in the client environment (VS BuildTools
-live at nonstandard `C:\BuildTools`), using `C:\opt\bazel.exe` with
-`--output_user_root=C:\opt\bazel-gemma4-upstream-refit-20260915`. Do NOT
-pass `--repo_env=BAZEL_SH=...` overrides; they invalidate the external
-repo cache (`local_config_cc`/`local_config_python`) and break the
-toolchain. If the server idles out, `shutdown`, delete a poisoned
-`external/local_config_cc` + `external/local_config_python` if present,
-and restart with the three variables set.
-
-Deferred to Codex (do NOT implement without separate review):
-
-- transactional delayed `ToolCallDelta` publication fix;
-- any `Gemma4ToolParser` state-machine redesign from the phantom/multi-call findings;
-- post-#4103 prompt-state grammar reconciliation;
-- runtime-Jinja / Minja semantic refit;
-- major `OVMSTextStreamer` changes; generic parser framework; `response_template` engine.
-
-Next unfinished tasks: template-adaptation RED contracts (§6), full
-`//src:ovms_test` parser-matrix execution, live Arc/Gemma4 acceptance,
-final history/promotion review (§10).
+**STOP SEMANTIC FEATURE WORK.** Next work is Windows product build → Arc/Gemma4 live → NovaClaw/OpenCode dogfood.
