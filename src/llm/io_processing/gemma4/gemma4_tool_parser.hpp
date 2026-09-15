@@ -17,6 +17,7 @@
 
 #include <optional>
 #include <string>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -34,13 +35,7 @@ public:
     static const std::string TOOL_RESPONSE_START_TAG;
 
 protected:
-    enum class State {
-        Content,
-        ToolCallStarted,
-        ToolCallParameters,
-        ToolCallEnded,
-        AfterToolCall
-    };
+    enum class State { Content, ToolCallStarted, ToolCallParameters, ToolCallEnded, AfterToolCall };
 
 public:
     Gemma4ToolParser() = delete;
@@ -56,8 +51,33 @@ public:
 
     explicit Gemma4ToolParser(ov::genai::Tokenizer& tokenizer,
         std::optional<OutputParsingConfig> configOverride = std::nullopt) :
-        BaseOutputParser(tokenizer,
-            configOverride.has_value() ? std::move(*configOverride) : defaultParsingConfig()) {}
+        BaseOutputParser(tokenizer, configOverride.has_value() ? std::move(*configOverride) : defaultParsingConfig()) {}
+
+    Gemma4ToolParser(ov::genai::Tokenizer& tokenizer,
+        const ToolsSchemas_t& toolsSchemas,
+        std::optional<OutputParsingConfig> configOverride = std::nullopt) :
+        BaseOutputParser(tokenizer, configOverride.has_value() ? std::move(*configOverride) : defaultParsingConfig()) {
+        for (const auto& [name, schema] : toolsSchemas) {
+            (void)schema;
+            allowedToolNames.insert(name);
+        }
+        enforceToolRegistry = !allowedToolNames.empty();
+        if (enforceToolRegistry && !configOverride.has_value()) {
+            parsingConfig.startTags.clear();
+            parsingConfig.preambleStartTags.clear();
+            parsingConfig.startTags.reserve(allowedToolNames.size() * 4);
+            parsingConfig.preambleStartTags.reserve(allowedToolNames.size() * 2);
+            for (const auto& name : allowedToolNames) {
+                parsingConfig.startTags.push_back(TOOL_CALL_START_TAG + TOOL_CALL_NAME_PREFIX + name + "{");
+                parsingConfig.startTags.push_back(TOOL_CALL_START_TAG + TOOL_CALL_NAME_PREFIX + name + "(");
+                parsingConfig.startTags.push_back(TOOL_CALL_START_TAG + ":" + name + "{");
+                parsingConfig.startTags.push_back(TOOL_CALL_START_TAG + ":" + name + "(");
+                parsingConfig.preambleStartTags.push_back(TOOL_CALL_NAME_PREFIX + name + "{");
+                parsingConfig.preambleStartTags.push_back(TOOL_CALL_NAME_PREFIX + name + "(");
+            }
+            parsingConfig.preambleStartTagsRequireBoundary = true;
+        }
+    }
 
     void resetState() override {
         streamingContent.clear();
@@ -74,27 +94,26 @@ public:
         const std::vector<int64_t>& tokens,
         ov::genai::GenerationFinishReason finishReason) override;
 
-    // Compatibility helpers used by existing tests/callers. Executable calls use
-    // parseNativeArgumentsBody(), which fails closed instead of stringifying malformed values.
     static std::string normalizeArgStr(const std::string& arg);
     static std::string parseArrayParameter(const std::string& argumentStr);
     static std::string parseObjectParameter(const std::string& argumentStr);
 
 private:
     static std::optional<std::string> parseNativeArgumentsBody(const std::string& argumentsBody);
-    static std::optional<size_t> findMatchingContainerEnd(
-        const std::string& text,
-        size_t openPos,
-        char openChar,
-        char closeChar,
-        size_t& malformedEndTag);
+    static std::optional<size_t> findMatchingContainerEnd(const std::string& text,
+        size_t openPos, char openChar, char closeChar, size_t& malformedEndTag);
     static std::string normalizeToolName(std::string rawName);
+
+    bool toolNameAllowed(const std::string& name) const {
+        return !enforceToolRegistry || allowedToolNames.count(name) != 0;
+    }
 
     bool parseNewContent();
     bool parseInContentState();
     bool parseInToolCallState();
     bool parseToolCallParametersState();
     bool parseInToolCallEndedState();
+    std::optional<size_t> findBarePreamble(size_t from) const;
 
     std::optional<Delta> wrapDeltaContent(const std::string& content);
     ToolCallDelta wrapDeltaArgs(const std::string& argsStr, int toolCallIndex);
@@ -107,6 +126,8 @@ private:
     char currentArgsOpen{'{'};
     char currentArgsClose{'}'};
     bool currentCallValid{true};
+    bool enforceToolRegistry{false};
+    std::unordered_set<std::string> allowedToolNames;
 };
 
 }  // namespace ovms
