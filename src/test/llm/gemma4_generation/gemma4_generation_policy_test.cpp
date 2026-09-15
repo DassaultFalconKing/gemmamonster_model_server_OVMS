@@ -291,13 +291,48 @@ TEST_F(Gemma4ApiValidationTest, InvalidNamedPolicyReturnsStatusInsteadOfThrowing
     doc.Parse(MISSING_NAMED_TOOL_REQUEST);
     ASSERT_FALSE(doc.HasParseError());
     OpenAIChatCompletionsHandler handler(doc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
-    ASSERT_TRUE(handler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+    EXPECT_EQ(handler.parseRequest(std::nullopt, 0, std::nullopt).code(), absl::StatusCode::kInvalidArgument);
+}
 
-    GenerationConfigBuilder builder(ov::genai::GenerationConfig{}, "gemma4", true, DecodingMethod::STANDARD);
-    EXPECT_NO_THROW({
-        auto result = handler.extractInputRequest(builder);
-        EXPECT_EQ(result.status().code(), absl::StatusCode::kInvalidArgument);
-    });
+TEST_F(Gemma4ApiValidationTest, ChatCompletionsRejectsHardToolChoiceWithoutUsableTools) {
+    const std::vector<std::string> requests{
+        R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":"required"})",
+        R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":"required","tools":null})",
+        R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":"required","tools":[]})",
+        R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":{"type":"function","function":{"name":"weather"}}})",
+        R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":{"type":"function","function":{"name":"weather"}},"tools":null})",
+        R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":{"type":"function","function":{"name":"weather"}},"tools":[]})",
+    };
+
+    for (const std::string& request : requests) {
+        SCOPED_TRACE(request);
+        rapidjson::Document doc;
+        doc.Parse(request.c_str());
+        ASSERT_FALSE(doc.HasParseError());
+        OpenAIChatCompletionsHandler handler(doc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+        EXPECT_EQ(handler.parseRequest(std::nullopt, 0, std::nullopt).code(), absl::StatusCode::kInvalidArgument);
+    }
+}
+
+TEST_F(Gemma4ApiValidationTest, ResponsesRejectsHardToolChoiceWithoutUsableTools) {
+    const std::vector<std::string> requests{
+        R"({"model":"m","input":"Call weather","tool_choice":"required"})",
+        R"({"model":"m","input":"Call weather","tool_choice":"required","tools":null})",
+        R"({"model":"m","input":"Call weather","tool_choice":"required","tools":[]})",
+        R"({"model":"m","input":"Call weather","tool_choice":{"type":"function","name":"weather"}})",
+        R"({"model":"m","input":"Call weather","tool_choice":{"type":"function","name":"weather"},"tools":null})",
+        R"({"model":"m","input":"Call weather","tool_choice":{"type":"function","name":"weather"},"tools":[]})",
+        R"({"model":"m","input":"Call weather","tool_choice":{"type":"function","name":"missing"},"tools":[{"type":"function","name":"weather","parameters":{"type":"object"}}]})",
+    };
+
+    for (const std::string& request : requests) {
+        SCOPED_TRACE(request);
+        rapidjson::Document doc;
+        doc.Parse(request.c_str());
+        ASSERT_FALSE(doc.HasParseError());
+        OpenAIResponsesHandler handler(doc, Endpoint::RESPONSES, std::chrono::system_clock::now(), *tokenizer);
+        EXPECT_EQ(handler.parseRequest(std::nullopt, 0, std::nullopt).code(), absl::StatusCode::kInvalidArgument);
+    }
 }
 
 TEST_F(Gemma4ApiValidationTest, ParallelFalseReachesRequestAndBoundsRequiredGrammar) {
