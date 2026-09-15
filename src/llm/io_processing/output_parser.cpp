@@ -382,8 +382,16 @@ std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse,
             auto status = streamOutputCache.lookupTags(reasoningParser->getParsingConfig().startTags);
             if (status == TagLookupStatus::NOT_FOUND)
                 status = lookupPreambleTags(*reasoningParser);
-            if (status == TagLookupStatus::FOUND_COMPLETE)
-                return parseReasoningChunk(tokens, finishReason);
+            if (status == TagLookupStatus::FOUND_COMPLETE) {
+                // If the reasoning end tag is already present in this buffer, close the
+                // phase immediately so a coalesced trailing content suffix is not parsed
+                // as more reasoning on the next drain.
+                ProcessingPhase nextPhase = REASONING;
+                const std::string& endTag = reasoningParser->getParsingConfig().endTag;
+                if (!endTag.empty() && streamOutputCache.getBuffer().find(endTag) != std::string::npos)
+                    nextPhase = UNKNOWN;
+                return parseReasoningChunk(tokens, finishReason, nextPhase);
+            }
             anyStart = status;
         }
         if (applyToolParser) {

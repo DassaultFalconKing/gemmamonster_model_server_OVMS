@@ -520,13 +520,22 @@ std::optional<Delta> Gemma4ToolParser::parseChunk(const std::string& chunk,
         streamingContent.erase(0, streamingPosition - keep);
         streamingPosition = keep;
     }
-    if (!chunk.empty())
-        streamingContent += chunk;
 
+    // Drain events produced by a prior parseChunk before accepting more bytes.
     if (auto pending = takePendingEvent())
         return pending;
 
-    // Drain FSM progress until an event is ready or more bytes are required.
+    if (!chunk.empty()) {
+        // OutputParser passes the current unparsed buffer (not a delta) and may
+        // re-feed a remainder we already retained past streamingPosition.
+        const std::string unparsed = streamingContent.substr(streamingPosition);
+        if (chunk != unparsed)
+            streamingContent += chunk;
+    }
+
+    // Progress until one event is ready or more bytes are required. Stop after a
+    // single envelope reaches AfterToolCall so OutputParser remainder ownership
+    // can re-enter for the next canonical envelope without double-parsing.
     for (int steps = 0; steps < 64; ++steps) {
         const size_t posBefore = streamingPosition;
         const State stateBefore = currentState;
@@ -535,23 +544,31 @@ std::optional<Delta> Gemma4ToolParser::parseChunk(const std::string& chunk,
             break;
         if (!pendingEvents.empty())
             return takePendingEvent();
+        if (stateBefore != State::AfterToolCall && currentState == State::AfterToolCall)
+            break;
         if (streamingPosition == posBefore && currentState == stateBefore && pendingEvents.size() == pendingBefore)
             break;
     }
 
     if (finishReason != ov::genai::GenerationFinishReason::NONE) {
-        // Terminal drain: emit already-committed pending events only. Incomplete
-        // envelopes (open thought of a tool call without `<tool_call|>`) do not commit.
         if (auto pending = takePendingEvent())
             return pending;
         if (currentState != State::Content && currentState != State::AfterToolCall) {
             clearCandidate();
             currentState = State::Content;
         }
+        if (currentState == State::AfterToolCall)
+            currentState = State::Content;
         if (currentState == State::Content && streamingPosition < streamingContent.size()) {
-            auto content = eraseSpecialMarkers(streamingContent.substr(streamingPosition));
-            streamingPosition = streamingContent.size();
-            return wrapDeltaContent(content);
+            // Do not flush bytes that belong to a subsequent canonical envelope;
+            // OutputParser owns that remainder after the first end tag.
+            const size_t nextStart = streamingContent.find(TOOL_CALL_START_TAG, streamingPosition);
+            const size_t end = nextStart == std::string::npos ? streamingContent.size() : nextStart;
+            if (end > streamingPosition) {
+                auto content = eraseSpecialMarkers(streamingContent.substr(streamingPosition, end - streamingPosition));
+                streamingPosition = end;
+                return wrapDeltaContent(content);
+            }
         }
     }
     return std::nullopt;
