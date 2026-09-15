@@ -137,11 +137,16 @@ TEST(Gemma4RenderedPromptStateTest, OpenThoughtAdaptationIsIdempotentAndKeepsSin
 
     EXPECT_FALSE(adaptGemma4ToolGrammarForRenderedPrompt(config, prompt));
     EXPECT_EQ(grammarText(config), once);
-    EXPECT_NE(once.find("stop_after_first=True"), std::string::npos);
+    EXPECT_NE(once.find("stop_after_first=true"), std::string::npos);
 }
 
 TEST(Gemma4RenderedPromptStateTest, DetectorUsesTheSameOpenThoughtState) {
     ov::genai::Tokenizer tokenizer(defaultTokenizerPath());
+    auto config = configFor("required");
+    ASSERT_TRUE(adaptGemma4ToolGrammarForRenderedPrompt(
+        config, "<|tool_response>ok<tool_response|><|channel>thought\n"));
+    ASSERT_NO_THROW(config.structured_output_config->validate(tokenizer));
+
     OutputParser parser(tokenizer, "gemma4", "gemma4", {});
 
     parser.detectAndSetImplicitReasoningStart(

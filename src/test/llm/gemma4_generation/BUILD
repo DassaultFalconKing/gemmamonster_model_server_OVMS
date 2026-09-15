@@ -37,6 +37,7 @@ cc_test(
     deps = [
         "@com_google_googletest//:gtest_main",
         "//src/llm:generation_config_builders",
+        "//src/llm:io_processing_gemma4_rendered_prompt_state",
         "//src/llm:output_parsers",
         "//third_party:genai",
         "//third_party:openvino",
@@ -45,3 +46,4 @@ cc_test(
     local_defines = COMMON_LOCAL_DEFINES,
     linkopts = COMMON_STATIC_LIBS_LINKOPTS,
     linkstatic = 1,
+)

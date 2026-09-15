@@ -36,6 +36,7 @@
 #include "../profiler.hpp"
 #include "apis/openai_completions.hpp"
 #include "apis/openai_responses.hpp"
+#include "io_processing/gemma4/rendered_prompt_state.hpp"
 #include "io_processing/generation_config_builder.hpp"
 #include "io_processing/input_processor.hpp"
 #include "ovms_text_streamer.hpp"
@@ -230,6 +231,20 @@ absl::Status GenAiServable::prepareInputs(std::shared_ptr<GenAiServableExecution
     status = processor.process(req);
     if (!status.ok()) {
         return status;
+    }
+
+    if (getProperties()->toolParserName == "gemma4" &&
+        adaptGemma4ToolGrammarForRenderedPrompt(
+            req.generationConfig, req.promptText)) {
+        try {
+            req.generationConfig.structured_output_config->validate(
+                getProperties()->tokenizer);
+        } catch (const std::exception& e) {
+            return absl::Status(
+                absl::StatusCode::kInvalidArgument,
+                std::string("Rendered-prompt Gemma4 grammar validation failed: ") +
+                    e.what());
+        }
     }
 
     if (executionContext->apiHandler->getOutputParser() != nullptr) {
