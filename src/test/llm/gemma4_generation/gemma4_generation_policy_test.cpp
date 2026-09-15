@@ -10,19 +10,31 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <string>
+#include <variant>
+
 #include "src/llm/io_processing/generation_config_builder.hpp"
 
 using namespace ovms;
 
 namespace {
-OpenAIRequest requiredWeatherRequest() {
+OpenAIRequest weatherRequest(const std::string& toolChoice) {
     OpenAIRequest request;
-    request.toolChoice = "required";
+    request.toolChoice = toolChoice;
     request.toolNameSchemaMap.emplace(
         "weather",
         ToolSchemaWrapper{nullptr,
             R"({"type":"object","properties":{"city":{"type":"string"}},"required":["city"]})"});
     return request;
+}
+
+const ov::genai::StructuredOutputConfig::StructuralTag* getStructuralTag(
+    const ov::genai::GenerationConfig& config) {
+    if (!config.structured_output_config || !config.structured_output_config->structural_tags_config)
+        return nullptr;
+    const auto& outer = *config.structured_output_config->structural_tags_config;
+    return std::get_if<ov::genai::StructuredOutputConfig::StructuralTag>(&outer);
 }
 }  // namespace
 
@@ -30,7 +42,27 @@ TEST(Gemma4GenerationPolicyTest, RequiredToolChoiceInstallsNativeStructuredGramm
     ov::genai::GenerationConfig baseConfig;
     GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
 
-    builder.parseConfigFromRequest(requiredWeatherRequest());
+    builder.parseConfigFromRequest(weatherRequest("required"));
 
     EXPECT_TRUE(builder.getConfig().structured_output_config.has_value());
+}
+
+TEST(Gemma4GenerationPolicyTest, AutoUsesLazyNativeToolTrigger) {
+    using Structured = ov::genai::StructuredOutputConfig;
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+
+    builder.parseConfigFromRequest(weatherRequest("auto"));
+
+    const auto* grammar = getStructuralTag(builder.getConfig());
+    ASSERT_NE(grammar, nullptr);
+    const auto* triggered = std::get_if<std::shared_ptr<Structured::TriggeredTags>>(grammar);
+    ASSERT_NE(triggered, nullptr);
+    ASSERT_TRUE(*triggered);
+    ASSERT_EQ((*triggered)->triggers.size(), 1u);
+    EXPECT_EQ((*triggered)->triggers[0], "<|tool_call>");
+    EXPECT_FALSE((*triggered)->at_least_one);
+    ASSERT_EQ((*triggered)->tags.size(), 1u);
+    EXPECT_EQ((*triggered)->tags[0].begin, "<|tool_call>call:weather");
+    EXPECT_EQ((*triggered)->tags[0].end, "<tool_call|>");
 }
