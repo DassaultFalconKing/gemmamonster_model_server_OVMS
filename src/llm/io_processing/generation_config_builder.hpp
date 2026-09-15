@@ -15,11 +15,16 @@
 //*****************************************************************************
 
 #pragma once
-#include <memory>
 #include <iostream>
+#include <memory>
+#include <stdexcept>
 #include <string>
+#include <utility>
+#include <vector>
+
 #include <openvino/genai/generation_config.hpp>
 #include <openvino/genai/tokenizer.hpp>
+
 #include "base_generation_config_builder.hpp"
 #include "phi4/generation_config_builder.hpp"
 #include "llama3/generation_config_builder.hpp"
@@ -29,6 +34,72 @@
 #include "../../logging.hpp"
 
 namespace ovms {
+
+class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
+    static ov::genai::StructuredOutputConfig::Tag buildToolTag(
+        const std::string& toolName,
+        const ToolSchemaWrapper& toolSchemaWrapper) {
+        if (toolSchemaWrapper.stringRepr.empty()) {
+            throw std::invalid_argument("Gemma4 guided tool schema for '" + toolName + "' is empty");
+        }
+
+        ov::genai::StructuredOutputConfig::Tag tag;
+        tag.begin = "<|tool_call>call:" + toolName;
+        tag.content = ov::genai::StructuredOutputConfig::JSONSchema(toolSchemaWrapper.stringRepr);
+        tag.end = "<tool_call|>";
+        return tag;
+    }
+
+    static ov::genai::StructuredOutputConfig::StructuralTag buildRequiredToolGrammar(
+        const OpenAIRequest& request) {
+        using Structured = ov::genai::StructuredOutputConfig;
+
+        std::vector<Structured::Tag> toolTags;
+        toolTags.reserve(request.toolNameSchemaMap.size());
+        for (const auto& [toolName, toolSchemaWrapper] : request.toolNameSchemaMap) {
+            toolTags.push_back(buildToolTag(toolName, toolSchemaWrapper));
+        }
+
+        auto requiredTags = std::make_shared<Structured::TagsWithSeparator>();
+        requiredTags->tags = std::move(toolTags);
+        requiredTags->separator = "";
+        requiredTags->at_least_one = true;
+
+        auto thought = std::make_shared<Structured::Tag>();
+        thought->begin = "<|channel>thought\n";
+        thought->content = Structured::AnyText();
+        thought->end = "<channel|>";
+
+        auto thoughtThenTools = std::make_shared<Structured::Concat>();
+        thoughtThenTools->elements = {thought, requiredTags};
+
+        auto alternatives = std::make_shared<Structured::Union>();
+        alternatives->elements = {requiredTags, thoughtThenTools};
+        return alternatives;
+    }
+
+public:
+    Gemma4GenerationConfigBuilder() = delete;
+    explicit Gemma4GenerationConfigBuilder(
+        const ov::genai::GenerationConfig& baseConfig,
+        bool enableToolGuidedGeneration,
+        DecodingMethod decodingMethod) :
+        BaseGenerationConfigBuilder(baseConfig, enableToolGuidedGeneration, decodingMethod) {}
+
+    void parseConfigFromRequest(const OpenAIRequest& request) override {
+        BaseGenerationConfigBuilder::parseConfigFromRequest(request);
+
+        if (request.toolChoice != "required") {
+            return;
+        }
+        if (request.toolNameSchemaMap.empty()) {
+            throw std::invalid_argument("Gemma4 tool_choice=required requires at least one available tool schema");
+        }
+
+        setStructuralTagsConfig(buildRequiredToolGrammar(request));
+    }
+};
+
 class GenerationConfigBuilder {
     std::unique_ptr<BaseGenerationConfigBuilder> builder_impl;
 
@@ -43,6 +114,8 @@ public:
             builder_impl = std::make_unique<Hermes3GenerationConfigBuilder>(baseConfig, enableToolGuidedGeneration, decodingMethod);
         } else if (toolParserName == "hermes3") {
             builder_impl = std::make_unique<Hermes3GenerationConfigBuilder>(baseConfig, enableToolGuidedGeneration, decodingMethod);
+        } else if (toolParserName == "gemma4") {
+            builder_impl = std::make_unique<Gemma4GenerationConfigBuilder>(baseConfig, enableToolGuidedGeneration, decodingMethod);
         } else if (toolParserName == "phi4") {
             builder_impl = std::make_unique<Phi4GenerationConfigBuilder>(baseConfig, enableToolGuidedGeneration, decodingMethod);
         } else if (toolParserName == "devstral") {
