@@ -1,9 +1,9 @@
 # Gemma4 Upstream Contribution Refit Plan
 
 **Status:** ACTIVE / implementation in progress  
-**Updated:** 2026-09-15  
+**Updated:** 2026-09-15 (local-agent session: parallel_tool_calls GREEN, tool-name validation GREEN, phantom-publication RED committed)  
 **Working branch:** `staging/gemma4-upstream-refit-clean-20260915`  
-**Current checkpoint before this document commit:** `cf6fc0412024a0f358048470da144abaa101046d`  
+**Current checkpoint before this document commit:** `fe894aad9` (local-agent session HEAD; full SHAs in §13)  
 **Upstream base:** `openvinotoolkit/model_server@a5136cb285482aaef5410a053b5ecd04ff9324ec`  
 **Authority dossier:** `docs/gemmamonster/COMPARATIVE-GEMMA4-PARSER-VERDICT.md`
 
@@ -100,15 +100,20 @@ The local agent must verify the connector-written branch before continuing imple
 
 Current observation: `OpenAIRequest` / builder work existed in the old line, but current `parseTools()` does not yet propagate the HTTP `parallel_tool_calls` field into generation policy.
 
-- [ ] Add HTTP/API RED contract: explicit `parallel_tool_calls=false` reaches the internal request as false; true/default semantics remain documented.
-- [ ] Decide and document default using current OpenAI-compatible OVMS behavior rather than guessing from the old branch.
-- [ ] Add internal request field only if not already present on the post-#4103 base.
-- [ ] Required/named grammar: `parallel_tool_calls=false` => max one native call.
-- [ ] `parallel_tool_calls=true` => native repeated calls allowed.
-- [ ] Auto grammar must apply the same repetition policy after trigger.
-- [ ] Add direct builder tests and an HTTP parsing test so laboratory-only field assignment cannot masquerade as API support.
+- [x] Add HTTP/API RED contract: explicit `parallel_tool_calls=false` reaches the internal request as false; true/default semantics remain documented. (RED `18de2c26c`)
+- [x] Decide and document default using current OpenAI-compatible OVMS behavior rather than guessing from the old branch. (absent/null => `true`)
+- [x] Add internal request field only if not already present on the post-#4103 base. (`OpenAIRequest::parallelToolCalls{true}`)
+- [x] Required/named grammar: `parallel_tool_calls=false` => max one native call. (`stop_after_first=true` on `TagsWithSeparator`)
+- [x] `parallel_tool_calls=true` => native repeated calls allowed. (`stop_after_first=false`)
+- [x] Auto grammar must apply the same repetition policy after trigger. (`stop_after_first` on `TriggeredTags`)
+- [x] Add direct builder tests and an HTTP parsing test so laboratory-only field assignment cannot masquerade as API support. (GREEN `7be4b7aa4`; non-bool rejected with `InvalidArgument`; Responses echoes explicit value)
 
 Source: llama.cpp native Gemma policy plus OpenAI parallel-tool semantics. Do not copy SGLang generic JSON fallback.
+
+### Tool-name validation (adversarial follow-up, completed this session)
+
+- [x] RED `447718b8d`: invalid tool names accepted into `<|tool_call>call:<name>` tags for required/named/auto.
+- [x] GREEN `547df8030`: `buildToolTag` rejects names outside `[A-Za-z0-9_.-]` with `std::invalid_argument` (fail-closed for all policies; auto cannot degrade to unguided sampling). Predicate duplicated with TODO referencing parser `saneToolName`; no shared-helper refactor.
 
 ### Generation validation matrix
 
@@ -156,6 +161,18 @@ Core parser semantic work is implemented, but before promotion:
 - [ ] Verify large integer lexeme remains byte-preserved.
 - [ ] Verify malformed call followed by valid call does not poison parser state.
 - [ ] Verify structural markers never leak to client content.
+
+Note (2026-09-15 session): contract tests for the above exist
+(`gemma4_upstream_refit_contract_test.cpp`) but were NOT executed here:
+they are linked only into the full `//src:ovms_test` binary, which was
+never built in this environment. The only parser-level tests executed
+this session are the new raw-Delta RED tests (`fe894aad9`,
+`//src/test/llm/gemma4_generation:gemma4_phantom_tool_call_test`):
+phantom `ToolCallDelta{id, name, ""}` publication on malformed input
+REPRODUCED (4 failing), unknown-tool header guard PASS, multi-call
+characterization PASS (bare second `call:` is executable, indices 0,1,
+no content leak). The transactional publication fix is deferred to
+Codex (see §13).
 
 ## 9. Build / source hygiene TODO
 
@@ -220,3 +237,50 @@ Escalate semantic forks as **observable experiments**, not library trivia. Usefu
 - In a streaming failure, which raw special token or phase transition disappears first?
 
 The user does not need to know every internal API. The valuable input is the observation that discriminates between parser, generator, template, streamer and API-policy failure.
+
+## 13. Local-agent session checkpoint 2026-09-15 (evening)
+
+Working branch HEAD after this session (all on `staging/gemma4-upstream-refit-clean-20260915`):
+
+- `18de2c26c` (pre-existing RED) test(gemma4): cover parallel tool call policy at HTTP boundary
+- `7be4b7aa4` (GREEN) fix(gemma4): plumb parallel_tool_calls into Gemma4 generation policy
+- `447718b8d` (RED) test(gemma4): reject unsafe tool names in generation policy
+- `547df8030` (GREEN) fix(gemma4): validate tool names before installing native grammar
+- `fe894aad9` (RED only) test(gemma4): expose phantom tool-call publication on malformed input
+
+Fetched HEAD at session start: `18de2c26cf80317113167712f40cd39b7e3b5987`.
+Upstream `main`: `e338fb74b53dc8ac1c48707903b85e3901adcbdc` (one commit past pinned base `a5136cb...`; no rebase performed).
+
+Evidence (Windows, `C:\opt\bazel.exe`, output root
+`C:\opt\bazel-gemma4-upstream-refit-20260915`, tokenizer
+`C:/llm/models/runtime/gemma4-26-heretic-google-current`):
+
+- `bazel test //src/test/llm/gemma4_generation:gemma4_generation_policy_test --test_output=errors` => PASS (21/21) after `7be4b7aa4` and `547df8030`.
+- `bazel test //src/test/llm/gemma4_generation:gemma4_phantom_tool_call_test --test_output=errors` => 4 PASS / 4 FAIL as designed:
+  - FAIL (phantom REPRODUCED): MalformedNumber (1 header, want 0), MalformedNested (1, want 0), MalformedThenValid (2 headers + valid index 1, want 1 header at 0), StreamingSplit (1, want 0);
+  - PASS: UnknownRegisteredTool (registry guard holds at header level), CanonicalTwoEnvelopes (2 calls idx 0,1), GarbageBetweenCalls (bare second `call:` IS executable, idx 0,1, garbage swallowed from content), AdjacentCalls (same).
+- `git diff --check` => PASS. buildifier not installed in this environment (no binary); BUILD edits follow the existing `cc_test` block style.
+- Broad parser/streamer regression via `//src:ovms_test` NOT run: binary was never built here and a full mediapipe/TF build is out of session scope. Only standalone `cc_test` targets under `src/test/llm/...` exist (the two gemma4_generation targets above).
+
+Build-environment note: the bazel server must be started with
+`BAZEL_SH=C:\opt\msys64\usr\bin\bash.exe`, `BAZEL_VS=C:\BuildTools`,
+`BAZEL_VC=C:\BuildTools\VC` in the client environment (VS BuildTools
+live at nonstandard `C:\BuildTools`), using `C:\opt\bazel.exe` with
+`--output_user_root=C:\opt\bazel-gemma4-upstream-refit-20260915`. Do NOT
+pass `--repo_env=BAZEL_SH=...` overrides; they invalidate the external
+repo cache (`local_config_cc`/`local_config_python`) and break the
+toolchain. If the server idles out, `shutdown`, delete a poisoned
+`external/local_config_cc` + `external/local_config_python` if present,
+and restart with the three variables set.
+
+Deferred to Codex (do NOT implement without separate review):
+
+- transactional delayed `ToolCallDelta` publication fix;
+- any `Gemma4ToolParser` state-machine redesign from the phantom/multi-call findings;
+- post-#4103 prompt-state grammar reconciliation;
+- runtime-Jinja / Minja semantic refit;
+- major `OVMSTextStreamer` changes; generic parser framework; `response_template` engine.
+
+Next unfinished tasks: template-adaptation RED contracts (§6), full
+`//src:ovms_test` parser-matrix execution, live Arc/Gemma4 acceptance,
+final history/promotion review (§10).
