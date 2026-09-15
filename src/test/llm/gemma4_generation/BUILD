@@ -7,6 +7,7 @@ cc_test(
         "@com_google_googletest//:gtest_main",
         "//src/llm:generation_config_builders",
         "//src/llm:openai_completions_api_handler",
+        "//src/llm:openai_responses_handler",
         "//third_party:genai",
     ],
     copts = COPTS_TESTS,

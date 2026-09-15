@@ -22,6 +22,7 @@
 #include <rapidjson/document.h>
 
 #include "src/llm/apis/openai_completions.hpp"
+#include "src/llm/apis/openai_responses.hpp"
 #include "src/llm/io_processing/generation_config_builder.hpp"
 
 using namespace ovms;
@@ -161,6 +162,10 @@ protected:
     static void TearDownTestSuite() {
         tokenizer.reset();
     }
+
+    static std::string weatherJson(const std::string& extraFields) {
+        return std::string(R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"object","properties":{}}}}])") + extraFields + "}";
+    }
 };
 
 std::unique_ptr<ov::genai::Tokenizer> Gemma4ApiValidationTest::tokenizer;
@@ -168,6 +173,40 @@ std::unique_ptr<ov::genai::Tokenizer> Gemma4ApiValidationTest::tokenizer;
 constexpr const char* INVALID_REQUIRED_TOOL_REQUEST = R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":"required","tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"invalid_schema_type"}}}]})";
 constexpr const char* INVALID_AUTO_TOOL_REQUEST = R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":"auto","tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"invalid_schema_type"}}}]})";
 constexpr const char* MISSING_NAMED_TOOL_REQUEST = R"({"model":"m","messages":[{"role":"user","content":"Call weather"}],"tool_choice":{"type":"function","function":{"name":"missing"}},"tools":[{"type":"function","function":{"name":"weather","parameters":{"type":"object"}}}]})";
+
+template <typename Request>
+auto parallelPolicy(const Request& request, int) -> decltype(request.parallelToolCalls) {
+    return request.parallelToolCalls;
+}
+
+bool parallelPolicy(const OpenAIRequest&, long) {
+    return true;
+}
+
+std::optional<bool> requiredStopsAfterFirst(const ov::genai::GenerationConfig& config) {
+    using Structured = ov::genai::StructuredOutputConfig;
+    const auto* grammar = getStructuralTag(config);
+    if (grammar == nullptr)
+        return std::nullopt;
+    const auto* alternatives = std::get_if<std::shared_ptr<Structured::Union>>(grammar);
+    if (alternatives == nullptr || !*alternatives || (*alternatives)->elements.empty())
+        return std::nullopt;
+    const auto* tags = std::get_if<std::shared_ptr<Structured::TagsWithSeparator>>(&(*alternatives)->elements.front());
+    if (tags == nullptr || !*tags)
+        return std::nullopt;
+    return (*tags)->stop_after_first;
+}
+
+std::optional<bool> autoStopsAfterFirst(const ov::genai::GenerationConfig& config) {
+    using Structured = ov::genai::StructuredOutputConfig;
+    const auto* grammar = getStructuralTag(config);
+    if (grammar == nullptr)
+        return std::nullopt;
+    const auto* triggered = std::get_if<std::shared_ptr<Structured::TriggeredTags>>(grammar);
+    if (triggered == nullptr || !*triggered)
+        return std::nullopt;
+    return (*triggered)->stop_after_first;
+}
 }  // namespace
 
 TEST_F(Gemma4ApiValidationTest, InvalidRequiredGrammarReturnsInvalidArgumentWithoutFallback) {
@@ -220,4 +259,114 @@ TEST_F(Gemma4ApiValidationTest, InvalidNamedPolicyReturnsStatusInsteadOfThrowing
         auto result = handler.extractInputRequest(builder);
         EXPECT_EQ(result.status().code(), absl::StatusCode::kInvalidArgument);
     });
+}
+
+TEST_F(Gemma4ApiValidationTest, ParallelFalseReachesRequestAndBoundsRequiredGrammar) {
+    rapidjson::Document doc;
+    const std::string json = weatherJson(R"(,"tool_choice":"required","parallel_tool_calls":false)");
+    doc.Parse(json.c_str());
+    ASSERT_FALSE(doc.HasParseError());
+    OpenAIChatCompletionsHandler handler(doc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+    ASSERT_TRUE(handler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+    EXPECT_FALSE(parallelPolicy(handler.getRequest(), 0));
+
+    GenerationConfigBuilder builder(ov::genai::GenerationConfig{}, "gemma4", true, DecodingMethod::STANDARD);
+    builder.parseConfigFromRequest(handler.getRequest());
+    const auto stops = requiredStopsAfterFirst(builder.getConfig());
+    ASSERT_TRUE(stops.has_value());
+    EXPECT_TRUE(*stops);
+}
+
+TEST_F(Gemma4ApiValidationTest, ParallelTrueAndDefaultAllowRequiredRepetition) {
+    for (const std::string field : {R"(,"tool_choice":"required","parallel_tool_calls":true)", R"(,"tool_choice":"required")"}) {
+        SCOPED_TRACE(field);
+        rapidjson::Document doc;
+        const std::string json = weatherJson(field);
+        doc.Parse(json.c_str());
+        ASSERT_FALSE(doc.HasParseError());
+        OpenAIChatCompletionsHandler handler(doc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+        ASSERT_TRUE(handler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+        EXPECT_TRUE(parallelPolicy(handler.getRequest(), 0));
+
+        GenerationConfigBuilder builder(ov::genai::GenerationConfig{}, "gemma4", true, DecodingMethod::STANDARD);
+        builder.parseConfigFromRequest(handler.getRequest());
+        const auto stops = requiredStopsAfterFirst(builder.getConfig());
+        ASSERT_TRUE(stops.has_value());
+        EXPECT_FALSE(*stops);
+    }
+}
+
+TEST_F(Gemma4ApiValidationTest, ParallelFalseBoundsNamedToolGrammar) {
+    rapidjson::Document doc;
+    const std::string json = weatherJson(R"(,"tool_choice":{"type":"function","function":{"name":"weather"}},"parallel_tool_calls":false)");
+    doc.Parse(json.c_str());
+    ASSERT_FALSE(doc.HasParseError());
+    OpenAIChatCompletionsHandler handler(doc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+    ASSERT_TRUE(handler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+    EXPECT_FALSE(parallelPolicy(handler.getRequest(), 0));
+
+    GenerationConfigBuilder builder(ov::genai::GenerationConfig{}, "gemma4", true, DecodingMethod::STANDARD);
+    builder.parseConfigFromRequest(handler.getRequest());
+    const auto stops = requiredStopsAfterFirst(builder.getConfig());
+    ASSERT_TRUE(stops.has_value());
+    EXPECT_TRUE(*stops);
+}
+
+TEST_F(Gemma4ApiValidationTest, ParallelFalseBoundsAutoAfterLazyTrigger) {
+    rapidjson::Document doc;
+    const std::string json = weatherJson(R"(,"tool_choice":"auto","parallel_tool_calls":false)");
+    doc.Parse(json.c_str());
+    ASSERT_FALSE(doc.HasParseError());
+    OpenAIChatCompletionsHandler handler(doc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+    ASSERT_TRUE(handler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+    EXPECT_FALSE(parallelPolicy(handler.getRequest(), 0));
+
+    GenerationConfigBuilder builder(ov::genai::GenerationConfig{}, "gemma4", true, DecodingMethod::STANDARD);
+    builder.parseConfigFromRequest(handler.getRequest());
+    const auto stops = autoStopsAfterFirst(builder.getConfig());
+    ASSERT_TRUE(stops.has_value());
+    EXPECT_TRUE(*stops);
+}
+
+TEST_F(Gemma4ApiValidationTest, ParallelTrueAllowsAutoRepetitionAfterLazyTrigger) {
+    rapidjson::Document doc;
+    const std::string json = weatherJson(R"(,"tool_choice":"auto","parallel_tool_calls":true)");
+    doc.Parse(json.c_str());
+    ASSERT_FALSE(doc.HasParseError());
+    OpenAIChatCompletionsHandler handler(doc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+    ASSERT_TRUE(handler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+    EXPECT_TRUE(parallelPolicy(handler.getRequest(), 0));
+
+    GenerationConfigBuilder builder(ov::genai::GenerationConfig{}, "gemma4", true, DecodingMethod::STANDARD);
+    builder.parseConfigFromRequest(handler.getRequest());
+    const auto stops = autoStopsAfterFirst(builder.getConfig());
+    ASSERT_TRUE(stops.has_value());
+    EXPECT_FALSE(*stops);
+}
+
+TEST_F(Gemma4ApiValidationTest, ParallelPolicyRejectsNonBooleanHttpValue) {
+    rapidjson::Document doc;
+    const std::string json = weatherJson(R"(,"parallel_tool_calls":"false")");
+    doc.Parse(json.c_str());
+    ASSERT_FALSE(doc.HasParseError());
+    OpenAIChatCompletionsHandler handler(doc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+    EXPECT_EQ(handler.parseRequest(std::nullopt, 0, std::nullopt).code(), absl::StatusCode::kInvalidArgument);
+}
+
+TEST_F(Gemma4ApiValidationTest, ResponsesEchoesExplicitParallelFalse) {
+    rapidjson::Document doc;
+    doc.Parse(R"({"model":"m","input":"Call weather","parallel_tool_calls":false,"tools":[{"type":"function","name":"weather","parameters":{"type":"object","properties":{}}}]})");
+    ASSERT_FALSE(doc.HasParseError());
+    OpenAIResponsesHandler handler(doc, Endpoint::RESPONSES, std::chrono::system_clock::now(), *tokenizer);
+    ASSERT_TRUE(handler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+    EXPECT_FALSE(parallelPolicy(handler.getRequest(), 0));
+
+    const std::vector<Delta> deltas;
+    const std::string response = handler.serializeUnaryResponse(deltas, ov::genai::GenerationFinishReason::STOP);
+    rapidjson::Document responseDoc;
+    responseDoc.Parse(response.c_str());
+    ASSERT_FALSE(responseDoc.HasParseError()) << response;
+    ASSERT_TRUE(responseDoc.HasMember("parallel_tool_calls"));
+    ASSERT_TRUE(responseDoc["parallel_tool_calls"].IsBool());
+    EXPECT_FALSE(responseDoc["parallel_tool_calls"].GetBool());
 }
