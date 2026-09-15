@@ -193,6 +193,7 @@ absl::Status OpenAIApiHandler::parseTools() {
     }
     auto toolChoiceIt = doc.FindMember("tool_choice");
     std::string toolChoice{"auto"};
+    bool namedToolChoice = false;
     if (toolChoiceIt != doc.MemberEnd() && !toolChoiceIt->value.IsNull()) {
         if (toolChoiceIt->value.IsString()) {
             toolChoice = toolChoiceIt->value.GetString();
@@ -205,6 +206,7 @@ absl::Status OpenAIApiHandler::parseTools() {
                 auto nameIt = toolChoiceFunctionIt->value.GetObject().FindMember("name");
                 if (nameIt != toolChoiceFunctionIt->value.GetObject().MemberEnd() && nameIt->value.IsString()) {
                     toolChoice = nameIt->value.GetString();
+                    namedToolChoice = true;
                 } else {
                     return absl::InvalidArgumentError("tool_choice.function.name is not a valid string");
                 }
@@ -216,6 +218,7 @@ absl::Status OpenAIApiHandler::parseTools() {
                         return absl::InvalidArgumentError("tool_choice.name is not a valid string");
                     }
                     toolChoice = nameIt->value.GetString();
+                    namedToolChoice = true;
                 } else {
                     return absl::InvalidArgumentError("tool_choice.function is not a valid JSON object");
                 }
@@ -298,9 +301,13 @@ absl::Status OpenAIApiHandler::parseTools() {
                 request.toolNameSchemaMap[functionName] = std::move(schemaReprs);
             }
         }
-    } else {
-        toolChoice = "none";  // If tools are not provided, set toolChoice to "none"
     }
+
+    const bool hardToolChoice = toolChoice == "required" || namedToolChoice;
+    if (hardToolChoice && request.toolNameSchemaMap.empty())
+        return absl::InvalidArgumentError("Hard tool_choice requires a matching tool with a usable parameters schema");
+    if (!hardToolChoice && request.toolNameSchemaMap.empty())
+        toolChoice = "none";
 
     request.toolChoice = toolChoice;
     return absl::OkStatus();
