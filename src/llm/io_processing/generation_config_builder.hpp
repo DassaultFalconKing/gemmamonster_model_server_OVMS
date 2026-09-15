@@ -36,6 +36,10 @@
 namespace ovms {
 
 class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
+    static bool isNamedToolChoice(const std::string& toolChoice) {
+        return !toolChoice.empty() && toolChoice != "none" && toolChoice != "auto" && toolChoice != "required";
+    }
+
     static ov::genai::StructuredOutputConfig::Tag buildToolTag(
         const std::string& toolName,
         const ToolSchemaWrapper& toolSchemaWrapper) {
@@ -53,6 +57,15 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
     static std::vector<ov::genai::StructuredOutputConfig::Tag> buildToolTags(
         const OpenAIRequest& request) {
         std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags;
+        if (isNamedToolChoice(request.toolChoice)) {
+            const auto it = request.toolNameSchemaMap.find(request.toolChoice);
+            if (it == request.toolNameSchemaMap.end()) {
+                throw std::invalid_argument("Gemma4 named tool_choice references an unavailable tool: " + request.toolChoice);
+            }
+            toolTags.push_back(buildToolTag(it->first, it->second));
+            return toolTags;
+        }
+
         toolTags.reserve(request.toolNameSchemaMap.size());
         for (const auto& [toolName, toolSchemaWrapper] : request.toolNameSchemaMap) {
             toolTags.push_back(buildToolTag(toolName, toolSchemaWrapper));
@@ -108,7 +121,7 @@ public:
         }
 
         auto toolTags = buildToolTags(request);
-        if (request.toolChoice == "required") {
+        if (request.toolChoice == "required" || isNamedToolChoice(request.toolChoice)) {
             setStructuralTagsConfig(buildRequiredToolGrammar(std::move(toolTags)));
             return;
         }
