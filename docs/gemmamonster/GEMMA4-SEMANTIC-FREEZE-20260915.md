@@ -1,8 +1,8 @@
 # Gemma4 semantic refit FROZEN — 2026-09-15
 
 Branch: `staging/gemma4-upstream-refit-clean-20260915`  
-**Behavioral freeze HEAD:** `36beda81ef0261392cb4ad16b602dfcdae031270`  
-**(This docs commit extends the branch but does not change behavioral scope.)**  
+**Behavioral freeze HEAD:** `66c66140113c4a6be8ce0b11b5aa23ccc774ac22`  
+**Branch tip (docs):** `5d2db97f8c5dc06eb5f180ab133f664d710ad049`  
 Upstream `main`: `e338fb74b53dc8ac1c48707903b85e3901adcbdc`  
 Status: **SEMANTIC FEATURE WORK FROZEN** pending Windows/live acceptance
 
@@ -44,7 +44,7 @@ git diff --check                                                    PASSED
 | `31985d037` | test(gemma4): pin F7 argument contracts |
 | `079eb6f66` | fix(gemma4): enforce object-root tool schemas |
 | `474bc82ac` | test(gemma4): pin bounded candidate guards |
-| `36beda81e` | fix(gemma4): bound malformed tool candidates |
+| `66c661401` | fix(gemma4): bound malformed tool candidates |
 
 ## Closed in this freeze
 

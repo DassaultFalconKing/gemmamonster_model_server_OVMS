@@ -3,7 +3,7 @@
 **Status:** SEMANTIC FEATURE WORK FROZEN pending Windows/live acceptance  
 **Updated:** 2026-09-15 (freeze session)  
 **Working branch:** `staging/gemma4-upstream-refit-clean-20260915`  
-**Freeze HEAD:** `36beda81ef0261392cb4ad16b602dfcdae031270`  
+**Freeze HEAD:** `66c66140113c4a6be8ce0b11b5aa23ccc774ac22` (behavioral); tip docs at branch HEAD  
 **Upstream base:** `openvinotoolkit/model_server@a5136cb285482aaef5410a053b5ecd04ff9324ec`  
 **Upstream main at freeze:** `e338fb74b53dc8ac1c48707903b85e3901adcbdc`  
 **Authority dossier:** `docs/gemmamonster/COMPARATIVE-GEMMA4-PARSER-VERDICT.md`  
@@ -125,8 +125,8 @@ Source: llama.cpp native Gemma policy plus OpenAI parallel-tool semantics. Do no
 - [x] P0-C rendered thought state: RED `3c05feb29` → GREEN `c746a9b97`; multi-turn H1/H2/H4/H5 `30dfdbfd3`.
 - [x] P0-D chunk invariance / drain: GREEN `2b1dfb812` (`gemma4_chunk_invariance_test`).
 - [x] F7 object-root schemas + upstream array matrix: RED `31985d037` → GREEN `079eb6f66`.
-- [x] F10 bounded malformed candidates: RED `474bc82ac` → GREEN `36beda81e`.
-- [x] Freeze record: `docs/gemmamonster/GEMMA4-SEMANTIC-FREEZE-20260915.md` at HEAD `36beda81e`.
+- [x] F10 bounded malformed candidates: RED `474bc82ac` → GREEN `66c661401`.
+- [x] Freeze record: `docs/gemmamonster/GEMMA4-SEMANTIC-FREEZE-20260915.md` (behavioral HEAD `66c661401`).
 
 ### Generation validation matrix
 
@@ -245,7 +245,7 @@ The user does not need to know every internal API. The valuable input is the obs
 
 ## 13. Freeze session checkpoint 2026-09-15 (evening)
 
-Working branch HEAD after freeze: `36beda81ef0261392cb4ad16b602dfcdae031270`.
+Working branch behavioral freeze HEAD: `66c66140113c4a6be8ce0b11b5aa23ccc774ac22`.
 
 See `docs/gemmamonster/GEMMA4-SEMANTIC-FREEZE-20260915.md` for the authoritative freeze record, closed scope, backlog, and next live-acceptance stage.
 
