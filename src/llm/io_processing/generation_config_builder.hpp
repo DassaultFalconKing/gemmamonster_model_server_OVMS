@@ -116,7 +116,11 @@ public:
     void parseConfigFromRequest(const OpenAIRequest& request) override {
         BaseGenerationConfigBuilder::parseConfigFromRequest(request);
 
-        if (request.toolNameSchemaMap.empty() || request.toolChoice == "none") {
+        const bool activeTools = !request.toolNameSchemaMap.empty() && request.toolChoice != "none";
+        if (request.responseFormat.has_value() && activeTools) {
+            throw std::invalid_argument("Gemma4 response_format cannot be combined with active tool generation constraints");
+        }
+        if (!activeTools) {
             return;
         }
 
