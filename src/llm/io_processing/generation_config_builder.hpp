@@ -50,15 +50,19 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
         return tag;
     }
 
-    static ov::genai::StructuredOutputConfig::StructuralTag buildRequiredToolGrammar(
+    static std::vector<ov::genai::StructuredOutputConfig::Tag> buildToolTags(
         const OpenAIRequest& request) {
-        using Structured = ov::genai::StructuredOutputConfig;
-
-        std::vector<Structured::Tag> toolTags;
+        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags;
         toolTags.reserve(request.toolNameSchemaMap.size());
         for (const auto& [toolName, toolSchemaWrapper] : request.toolNameSchemaMap) {
             toolTags.push_back(buildToolTag(toolName, toolSchemaWrapper));
         }
+        return toolTags;
+    }
+
+    static ov::genai::StructuredOutputConfig::StructuralTag buildRequiredToolGrammar(
+        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags) {
+        using Structured = ov::genai::StructuredOutputConfig;
 
         auto requiredTags = std::make_shared<Structured::TagsWithSeparator>();
         requiredTags->tags = std::move(toolTags);
@@ -78,6 +82,16 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
         return alternatives;
     }
 
+    static ov::genai::StructuredOutputConfig::StructuralTag buildAutoToolGrammar(
+        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags) {
+        using Structured = ov::genai::StructuredOutputConfig;
+        auto triggeredTags = std::make_shared<Structured::TriggeredTags>();
+        triggeredTags->triggers = {"<|tool_call>"};
+        triggeredTags->tags = std::move(toolTags);
+        triggeredTags->at_least_one = false;
+        return triggeredTags;
+    }
+
 public:
     Gemma4GenerationConfigBuilder() = delete;
     explicit Gemma4GenerationConfigBuilder(
@@ -89,14 +103,19 @@ public:
     void parseConfigFromRequest(const OpenAIRequest& request) override {
         BaseGenerationConfigBuilder::parseConfigFromRequest(request);
 
-        if (request.toolChoice != "required") {
+        if (request.toolNameSchemaMap.empty() || request.toolChoice == "none") {
             return;
         }
-        if (request.toolNameSchemaMap.empty()) {
-            throw std::invalid_argument("Gemma4 tool_choice=required requires at least one available tool schema");
+
+        auto toolTags = buildToolTags(request);
+        if (request.toolChoice == "required") {
+            setStructuralTagsConfig(buildRequiredToolGrammar(std::move(toolTags)));
+            return;
         }
 
-        setStructuralTagsConfig(buildRequiredToolGrammar(request));
+        if ((request.toolChoice.empty() || request.toolChoice == "auto") && enableToolGuidedGeneration) {
+            setStructuralTagsConfig(buildAutoToolGrammar(std::move(toolTags)));
+        }
     }
 };
 
