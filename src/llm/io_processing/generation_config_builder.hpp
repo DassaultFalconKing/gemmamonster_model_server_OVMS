@@ -76,13 +76,15 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
     }
 
     static ov::genai::StructuredOutputConfig::StructuralTag buildRequiredToolGrammar(
-        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags) {
+        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags,
+        bool stopAfterFirst) {
         using Structured = ov::genai::StructuredOutputConfig;
 
         auto requiredTags = std::make_shared<Structured::TagsWithSeparator>();
         requiredTags->tags = std::move(toolTags);
         requiredTags->separator = "";
         requiredTags->at_least_one = true;
+        requiredTags->stop_after_first = stopAfterFirst;
 
         auto thought = std::make_shared<Structured::Tag>();
         thought->begin = "<|channel>thought\n";
@@ -98,12 +100,14 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
     }
 
     static ov::genai::StructuredOutputConfig::StructuralTag buildAutoToolGrammar(
-        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags) {
+        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags,
+        bool stopAfterFirst) {
         using Structured = ov::genai::StructuredOutputConfig;
         auto triggeredTags = std::make_shared<Structured::TriggeredTags>();
         triggeredTags->triggers = {"<|tool_call>"};
         triggeredTags->tags = std::move(toolTags);
         triggeredTags->at_least_one = false;
+        triggeredTags->stop_after_first = stopAfterFirst;
         return triggeredTags;
     }
 
@@ -133,14 +137,15 @@ public:
         }
 
         auto toolTags = buildToolTags(request);
+        const bool stopAfterFirst = !request.parallelToolCalls;
         if (hardChoice) {
             hardToolPolicy = true;
-            setStructuralTagsConfig(buildRequiredToolGrammar(std::move(toolTags)));
+            setStructuralTagsConfig(buildRequiredToolGrammar(std::move(toolTags), stopAfterFirst));
             return;
         }
 
         if ((request.toolChoice.empty() || request.toolChoice == "auto") && enableToolGuidedGeneration) {
-            setStructuralTagsConfig(buildAutoToolGrammar(std::move(toolTags)));
+            setStructuralTagsConfig(buildAutoToolGrammar(std::move(toolTags), stopAfterFirst));
         }
     }
 

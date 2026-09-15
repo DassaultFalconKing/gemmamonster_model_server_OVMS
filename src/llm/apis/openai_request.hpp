@@ -81,6 +81,8 @@ struct OpenAIRequest {
     ToolsSchemas_t toolNameSchemaMap;
     // Holds value for tool_choice field as described in https://platform.openai.com/docs/api-reference/chat/create#chat_create-tool_choice
     std::string toolChoice;
+    // Whether the model may call multiple tools in parallel. Omitted/absent means true.
+    bool parallelToolCalls{true};
 
     bool skipSpecialTokens{true};
 

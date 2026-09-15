@@ -183,6 +183,14 @@ absl::Status OpenAIApiHandler::ensureArgumentsInToolCalls(Value& messageObj) {
 }
 
 absl::Status OpenAIApiHandler::parseTools() {
+    auto parallelToolCallsIt = doc.FindMember("parallel_tool_calls");
+    if (parallelToolCallsIt != doc.MemberEnd() && !parallelToolCallsIt->value.IsNull()) {
+        if (!parallelToolCallsIt->value.IsBool())
+            return absl::InvalidArgumentError("parallel_tool_calls is not a boolean");
+        request.parallelToolCalls = parallelToolCallsIt->value.GetBool();
+    } else {
+        request.parallelToolCalls = true;
+    }
     auto toolChoiceIt = doc.FindMember("tool_choice");
     std::string toolChoice{"auto"};
     if (toolChoiceIt != doc.MemberEnd() && !toolChoiceIt->value.IsNull()) {
