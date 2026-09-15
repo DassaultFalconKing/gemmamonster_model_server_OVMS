@@ -12,6 +12,10 @@ This fork is temporary by design. Its preferred end state is for the useful Gemm
 
 The underlying server remains OpenVINO Model Server, with its original project history, attribution, and Apache 2.0 license.
 
+### Gemmamonster extension: Intel Arc U4 KV cache
+
+For long-context Gemma 4 agent sessions on Intel Arc, Gemmamonster supports an OpenVINO GPU U4 KV-cache profile. On the validated workload it reduced cache pressure and improved speed without a meaningful U8 quality difference. Use dynamic cache allocation (`--cache_size 0`), verify the effective GPU precision in the startup log, and compare U4/U8 with the same model, runtime, driver, and request corpus. See the [Intel Arc U4 KV-cache runbook](docs/gemmamonster/INTEL-ARC-U4-KV-CACHE.md).
+
 [![Apache License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](https://github.com/openvinotoolkit/model_server/blob/main/LICENSE)
 [![Docker Pulls](https://img.shields.io/docker/pulls/openvino/model_server.svg)](https://hub.docker.com/r/openvino/model_server)
 [![GitHub Release](https://img.shields.io/github/v/release/openvinotoolkit/model_server)](https://github.com/openvinotoolkit/model_server/releases)
