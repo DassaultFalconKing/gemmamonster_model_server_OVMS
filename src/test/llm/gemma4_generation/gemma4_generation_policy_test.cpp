@@ -110,3 +110,23 @@ TEST(Gemma4GenerationPolicyTest, ToolChoiceNoneLeavesResponseFormatAvailable) {
     EXPECT_NO_THROW(builder.parseConfigFromRequest(request));
     EXPECT_TRUE(builder.getConfig().structured_output_config.has_value());
 }
+
+TEST(Gemma4GenerationPolicyTest, RequiredWithoutToolsIsRejected) {
+    OpenAIRequest request;
+    request.toolChoice = "required";
+
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+    EXPECT_THROW(builder.parseConfigFromRequest(request), std::invalid_argument);
+}
+
+TEST(Gemma4GenerationPolicyTest, HardChoiceRequiresSuccessfulGrammarValidation) {
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder requiredBuilder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+    requiredBuilder.parseConfigFromRequest(weatherRequest("required"));
+    EXPECT_TRUE(requiredBuilder.requiresValidStructuredOutput());
+
+    GenerationConfigBuilder autoBuilder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+    autoBuilder.parseConfigFromRequest(weatherRequest("auto"));
+    EXPECT_FALSE(autoBuilder.requiresValidStructuredOutput());
+}
