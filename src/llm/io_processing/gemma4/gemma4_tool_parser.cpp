@@ -45,6 +45,12 @@ const std::string Gemma4ToolParser::TOOL_RESPONSE_START_TAG = "<|tool_response>"
 namespace {
 using JsonWriter = rapidjson::Writer<rapidjson::StringBuffer>;
 
+// A generated tool call should be far smaller than the surrounding HTTP/model
+// limits. These local caps prevent a malformed candidate from retaining
+// unbounded streaming state while leaving ample room for legitimate arguments.
+constexpr size_t MAX_NATIVE_TOOL_CANDIDATE_BYTES = 64 * 1024;
+constexpr size_t MAX_NATIVE_TOOL_CONTAINER_DEPTH = 64;
+
 class NumberPreservingWriter : public JsonWriter {
 public:
     explicit NumberPreservingWriter(rapidjson::StringBuffer& buffer) : JsonWriter(buffer) {}
@@ -261,35 +267,80 @@ std::optional<std::string> Gemma4ToolParser::parseNativeArgumentsBody(const std:
 }
 
 std::optional<size_t> Gemma4ToolParser::findMatchingContainerEnd(const std::string& text,
-    size_t openPos, char openChar, char closeChar, size_t& malformedEndTag) {
+    size_t openPos, char openChar, char closeChar, size_t& malformedEndTag,
+    bool& candidateLimitExceeded) {
     malformedEndTag = std::string::npos;
+    candidateLimitExceeded = false;
     if (openPos >= text.size() || text[openPos] != openChar) return std::nullopt;
     std::vector<char> closers{closeChar};
     bool malformed = false;
     size_t i = openPos + 1;
     while (i < text.size()) {
+        if (i - openPos > MAX_NATIVE_TOOL_CANDIDATE_BYTES) {
+            candidateLimitExceeded = true;
+            malformedEndTag = text.find(TOOL_CALL_END_TAG, i);
+            return std::nullopt;
+        }
         if (text.compare(i, TOOL_ARGS_STRING_INDICATOR.size(), TOOL_ARGS_STRING_INDICATOR) == 0) {
             const size_t end = text.find(TOOL_ARGS_STRING_INDICATOR, i + TOOL_ARGS_STRING_INDICATOR.size());
-            if (end == std::string::npos) return std::nullopt;
+            const size_t envelopeEnd = text.find(TOOL_CALL_END_TAG, i + TOOL_ARGS_STRING_INDICATOR.size());
+            if (envelopeEnd != std::string::npos && (end == std::string::npos || envelopeEnd < end)) {
+                malformedEndTag = envelopeEnd;
+                return std::nullopt;
+            }
+            if (end == std::string::npos)
+                return std::nullopt;
+            if (end - openPos > MAX_NATIVE_TOOL_CANDIDATE_BYTES) {
+                candidateLimitExceeded = true;
+                malformedEndTag = text.find(TOOL_CALL_END_TAG, end);
+                return std::nullopt;
+            }
             i = end + TOOL_ARGS_STRING_INDICATOR.size(); continue;
         }
         if (text[i] == '"') {
             ++i; bool escaped = false;
+            bool closed = false;
             while (i < text.size()) {
+                if (i - openPos > MAX_NATIVE_TOOL_CANDIDATE_BYTES) {
+                    candidateLimitExceeded = true;
+                    malformedEndTag = text.find(TOOL_CALL_END_TAG, i);
+                    return std::nullopt;
+                }
+                if (text.compare(i, TOOL_CALL_END_TAG.size(), TOOL_CALL_END_TAG) == 0) {
+                    malformedEndTag = i;
+                    return std::nullopt;
+                }
                 const char c = text[i++];
                 if (escaped) { escaped = false; continue; }
                 if (c == '\\') { escaped = true; continue; }
-                if (c == '"') break;
+                if (c == '"') {
+                    closed = true;
+                    break;
+                }
             }
+            if (!closed)
+                return std::nullopt;
             continue;
         }
         if (text.compare(i, TOOL_CALL_END_TAG.size(), TOOL_CALL_END_TAG) == 0) {
             malformedEndTag = i; return std::nullopt;
         }
         switch (text[i]) {
-        case '{': closers.push_back('}'); break;
-        case '[': closers.push_back(']'); break;
-        case '(': closers.push_back(')'); break;
+        case '{':
+        case '[':
+        case '(':
+            if (closers.size() >= MAX_NATIVE_TOOL_CONTAINER_DEPTH) {
+                candidateLimitExceeded = true;
+                malformedEndTag = text.find(TOOL_CALL_END_TAG, i);
+                return std::nullopt;
+            }
+            if (text[i] == '{')
+                closers.push_back('}');
+            else if (text[i] == '[')
+                closers.push_back(']');
+            else
+                closers.push_back(')');
+            break;
         case '}': case ']': case ')':
             if (closers.empty() || closers.back() != text[i]) { malformed = true; break; }
             closers.pop_back();
@@ -340,6 +391,24 @@ void Gemma4ToolParser::clearCandidate() {
 void Gemma4ToolParser::rejectCandidateEnvelope() {
     clearCandidate();
     candidate.envelopeRejected = true;
+}
+
+bool Gemma4ToolParser::discardRejectedCandidate() {
+    const size_t end = streamingContent.find(TOOL_CALL_END_TAG, streamingPosition);
+    if (end != std::string::npos) {
+        streamingPosition = end + TOOL_CALL_END_TAG.size();
+        clearCandidate();
+        currentState = State::AfterToolCall;
+        return true;
+    }
+
+    // Preserve only enough suffix to recognize an end tag split across chunks.
+    const size_t keep = TOOL_CALL_END_TAG.size() - 1;
+    if (streamingContent.size() > keep) {
+        streamingContent.erase(0, streamingContent.size() - keep);
+        streamingPosition = 0;
+    }
+    return false;
 }
 
 void Gemma4ToolParser::commitCandidateIfReady() {
@@ -412,17 +481,27 @@ bool Gemma4ToolParser::parseInToolCallState() {
 }
 
 bool Gemma4ToolParser::parseToolCallParametersState() {
+    if (candidate.envelopeRejected)
+        return discardRejectedCandidate();
     if (streamingPosition == 0)
         return false;
     const size_t openPos = streamingPosition - 1;
     size_t malformedEnd = std::string::npos;
-    auto close = findMatchingContainerEnd(streamingContent, openPos, currentArgsOpen, currentArgsClose, malformedEnd);
+    bool candidateLimitExceeded = false;
+    auto close = findMatchingContainerEnd(
+        streamingContent, openPos, currentArgsOpen, currentArgsClose, malformedEnd, candidateLimitExceeded);
     if (!close.has_value()) {
         if (malformedEnd != std::string::npos) {
             streamingPosition = malformedEnd + TOOL_CALL_END_TAG.size();
             currentState = State::AfterToolCall;
             clearCandidate();
             return true;
+        }
+        if (candidateLimitExceeded) {
+            SPDLOG_LOGGER_WARN(llm_calculator_logger,
+                "Gemma4 parser refusing tool-call candidate beyond byte/depth limits.");
+            rejectCandidateEnvelope();
+            return discardRejectedCandidate();
         }
         return false;
     }
