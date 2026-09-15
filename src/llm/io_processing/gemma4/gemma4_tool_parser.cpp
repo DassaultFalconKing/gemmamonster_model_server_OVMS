@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <deque>
 #include <optional>
 #include <string>
 #include <utility>
@@ -332,18 +333,51 @@ std::optional<size_t> Gemma4ToolParser::findBarePreamble(size_t from) const {
     return best;
 }
 
+void Gemma4ToolParser::clearCandidate() {
+    candidate = {};
+}
+
+void Gemma4ToolParser::rejectCandidateEnvelope() {
+    clearCandidate();
+    candidate.envelopeRejected = true;
+}
+
+void Gemma4ToolParser::commitCandidateIfReady() {
+    // Public index/id/name exist only after a fully validated closed envelope.
+    if (!candidate.envelopeRejected && candidate.nameValid && candidate.argsComplete && !candidate.arguments.empty()) {
+        pendingEvents.push_back(ToolCallDelta{
+            nextPublicIndex++,
+            generateRandomId(),
+            candidate.name,
+            candidate.arguments});
+    }
+    clearCandidate();
+}
+
 bool Gemma4ToolParser::parseInContentState() {
     const size_t canonical = streamingContent.find(TOOL_CALL_START_TAG, streamingPosition);
     const auto bare = findBarePreamble(streamingPosition);
     size_t next = canonical;
     bool isBare = false;
-    if (bare.has_value() && (next == std::string::npos || *bare < next)) { next = *bare; isBare = true; }
-    if (next == std::string::npos) return true;
-    if (next > streamingPosition) return true;
-    if (!isBare) streamingPosition = next + TOOL_CALL_START_TAG.size();
+    if (bare.has_value() && (next == std::string::npos || *bare < next)) {
+        next = *bare;
+        isBare = true;
+    }
+    if (next == std::string::npos)
+        return false;
+    if (next > streamingPosition) {
+        std::string content = streamingContent.substr(streamingPosition, next - streamingPosition);
+        streamingPosition = next;
+        content = eraseSpecialMarkers(std::move(content));
+        if (!content.empty())
+            pendingEvents.push_back(ContentDelta{std::move(content)});
+        return true;
+    }
+    if (!isBare)
+        streamingPosition = next + TOOL_CALL_START_TAG.size();
+    clearCandidate();
     currentState = State::ToolCallStarted;
-    currentCallValid = true;
-    return false;
+    return true;
 }
 
 bool Gemma4ToolParser::parseInToolCallState() {
@@ -351,117 +385,172 @@ bool Gemma4ToolParser::parseInToolCallState() {
     const size_t brace = streamingContent.find('{', streamingPosition);
     const size_t paren = streamingContent.find('(', streamingPosition);
     size_t args = brace;
-    if (paren != std::string::npos && (args == std::string::npos || paren < args)) args = paren;
+    if (paren != std::string::npos && (args == std::string::npos || paren < args))
+        args = paren;
     if (endTag != std::string::npos && (args == std::string::npos || endTag < args)) {
-        streamingPosition = endTag + TOOL_CALL_END_TAG.size(); currentState = State::AfterToolCall;
-        currentCallValid = false; toolCall = {}; return true;
+        streamingPosition = endTag + TOOL_CALL_END_TAG.size();
+        currentState = State::AfterToolCall;
+        clearCandidate();
+        return true;
     }
-    if (args == std::string::npos) return false;
+    if (args == std::string::npos)
+        return false;
     const std::string name = normalizeToolName(streamingContent.substr(streamingPosition, args - streamingPosition));
-    currentCallValid = saneToolName(name) && toolNameAllowed(name);
-    currentArgsOpen = streamingContent[args]; currentArgsClose = currentArgsOpen == '(' ? ')' : '}';
-    streamingPosition = args + 1; currentState = State::ToolCallParameters;
-    if (currentCallValid) { toolCall = ToolCall{generateRandomId(), name, ""}; ++toolCallIndex; }
-    else { toolCall = {}; SPDLOG_LOGGER_WARN(llm_calculator_logger, "Gemma4 parser refusing malformed or unavailable tool name: '{}'", name); }
+    candidate.name = name;
+    candidate.nameValid = saneToolName(name) && toolNameAllowed(name);
+    candidate.argsComplete = false;
+    candidate.arguments.clear();
+    if (!candidate.nameValid) {
+        SPDLOG_LOGGER_WARN(llm_calculator_logger,
+            "Gemma4 parser refusing malformed or unavailable tool name: '{}'", name);
+    }
+    currentArgsOpen = streamingContent[args];
+    currentArgsClose = currentArgsOpen == '(' ? ')' : '}';
+    streamingPosition = args + 1;
+    currentState = State::ToolCallParameters;
     return true;
 }
 
 bool Gemma4ToolParser::parseToolCallParametersState() {
-    if (streamingPosition == 0) return false;
+    if (streamingPosition == 0)
+        return false;
     const size_t openPos = streamingPosition - 1;
     size_t malformedEnd = std::string::npos;
     auto close = findMatchingContainerEnd(streamingContent, openPos, currentArgsOpen, currentArgsClose, malformedEnd);
     if (!close.has_value()) {
         if (malformedEnd != std::string::npos) {
-            streamingPosition = malformedEnd + TOOL_CALL_END_TAG.size(); currentState = State::AfterToolCall;
-            currentCallValid = false; toolCall = {}; return true;
+            streamingPosition = malformedEnd + TOOL_CALL_END_TAG.size();
+            currentState = State::AfterToolCall;
+            clearCandidate();
+            return true;
         }
         return false;
     }
     const std::string body = streamingContent.substr(streamingPosition, *close - streamingPosition);
-    if (currentCallValid) {
+    if (candidate.nameValid) {
         auto parsed = parseNativeArgumentsBody(body);
-        if (parsed) toolCall.arguments = std::move(*parsed);
-        else { currentCallValid = false; toolCall.arguments.clear(); SPDLOG_LOGGER_WARN(llm_calculator_logger, "Gemma4 native argument parse failed; refusing executable tool call '{}'.", toolCall.name); }
+        if (parsed) {
+            candidate.arguments = std::move(*parsed);
+            candidate.argsComplete = true;
+        } else {
+            candidate.nameValid = false;
+            candidate.arguments.clear();
+            candidate.argsComplete = false;
+            SPDLOG_LOGGER_WARN(llm_calculator_logger,
+                "Gemma4 native argument parse failed; refusing executable tool call '{}'.", candidate.name);
+        }
     }
-    streamingPosition = *close + 1; currentState = State::ToolCallEnded; return true;
+    streamingPosition = *close + 1;
+    currentState = State::ToolCallEnded;
+    return true;
 }
 
 bool Gemma4ToolParser::parseInToolCallEndedState() {
     const size_t end = streamingContent.find(TOOL_CALL_END_TAG, streamingPosition);
     const size_t next = streamingContent.find(TOOL_CALL_NAME_PREFIX, streamingPosition);
     if (next != std::string::npos && (end == std::string::npos || next < end)) {
-        streamingPosition = next; currentState = State::ToolCallStarted; currentCallValid = true; return true;
+        // One native envelope may contain only one call. Extra `call:` before
+        // `<tool_call|>` is garbage / implicit multicall and fail-closes the envelope.
+        streamingPosition = next;
+        rejectCandidateEnvelope();
+        // Consume through the closing tag if present so a later canonical envelope can recover.
+        if (end != std::string::npos) {
+            streamingPosition = end + TOOL_CALL_END_TAG.size();
+            clearCandidate();
+            currentState = State::AfterToolCall;
+            return true;
+        }
+        // Skip the unexpected preamble and keep scanning for the envelope close.
+        streamingPosition = next + TOOL_CALL_NAME_PREFIX.size();
+        return true;
     }
     if (end != std::string::npos) {
-        streamingPosition = end + TOOL_CALL_END_TAG.size(); currentState = State::AfterToolCall; return true;
+        streamingPosition = end + TOOL_CALL_END_TAG.size();
+        commitCandidateIfReady();
+        currentState = State::AfterToolCall;
+        return true;
     }
     return false;
 }
 
 bool Gemma4ToolParser::parseNewContent() {
     switch (currentState) {
-    case State::Content: return parseInContentState();
-    case State::ToolCallStarted: return parseInToolCallState();
-    case State::ToolCallParameters: return parseToolCallParametersState();
-    case State::ToolCallEnded: return parseInToolCallEndedState();
-    case State::AfterToolCall: break;
+    case State::Content:
+        return parseInContentState();
+    case State::ToolCallStarted:
+        return parseInToolCallState();
+    case State::ToolCallParameters:
+        return parseToolCallParametersState();
+    case State::ToolCallEnded:
+        return parseInToolCallEndedState();
+    case State::AfterToolCall:
+        currentState = State::Content;
+        return true;
     }
     return false;
+}
+
+std::string Gemma4ToolParser::eraseSpecialMarkers(std::string content) const {
+    for (const std::string& erase : {TURN_END_TAG, TOOL_RESPONSE_START_TAG}) {
+        size_t pos = content.find(erase);
+        while (pos != std::string::npos) {
+            content.erase(pos, erase.size());
+            pos = content.find(erase, pos);
+        }
+    }
+    return content;
 }
 
 std::optional<Delta> Gemma4ToolParser::wrapDeltaContent(const std::string& content) {
     return content.empty() ? std::nullopt : std::optional<Delta>{ContentDelta{content}};
 }
-ToolCallDelta Gemma4ToolParser::wrapDeltaArgs(const std::string& args, int index) {
-    return ToolCallDelta{index, std::nullopt, std::nullopt, args};
+
+std::optional<Delta> Gemma4ToolParser::takePendingEvent() {
+    if (pendingEvents.empty())
+        return std::nullopt;
+    Delta delta = std::move(pendingEvents.front());
+    pendingEvents.pop_front();
+    return delta;
 }
 
 std::optional<Delta> Gemma4ToolParser::parseChunk(const std::string& chunk,
     const std::vector<int64_t>& /*tokens*/, ov::genai::GenerationFinishReason finishReason) {
     if (streamingPosition >= 4096) {
         const size_t keep = currentState == State::ToolCallParameters ? 1 : 0;
-        streamingContent.erase(0, streamingPosition - keep); streamingPosition = keep;
+        streamingContent.erase(0, streamingPosition - keep);
+        streamingPosition = keep;
     }
-    if (!chunk.empty()) streamingContent += chunk;
+    if (!chunk.empty())
+        streamingContent += chunk;
 
-    if (parseNewContent()) {
-        if (currentState == State::ToolCallParameters) {
-            if (currentCallValid) return ToolCallDelta{toolCallIndex, toolCall.id, toolCall.name, ""};
-            return std::nullopt;
-        }
-        if (currentState == State::ToolCallEnded) {
-            if (currentCallValid && !toolCall.arguments.empty()) {
-                auto delta = wrapDeltaArgs(toolCall.arguments, toolCallIndex); toolCall.arguments.clear(); return delta;
-            }
-            return std::nullopt;
-        }
-        if (currentState == State::Content) {
-            size_t end = streamingContent.find(TOOL_CALL_START_TAG, streamingPosition);
-            const auto bare = findBarePreamble(streamingPosition);
-            if (bare.has_value() && (end == std::string::npos || *bare < end)) end = *bare;
-            std::string content = end == std::string::npos ? streamingContent.substr(streamingPosition) : streamingContent.substr(streamingPosition, end - streamingPosition);
-            streamingPosition += content.size();
-            for (const std::string& erase : {TURN_END_TAG, TOOL_RESPONSE_START_TAG}) {
-                size_t pos = content.find(erase);
-                while (pos != std::string::npos) { content.erase(pos, erase.size()); pos = content.find(erase, pos); }
-            }
-            return wrapDeltaContent(content);
-        }
-        if (currentState == State::AfterToolCall) currentState = State::Content;
+    if (auto pending = takePendingEvent())
+        return pending;
+
+    // Drain FSM progress until an event is ready or more bytes are required.
+    for (int steps = 0; steps < 64; ++steps) {
+        const size_t posBefore = streamingPosition;
+        const State stateBefore = currentState;
+        const size_t pendingBefore = pendingEvents.size();
+        if (!parseNewContent())
+            break;
+        if (!pendingEvents.empty())
+            return takePendingEvent();
+        if (streamingPosition == posBefore && currentState == stateBefore && pendingEvents.size() == pendingBefore)
+            break;
     }
 
     if (finishReason != ov::genai::GenerationFinishReason::NONE) {
-        if (currentState == State::ToolCallParameters) parseToolCallParametersState();
-        if (currentState == State::ToolCallEnded && currentCallValid && !toolCall.arguments.empty()) {
-            auto delta = wrapDeltaArgs(toolCall.arguments, toolCallIndex); toolCall.arguments.clear(); return delta;
+        // Terminal drain: emit already-committed pending events only. Incomplete
+        // envelopes (open thought of a tool call without `<tool_call|>`) do not commit.
+        if (auto pending = takePendingEvent())
+            return pending;
+        if (currentState != State::Content && currentState != State::AfterToolCall) {
+            clearCandidate();
+            currentState = State::Content;
         }
         if (currentState == State::Content && streamingPosition < streamingContent.size()) {
-            auto content = streamingContent.substr(streamingPosition); streamingPosition += content.size();
-            for (const std::string& erase : {TURN_END_TAG, TOOL_RESPONSE_START_TAG}) {
-                size_t pos = content.find(erase);
-                while (pos != std::string::npos) { content.erase(pos, erase.size()); pos = content.find(erase, pos); }
-            }
+            auto content = eraseSpecialMarkers(streamingContent.substr(streamingPosition));
+            streamingPosition = streamingContent.size();
             return wrapDeltaContent(content);
         }
     }
@@ -469,3 +558,4 @@ std::optional<Delta> Gemma4ToolParser::parseChunk(const std::string& chunk,
 }
 
 }  // namespace ovms
+

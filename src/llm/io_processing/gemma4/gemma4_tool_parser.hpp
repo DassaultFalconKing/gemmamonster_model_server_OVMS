@@ -15,6 +15,7 @@
 //*****************************************************************************
 #pragma once
 
+#include <deque>
 #include <optional>
 #include <string>
 #include <unordered_set>
@@ -83,11 +84,11 @@ public:
         streamingContent.clear();
         streamingPosition = 0;
         currentState = State::Content;
-        toolCall = {};
-        toolCallIndex = -1;
+        clearCandidate();
+        nextPublicIndex = 0;
+        pendingEvents.clear();
         currentArgsOpen = '{';
         currentArgsClose = '}';
-        currentCallValid = true;
     }
 
     std::optional<Delta> parseChunk(const std::string& chunk,
@@ -99,6 +100,14 @@ public:
     static std::string parseObjectParameter(const std::string& argumentStr);
 
 private:
+    struct PrivateCandidate {
+        std::string name;
+        std::string arguments;
+        bool nameValid{false};
+        bool argsComplete{false};
+        bool envelopeRejected{false};
+    };
+
     static std::optional<std::string> parseNativeArgumentsBody(const std::string& argumentsBody);
     static std::optional<size_t> findMatchingContainerEnd(const std::string& text,
         size_t openPos, char openChar, char closeChar, size_t& malformedEndTag);
@@ -108,26 +117,29 @@ private:
         return !enforceToolRegistry || allowedToolNames.count(name) != 0;
     }
 
+    void clearCandidate();
+    void rejectCandidateEnvelope();
+    void commitCandidateIfReady();
     bool parseNewContent();
     bool parseInContentState();
     bool parseInToolCallState();
     bool parseToolCallParametersState();
     bool parseInToolCallEndedState();
     std::optional<size_t> findBarePreamble(size_t from) const;
-
     std::optional<Delta> wrapDeltaContent(const std::string& content);
-    ToolCallDelta wrapDeltaArgs(const std::string& argsStr, int toolCallIndex);
+    std::optional<Delta> takePendingEvent();
+    std::string eraseSpecialMarkers(std::string content) const;
 
     std::string streamingContent;
     size_t streamingPosition{0};
     State currentState{State::Content};
-    ToolCall toolCall;
-    int toolCallIndex{-1};
+    PrivateCandidate candidate;
+    int nextPublicIndex{0};
     char currentArgsOpen{'{'};
     char currentArgsClose{'}'};
-    bool currentCallValid{true};
     bool enforceToolRegistry{false};
     std::unordered_set<std::string> allowedToolNames;
+    std::deque<Delta> pendingEvents;
 };
 
 }  // namespace ovms

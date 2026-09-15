@@ -172,19 +172,71 @@ TEST_F(Gemma4PhantomToolCallTest, CanonicalTwoEnvelopesYieldTwoCalls) {
     EXPECT_EQ(executableIndices(deltas), (std::vector<int>{0, 1}));
 }
 
-TEST_F(Gemma4PhantomToolCallTest, GarbageBetweenCallsCharacterization) {
-    // Characterization of parseInToolCallEndedState bare `call:` recovery:
-    // records whether the second call is executable and which index it takes.
+TEST_F(Gemma4PhantomToolCallTest, OneEnvelopeGarbageMulticallPublishesNothing) {
+    // Extra `call:` before `<tool_call|>` fails closed for the whole envelope.
     auto deltas = parseRaw(
         R"(<|tool_call>call:question{x:1} garbage call:question{x:2}<tool_call|>)");
-    EXPECT_EQ(countHeaders(deltas), 2u);
-    EXPECT_EQ(executableIndices(deltas), (std::vector<int>{0, 1}));
-    EXPECT_EQ(contentText(deltas).find("garbage"), std::string::npos);
+    EXPECT_EQ(countHeaders(deltas), 0u);
+    EXPECT_TRUE(executableIndices(deltas).empty());
 }
 
-TEST_F(Gemma4PhantomToolCallTest, AdjacentCallsWithoutSeparatorCharacterization) {
+TEST_F(Gemma4PhantomToolCallTest, OneEnvelopeAdjacentMulticallPublishesNothing) {
     auto deltas = parseRaw(
         R"(<|tool_call>call:question{x:1}call:question{x:2}<tool_call|>)");
-    EXPECT_EQ(countHeaders(deltas), 2u);
-    EXPECT_EQ(executableIndices(deltas), (std::vector<int>{0, 1}));
+    EXPECT_EQ(countHeaders(deltas), 0u);
+    EXPECT_TRUE(executableIndices(deltas).empty());
+}
+
+TEST_F(Gemma4PhantomToolCallTest, StopBeforeEnvelopeClosePublishesNothing) {
+    OutputParser parser(*tokenizer, "gemma4", "gemma4", questionTools());
+    auto deltas = collectRawDeltas(parser, {"<|tool_call>call:question{x:1}"});
+    EXPECT_EQ(countHeaders(deltas), 0u);
+    EXPECT_TRUE(executableIndices(deltas).empty());
+}
+
+TEST_F(Gemma4PhantomToolCallTest, LengthBeforeEnvelopeClosePublishesNothing) {
+    OutputParser parser(*tokenizer, "gemma4", "gemma4", questionTools());
+    std::vector<Delta> deltas;
+    auto push = [&](const std::string& chunk, ov::genai::GenerationFinishReason reason) {
+        auto delta = parser.parseChunk(chunk, {}, true, reason);
+        if (delta.has_value())
+            deltas.push_back(std::move(*delta));
+    };
+    push("<|tool_call>call:question{x:1}", ov::genai::GenerationFinishReason::NONE);
+    for (int i = 0; i < 8; ++i)
+        push("", ov::genai::GenerationFinishReason::LENGTH);
+    EXPECT_EQ(countHeaders(deltas), 0u);
+    EXPECT_TRUE(executableIndices(deltas).empty());
+}
+
+TEST_F(Gemma4PhantomToolCallTest, RepeatedFinalizationDoesNotDuplicateCommittedCall) {
+    OutputParser parser(*tokenizer, "gemma4", "gemma4", questionTools());
+    std::vector<Delta> deltas;
+    auto push = [&](const std::string& chunk, ov::genai::GenerationFinishReason reason) {
+        auto delta = parser.parseChunk(chunk, {}, true, reason);
+        if (delta.has_value())
+            deltas.push_back(std::move(*delta));
+    };
+    push(R"(<|tool_call>call:question{x:1}<tool_call|>)", ov::genai::GenerationFinishReason::NONE);
+    for (int i = 0; i < 8; ++i)
+        push("", ov::genai::GenerationFinishReason::STOP);
+    EXPECT_EQ(countHeaders(deltas), 1u);
+    EXPECT_EQ(executableIndices(deltas), (std::vector<int>{0}));
+}
+
+TEST_F(Gemma4PhantomToolCallTest, CanonicalValidCallPublishesOneAtomicDelta) {
+    auto deltas = parseRaw(R"(<|tool_call>call:question{x:1}<tool_call|>)");
+    EXPECT_EQ(countHeaders(deltas), 1u);
+    ASSERT_EQ(executableIndices(deltas).size(), 1u);
+    EXPECT_EQ(executableIndices(deltas)[0], 0);
+    size_t toolDeltas = 0;
+    for (const auto& delta : deltas) {
+        if (const auto* tool = std::get_if<ToolCallDelta>(&delta)) {
+            ++toolDeltas;
+            EXPECT_TRUE(tool->id.has_value());
+            EXPECT_TRUE(tool->name.has_value());
+            EXPECT_FALSE(tool->arguments.empty());
+        }
+    }
+    EXPECT_EQ(toolDeltas, 1u);
 }
