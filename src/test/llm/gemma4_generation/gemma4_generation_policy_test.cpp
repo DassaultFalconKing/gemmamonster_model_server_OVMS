@@ -335,6 +335,101 @@ TEST_F(Gemma4ApiValidationTest, ResponsesRejectsHardToolChoiceWithoutUsableTools
     }
 }
 
+TEST_F(Gemma4ApiValidationTest, HttpRejectsInvalidToolNames) {
+    const std::vector<std::string> names{
+        "foo bar", "foo:bar", "foo{bar", "foo<bar", "foo>bar", R"(foo\nbar)", "<|tool_call>", "call:foo"};
+
+    for (const std::string& name : names) {
+        SCOPED_TRACE(name);
+        const std::string chatRequest =
+            R"({"model":"m","messages":[{"role":"user","content":"Call tool"}],"tools":[{"type":"function","function":{"name":")" +
+            name + R"(","parameters":{"type":"object"}}}]})";
+        rapidjson::Document chatDoc;
+        chatDoc.Parse(chatRequest.c_str());
+        ASSERT_FALSE(chatDoc.HasParseError());
+        OpenAIChatCompletionsHandler chatHandler(chatDoc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+        EXPECT_EQ(chatHandler.parseRequest(std::nullopt, 0, std::nullopt).code(), absl::StatusCode::kInvalidArgument);
+
+        const std::string responsesRequest =
+            R"({"model":"m","input":"Call tool","tools":[{"type":"function","name":")" +
+            name + R"(","parameters":{"type":"object"}}]})";
+        rapidjson::Document responsesDoc;
+        responsesDoc.Parse(responsesRequest.c_str());
+        ASSERT_FALSE(responsesDoc.HasParseError());
+        OpenAIResponsesHandler responsesHandler(responsesDoc, Endpoint::RESPONSES, std::chrono::system_clock::now(), *tokenizer);
+        EXPECT_EQ(responsesHandler.parseRequest(std::nullopt, 0, std::nullopt).code(), absl::StatusCode::kInvalidArgument);
+    }
+}
+
+TEST_F(Gemma4ApiValidationTest, HttpAcceptsValidToolNames) {
+    for (const std::string& name : {"weather", "foo_bar", "foo-bar", "foo.bar", "tool123"}) {
+        SCOPED_TRACE(name);
+        const std::string chatRequest =
+            R"({"model":"m","messages":[{"role":"user","content":"Call tool"}],"tools":[{"type":"function","function":{"name":")" +
+            name + R"(","parameters":{"type":"object"}}}]})";
+        rapidjson::Document chatDoc;
+        chatDoc.Parse(chatRequest.c_str());
+        ASSERT_FALSE(chatDoc.HasParseError());
+        OpenAIChatCompletionsHandler chatHandler(chatDoc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+        EXPECT_TRUE(chatHandler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+
+        const std::string responsesRequest =
+            R"({"model":"m","input":"Call tool","tools":[{"type":"function","name":")" +
+            name + R"(","parameters":{"type":"object"}}]})";
+        rapidjson::Document responsesDoc;
+        responsesDoc.Parse(responsesRequest.c_str());
+        ASSERT_FALSE(responsesDoc.HasParseError());
+        OpenAIResponsesHandler responsesHandler(responsesDoc, Endpoint::RESPONSES, std::chrono::system_clock::now(), *tokenizer);
+        EXPECT_TRUE(responsesHandler.parseRequest(std::nullopt, 0, std::nullopt).ok());
+    }
+}
+
+TEST_F(Gemma4ApiValidationTest, HttpRejectsReservedToolDeclarations) {
+    for (const std::string& name : {"none", "auto", "required"}) {
+        SCOPED_TRACE(name);
+        const std::string chatRequest =
+            R"({"model":"m","messages":[{"role":"user","content":"Call tool"}],"tools":[{"type":"function","function":{"name":")" +
+            name + R"(","parameters":{"type":"object"}}}]})";
+        rapidjson::Document chatDoc;
+        chatDoc.Parse(chatRequest.c_str());
+        ASSERT_FALSE(chatDoc.HasParseError());
+        OpenAIChatCompletionsHandler chatHandler(chatDoc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+        EXPECT_EQ(chatHandler.parseRequest(std::nullopt, 0, std::nullopt).code(), absl::StatusCode::kInvalidArgument);
+
+        const std::string responsesRequest =
+            R"({"model":"m","input":"Call tool","tools":[{"type":"function","name":")" +
+            name + R"(","parameters":{"type":"object"}}]})";
+        rapidjson::Document responsesDoc;
+        responsesDoc.Parse(responsesRequest.c_str());
+        ASSERT_FALSE(responsesDoc.HasParseError());
+        OpenAIResponsesHandler responsesHandler(responsesDoc, Endpoint::RESPONSES, std::chrono::system_clock::now(), *tokenizer);
+        EXPECT_EQ(responsesHandler.parseRequest(std::nullopt, 0, std::nullopt).code(), absl::StatusCode::kInvalidArgument);
+    }
+}
+
+TEST_F(Gemma4ApiValidationTest, HttpRejectsReservedNamedToolChoices) {
+    for (const std::string& name : {"none", "auto", "required"}) {
+        SCOPED_TRACE(name);
+        const std::string chatRequest =
+            R"({"model":"m","messages":[{"role":"user","content":"Call tool"}],"tool_choice":{"type":"function","function":{"name":")" +
+            name + R"("}},"tools":[{"type":"function","function":{"name":")" + name + R"(","parameters":{"type":"object"}}}]})";
+        rapidjson::Document chatDoc;
+        chatDoc.Parse(chatRequest.c_str());
+        ASSERT_FALSE(chatDoc.HasParseError());
+        OpenAIChatCompletionsHandler chatHandler(chatDoc, Endpoint::CHAT_COMPLETIONS, std::chrono::system_clock::now(), *tokenizer);
+        EXPECT_EQ(chatHandler.parseRequest(std::nullopt, 0, std::nullopt).code(), absl::StatusCode::kInvalidArgument);
+
+        const std::string responsesRequest =
+            R"({"model":"m","input":"Call tool","tool_choice":{"type":"function","name":")" +
+            name + R"("},"tools":[{"type":"function","name":")" + name + R"(","parameters":{"type":"object"}}]})";
+        rapidjson::Document responsesDoc;
+        responsesDoc.Parse(responsesRequest.c_str());
+        ASSERT_FALSE(responsesDoc.HasParseError());
+        OpenAIResponsesHandler responsesHandler(responsesDoc, Endpoint::RESPONSES, std::chrono::system_clock::now(), *tokenizer);
+        EXPECT_EQ(responsesHandler.parseRequest(std::nullopt, 0, std::nullopt).code(), absl::StatusCode::kInvalidArgument);
+    }
+}
+
 TEST_F(Gemma4ApiValidationTest, ParallelFalseReachesRequestAndBoundsRequiredGrammar) {
     rapidjson::Document doc;
     const std::string json = weatherJson(R"(,"tool_choice":"required","parallel_tool_calls":false)");
