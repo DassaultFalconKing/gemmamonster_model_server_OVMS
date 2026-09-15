@@ -90,3 +90,23 @@ TEST(Gemma4GenerationPolicyTest, NamedChoiceRestrictsGrammarToSelectedTool) {
     EXPECT_NE(text.find("<|tool_call>call:weather"), std::string::npos);
     EXPECT_EQ(text.find("<|tool_call>call:clock"), std::string::npos);
 }
+
+TEST(Gemma4GenerationPolicyTest, ActiveToolsRejectCompetingResponseFormat) {
+    OpenAIRequest request = weatherRequest("required");
+    request.responseFormat = R"({"type":"structural_tag","format":{"type":"json_object"}})";
+
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+
+    EXPECT_THROW(builder.parseConfigFromRequest(request), std::invalid_argument);
+}
+
+TEST(Gemma4GenerationPolicyTest, ToolChoiceNoneLeavesResponseFormatAvailable) {
+    OpenAIRequest request = weatherRequest("none");
+    request.responseFormat = R"({"type":"structural_tag","format":{"type":"json_object"}})";
+
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+    EXPECT_NO_THROW(builder.parseConfigFromRequest(request));
+    EXPECT_TRUE(builder.getConfig().structured_output_config.has_value());
+}
