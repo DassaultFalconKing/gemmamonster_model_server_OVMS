@@ -136,22 +136,33 @@ evidence, bench dumps, Windows packaging, release tooling, provenance verifier,
 NovaClaw/OpenCode runtime, GPU `CL_OUT_OF_RESOURCES`, quarantine, speculative/MTP,
 unrelated perf/Windows repairs. В transplant выше — только `src/` из списка.
 
-## 5. Test gate (на новом HEAD, старое evidence НЕ валидно)
+## 5. Test gate — ПРОЙДЕН на HEAD ветки 2026-09-16
 
-Старое: 64/64 PASS на `239f70d` (6 targets) — только provenance, не proof нового HEAD.
-
-На `upstream/gemma4-tool-calling` прогнать:
 ```text
-//src/test/llm/gemma4_generation:gemma4_generation_policy_test (27)
-//src/test/llm/gemma4_generation:gemma4_phantom_tool_call_test (12)
-//src/test/llm/gemma4_generation:gemma4_chunk_invariance_test (4)
-//src/test/llm/gemma4_generation:gemma4_rendered_prompt_state_test (11)
-//src/test/llm/gemma4_generation:gemma4_f7_contract_test (5)
-//src/test/llm/gemma4_generation:gemma4_f10_guard_test (5)
-+ src/BUILD:test_llm_output_parser_tests с фильтром Gemma4
-+ http_openai_handler_test (Gemma4 кейсы)
+HEAD: f07ae95517361f39eb7774b5d611f3a282b1c980 (upstream/gemma4-tool-calling)
+CMD:  bazel test --config=win_mp_on_py_off --nocache_test_results --test_output=all
+      (env: windows_setupvars-эквивалент, MSVC C:\BuildTools 14.44.35207,
+       BAZEL_SH=MSYS; см. run_gate.cmd в задаче)
+LOG:  C:\git\artifacts\gemma4-upstream-pr-20260916\semantic-suite.log
+BEP:  .../test-events.json, EXIT: .../exit-code.txt = 0
 ```
-с `--nocache_test_results`, плюс `git diff --check`.
+
+```text
+//src/test/llm/gemma4_generation:gemma4_generation_policy_test       PASSED (27)
+//src/test/llm/gemma4_generation:gemma4_phantom_tool_call_test       PASSED (12)
+//src/test/llm/gemma4_generation:gemma4_chunk_invariance_test        PASSED (4)
+//src/test/llm/gemma4_generation:gemma4_rendered_prompt_state_test   PASSED (11)
+//src/test/llm/gemma4_generation:gemma4_f7_contract_test             PASSED (5)
+//src/test/llm/gemma4_generation:gemma4_f10_guard_test               PASSED (5)
+Executed 6 out of 6 tests: 6 tests pass. OK-cases: 64, FAILED: 0.
+Build completed successfully, 1091 total actions.
+```
+
+Окружные грабли по пути (не код, закрыты): диск C: был 0 байт → чистка;
+`which(bash)` находил WSL вместо MSYS → `BAZEL_SH` + MSYS первым в PATH;
+`BAZEL_VS/VC` не заданы в голом шелле → MSVC `C:\BuildTools` (14.44.35207);
+`setupvars.ps1` — только runtime, для сборки нужен build-env
+(см. `windows_setupvars.bat`, MSVC-путь у нас не дефолтный).
 
 Contracts: none/auto/required/named, invalid named, hard без tools,
 nested objects/arrays/strings/numbers/booleans/null, reasoning→tool,
@@ -191,7 +202,7 @@ Compatibility (no peer deps, non-Gemma preserved, GPU/MTP/perf out of scope).
 - [x] dist атрибутирован (`DIST-ATTRIBUTION.md`: staging/gemma4-upstream-refit-clean-20260915 @ 43bc254,
       ovms.exe SHA256 == accepted BINARY_SHA256; `src/` ветки == источнику dist
       минус 1 hygiene-строка EOF в `gemma4_tool_parser.cpp`, коммит `4536180`)
-- [ ] test gate на новом HEAD (в работе)
+- [ ] test gate на новом HEAD → ПРОЙДЕН (6/6 targets, 64/64 cases, exit 0)
 - [x] `git diff --check`: остаётся FAIL ТОЛЬКО по `src/llm/BUILD` —
       файл целиком CRLF уже в upstream blob (714/714 строк), наши добавленные
       строки наследуют кодировку файла. Все остальные файлы PASS
@@ -203,5 +214,7 @@ Compatibility (no peer deps, non-Gemma preserved, GPU/MTP/perf out of scope).
 - [ ] удалить эту папку из PR diff
 
 ```text
-UPSTREAM_PR_NOT_READY (test gate в работе)
+UPSTREAM_PR_NEAR_READY (gate GREEN; остались: semantic split коммитов,
++ output_parsers/http_openai_handler прогон, upstream focused docs,
+удаление prep-папки из PR diff)
 ```
