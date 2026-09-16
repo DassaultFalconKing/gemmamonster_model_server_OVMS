@@ -490,6 +490,16 @@ ovms_cc_library(
     visibility = ["//visibility:public"],
 )
 
+ovms_cc_library(
+    name = "io_processing_gemma4_rendered_prompt_state",
+    hdrs = ["io_processing/gemma4/rendered_prompt_state.hpp"],
+    srcs = ["io_processing/gemma4/rendered_prompt_state.cpp"],
+    deps = [
+        "//third_party:genai",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 ovms_cc_library( # TODO split further so we don't have to recompile everything when changing one parser ...
     name = "output_parsers",
     hdrs = [
@@ -525,6 +535,7 @@ ovms_cc_library( # TODO split further so we don't have to recompile everything w
         ":io_processing_parser_config_validation",
         ":io_processing_qwen3coder_tool_parser",
         ":io_processing_lfm2_tool_parser",
+        ":io_processing_gemma4_rendered_prompt_state",
         ":io_processing_gemma4_tool_parser",
         ":io_processing_minicpm5_tool_parser",
         ":io_processing_qwen3_reasoning_parser",
@@ -625,6 +636,7 @@ ovms_cc_library(
         ":openai_completions_api_handler",
         ":openai_responses_handler",
         ":generation_config_builders",
+        ":io_processing_gemma4_rendered_prompt_state",
         ":chat_template_analyzer",
         ":chat_template_probe",
         ":io_processing_input_processor_context",

@@ -4849,9 +4849,9 @@ TEST_F(HttpOpenAIHandlerParsingTest, ResponsesImageChatHistoryIndexMatchesAfterF
 
 TEST_F(HttpOpenAIHandlerParsingTest, ResponsesFlatToolWithoutParametersIsNormalised) {
     // Flat Responses tools may omit `parameters` for zero-arg functions. The
-    // nested form should still be produced (with no `parameters` key under
-    // function), not fail or fabricate one. Input is given as an array so
-    // ChatHistorySink populates the messages array.
+    // shared parser materializes the canonical empty object schema so every
+    // retained tool has an explicit object-root contract. Input is given as an
+    // array so ChatHistorySink populates the messages array.
     expectResponsesEquivalentToChatCompletions(doc, *tokenizer,
         R"({
             "model": "llama",
@@ -4860,7 +4860,7 @@ TEST_F(HttpOpenAIHandlerParsingTest, ResponsesFlatToolWithoutParametersIsNormali
         })",
         R"({
             "messages": [{"role":"user","content":[{"type":"text","text":"hello"}]}],
-            "tools": [{"type":"function","function":{"name":"ping","description":"no args"}}]
+            "tools": [{"type":"function","function":{"name":"ping","description":"no args","parameters":{"type":"object","properties":{}}}}]
         })");
 }
 

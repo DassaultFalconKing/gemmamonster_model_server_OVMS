@@ -50,6 +50,6 @@ public:
         }()) {
         resolveSpecialTokenIds();
     }
-    std::optional<Delta> parseChunk(const std::string& chunk, const std::vector<int64_t>& tokens, ov::genai::GenerationFinishReason finishReason) override;
+    // parseChunk inherited from Qwen3ReasoningParser: strips start/end tags and emits body.
 };
 }  // namespace ovms

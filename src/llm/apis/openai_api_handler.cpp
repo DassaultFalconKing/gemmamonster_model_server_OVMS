@@ -17,11 +17,17 @@
 #include "openai_api_handler.hpp"
 
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <limits>
 #include <memory>
 #include <stdexcept>
+#include <string>
 #include <unordered_map>
+#include <unordered_set>
+
+#include <rapidjson/pointer.h>
+
 #include "src/port/rapidjson_stringbuffer.hpp"
 #include "src/port/rapidjson_writer.hpp"
 #include <set>
@@ -39,6 +45,156 @@ using namespace rapidjson;
 namespace ovms {
 
 constexpr size_t DEFAULT_MAX_STOP_WORDS = 16;  // same as deep-seek
+
+namespace {
+// Tool names must match generation grammar literals and the Gemma output parser
+// alphabet: [A-Za-z0-9_.-]+. Reject early so invalid names cannot reach optional
+// auto grammar compilation and silently become unguided generation.
+bool isSafeHttpToolName(const std::string& name) {
+    return !name.empty() && std::all_of(name.begin(), name.end(), [](unsigned char c) {
+        return std::isalnum(c) || c == '_' || c == '-' || c == '.';
+    });
+}
+
+// Reserved because request.toolChoice is a flat string that also encodes the
+// policy keywords none/auto/required. A declared or named tool with one of these
+// names would silently collide with policy selection.
+bool isReservedToolPolicyName(const std::string& name) {
+    return name == "none" || name == "auto" || name == "required";
+}
+
+absl::Status validateHttpToolName(const std::string& name) {
+    if (!isSafeHttpToolName(name))
+        return absl::InvalidArgumentError("Tool function name contains unsupported characters");
+    if (isReservedToolPolicyName(name))
+        return absl::InvalidArgumentError("Tool function name collides with reserved tool_choice policy keyword");
+    return absl::OkStatus();
+}
+
+using JsonRootTypes = uint8_t;
+constexpr JsonRootTypes JSON_NULL = 1 << 0;
+constexpr JsonRootTypes JSON_BOOLEAN = 1 << 1;
+constexpr JsonRootTypes JSON_NUMBER = 1 << 2;
+constexpr JsonRootTypes JSON_STRING = 1 << 3;
+constexpr JsonRootTypes JSON_ARRAY = 1 << 4;
+constexpr JsonRootTypes JSON_OBJECT = 1 << 5;
+constexpr JsonRootTypes JSON_ALL_TYPES =
+    JSON_NULL | JSON_BOOLEAN | JSON_NUMBER | JSON_STRING | JSON_ARRAY | JSON_OBJECT;
+constexpr size_t MAX_SCHEMA_REFERENCE_DEPTH = 64;
+
+std::optional<JsonRootTypes> jsonTypeMask(const rapidjson::Value& type) {
+    auto oneType = [](const rapidjson::Value& value) -> std::optional<JsonRootTypes> {
+        if (!value.IsString())
+            return std::nullopt;
+        const std::string name(value.GetString(), value.GetStringLength());
+        if (name == "null") return JSON_NULL;
+        if (name == "boolean") return JSON_BOOLEAN;
+        if (name == "integer" || name == "number") return JSON_NUMBER;
+        if (name == "string") return JSON_STRING;
+        if (name == "array") return JSON_ARRAY;
+        if (name == "object") return JSON_OBJECT;
+        return std::nullopt;
+    };
+
+    if (type.IsString())
+        return oneType(type);
+    if (!type.IsArray() || type.Empty())
+        return std::nullopt;
+
+    JsonRootTypes result = 0;
+    for (const auto& entry : type.GetArray()) {
+        auto mask = oneType(entry);
+        if (!mask.has_value())
+            return std::nullopt;
+        result |= *mask;
+    }
+    return result;
+}
+
+std::optional<JsonRootTypes> possibleJsonRootTypes(const rapidjson::Value& schema,
+    const rapidjson::Value& schemaDocument,
+    std::unordered_set<const rapidjson::Value*>& resolving,
+    size_t depth) {
+    if (!schema.IsObject() || depth > MAX_SCHEMA_REFERENCE_DEPTH)
+        return std::nullopt;
+    if (!resolving.insert(&schema).second)
+        return std::nullopt;
+
+    JsonRootTypes possible = JSON_ALL_TYPES;
+    const auto finish = [&](std::optional<JsonRootTypes> result) {
+        resolving.erase(&schema);
+        return result;
+    };
+
+    auto typeIt = schema.FindMember("type");
+    if (typeIt != schema.MemberEnd()) {
+        auto mask = jsonTypeMask(typeIt->value);
+        if (!mask.has_value())
+            return finish(std::nullopt);
+        possible &= *mask;
+    }
+
+    auto refIt = schema.FindMember("$ref");
+    if (refIt != schema.MemberEnd()) {
+        if (!refIt->value.IsString())
+            return finish(std::nullopt);
+        const std::string ref(refIt->value.GetString(), refIt->value.GetStringLength());
+        if (ref.empty() || ref.front() != '#')
+            return finish(std::nullopt);
+        rapidjson::Pointer pointer(ref.c_str() + 1);
+        const rapidjson::Value* referenced = pointer.Get(schemaDocument);
+        if (referenced == nullptr)
+            return finish(std::nullopt);
+        auto mask = possibleJsonRootTypes(*referenced, schemaDocument, resolving, depth + 1);
+        if (!mask.has_value())
+            return finish(std::nullopt);
+        possible &= *mask;
+    }
+
+    for (const char* unionKeyword : {"oneOf", "anyOf"}) {
+        auto unionIt = schema.FindMember(unionKeyword);
+        if (unionIt == schema.MemberEnd())
+            continue;
+        if (!unionIt->value.IsArray() || unionIt->value.Empty())
+            return finish(std::nullopt);
+        JsonRootTypes unionTypes = 0;
+        for (const auto& branch : unionIt->value.GetArray()) {
+            auto mask = possibleJsonRootTypes(branch, schemaDocument, resolving, depth + 1);
+            if (!mask.has_value())
+                return finish(std::nullopt);
+            unionTypes |= *mask;
+        }
+        possible &= unionTypes;
+    }
+
+    auto allOfIt = schema.FindMember("allOf");
+    if (allOfIt != schema.MemberEnd()) {
+        if (!allOfIt->value.IsArray() || allOfIt->value.Empty())
+            return finish(std::nullopt);
+        for (const auto& branch : allOfIt->value.GetArray()) {
+            auto mask = possibleJsonRootTypes(branch, schemaDocument, resolving, depth + 1);
+            if (!mask.has_value())
+                return finish(std::nullopt);
+            possible &= *mask;
+        }
+    }
+
+    return finish(possible);
+}
+
+bool requiresObjectRoot(const rapidjson::Value& schema) {
+    std::unordered_set<const rapidjson::Value*> resolving;
+    const auto possible = possibleJsonRootTypes(schema, schema, resolving, 0);
+    return possible.has_value() && *possible == JSON_OBJECT;
+}
+
+void setCanonicalEmptyObjectSchema(rapidjson::Value& function, rapidjson::Document::AllocatorType& allocator) {
+    rapidjson::Value parameters(rapidjson::kObjectType);
+    parameters.AddMember("type", rapidjson::Value("object", allocator), allocator);
+    parameters.AddMember("properties", rapidjson::Value(rapidjson::kObjectType), allocator);
+    function.AddMember("parameters", parameters, allocator);
+}
+}  // namespace
 
 ov::genai::JsonContainer rapidJsonValueToJsonContainer(const rapidjson::Value& value) {
     if (value.IsNull()) {
@@ -183,8 +339,17 @@ absl::Status OpenAIApiHandler::ensureArgumentsInToolCalls(Value& messageObj) {
 }
 
 absl::Status OpenAIApiHandler::parseTools() {
+    auto parallelToolCallsIt = doc.FindMember("parallel_tool_calls");
+    if (parallelToolCallsIt != doc.MemberEnd() && !parallelToolCallsIt->value.IsNull()) {
+        if (!parallelToolCallsIt->value.IsBool())
+            return absl::InvalidArgumentError("parallel_tool_calls is not a boolean");
+        request.parallelToolCalls = parallelToolCallsIt->value.GetBool();
+    } else {
+        request.parallelToolCalls = true;
+    }
     auto toolChoiceIt = doc.FindMember("tool_choice");
     std::string toolChoice{"auto"};
+    bool namedToolChoice = false;
     if (toolChoiceIt != doc.MemberEnd() && !toolChoiceIt->value.IsNull()) {
         if (toolChoiceIt->value.IsString()) {
             toolChoice = toolChoiceIt->value.GetString();
@@ -197,6 +362,9 @@ absl::Status OpenAIApiHandler::parseTools() {
                 auto nameIt = toolChoiceFunctionIt->value.GetObject().FindMember("name");
                 if (nameIt != toolChoiceFunctionIt->value.GetObject().MemberEnd() && nameIt->value.IsString()) {
                     toolChoice = nameIt->value.GetString();
+                    namedToolChoice = true;
+                    if (auto status = validateHttpToolName(toolChoice); !status.ok())
+                        return status;
                 } else {
                     return absl::InvalidArgumentError("tool_choice.function.name is not a valid string");
                 }
@@ -208,6 +376,9 @@ absl::Status OpenAIApiHandler::parseTools() {
                         return absl::InvalidArgumentError("tool_choice.name is not a valid string");
                     }
                     toolChoice = nameIt->value.GetString();
+                    namedToolChoice = true;
+                    if (auto status = validateHttpToolName(toolChoice); !status.ok())
+                        return status;
                 } else {
                     return absl::InvalidArgumentError("tool_choice.function is not a valid JSON object");
                 }
@@ -242,9 +413,14 @@ absl::Status OpenAIApiHandler::parseTools() {
                     return absl::InvalidArgumentError("Function object does not contain a valid name field");
                 }
                 functionName = nameIt->value.GetString();
+                if (auto status = validateHttpToolName(functionName); !status.ok())
+                    return status;
                 auto parametersIt = functionObj.GetObject().FindMember("parameters");
                 if (parametersIt != functionObj.GetObject().MemberEnd()) {
                     parametersValue = &parametersIt->value;
+                } else {
+                    setCanonicalEmptyObjectSchema(functionObj, doc.GetAllocator());
+                    parametersValue = &functionObj["parameters"];
                 }
             } else {
                 auto typeIt = obj.FindMember("type");
@@ -260,10 +436,15 @@ absl::Status OpenAIApiHandler::parseTools() {
                     return absl::InvalidArgumentError("Function object does not contain a valid name field");
                 }
                 functionName = nameIt->value.GetString();
+                if (auto status = validateHttpToolName(functionName); !status.ok())
+                    return status;
 
                 auto parametersIt = obj.FindMember("parameters");
                 if (parametersIt != obj.MemberEnd()) {
                     parametersValue = &parametersIt->value;
+                } else {
+                    setCanonicalEmptyObjectSchema(obj, doc.GetAllocator());
+                    parametersValue = &obj["parameters"];
                 }
             }
 
@@ -280,19 +461,38 @@ absl::Status OpenAIApiHandler::parseTools() {
                 if (!parametersValue->IsObject()) {
                     return absl::InvalidArgumentError("Function parameters are not a valid JSON object");
                 }
+                if (!requiresObjectRoot(*parametersValue)) {
+                    return absl::InvalidArgumentError(
+                        "Function parameters schema must require an unambiguous object root");
+                }
                 // Dump parameters object to string since this is the schema format expected by GenAI
                 // Keep the rapidjson::Value pointer as well to avoid re-parsing in outputParsers
                 rapidjson::StringBuffer buffer;
                 rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
                 parametersValue->Accept(writer);
                 std::string parametersStr = buffer.GetString();
+                auto existing = request.toolNameSchemaMap.find(functionName);
+                if (existing != request.toolNameSchemaMap.end()) {
+                    const bool sameSchema =
+                        existing->second.rapidjsonRepr != nullptr &&
+                        *existing->second.rapidjsonRepr == *parametersValue;
+                    if (!sameSchema) {
+                        return absl::InvalidArgumentError(
+                            "Duplicate tool function name has conflicting parameters schemas");
+                    }
+                    continue;
+                }
                 ToolSchemaWrapper schemaReprs{parametersValue, std::move(parametersStr)};
-                request.toolNameSchemaMap[functionName] = std::move(schemaReprs);
+                request.toolNameSchemaMap.emplace(functionName, std::move(schemaReprs));
             }
         }
-    } else {
-        toolChoice = "none";  // If tools are not provided, set toolChoice to "none"
     }
+
+    const bool hardToolChoice = toolChoice == "required" || namedToolChoice;
+    if (hardToolChoice && request.toolNameSchemaMap.empty())
+        return absl::InvalidArgumentError("Hard tool_choice requires a matching tool with a usable parameters schema");
+    if (!hardToolChoice && request.toolNameSchemaMap.empty())
+        toolChoice = "none";
 
     request.toolChoice = toolChoice;
     return absl::OkStatus();
@@ -370,8 +570,8 @@ ov::genai::ChatHistory& OpenAIApiHandler::getChatHistory() {
 }
 
 absl::StatusOr<InputRequest> OpenAIApiHandler::extractInputRequest(GenerationConfigBuilder& configBuilder) {
-    configBuilder.parseConfigFromRequest(request);
     try {
+        configBuilder.parseConfigFromRequest(request);
         configBuilder.adjustConfigForDecodingMethod();
     } catch (const std::invalid_argument& e) {
         return absl::InvalidArgumentError(e.what());
@@ -379,6 +579,9 @@ absl::StatusOr<InputRequest> OpenAIApiHandler::extractInputRequest(GenerationCon
     try {
         configBuilder.validateStructuredOutputConfig(tokenizer);
     } catch (const std::exception& e) {
+        if (configBuilder.requiresValidStructuredOutput()) {
+            return absl::InvalidArgumentError(absl::StrCat("Structured output validation failed for required generation policy: ", e.what()));
+        }
         SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "Tool guided generation will not be applied due to JSON schema validation failure: {}", e.what());
         configBuilder.unsetStructuredOutputConfig();
     }

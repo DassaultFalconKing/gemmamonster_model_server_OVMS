@@ -28,18 +28,7 @@ void Gemma4ReasoningParser::skipToken(const std::vector<int64_t>& generatedToken
     }
 }
 
-std::optional<Delta> Gemma4ReasoningParser::parseChunk(const std::string& chunk, const std::vector<int64_t>& /*tokens*/, ov::genai::GenerationFinishReason finishReason) {
-    if (chunk.empty()) {
-        SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "Received empty chunk for Gemma4ReasoningParser");
-        return std::nullopt;
-    }
-
-    if (chunk.find(parsingConfig.startTags[0]) != std::string::npos || chunk.find(parsingConfig.endTag) != std::string::npos ||
-        chunk.find(parsingConfig.preambleStartTags[0]) != std::string::npos) {
-        return std::nullopt;
-    } else {
-        return ReasoningDelta{chunk};
-    }
-    return std::nullopt;
-}
+// Use Qwen3ReasoningParser::parseChunk: strip phase entry/end tags and emit body.
+// The previous Gemma override dropped any chunk containing a marker, which made
+// coalesced `<|channel>thought\nsecret<channel|>answer` lose both secret and answer.
 }  // namespace ovms
