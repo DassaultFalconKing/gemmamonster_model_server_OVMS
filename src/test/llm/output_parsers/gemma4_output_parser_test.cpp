@@ -75,6 +75,10 @@ protected:
         }
     }
 
+    std::string expectedAtomicToolCall(const std::string& name, const std::string& arguments, int index = 0) {
+        return ovms::test::deltaToJson(ToolCallDelta{index, std::string("XXXXXXXXX"), name, arguments});
+    }
+
     void assertStreamingVec(const std::vector<std::tuple<std::string, ov::genai::GenerationFinishReason, std::optional<std::string>>>& chunkToDeltaVec) {
         for (const auto& [chunk, finishReason, expectedDelta] : chunkToDeltaVec) {
             std::optional<ovms::Delta> doc = outputParserWithRegularToolParsing->parseChunk(chunk, {}, true, finishReason);
@@ -160,144 +164,100 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallOutputWithSingleToolCallAndReasoning
 
 TEST_F(Gemma4OutputParserTest, ParseReasoningWithoutToolCall) {
     std::string inputWithProperClosure = "<|channel>thought\nSome reasoning content<channel|>SOME CONTENT WITHOUT TOOL CALL";
-
-    std::vector<std::string> inputs = {inputWithProperClosure};
-    for (auto& input : inputs) {
-        auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
-        std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
-        ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
-        EXPECT_EQ(parsedOutput.content, "SOME CONTENT WITHOUT TOOL CALL");
-        EXPECT_EQ(parsedOutput.reasoning, "Some reasoning content");
-
-        ASSERT_EQ(parsedOutput.toolCalls.size(), 0);
-    }
+    auto generatedTensor = gemma4Tokenizer->encode(inputWithProperClosure).input_ids;
+    std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
+    ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
+    EXPECT_EQ(parsedOutput.content, "SOME CONTENT WITHOUT TOOL CALL");
+    EXPECT_EQ(parsedOutput.reasoning, "Some reasoning content");
+    ASSERT_EQ(parsedOutput.toolCalls.size(), 0);
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallOutputWithNoToolsInTheRequest) {
     std::string inputWithProperClosure = "<|tool_call>call:example_tool{arg1:<|\"|>value1<|\"|>,arg2:42}<tool_call|>";
     std::string inputWithoutSpecialTokens = "call:example_tool{arg1:value1,arg2:42}";
-
-    std::vector<std::string> inputs = {inputWithProperClosure};
-    for (auto& input : inputs) {
-        auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
-        std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
-        ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, false);
-        EXPECT_EQ(parsedOutput.content, inputWithoutSpecialTokens);
-        EXPECT_EQ(parsedOutput.reasoning, "");
-
-        ASSERT_EQ(parsedOutput.toolCalls.size(), 0);
-    }
+    auto generatedTensor = gemma4Tokenizer->encode(inputWithProperClosure).input_ids;
+    std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
+    ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, false);
+    EXPECT_EQ(parsedOutput.content, inputWithoutSpecialTokens);
+    EXPECT_EQ(parsedOutput.reasoning, "");
+    ASSERT_EQ(parsedOutput.toolCalls.size(), 0);
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithObjectArguments) {
     std::string inputWithProperClosure = "<|tool_call>call:dummy{config:{name:<|\"|>astro_config<|\"|>,value:99}}<tool_call|>";
-
-    std::vector<std::string> inputs = {inputWithProperClosure};
-    for (auto& input : inputs) {
-        auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
-        std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
-        ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
-        EXPECT_EQ(parsedOutput.content, "");
-        EXPECT_EQ(parsedOutput.reasoning, "");
-
-        ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
-        EXPECT_EQ(parsedOutput.toolCalls[0].name, "dummy");
-        EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"config\":{\"name\":\"astro_config\",\"value\":99}}");
-        EXPECT_EQ(parsedOutput.toolCalls[0].id.empty(), false);
-    }
+    auto generatedTensor = gemma4Tokenizer->encode(inputWithProperClosure).input_ids;
+    std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
+    ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
+    EXPECT_EQ(parsedOutput.content, "");
+    EXPECT_EQ(parsedOutput.reasoning, "");
+    ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
+    EXPECT_EQ(parsedOutput.toolCalls[0].name, "dummy");
+    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"config\":{\"name\":\"astro_config\",\"value\":99}}");
+    EXPECT_FALSE(parsedOutput.toolCalls[0].id.empty());
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithStringArguments) {
     std::string inputWithProperClosure = "<|tool_call>call:test1{arg1:<|\"|>data1,data2<|\"|>}<tool_call|>";
-
-    std::vector<std::string> inputs = {inputWithProperClosure};
-    for (auto& input : inputs) {
-        auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
-        std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
-        ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
-        EXPECT_EQ(parsedOutput.content, "");
-        EXPECT_EQ(parsedOutput.reasoning, "");
-
-        ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
-        EXPECT_EQ(parsedOutput.toolCalls[0].name, "test1");
-        EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"arg1\":\"data1,data2\"}");
-        EXPECT_EQ(parsedOutput.toolCalls[0].id.empty(), false);
-    }
+    auto generatedTensor = gemma4Tokenizer->encode(inputWithProperClosure).input_ids;
+    std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
+    ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
+    EXPECT_EQ(parsedOutput.content, "");
+    EXPECT_EQ(parsedOutput.reasoning, "");
+    ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
+    EXPECT_EQ(parsedOutput.toolCalls[0].name, "test1");
+    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"arg1\":\"data1,data2\"}");
+    EXPECT_FALSE(parsedOutput.toolCalls[0].id.empty());
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithListOfStringsAsArgument) {
     std::string inputWithProperClosure = "<|tool_call>call:generate_DNA_sequence{length:100,preferences:[<|\"|>G<|\"|>,<|\"|>C<|\"|>]}<tool_call|>";
-
-    std::vector<std::string> inputs = {inputWithProperClosure};
-    for (auto& input : inputs) {
-        auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
-        std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
-        ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
-        EXPECT_EQ(parsedOutput.content, "");
-        EXPECT_EQ(parsedOutput.reasoning, "");
-
-        ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
-        EXPECT_EQ(parsedOutput.toolCalls[0].name, "generate_DNA_sequence");
-        EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"length\":100,\"preferences\":[\"G\",\"C\"]}");
-        EXPECT_EQ(parsedOutput.toolCalls[0].id.empty(), false);
-    }
+    auto generatedTensor = gemma4Tokenizer->encode(inputWithProperClosure).input_ids;
+    std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
+    ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
+    EXPECT_EQ(parsedOutput.content, "");
+    EXPECT_EQ(parsedOutput.reasoning, "");
+    ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
+    EXPECT_EQ(parsedOutput.toolCalls[0].name, "generate_DNA_sequence");
+    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"length\":100,\"preferences\":[\"G\",\"C\"]}");
+    EXPECT_FALSE(parsedOutput.toolCalls[0].id.empty());
 }
 
 TEST_F(Gemma4OutputParserTest, ParserToolCallWithBooleanArgument) {
     std::string inputWithProperClosure = "<|tool_call>call:check_status{flag:true}<tool_call|>";
-
-    std::vector<std::string> inputs = {inputWithProperClosure};
-    for (auto& input : inputs) {
-        auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
-        std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
-        ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
-        EXPECT_EQ(parsedOutput.content, "");
-        EXPECT_EQ(parsedOutput.reasoning, "");
-
-        ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
-        EXPECT_EQ(parsedOutput.toolCalls[0].name, "check_status");
-        EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"flag\":true}");
-        EXPECT_EQ(parsedOutput.toolCalls[0].id.empty(), false);
-    }
+    auto generatedTensor = gemma4Tokenizer->encode(inputWithProperClosure).input_ids;
+    std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
+    ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
+    EXPECT_EQ(parsedOutput.content, "");
+    EXPECT_EQ(parsedOutput.reasoning, "");
+    ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
+    EXPECT_EQ(parsedOutput.toolCalls[0].name, "check_status");
+    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"flag\":true}");
+    EXPECT_FALSE(parsedOutput.toolCalls[0].id.empty());
 }
 
 TEST_F(Gemma4OutputParserTest, ParseTwoToolCallsAtOnce) {
-    std::string inputWithProperClosure = "<|tool_call>call:dummy1{config:{name:<|\"|>astro_config<|\"|>,value:99}}call:dummy2{config:{value:199,name:<|\"|>second_config<|\"|>}}<tool_call|>";
-
-    std::vector<std::string> inputs = {inputWithProperClosure};
-    for (auto& input : inputs) {
-        auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
-        std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
-        ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
-        EXPECT_EQ(parsedOutput.content, "");
-        EXPECT_EQ(parsedOutput.reasoning, "");
-
-        ASSERT_EQ(parsedOutput.toolCalls.size(), 2);
-        EXPECT_EQ(parsedOutput.toolCalls[0].name, "dummy1");
-        EXPECT_EQ(parsedOutput.toolCalls[1].name, "dummy2");
-        EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"config\":{\"name\":\"astro_config\",\"value\":99}}");
-        EXPECT_EQ(parsedOutput.toolCalls[1].arguments, "{\"config\":{\"value\":199,\"name\":\"second_config\"}}");
-        EXPECT_EQ(parsedOutput.toolCalls[0].id.empty(), false);
-        EXPECT_EQ(parsedOutput.toolCalls[1].id.empty(), false);
-    }
+    // Multiple call: entries inside one native envelope are ambiguous/malformed.
+    // The accepted atomic parser contract rejects the entire envelope.
+    std::string input = "<|tool_call>call:dummy1{config:{name:<|\"|>astro_config<|\"|>,value:99}}call:dummy2{config:{value:199,name:<|\"|>second_config<|\"|>}}<tool_call|>";
+    auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
+    std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
+    ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
+    EXPECT_EQ(parsedOutput.content, "");
+    EXPECT_EQ(parsedOutput.reasoning, "");
+    EXPECT_TRUE(parsedOutput.toolCalls.empty());
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithArrayArguments) {
     std::string inputWithProperClosure = "<|tool_call>call:sort{array:[42,17,89,5,33],order:<|\"|>descending<|\"|>}<tool_call|>";
-
-    std::vector<std::string> inputs = {inputWithProperClosure};
-    for (auto& input : inputs) {
-        auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
-        std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
-        ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
-        EXPECT_EQ(parsedOutput.content, "");
-        EXPECT_EQ(parsedOutput.reasoning, "");
-
-        ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
-        EXPECT_EQ(parsedOutput.toolCalls[0].name, "sort");
-        EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"array\":[42,17,89,5,33],\"order\":\"descending\"}");
-        EXPECT_EQ(parsedOutput.toolCalls[0].id.empty(), false);
-    }
+    auto generatedTensor = gemma4Tokenizer->encode(inputWithProperClosure).input_ids;
+    std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
+    ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
+    EXPECT_EQ(parsedOutput.content, "");
+    EXPECT_EQ(parsedOutput.reasoning, "");
+    ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
+    EXPECT_EQ(parsedOutput.toolCalls[0].name, "sort");
+    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"array\":[42,17,89,5,33],\"order\":\"descending\"}");
+    EXPECT_FALSE(parsedOutput.toolCalls[0].id.empty());
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithArrayOfObjectsArguments) {
@@ -310,7 +270,7 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallWithArrayOfObjectsArguments) {
     EXPECT_EQ(parsedOutput.toolCalls[0].name, "read_files");
     EXPECT_EQ(parsedOutput.toolCalls[0].arguments,
         R"({"files":[{"path":"c:\\opt\\demo\\hello_world_project\\hello.py"},{"path":"c:\\opt\\demo\\hello_world_project\\README.md"}]})");
-    EXPECT_EQ(parsedOutput.toolCalls[0].id.empty(), false);
+    EXPECT_FALSE(parsedOutput.toolCalls[0].id.empty());
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithArrayOfObjectsWithMixedValueTypes) {
@@ -371,11 +331,12 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallWithThoughtPreamble) {
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithArrayOfObjectsArgumentsStreaming) {
+    const std::string args = R"({"files":[{"path":"c:\\opt\\demo\\hello_world_project\\hello.py"},{"path":"c:\\opt\\demo\\hello_world_project\\README.md"}]})";
     std::vector<std::tuple<std::string, ov::genai::GenerationFinishReason, std::optional<std::string>>> chunkToDeltaVec{
         {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"read_files", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{files", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"read_files"}}]}})"},
+        {"{files", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"{path", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
@@ -386,43 +347,20 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallWithArrayOfObjectsArgumentsStreaming
         {"{path:<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {R"(c:\opt\demo\hello_world_project\README.md)", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}]}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"files\":[{\"path\":\"c:\\\\opt\\\\demo\\\\hello_world_project\\\\hello.py\"},{\"path\":\"c:\\\\opt\\\\demo\\\\hello_world_project\\\\README.md\"}]}"}}]}})"},
-        {"<tool_call|>", ov::genai::GenerationFinishReason::STOP, std::nullopt},
+        {"}]}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<tool_call|>", ov::genai::GenerationFinishReason::STOP, expectedAtomicToolCall("read_files", args)},
     };
-
     assertStreamingVec(chunkToDeltaVec);
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallOutputWithThreeToolCalls) {
-    std::string inputWithProperClosure = "<|tool_call>call:example_tool{arg1:<|\"|>value1<|\"|>,arg2:42}call:another_tool{param1:<|\"|>data<|\"|>,param2:true}call:third_tool{key:<|\"|>value<|\"|>}<tool_call|>";
-
-    std::vector<std::string> inputs = {inputWithProperClosure};
-    for (auto& input : inputs) {
-        auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
-        std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
-        ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
-        EXPECT_EQ(parsedOutput.content, "");
-        EXPECT_EQ(parsedOutput.reasoning, "");
-
-        ASSERT_EQ(parsedOutput.toolCalls.size(), 3);
-        EXPECT_EQ(parsedOutput.toolCalls[0].name, "example_tool");
-        EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"arg1\":\"value1\",\"arg2\":42}");
-        EXPECT_EQ(parsedOutput.toolCalls[0].id.empty(), false);
-        auto firstToolCallId = parsedOutput.toolCalls[0].id;
-
-        EXPECT_EQ(parsedOutput.toolCalls[1].name, "another_tool");
-        EXPECT_EQ(parsedOutput.toolCalls[1].arguments, "{\"param1\":\"data\",\"param2\":true}");
-        EXPECT_EQ(parsedOutput.toolCalls[1].id.empty(), false);
-        auto secondToolCallId = parsedOutput.toolCalls[1].id;
-        EXPECT_NE(firstToolCallId, secondToolCallId);
-
-        EXPECT_EQ(parsedOutput.toolCalls[2].name, "third_tool");
-        EXPECT_EQ(parsedOutput.toolCalls[2].arguments, "{\"key\":\"value\"}");
-        EXPECT_EQ(parsedOutput.toolCalls[2].id.empty(), false);
-        auto thirdToolCallId = parsedOutput.toolCalls[2].id;
-        EXPECT_NE(firstToolCallId, thirdToolCallId);
-        EXPECT_NE(secondToolCallId, thirdToolCallId);
-    }
+    std::string input = "<|tool_call>call:example_tool{arg1:<|\"|>value1<|\"|>,arg2:42}call:another_tool{param1:<|\"|>data<|\"|>,param2:true}call:third_tool{key:<|\"|>value<|\"|>}<tool_call|>";
+    auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
+    std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
+    ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
+    EXPECT_EQ(parsedOutput.content, "");
+    EXPECT_EQ(parsedOutput.reasoning, "");
+    EXPECT_TRUE(parsedOutput.toolCalls.empty());
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallOutputWithThreeToolCallsWithContentInBetween) {
@@ -433,38 +371,24 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallOutputWithThreeToolCallsWithContentI
                                          " This is some content between second and third tool call. "
                                          "<|tool_call>call:third_tool{key:<|\"|>value<|\"|>}<tool_call|>"
                                          "After tool calls content.";
-
-    std::vector<std::string> inputs = {inputWithProperClosure};
-    for (auto& input : inputs) {
-        auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
-        std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
-        ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
-        EXPECT_EQ(parsedOutput.content, "Before tool calls content. This is some content between tool calls. This is some content between second and third tool call. After tool calls content.");
-        EXPECT_EQ(parsedOutput.reasoning, "");
-
-        ASSERT_EQ(parsedOutput.toolCalls.size(), 3);
-        EXPECT_EQ(parsedOutput.toolCalls[0].name, "example_tool");
-        EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"arg1\":\"value1\",\"arg2\":42}");
-        EXPECT_EQ(parsedOutput.toolCalls[0].id.empty(), false);
-        auto firstToolCallId = parsedOutput.toolCalls[0].id;
-
-        EXPECT_EQ(parsedOutput.toolCalls[1].name, "another_tool");
-        EXPECT_EQ(parsedOutput.toolCalls[1].arguments, "{\"param1\":\"data\",\"param2\":true}");
-        EXPECT_EQ(parsedOutput.toolCalls[1].id.empty(), false);
-        auto secondToolCallId = parsedOutput.toolCalls[1].id;
-        EXPECT_NE(firstToolCallId, secondToolCallId);
-
-        EXPECT_EQ(parsedOutput.toolCalls[2].name, "third_tool");
-        EXPECT_EQ(parsedOutput.toolCalls[2].arguments, "{\"key\":\"value\"}");
-        EXPECT_EQ(parsedOutput.toolCalls[2].id.empty(), false);
-        auto thirdToolCallId = parsedOutput.toolCalls[2].id;
-        EXPECT_NE(firstToolCallId, thirdToolCallId);
-        EXPECT_NE(secondToolCallId, thirdToolCallId);
-    }
+    auto generatedTensor = gemma4Tokenizer->encode(inputWithProperClosure).input_ids;
+    std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
+    ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
+    EXPECT_EQ(parsedOutput.content, "Before tool calls content. This is some content between tool calls. This is some content between second and third tool call. After tool calls content.");
+    EXPECT_EQ(parsedOutput.reasoning, "");
+    ASSERT_EQ(parsedOutput.toolCalls.size(), 3);
+    EXPECT_EQ(parsedOutput.toolCalls[0].name, "example_tool");
+    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"arg1\":\"value1\",\"arg2\":42}");
+    EXPECT_EQ(parsedOutput.toolCalls[1].name, "another_tool");
+    EXPECT_EQ(parsedOutput.toolCalls[1].arguments, "{\"param1\":\"data\",\"param2\":true}");
+    EXPECT_EQ(parsedOutput.toolCalls[2].name, "third_tool");
+    EXPECT_EQ(parsedOutput.toolCalls[2].arguments, "{\"key\":\"value\"}");
+    EXPECT_NE(parsedOutput.toolCalls[0].id, parsedOutput.toolCalls[1].id);
+    EXPECT_NE(parsedOutput.toolCalls[0].id, parsedOutput.toolCalls[2].id);
+    EXPECT_NE(parsedOutput.toolCalls[1].id, parsedOutput.toolCalls[2].id);
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithEmptyArguments) {
-    // Tool call with empty braces (no arguments)
     std::string input = "<|tool_call>call:no_args_tool{}<tool_call|>";
     auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
     std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
@@ -475,7 +399,6 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallWithEmptyArguments) {
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithMultipleUtfChars) {
-    // Tool call with empty braces (no arguments) and content around
     std::string input = R"(<|tool_call>call:post_tweet{content:<|"|>Check out the sorted report! 🚀 We've made improvements to the content. Tagging @currenttech and mentioning Julia for our insightful team. #currenttech #trend<|"|>,mentions:[<|"|>@currenttech<|"|>,<|"|>Julia<|"|>],tags:[<|"|>#currenttrend<|"|>]}<tool_call|>)";
     auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
     std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
@@ -487,94 +410,61 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallWithMultipleUtfChars) {
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithMultipleUtfCharsStreaming) {
+    const std::string args = R"({"content":"Check out the sorted report! 🚀 We've made improvements to the content. Tagging @currenttech and mentioning Julia for our insightful team. #currenttech #trend","mentions":["@currenttech","Julia"],"tags":["#currenttrend"]})";
     std::vector<std::tuple<std::string, ov::genai::GenerationFinishReason, std::optional<std::string>>> chunkToDeltaVec{
-        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"post", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"_tweet", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{content", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"post_tweet"}}]}})"},
-        {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"Check out the sorted report!", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" 🚀", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" We've made improvements", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" to the content.", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" Tagging @currenttech", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" and mentioning Julia", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" for our insightful team.", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" #currenttech #trend", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"mentions", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"@currenttech", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"Julia", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"],", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"tags", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"#currenttrend", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"]}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"content\":\"Check out the sorted report! 🚀 We've made improvements to the content. Tagging @currenttech and mentioning Julia for our insightful team. #currenttech #trend\",\"mentions\":[\"@currenttech\",\"Julia\"],\"tags\":[\"#currenttrend\"]}"}}]}})"},
-        {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"post", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"_tweet", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"{content", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"Check out the sorted report!", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" 🚀", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {" We've made improvements", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" to the content.", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {" Tagging @currenttech", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" and mentioning Julia", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {" for our insightful team.", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" #currenttech #trend", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"mentions", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"@currenttech", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"Julia", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"],", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"tags", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"#currenttrend", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"]}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, expectedAtomicToolCall("post_tweet", args)},
     };
-
     assertStreamingVec(chunkToDeltaVec);
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallArgumentValueContainingComma) {
-    // Comma embedded inside a string value (e.g. generated code) must
-    // not be mistaken for the separator between arguments.
-    std::string input =
-        "<|tool_call>call:editor{new_text:<|\"|>print(\"Hello, World!\")\n"
-        "<|\"|>,path:<|\"|>/home/user/demos/hello_world_python/hello.py<|\"|>}<tool_call|>";
+    std::string input = "<|tool_call>call:editor{new_text:<|\"|>print(\"Hello, World!\")\n<|\"|>,path:<|\"|>/home/user/demos/hello_world_python/hello.py<|\"|>}<tool_call|>";
     auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
     std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
     ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
     EXPECT_EQ(parsedOutput.content, "");
     ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
     EXPECT_EQ(parsedOutput.toolCalls[0].name, "editor");
-    EXPECT_EQ(parsedOutput.toolCalls[0].arguments,
-        "{\"new_text\":\"print(\\\"Hello, World!\\\")\\n\",\"path\":\"/home/user/demos/hello_world_python/hello.py\"}");
+    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"new_text\":\"print(\\\"Hello, World!\\\")\\n\",\"path\":\"/home/user/demos/hello_world_python/hello.py\"}");
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallArgumentValueContainingBracesAndBrackets) {
-    // Literal '{', '}', '[', ']' inside a string value must not be mistaken
-    // for nested object/array structure or for the tool call's own top-level closing brace.
-    std::string input =
-        "<|tool_call>call:editor{new_text:<|\"|>numbers = [1, 2, 3] and config = {a: 1, b: 2}<|\"|>,"
-        "path:<|\"|>file.txt<|\"|>}<tool_call|>";
+    std::string input = "<|tool_call>call:editor{new_text:<|\"|>numbers = [1, 2, 3] and config = {a: 1, b: 2}<|\"|>,path:<|\"|>file.txt<|\"|>}<tool_call|>";
     auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
     std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
     ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
     EXPECT_EQ(parsedOutput.content, "");
     ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
     EXPECT_EQ(parsedOutput.toolCalls[0].name, "editor");
-    EXPECT_EQ(parsedOutput.toolCalls[0].arguments,
-        "{\"new_text\":\"numbers = [1, 2, 3] and config = {a: 1, b: 2}\",\"path\":\"file.txt\"}");
+    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"new_text\":\"numbers = [1, 2, 3] and config = {a: 1, b: 2}\",\"path\":\"file.txt\"}");
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallArgumentValueWithUnclosedQuoteAndBraceMidStream) {
-    // While a string value is still streaming (its closing <|"|> hasn't
-    // arrived yet), an internal '"' followed by a '}' inside the already-received partial
-    // value must not be mistaken for the tool call's own closing brace.
+    const std::string args = R"({"new_text":"say \"hi} keep going"})";
     std::vector<std::tuple<std::string, ov::genai::GenerationFinishReason, std::optional<std::string>>> chunkToDeltaVec{
-        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"editor", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{new_text", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"editor"}}]}})"},
-        {":<|\"|>say ", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"\"hi}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" keep going", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"new_text\":\"say \\\"hi} keep going\"}"}}]}})"},
-        {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"editor", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"{new_text", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {":<|\"|>say ", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"\"hi}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {" keep going", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, expectedAtomicToolCall("editor", args)},
     };
-
     assertStreamingVec(chunkToDeltaVec);
 }
 
@@ -595,171 +485,111 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallOutputWithContentAndSingleToolCall) 
     ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
     EXPECT_EQ(parsedOutput.content, "This is a content part and next will be a tool call.\n\n");
     EXPECT_EQ(parsedOutput.reasoning, "");
-
     ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
     EXPECT_EQ(parsedOutput.toolCalls[0].name, "example_tool");
     EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"arg1\":\"value1\",\"arg2\":42}");
-    EXPECT_EQ(parsedOutput.toolCalls[0].id.empty(), false);
+    EXPECT_FALSE(parsedOutput.toolCalls[0].id.empty());
 }
 
 TEST_F(Gemma4OutputParserTest, HolisticStreaming) {
     std::vector<std::tuple<std::string, ov::genai::GenerationFinishReason, std::optional<std::string>>> chunkToDeltaVec{
         {"JUST_SOME_STRING_BEFORE_SPECIAL_STARTING_TAG", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"JUST_SOME_STRING_BEFORE_SPECIAL_STARTING_TAG"}})"},
-        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"sort", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{array", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"sort"}}]}})"},
-        {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"42", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" 17", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" 89", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" 5", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" 33", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"],", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"order", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"desc", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"ending", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"array\":[42,17,89,5,33],\"order\":\"descending\"}"}}]}})"},
-        {"call:d", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"ummy", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{config", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":1,"function":{"name":"dummy"}}]}})"},
-        {":{", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"name", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {":", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"astro_config", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"value", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {":", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"99", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":1,"function":{"arguments":"{\"config\":{\"name\":\"astro_config\",\"value\":99}}"}}]}})"},
-        {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"sort", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"{array", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"42", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" 17", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" 89", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" 5", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" 33", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"],", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"order", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"desc", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"ending", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"}", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"call:d", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"ummy", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"{config", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {":{", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"name", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {":", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"astro_config", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"value", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {":", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"99", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"}}", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"ANOTHER_CONTENT_AFTER_TOOL_CALL", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"ANOTHER_CONTENT_AFTER_TOOL_CALL"}})"},
     };
-
     assertStreamingVec(chunkToDeltaVec);
 }
 
 TEST_F(Gemma4OutputParserTest, StreamingWithBiggerChunks) {
+    const std::string args = R"({"array":[42,17,89,5,33],"order":"descending"})";
     std::vector<std::tuple<std::string, ov::genai::GenerationFinishReason, std::optional<std::string>>> chunkToDeltaVec{
         {"SOME_CONTENT", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"SOME_CONTENT"}})"},
         {"MORE_CONTENT<|tool_call>", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"MORE_CONTENT"}})"},
-        {"call:sort", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{array:", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"sort"}}]}})"},
+        {"call:sort", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"{array:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"[42, 17, 89, 5, 33],order:<|\"|>descending<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"array\":[42,17,89,5,33],\"order\":\"descending\"}"}}]}})"},
-        {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, expectedAtomicToolCall("sort", args)},
         {"ANOTHER_CONTENT_AFTER_TOOL_CALL", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"ANOTHER_CONTENT_AFTER_TOOL_CALL"}})"},
     };
-
     assertStreamingVec(chunkToDeltaVec);
 }
 
 TEST_F(Gemma4OutputParserTest, StreamingWithWhitespacesBetweenToolCalls) {
     std::vector<std::tuple<std::string, ov::genai::GenerationFinishReason, std::optional<std::string>>> chunkToDeltaVec{
         {"JUST_SOME_STRING_BEFORE_SPECIAL_STARTING_TAG", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"JUST_SOME_STRING_BEFORE_SPECIAL_STARTING_TAG"}})"},
-        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"\n", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"call:sort", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{array", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"sort"}}]}})"},
-        {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"42", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" 17", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" 89", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" 5", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" 33", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"],", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"order", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"desc", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"ending", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"array\":[42,17,89,5,33],\"order\":\"descending\"}"}}]}})"},
-        {" call:d", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"ummy", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{config", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":1,"function":{"name":"dummy"}}]}})"},
-        {":{", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"name", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {":", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"astro_config", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"value", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {":", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"99", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}}", ov ::genai ::GenerationFinishReason ::NONE, R"({"delta":{"tool_calls":[{"index":1,"function":{"arguments":"{\"config\":{\"name\":\"astro_config\",\"value\":99}}"}}]}})"},
-        {"call: solve", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{e", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":2,"function":{"name":"solve"}}]}})"},
-        {"quation", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"2", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"*", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"(", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"x", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"+", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"5)", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" =", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {" 13", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":2,"function":{"arguments":"{\"equation\":\"2*(x+5) = 13\"}"}}]}})"},
-        {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"\n", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"call:sort", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"{array", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"42", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" 17", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" 89", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" 5", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {",", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" 33", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"],", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"order", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"desc", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"ending", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {" call:d", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"ummy", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"{config", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {":{", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"name", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {":", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"astro_config", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"value", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {":", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"99", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"}}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"call: solve", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"{e", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"quation", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"2", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"*", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"(", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"x", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"+", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"5)", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {" =", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {" 13", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"And some content after second tool call", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"And some content after second tool call"}})"},
     };
-
     assertStreamingVec(chunkToDeltaVec);
 }
 
 TEST_F(Gemma4OutputParserTest, StreamingWithToolCallWithEmptyParams) {
     std::vector<std::tuple<std::string, ov::genai::GenerationFinishReason, std::optional<std::string>>> chunkToDeltaVec{
-        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"empty_params", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"empty_params"}}]}})"},
-        {"<tool_call|>", ov::genai::GenerationFinishReason::STOP, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{}"}}]}})"},
+        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"empty_params", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"{}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<tool_call|>", ov::genai::GenerationFinishReason::STOP, expectedAtomicToolCall("empty_params", "{}")},
     };
-
     assertStreamingVec(chunkToDeltaVec);
 }
 
 TEST_F(Gemma4OutputParserTest, StreamingWithToolResponseTokenAtTheEndOfGeneration) {
     std::vector<std::tuple<std::string, ov::genai::GenerationFinishReason, std::optional<std::string>>> chunkToDeltaVec{
-        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"dummy", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{arg1:", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"dummy"}}]}})"},
-        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"value1", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"arg1\":\"value1\"}"}}]}})"},
-        {"<tool_call|><|tool_response>", ov::genai::GenerationFinishReason::STOP, std::nullopt},
+        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"dummy", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"{arg1:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"value1", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<tool_call|><|tool_response>", ov::genai::GenerationFinishReason::STOP, expectedAtomicToolCall("dummy", R"({"arg1":"value1"})")},
     };
-
     assertStreamingVec(chunkToDeltaVec);
 }
 
-// Model omits the "<tool_call|>" end tag entirely and jumps straight to a stray
-// "<|tool_response>" before stopping. Arguments must be emitted exactly once
-// (regression test: the finish-flush fallback used to blindly re-emit them).
 TEST_F(Gemma4OutputParserTest, StreamingWithMissingEndTagBeforeStop) {
     std::vector<std::tuple<std::string, ov::genai::GenerationFinishReason, std::optional<std::string>>> chunkToDeltaVec{
-        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"ls", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{a:", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"ls"}}]}})"},
-        {"true}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"a\":true}"}}]}})"},
-        {"<|tool_response>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"ls", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"{a:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"true}", ov::genai::GenerationFinishReason::NONE, std::nullopt}, {"<|tool_response>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"", ov::genai::GenerationFinishReason::STOP, std::nullopt},
     };
-
     assertStreamingVec(chunkToDeltaVec);
 }
 
@@ -770,29 +600,21 @@ TEST_F(Gemma4OutputParserTest, StreamingContentWithTurnTokenAtTheEndOfGeneration
         {" with a turn token at the end.", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":" with a turn token at the end."}})"},
         {"<turn|>", ov::genai::GenerationFinishReason::STOP, std::nullopt},
     };
-
     assertStreamingVec(chunkToDeltaVec);
 }
 
 TEST_F(Gemma4OutputParserTest, ToolCallsWithoutToolsInTheRequestStreaming) {
     std::vector<std::pair<std::string, std::optional<std::string>>> chunkToDeltaVec{
-        {"<|tool_call>", "{\"delta\":{\"content\":\"<|tool_call>\"}}"},
-        {"call:super", "{\"delta\":{\"content\":\"call:super\"}}"},
-        {"_tool_number_two", "{\"delta\":{\"content\":\"_tool_number_two\"}}"},
-        {"{arg1", "{\"delta\":{\"content\":\"{arg1\"}}"},
-        {":<|\"|>", "{\"delta\":{\"content\":\":<|\\\"|>\"}}"},
-        {"val{{{ue1", "{\"delta\":{\"content\":\"val{{{ue1\"}}"},
-        {"<|\"|>}", "{\"delta\":{\"content\":\"<|\\\"|>}\"}}"},
-        {"<tool_call|>", "{\"delta\":{\"content\":\"<tool_call|>\"}}"},
+        {"<|tool_call>", "{\"delta\":{\"content\":\"<|tool_call>\"}}"}, {"call:super", "{\"delta\":{\"content\":\"call:super\"}}"},
+        {"_tool_number_two", "{\"delta\":{\"content\":\"_tool_number_two\"}}"}, {"{arg1", "{\"delta\":{\"content\":\"{arg1\"}}"},
+        {":<|\"|>", "{\"delta\":{\"content\":\":<|\\\"|>\"}}"}, {"val{{{ue1", "{\"delta\":{\"content\":\"val{{{ue1\"}}"},
+        {"<|\"|>}", "{\"delta\":{\"content\":\"<|\\\"|>}\"}}"}, {"<tool_call|>", "{\"delta\":{\"content\":\"<tool_call|>\"}}"},
     };
-
     for (const auto& [chunk, expectedDelta] : chunkToDeltaVec) {
         std::optional<ovms::Delta> doc = outputParserWithRegularToolParsing->parseChunk(chunk, {}, false, ov::genai::GenerationFinishReason::NONE);
         assertChunkEqual(doc, expectedDelta, chunk);
     }
 }
-
-// Malformed tool calls
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithMissingParentheses) {
     std::string input = "<|tool_call>call:broken_tool<tool_call|>";
@@ -815,8 +637,7 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallWithArgumentMissingEquals) {
     auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
     std::vector<int64_t> generatedTokens(generatedTensor.data<int64_t>(), generatedTensor.data<int64_t>() + generatedTensor.get_size());
     ParsedOutput parsedOutput = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, generatedTokens, true, true);
-    ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
-    EXPECT_EQ(parsedOutput.toolCalls[0].name, "broken");
+    EXPECT_TRUE(parsedOutput.toolCalls.empty());
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithStringArgumentsContainingComparison) {
