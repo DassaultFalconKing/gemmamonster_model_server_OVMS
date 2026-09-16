@@ -1,6 +1,6 @@
 # Gemma4 upstream evidence triage — live handoff
 
-Status: `PLAN_REFINED / TEST_HELPER_FIX_COMMITTED / PARSER_FIX_COMMITTED / LEGACY_TEST_RECONCILIATION_IN_PROGRESS / HOST_GREEN_NOT_RUN`
+Status: `TRIAGE_16_OF_16_CLASSIFIED / TEST_HELPER_FIX_COMMITTED / PARSER_FIX_COMMITTED / LEGACY_PARSER_TESTS_RECONCILED / SOURCE_DIFF_AUDITED / HTTP_STALE_EXPECTATION_PENDING / HOST_GREEN_NOT_RUN`
 
 ## Immutable inputs
 
@@ -12,6 +12,7 @@ Status: `PLAN_REFINED / TEST_HELPER_FIX_COMMITTED / PARSER_FIX_COMMITTED / LEGAC
 - Refined plan commit: `749c9769aeb06d07cc69822318342eb5087b9b82`
 - Lossless test-helper fix: `d7e26e7d0ace229ee74066f9957e3f423cbcd238`
 - Escaped-string production fix: `2dc4e54c4b07937effcb47e75c1de4058661ee2f`
+- Parser legacy reconciliation: `dd3845f49aa9fcd11ed24da8eabc2459f9c916b4`
 - Clean split leaf to mirror only after GREEN: `62676e2e4`
 - Separate whitespace repair: `fix/gemma4-whitespace-regression-1609` + GenAI `e00eada6`; do not mix.
 
@@ -22,7 +23,7 @@ Raw evidence: 229 filtered cases, 213 passed, 16 failed.
 | Class | Count | Decision |
 |---|---:|---|
 | missing `opt-125m` tokenizer | 1 | environmental; no product fix |
-| unknown hard-named tool expected OK by old test | 1 | stale expectation; keep INVALID_ARGUMENT |
+| unknown hard-named tool expected OK by old test | 1 | stale expectation; keep `INVALID_ARGUMENT` |
 | huge numeric lexeme changed to double | 1 | test helper bug; repaired in `d7e26e7d` |
 | non-streaming implicit multicall in one envelope | 2 | stale expectation; accepted parser intentionally rejects it |
 | streaming valid single-call envelopes expecting early deltas | 6 | stale timing expectation; expect one atomic call at close |
@@ -31,48 +32,117 @@ Raw evidence: 229 filtered cases, 213 passed, 16 failed.
 | `broken{malformed_arg}` accepted by old test | 1 | stale expectation; malformed native argument must fail closed |
 | `print(\"hello world\")` remains backslash-escaped | 1 | real parser regression; repaired in `2dc4e54c` |
 
-Note: evidence prose says 8 streaming cases, raw `ovmstest-failing-blocks.txt` contains 9. Raw failing blocks win. Further source inspection splits those nine into 6 valid atomic streams + 2 invalid multicall envelopes + 1 incomplete envelope.
+Evidence prose says 8 streaming cases, raw `ovmstest-failing-blocks.txt` contains 9. Raw failing blocks win: 6 valid atomic streams + 2 invalid multicall envelopes + 1 incomplete envelope.
 
-## Root-cause and committed repairs
+## Root causes and committed repairs
 
-### Lossless numbers
+### 1. Lossless numbers — test harness, not product
 
-Production `gemma4_tool_parser.cpp` already uses a SAX `NumberPreservingWriter` for native numeric scalars. The failing test routed accumulated arguments through `src/test/llm/output_parsers/output_parser_test_utils.hpp::parseWithStreamer()`, which reparsed them into `rapidjson::Document` and serialized with a normal writer. That test-only roundtrip converted the long lexeme through `double`.
+Production `gemma4_tool_parser.cpp` already uses SAX `NumberPreservingWriter`. The failing test routed accumulated arguments through `output_parser_test_utils.hpp::parseWithStreamer()`, reparsed them into `rapidjson::Document`, then serialized through a normal writer, converting the long numeric lexeme through `double`.
 
-Committed repair `d7e26e7d`: test helper now compacts JSON with RapidJSON Reader + `kParseNumbersAsStringsFlag` + RawNumber writer, preserving numeric lexemes.
+`d7e26e7d` repairs only the helper with RapidJSON Reader + `kParseNumbersAsStringsFlag` + RawNumber writer.
 
-### Escaped delimited strings
+### 2. Escaped Gemma-native delimited strings — real product regression
 
-Historical `escapeAsJsonString()` decodes valid JSON escape sequences once and falls back to literal bytes on parse failure. Recursive parser commit `bed7a1e54` changed `<|\"|>...<|\"|>` handling to direct `writer.String(raw)`, so `\"` became a literal backslash plus quote in the semantic string.
+Recursive parser commit `bed7a1e54` changed `<|\"|>...<|\"|>` handling to direct `writer.String(raw)`, changing established native escape semantics.
 
-Committed repair `2dc4e54c`: `NativeValueParser::parseDelimitedString()` now runs the raw delimited payload through `escapeAsJsonString()` and emits the resulting valid JSON string token with `RawValue`. GitHub diff verification confirms exactly one hunk in exactly one production file; state machine, envelope logic, streamer and generation policy are untouched.
+`2dc4e54c` changes only `NativeValueParser::parseDelimitedString()`: run the raw marker-delimited payload through existing `escapeAsJsonString()` and emit the resulting JSON string token with `RawValue`. No FSM, envelope, streamer, registry, generation, or recovery policy change.
 
-### Atomic/fail-closed cases
+### 3. Atomic/fail-closed cases — stale upstream expectations
 
-Commit `909e21f07` intentionally exposes a public tool call only after one complete validated envelope. It also rejects additional `call:` forms before the same `<tool_call|>` close. Therefore:
+`909e21f0770d3feff76b39cc3448ac5f6660cc5b` is authority:
 
-- `HolisticStreaming`: implicit sort+dummy multicall inside one envelope => reject entire envelope.
-- `StreamingWithWhitespacesBetweenToolCalls`: implicit sort+dummy+solve multicall inside one envelope => reject entire envelope.
-- `StreamingWithMissingEndTagBeforeStop`: no `<tool_call|>` => incomplete candidate is cleared on STOP.
-- Six remaining streaming failures are valid one-call envelopes whose legacy tests expect name/arguments too early; tests must move the semantic call expectation to canonical close, not production code back to early emission.
+- id/name/index stay private until name + args + canonical close validate;
+- incomplete STOP/LENGTH candidates never become executable calls;
+- one native envelope contains at most one `call:`;
+- malformed/implicit multicall fails closed.
 
-Request-boundary commits (`355ae00c1`, `3755dc85b`, `cf6fc0412`) intentionally reject invalid hard tool choices. Do not weaken these paths to satisfy legacy upstream tests.
+Therefore the parser test reconciliation in `dd3845f` moves valid-stream expectations to one complete atomic delta at `<tool_call|>`, expects implicit one-envelope multicall to yield no tool call, and expects missing-close/malformed-arg candidates to remain non-executable.
+
+Canonical parallel calling through multiple independently closed native envelopes remains valid and must stay GREEN.
+
+## Audit note
+
+A first broad legacy-test edit `2489e342e1a8634bafa9cac2e955fb3e846f9efa` was rejected during diff audit because it touched too much of the file. `b9f65b96bb53e611a5bd4160a7739887584ccc90` restores that test file byte-for-byte to the pre-edit tree. The retained reconciliation `dd3845f` was then audited as one-file `42+ / 58-` focused delta.
+
+Do not promote the `2489e342` / `b9f65b96` audit pair into the final clean PR series. Rebuild/squash the retained delta after host GREEN.
+
+## One remaining source edit before host gate
+
+`HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceNotInProvidedList` is stale. `3755dc85b` intentionally requires hard named tool choice to resolve to a usable declared tool; `cf6fc0412` reinforces fail-hard validation.
+
+Required edit in `src/test/http_openai_handler_test.cpp`:
+
+```cpp
+TEST_F(HttpOpenAIHandlerParsingTest, ParseRequestWithTools_Provided3_ChoiceNotInProvidedList) {
+    std::vector<std::string> providedTools{"get_weather1", "get_weather2", "get_weather3"};
+    std::string toolsChoice = R"({"type": "function", "function": {"name": "get_weather4"}})";
+    assertRequestWithTools(providedTools, toolsChoice, absl::StatusCode::kInvalidArgument);
+}
+```
+
+Do not weaken production request validation to satisfy the old `OK` expectation.
 
 ## Verification state
 
 - Evidence RED on base: `229 ran / 213 passed / 16 failed`.
-- Source inspection/root-cause classification: complete for all 16 failures.
-- Test-helper commit source-reviewed: yes.
-- Production parser commit diff-verified: yes, exactly one hunk/one file.
-- Windows/Bazel GREEN on current HEAD: **not run in this environment**.
-- Do not report any repaired test as PASS until host gate executes.
+- Root-cause classification: complete 16/16.
+- Test-helper source repair: committed/reviewed.
+- Production parser repair: committed; one-hunk/one-file diff verified.
+- Parser legacy reconciliation: committed; focused source diff audited.
+- HTTP stale test: pending.
+- Windows/Bazel GREEN on current HEAD: **not run**.
 
-## Next exact actions
+No repaired test is to be reported as PASS until host gate executes.
 
-1. Reconcile stale HTTP named-choice expectation.
-2. Reconcile parser legacy expectations: non-stream multicall, malformed arg, six valid atomic streams, two streaming multicall rejects, one incomplete-envelope reject.
-3. Run focused 229-case host gate with evidence environment.
-4. Run fresh six-target / 64-case semantic gate.
-5. Only after GREEN, mirror/regenerate onto split leaf `62676e2e4`.
+## Host gate
+
+Use the evidence environment:
+
+```text
+MSVC C:\BuildTools 14.44.35207
+MSYS bash first in PATH
+BAZEL_SH=C:/opt/msys64/usr/bin/bash.exe
+Python 3.12.10
+--output_user_root=C:/o
+```
+
+Tokenizer fixture:
+
+```text
+src\test\llm_testing\OpenVINO\gemma-4-E4B-it-int4-ov
+  -> C:\llm\models\OpenVINO\gemma-4-E4B-it-int4-ov
+```
+
+Focused gate (`py_on` is required because the upstream `servable.hpp:239` py_off issue is outside this repair):
+
+```text
+bazel test --config=win_mp_on_py_on --nocache_test_results --test_output=all \
+  --test_env=PYTHONPATH=<workspace>\bazel-out\x64_windows-opt\bin\src\python\binding;C:/opt/openvino/python \
+  --test_filter=Gemma4OutputParserTest.*:Gemma4UpstreamRefitContractTest.*:Gemma4SpecialTokenHandoffTest.*:HttpOpenAIHandlerParsingTest.* \
+  //src:ovms_test
+```
+
+Then rerun all six existing Gemma4 semantic targets on the same HEAD/dependency set:
+
+```text
+gemma4_generation_policy_test
+gemma4_phantom_tool_call_test
+gemma4_chunk_invariance_test
+gemma4_rendered_prompt_state_test
+gemma4_f7_contract_test
+gemma4_f10_guard_test
+```
+
+The old `64/64` is baseline evidence only, not proof for this repaired HEAD.
+
+## Resume point
+
+1. apply the single pending HTTP stale-expectation edit;
+2. audit final source diff vs `12f14d4` and baseline `d582668`;
+3. run focused host gate;
+4. run fresh six-target semantic gate;
+5. if GREEN, rebuild a clean promotion series without `2489e342` / `b9f65b96`;
+6. only then regenerate/mirror `upstream/gemma4-tool-calling-split` (`62676e2e4`).
 
 Implementation plan: `docs/superpowers/plans/2026-09-17-gemma4-upstream-evidence-triage.md`.
