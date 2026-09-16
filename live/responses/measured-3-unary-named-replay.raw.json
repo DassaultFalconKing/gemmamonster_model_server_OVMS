@@ -1,0 +1,1 @@
+{"choices":[{"finish_reason":"stop","index":0,"logprobs":null,"message":{"content":"The OVMS version is OpenVINO Model Server 2026.5.0.b722aa440.","role":"assistant","tool_calls":[]}}],"created":1789564208,"model":"gemma4-26-heretic","object":"chat.completion","usage":{"prompt_tokens":1121,"completion_tokens":30,"total_tokens":1151}}

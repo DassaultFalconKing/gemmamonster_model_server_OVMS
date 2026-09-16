@@ -1,0 +1,90 @@
+{
+  "model": "gemma4-26-heretic",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Call read_file for binary-provenance.txt and read_file for README.md. Make both calls in this response."
+    },
+    {
+      "content": "",
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "id": "M9mFkpE7Z",
+          "type": "function",
+          "function": {
+            "name": "read_file",
+            "arguments": "{\"path\":\"binary-provenance.txt\"}"
+          }
+        },
+        {
+          "id": "A6MZURk6p",
+          "type": "function",
+          "function": {
+            "name": "read_file",
+            "arguments": "{\"path\":\"README.md\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "M9mFkpE7Z",
+      "content": "SOURCE_BRANCH: staging/gemma4-upstream-refit-clean-20260915\nSOURCE_HEAD: e6458ef78636113edf12f1aee6bc36825e773651\nBEHAVIORAL_FREEZE_SHA: 66c66140113c4a6be8ce0b11b5aa23ccc774ac22\nFREEZE_BUILD_SOURCE: b722aa440b5555041f24e6d6f7aea8bda100bdf7\nSRC_DIFF_FREEZE_TO_HEAD: docs-only (no src/ changes)\n\nOVMS_PATH: C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\ovms.exe\nOVMS_SHA256: 3DFC2D11E614BD03924E6730AD8053DB00A6E5564F41E11F966A0929B44F65FE\nOVMS_VERSION: OpenVINO Model Server 2026.5.0.b722aa440\nOVMS_BACKEND: OpenVINO backend 2026.5.0-23099-d015add94c1\nOVMS_GENAI_BACKEND: OpenVINO GenAI backend 2026.5.0.0-3454-01f999504f8\n\nOPENVINO_DLL_PATH: C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino.dll\nOPENVINO_DLL_SHA256: F7797C7D89C78E67E2BC4779F8848A850B4C1C21C41EB6D3FB7D28A2450DAAC1\nOPENVINO_VERSION: 2026.5.0-23099-d015add94c1\n\nGENAI_DLL_PATH: C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_genai.dll\nGENAI_DLL_SHA256: EF21DB9E15382916D3F800B2A1575F8B9240AC80BF28927888E5DF6AABBA3596\nGENAI_VERSION: 2026.5.0.0-3454-01f999504f8\n\nTOKENIZERS_DLL_PATH: C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_tokenizers.dll\nTOKENIZERS_DLL_SHA256: 224BD94976DCC1FF47CBBF4C9DBF1A2F959E40A9C4BBDDDD497A79BBD360E0A8\nTOKENIZERS_VERSION: 2026.5.0.0-741-b40486a0aac\n\nLOADED_MODULES_VERIFIED_VIA: Get-Process -Module on live server PID (profile 00)\nMIXED_OLD_RUNTIME: NO\nOLD_RUNTIME_PATHS_LOADED: none (no modules from C:\\llm\\*, C:\\g54r2*, C:\\o*)\nFORBIDDEN_BINARY_USED: no (C:\\llm\\ovms\\ovms.exe NOT used)\n"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "A6MZURk6p",
+      "content": "# Corrective Gemma4 Live Acceptance (2026.5 freeze binary)\n\nRetest of scouting profiles `00 / 20 / 21` on the EXACT packaged Gemmamonster 2026.5\nbinary (`dist/windows/ovms/ovms.exe`, SHA `3DFC…44F65FE`), plus the full semantic /\ntool / streaming / multi-turn gate and a live agentic dogfood loop on the winner.\n\n- `environment.txt` — branch/HEAD, GPU, model, endpoint, MTP status.\n- `binary-provenance.txt` — SHA, versions, loaded-DLL paths, `MIXED_OLD_RUNTIME: NO`.\n- `commands.txt` — every server/test command.\n- `results.csv` — per-run measurements (measured runs only; warmups excluded).\n- `results-summary.json` — mean/min/max/stddev per profile×workload.\n- `runs-<profile>.json` — full per-profile rows incl. WS/GPU snapshots.\n- `requests/` `responses/` `streams/` — raw evidence (sanitized, model-generated text only).\n- `logs/` — server logs per profile. `-attempt1-died0432.log` preserves the\n  unattributed morning server death. `dogfood-transcript.txt` is the agent loop log.\n- `semantic-verdicts.txt` — per-gate PASS/FAIL.\n- `launch-*.bat` — exact server launchers (foreground-safe, `>>` log append).\n- `bench-2026.5.ps1`, `control-short.ps1`, `prefix-test.ps1`, `semantic-gate.ps1`, `dogfood.ps1` — harnesses.\n\n## Result (see FINAL verdict message for the full table)\n\n- Profiles measured fresh on 2026.5; scouting 2026.4 numbers NOT reused.\n- `20 ~= 21` on medium/long; short converges to ~26.5 after control → **winner: 20** (simpler).\n- Repeated-prefix: turn1 TTFT 26.0s → turn2 2.8s → turn3 1.7s (prefix cache works).\n- Semantic gate 14/14 PASS (phantom probe: text-only, `tool_calls: []`, no executable call).\n- Dogfood: 4 turns / 3 tool calls / 0 errors, grounded summary.\n- MTP: `SKIPPED_NO_ASSISTANT_IR`.\n- Max measured throughput 27.46 tok/s (short); no `>30 tok/s` claim made.\n\n## Integrity notes (read before citing numbers)\n\n1. `results.csv` initially contained a FOREIGN batch (02:48–02:49Z: re-run of profile 00\n   incl. 3 failed long rows, `tok_s=0`) — purged; kept rows verified as this session's.\n2. Morning window 04:36–05:09 local shows unattributed parallel server activity\n   (`ovms-22-*.log`, `ovms-20u4b4096seq4-longonly.log`, second AVAILABLE appended into\n   profile logs) — foreign files preserved untouched, not cited.\n3. Profile-20 attempt-1 death (04:32:17 local, silent, no dump/OS event) is unattributed;\n   afternoon session (10:56Z+) ran 60+ requests with zero failures on PID 16804.\n4. Streaming TTFT ≈ wall on this runtime (chunks burst after full generation);\n   `tpot_ms` column is therefore an artifact — use `tok_s` = output/wall.\n"
+    },
+    {
+      "role": "user",
+      "content": "Now report the requested facts from the tool results. Do not call any more tools."
+    }
+  ],
+  "temperature": 0,
+  "max_tokens": 512,
+  "stream": false,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "list_dir",
+        "description": "List files in an acceptance workspace directory.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "read_file",
+        "description": "Read up to 5000 characters of a text file in the acceptance workspace.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "parallel_tool_calls": false
+}

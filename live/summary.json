@@ -1,0 +1,82 @@
+[
+  {
+    "case": "warmup-unary-named",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "case": "warmup-stream-required",
+    "status": "FAIL",
+    "error": "ungrounded or wrong calls: [('list_dir', '.')]"
+  },
+  {
+    "case": "warmup-parallel",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "case": "warmup-agent-auto",
+    "status": "FAIL",
+    "error": "generation limit; incomplete task cannot pass"
+  },
+  {
+    "case": "measured-1-unary-named",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "case": "measured-1-stream-required",
+    "status": "FAIL",
+    "error": "ungrounded or wrong calls: [('list_dir', '.')]"
+  },
+  {
+    "case": "measured-1-parallel",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "case": "measured-1-agent-auto",
+    "status": "FAIL",
+    "error": "generation limit; incomplete task cannot pass"
+  },
+  {
+    "case": "measured-2-unary-named",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "case": "measured-2-stream-required",
+    "status": "FAIL",
+    "error": "ungrounded or wrong calls: [('list_dir', '.')]"
+  },
+  {
+    "case": "measured-2-parallel",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "case": "measured-2-agent-auto",
+    "status": "FAIL",
+    "error": "generation limit; incomplete task cannot pass"
+  },
+  {
+    "case": "measured-3-unary-named",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "case": "measured-3-stream-required",
+    "status": "FAIL",
+    "error": "ungrounded or wrong calls: [('list_dir', '.')]"
+  },
+  {
+    "case": "measured-3-parallel",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "case": "measured-3-agent-auto",
+    "status": "FAIL",
+    "error": "generation limit; incomplete task cannot pass"
+  }
+]

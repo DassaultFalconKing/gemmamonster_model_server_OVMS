@@ -1,0 +1,16 @@
+{
+  "http_status": 200,
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 1121,
+    "completion_tokens": 30,
+    "total_tokens": 1151
+  },
+  "wall_seconds": 2.70299999999952,
+  "ttft_seconds": null,
+  "message": {
+    "content": "The OVMS version is OpenVINO Model Server 2026.5.0.b722aa440.",
+    "role": "assistant",
+    "tool_calls": []
+  }
+}

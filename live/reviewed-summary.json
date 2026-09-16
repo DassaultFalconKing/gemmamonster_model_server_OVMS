@@ -1,0 +1,16 @@
+{
+  "chat_requests": 44,
+  "http_200": 44,
+  "tool_calls": 32,
+  "named_with_replay": "4/4 PASS",
+  "parallel_same_name_with_replay": "4/4 PASS",
+  "required_stream_trajectory_with_replay": "4/4 PASS",
+  "strict_stream_first_tool_expectation": "4/4 FAIL: valid list_dir chosen before read_file; original receipts preserved",
+  "auto_agent_tools": "4/4 completed all three required tools",
+  "auto_agent_final_completion": "4/4 FAIL: finish_reason=length at max_tokens=512",
+  "server_pid_before_after": 3380,
+  "gpu_fatal_or_resource_or_quarantine": false,
+  "delegation_cancellation_exercised": false,
+  "overall_full_dogfood": "FAIL",
+  "runtime_fix_attempted": false
+}

@@ -1,0 +1,25 @@
+{
+  "http_status": 200,
+  "finish_reason": "tool_calls",
+  "usage": {
+    "prompt_tokens": 207,
+    "completion_tokens": 16,
+    "total_tokens": 223
+  },
+  "wall_seconds": 1.5,
+  "ttft_seconds": null,
+  "message": {
+    "content": "",
+    "role": "assistant",
+    "tool_calls": [
+      {
+        "id": "nzEqTDJ8W",
+        "type": "function",
+        "function": {
+          "name": "list_dir",
+          "arguments": "{\"path\":\".\"}"
+        }
+      }
+    ]
+  }
+}

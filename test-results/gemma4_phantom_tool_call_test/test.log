@@ -1,0 +1,35 @@
+Executing tests from //src/test/llm/gemma4_generation:gemma4_phantom_tool_call_test
+-----------------------------------------------------------------------------
+Running main() from gmock_main.cc
+[==========] Running 12 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 12 tests from Gemma4PhantomToolCallTest
+[ RUN      ] Gemma4PhantomToolCallTest.MalformedNumberPublishesNoExecutableHeader
+[       OK ] Gemma4PhantomToolCallTest.MalformedNumberPublishesNoExecutableHeader (296 ms)
+[ RUN      ] Gemma4PhantomToolCallTest.MalformedNestedStructurePublishesNoExecutableHeader
+[       OK ] Gemma4PhantomToolCallTest.MalformedNestedStructurePublishesNoExecutableHeader (1 ms)
+[ RUN      ] Gemma4PhantomToolCallTest.UnknownRegisteredToolPublishesNoHeader
+[       OK ] Gemma4PhantomToolCallTest.UnknownRegisteredToolPublishesNoHeader (0 ms)
+[ RUN      ] Gemma4PhantomToolCallTest.MalformedThenValidKeepsIndexZero
+[       OK ] Gemma4PhantomToolCallTest.MalformedThenValidKeepsIndexZero (2 ms)
+[ RUN      ] Gemma4PhantomToolCallTest.StreamingSplitMalformedPublishesNothing
+[       OK ] Gemma4PhantomToolCallTest.StreamingSplitMalformedPublishesNothing (1 ms)
+[ RUN      ] Gemma4PhantomToolCallTest.CanonicalTwoEnvelopesYieldTwoCalls
+[       OK ] Gemma4PhantomToolCallTest.CanonicalTwoEnvelopesYieldTwoCalls (0 ms)
+[ RUN      ] Gemma4PhantomToolCallTest.OneEnvelopeGarbageMulticallPublishesNothing
+[       OK ] Gemma4PhantomToolCallTest.OneEnvelopeGarbageMulticallPublishesNothing (1 ms)
+[ RUN      ] Gemma4PhantomToolCallTest.OneEnvelopeAdjacentMulticallPublishesNothing
+[       OK ] Gemma4PhantomToolCallTest.OneEnvelopeAdjacentMulticallPublishesNothing (0 ms)
+[ RUN      ] Gemma4PhantomToolCallTest.StopBeforeEnvelopeClosePublishesNothing
+[       OK ] Gemma4PhantomToolCallTest.StopBeforeEnvelopeClosePublishesNothing (0 ms)
+[ RUN      ] Gemma4PhantomToolCallTest.LengthBeforeEnvelopeClosePublishesNothing
+[       OK ] Gemma4PhantomToolCallTest.LengthBeforeEnvelopeClosePublishesNothing (0 ms)
+[ RUN      ] Gemma4PhantomToolCallTest.RepeatedFinalizationDoesNotDuplicateCommittedCall
+[       OK ] Gemma4PhantomToolCallTest.RepeatedFinalizationDoesNotDuplicateCommittedCall (0 ms)
+[ RUN      ] Gemma4PhantomToolCallTest.CanonicalValidCallPublishesOneAtomicDelta
+[       OK ] Gemma4PhantomToolCallTest.CanonicalValidCallPublishesOneAtomicDelta (1 ms)
+[----------] 12 tests from Gemma4PhantomToolCallTest (309 ms total)
+
+[----------] Global test environment tear-down
+[==========] 12 tests from 1 test suite ran. (469 ms total)
+[  PASSED  ] 12 tests.

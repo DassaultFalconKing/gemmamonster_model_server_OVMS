@@ -1,0 +1,33 @@
+{
+  "http_status": 200,
+  "finish_reason": "tool_calls",
+  "usage": {
+    "prompt_tokens": 145,
+    "completion_tokens": 44,
+    "total_tokens": 189
+  },
+  "wall_seconds": 2.6710000000002765,
+  "ttft_seconds": null,
+  "message": {
+    "content": "",
+    "role": "assistant",
+    "tool_calls": [
+      {
+        "id": "mKdHxbiNn",
+        "type": "function",
+        "function": {
+          "name": "read_file",
+          "arguments": "{\"path\":\"binary-provenance.txt\"}"
+        }
+      },
+      {
+        "id": "HdfCco9Vi",
+        "type": "function",
+        "function": {
+          "name": "read_file",
+          "arguments": "{\"path\":\"README.md\"}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,126 @@
+b4
+data: {"choices":[{"index":0,"delta":{"role":"assistant","content":null},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk"}
+
+
+bf
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"The"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bf
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" OV"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+be
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"MS"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+c4
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" version"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bf
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" is"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bf
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" **"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+c0
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"Open"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"V"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bf
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"INO"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+c2
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" Model"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+c3
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" Server"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":" "},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"2"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"0"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"2"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"6"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"."},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"5"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"."},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"0"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"."},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"b"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"7"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"2"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"2"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+be
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"aa"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"4"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+bd
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"4"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+
+2ee
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"0"},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"content":"**."},"finish_reason":null}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+data: {"choices":[{"index":0,"logprobs":null,"delta":{},"finish_reason":"stop"}],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+data: {"choices":[],"created":1789564309,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":{"prompt_tokens":1370,"completion_tokens":31,"total_tokens":1401}}
+
+data: [DONE]

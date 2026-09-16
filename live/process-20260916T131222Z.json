@@ -1,0 +1,412 @@
+﻿{
+    "modules":  [
+                    {
+                        "ModuleName":  "ovms.exe",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\ovms.exe"
+                    },
+                    {
+                        "ModuleName":  "ntdll.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\ntdll.dll"
+                    },
+                    {
+                        "ModuleName":  "KERNEL32.DLL",
+                        "FileName":  "C:\\WINDOWS\\System32\\KERNEL32.DLL"
+                    },
+                    {
+                        "ModuleName":  "KERNELBASE.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\KERNELBASE.dll"
+                    },
+                    {
+                        "ModuleName":  "RPCRT4.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\RPCRT4.dll"
+                    },
+                    {
+                        "ModuleName":  "ADVAPI32.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\ADVAPI32.dll"
+                    },
+                    {
+                        "ModuleName":  "msvcrt.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\msvcrt.dll"
+                    },
+                    {
+                        "ModuleName":  "sechost.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\sechost.dll"
+                    },
+                    {
+                        "ModuleName":  "WS2_32.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\WS2_32.dll"
+                    },
+                    {
+                        "ModuleName":  "ucrtbase.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\ucrtbase.dll"
+                    },
+                    {
+                        "ModuleName":  "SHLWAPI.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\SHLWAPI.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino_genai.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_genai.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino.dll"
+                    },
+                    {
+                        "ModuleName":  "dbghelp.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\dbghelp.dll"
+                    },
+                    {
+                        "ModuleName":  "combase.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\combase.dll"
+                    },
+                    {
+                        "ModuleName":  "OLEAUT32.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\OLEAUT32.dll"
+                    },
+                    {
+                        "ModuleName":  "msvcp_win.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\msvcp_win.dll"
+                    },
+                    {
+                        "ModuleName":  "MSVCP140.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\MSVCP140.dll"
+                    },
+                    {
+                        "ModuleName":  "VCRUNTIME140.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\VCRUNTIME140.dll"
+                    },
+                    {
+                        "ModuleName":  "VCRUNTIME140_1.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\VCRUNTIME140_1.dll"
+                    },
+                    {
+                        "ModuleName":  "tbb12.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\tbb12.dll"
+                    },
+                    {
+                        "ModuleName":  "MSVCP140_CODECVT_IDS.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\MSVCP140_CODECVT_IDS.dll"
+                    },
+                    {
+                        "ModuleName":  "opencv_world4140.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\opencv_world4140.dll"
+                    },
+                    {
+                        "ModuleName":  "GDI32.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\GDI32.dll"
+                    },
+                    {
+                        "ModuleName":  "win32u.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\win32u.dll"
+                    },
+                    {
+                        "ModuleName":  "gdi32full.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\gdi32full.dll"
+                    },
+                    {
+                        "ModuleName":  "USER32.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\USER32.dll"
+                    },
+                    {
+                        "ModuleName":  "ole32.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\ole32.dll"
+                    },
+                    {
+                        "ModuleName":  "COMDLG32.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\COMDLG32.dll"
+                    },
+                    {
+                        "ModuleName":  "shcore.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\shcore.dll"
+                    },
+                    {
+                        "ModuleName":  "SHELL32.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\SHELL32.dll"
+                    },
+                    {
+                        "ModuleName":  "COMCTL32.dll",
+                        "FileName":  "C:\\WINDOWS\\WinSxS\\amd64_microsoft.windows.common-controls_6595b64144ccf1df_5.82.26100.8328_none_87eede957a2ccddd\\COMCTL32.dll"
+                    },
+                    {
+                        "ModuleName":  "MFPlat.DLL",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\MFPlat.DLL"
+                    },
+                    {
+                        "ModuleName":  "MFReadWrite.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\MFReadWrite.dll"
+                    },
+                    {
+                        "ModuleName":  "MF.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\MF.dll"
+                    },
+                    {
+                        "ModuleName":  "dxgi.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\dxgi.dll"
+                    },
+                    {
+                        "ModuleName":  "d3d11.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\d3d11.dll"
+                    },
+                    {
+                        "ModuleName":  "CONCRT140.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\CONCRT140.dll"
+                    },
+                    {
+                        "ModuleName":  "cfgmgr32.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\cfgmgr32.dll"
+                    },
+                    {
+                        "ModuleName":  "powrprof.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\powrprof.dll"
+                    },
+                    {
+                        "ModuleName":  "MFCORE.DLL",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\MFCORE.DLL"
+                    },
+                    {
+                        "ModuleName":  "git2.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\git2.dll"
+                    },
+                    {
+                        "ModuleName":  "CRYPT32.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\CRYPT32.dll"
+                    },
+                    {
+                        "ModuleName":  "WINHTTP.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\WINHTTP.dll"
+                    },
+                    {
+                        "ModuleName":  "libcurl-x64.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\libcurl-x64.dll"
+                    },
+                    {
+                        "ModuleName":  "WLDAP32.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\WLDAP32.dll"
+                    },
+                    {
+                        "ModuleName":  "Normaliz.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\Normaliz.dll"
+                    },
+                    {
+                        "ModuleName":  "CRYPTBASE.DLL",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\CRYPTBASE.DLL"
+                    },
+                    {
+                        "ModuleName":  "bcrypt.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\bcrypt.dll"
+                    },
+                    {
+                        "ModuleName":  "Secur32.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\Secur32.dll"
+                    },
+                    {
+                        "ModuleName":  "IPHLPAPI.DLL",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\IPHLPAPI.DLL"
+                    },
+                    {
+                        "ModuleName":  "SSPICLI.DLL",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\SSPICLI.DLL"
+                    },
+                    {
+                        "ModuleName":  "IMM32.DLL",
+                        "FileName":  "C:\\WINDOWS\\System32\\IMM32.DLL"
+                    },
+                    {
+                        "ModuleName":  "bcryptPrimitives.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\bcryptPrimitives.dll"
+                    },
+                    {
+                        "ModuleName":  "RTWorkQ.DLL",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\RTWorkQ.DLL"
+                    },
+                    {
+                        "ModuleName":  "UMPDC.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\UMPDC.dll"
+                    },
+                    {
+                        "ModuleName":  "libovmspython.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\libovmspython.dll"
+                    },
+                    {
+                        "ModuleName":  "python312.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\python\\python312.dll"
+                    },
+                    {
+                        "ModuleName":  "VERSION.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\VERSION.dll"
+                    },
+                    {
+                        "ModuleName":  "kernel.appcore.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\kernel.appcore.dll"
+                    },
+                    {
+                        "ModuleName":  "python3.DLL",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\python\\python3.DLL"
+                    },
+                    {
+                        "ModuleName":  "pyovms.pyd",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\python\\pyovms.pyd"
+                    },
+                    {
+                        "ModuleName":  "libpython_calculators.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\libpython_calculators.dll"
+                    },
+                    {
+                        "ModuleName":  "ovms_mediapipe_runtime_shared.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\ovms_mediapipe_runtime_shared.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino_tokenizers.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_tokenizers.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino_auto_plugin.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_auto_plugin.dll"
+                    },
+                    {
+                        "ModuleName":  "WINTRUST.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\WINTRUST.dll"
+                    },
+                    {
+                        "ModuleName":  "MSASN1.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\MSASN1.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino_auto_batch_plugin.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_auto_batch_plugin.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino_intel_cpu_plugin.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_intel_cpu_plugin.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino_intel_gpu_plugin.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_intel_gpu_plugin.dll"
+                    },
+                    {
+                        "ModuleName":  "SETUPAPI.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\SETUPAPI.dll"
+                    },
+                    {
+                        "ModuleName":  "OpenCL.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\OpenCL.dll"
+                    },
+                    {
+                        "ModuleName":  "dxcore.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\dxcore.dll"
+                    },
+                    {
+                        "ModuleName":  "windows.staterepositorycore.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\windows.staterepositorycore.dll"
+                    },
+                    {
+                        "ModuleName":  "directxdatabasehelper.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\directxdatabasehelper.dll"
+                    },
+                    {
+                        "ModuleName":  "igdrcl64.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\iigd_dch.inf_amd64_bace702a372523d6\\igdrcl64.dll"
+                    },
+                    {
+                        "ModuleName":  "WINMM.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\WINMM.dll"
+                    },
+                    {
+                        "ModuleName":  "igdgmm2_64.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\iigd_dch.inf_amd64_bace702a372523d6\\igdgmm2_64.dll"
+                    },
+                    {
+                        "ModuleName":  "igdgmm64.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\iigd_dch.inf_amd64_bace702a372523d6\\igdgmm64.dll"
+                    },
+                    {
+                        "ModuleName":  "igdgmmstaging_64.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\iigd_dch.inf_amd64_bace702a372523d6\\igdgmmstaging_64.dll"
+                    },
+                    {
+                        "ModuleName":  "windows.storage.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\windows.storage.dll"
+                    },
+                    {
+                        "ModuleName":  "igdfcl64.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\iigd_dch.inf_amd64_bace702a372523d6\\igdfcl64.dll"
+                    },
+                    {
+                        "ModuleName":  "igc-default64.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\iigd_dch.inf_amd64_bace702a372523d6\\igc-default64.dll"
+                    },
+                    {
+                        "ModuleName":  "intelocl64.dll",
+                        "FileName":  "C:\\Program Files (x86)\\Intel\\oneAPI\\compiler\\2025.1\\bin\\intelocl64.dll"
+                    },
+                    {
+                        "ModuleName":  "DEVOBJ.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\DEVOBJ.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino_hetero_plugin.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_hetero_plugin.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino_intel_npu_plugin.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_intel_npu_plugin.dll"
+                    },
+                    {
+                        "ModuleName":  "ze_loader.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\ze_loader.dll"
+                    },
+                    {
+                        "ModuleName":  "ze_tracing_layer.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\ze_tracing_layer.dll"
+                    },
+                    {
+                        "ModuleName":  "npu_level_zero_umd.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\npu.inf_amd64_597e96d1fdad31a4\\npu_level_zero_umd.dll"
+                    },
+                    {
+                        "ModuleName":  "wer.dll",
+                        "FileName":  "C:\\WINDOWS\\SYSTEM32\\wer.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino_intel_npu_compiler_loader.dll",
+                        "FileName":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\npu.inf_amd64_597e96d1fdad31a4\\openvino_intel_npu_compiler_loader.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino_intel_npu_compiler_loader.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_intel_npu_compiler_loader.dll"
+                    },
+                    {
+                        "ModuleName":  "mswsock.dll",
+                        "FileName":  "C:\\WINDOWS\\system32\\mswsock.dll"
+                    },
+                    {
+                        "ModuleName":  "openvino_ir_frontend.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\openvino_ir_frontend.dll"
+                    },
+                    {
+                        "ModuleName":  "_bz2.pyd",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\python\\_bz2.pyd"
+                    },
+                    {
+                        "ModuleName":  "_lzma.pyd",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\python\\_lzma.pyd"
+                    },
+                    {
+                        "ModuleName":  "_hashlib.pyd",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\python\\_hashlib.pyd"
+                    },
+                    {
+                        "ModuleName":  "libcrypto-3.dll",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\python\\libcrypto-3.dll"
+                    },
+                    {
+                        "ModuleName":  "_speedups.cp312-win_amd64.pyd",
+                        "FileName":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\python\\Lib\\site-packages\\markupsafe\\_speedups.cp312-win_amd64.pyd"
+                    }
+                ],
+    "timestamp":  "2026-09-16T13:12:22.1151682Z",
+    "command_line":  "\"C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\ovms.exe\"  --rest_port 18091 --rest_bind_address 127.0.0.1 --model_path \"C:\\llm\\models\\OpenVINO\\Wondernutts\\gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov\" --model_name gemma4-26-heretic --target_device GPU --pipeline_type VLM_CB --reasoning_parser gemma4 --tool_parser gemma4 --enable_tool_guided_generation true --dynamic_split_fuse true --cache_size 0 --cache_dir \"C:\\llm\\cache\\gemmamonster\" --log_level INFO --plugin_config \"{\\\"KV_CACHE_PRECISION\\\":\\\"u4\\\"}\" --enable_prefix_caching true --max_num_batched_tokens 4096 --max_num_seqs 4 ",
+    "executable":  "C:\\git\\gemma4-upstream-refit-clean-20260915\\dist\\windows\\ovms\\ovms.exe",
+    "pid":  3380
+}

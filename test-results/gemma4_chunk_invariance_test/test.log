@@ -1,0 +1,19 @@
+Executing tests from //src/test/llm/gemma4_generation:gemma4_chunk_invariance_test
+-----------------------------------------------------------------------------
+Running main() from gmock_main.cc
+[==========] Running 4 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 4 tests from Gemma4ChunkInvarianceTest
+[ RUN      ] Gemma4ChunkInvarianceTest.SingleCanonicalCallIndependentOfPartition
+[       OK ] Gemma4ChunkInvarianceTest.SingleCanonicalCallIndependentOfPartition (360 ms)
+[ RUN      ] Gemma4ChunkInvarianceTest.TwoCanonicalCallsIndependentOfPartition
+[       OK ] Gemma4ChunkInvarianceTest.TwoCanonicalCallsIndependentOfPartition (2 ms)
+[ RUN      ] Gemma4ChunkInvarianceTest.MalformedThenValidKeepsValidAtIndexZero
+[       OK ] Gemma4ChunkInvarianceTest.MalformedThenValidKeepsValidAtIndexZero (2 ms)
+[ RUN      ] Gemma4ChunkInvarianceTest.ReasoningContentIndependentOfPartition
+[       OK ] Gemma4ChunkInvarianceTest.ReasoningContentIndependentOfPartition (3 ms)
+[----------] 4 tests from Gemma4ChunkInvarianceTest (368 ms total)
+
+[----------] Global test environment tear-down
+[==========] 4 tests from 1 test suite ran. (524 ms total)
+[  PASSED  ] 4 tests.

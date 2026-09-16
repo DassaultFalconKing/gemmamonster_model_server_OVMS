@@ -1,0 +1,25 @@
+{
+  "http_status": 200,
+  "finish_reason": "tool_calls",
+  "usage": {
+    "prompt_tokens": 1444,
+    "completion_tokens": 19,
+    "total_tokens": 1463
+  },
+  "wall_seconds": 2.1409999999996217,
+  "ttft_seconds": null,
+  "message": {
+    "content": "",
+    "role": "assistant",
+    "tool_calls": [
+      {
+        "id": "bNXfsfVvZ",
+        "type": "function",
+        "function": {
+          "name": "list_dir",
+          "arguments": "{\"path\":\"logs\"}"
+        }
+      }
+    ]
+  }
+}

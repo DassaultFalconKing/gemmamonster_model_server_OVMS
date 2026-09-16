@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="4" failures="0" disabled="0" errors="0" time="0.524" timestamp="2026-09-16T13:02:09.859" name="AllTests">
+  <testsuite name="Gemma4ChunkInvarianceTest" tests="4" failures="0" disabled="0" skipped="0" errors="0" time="0.368" timestamp="2026-09-16T13:02:10.001">
+    <testcase name="SingleCanonicalCallIndependentOfPartition" file="src/test/llm/gemma4_generation/gemma4_chunk_invariance_test.cpp" line="121" status="run" result="completed" time="0.36" timestamp="2026-09-16T13:02:10.001" classname="Gemma4ChunkInvarianceTest" />
+    <testcase name="TwoCanonicalCallsIndependentOfPartition" file="src/test/llm/gemma4_generation/gemma4_chunk_invariance_test.cpp" line="141" status="run" result="completed" time="0.002" timestamp="2026-09-16T13:02:10.361" classname="Gemma4ChunkInvarianceTest" />
+    <testcase name="MalformedThenValidKeepsValidAtIndexZero" file="src/test/llm/gemma4_generation/gemma4_chunk_invariance_test.cpp" line="160" status="run" result="completed" time="0.002" timestamp="2026-09-16T13:02:10.364" classname="Gemma4ChunkInvarianceTest" />
+    <testcase name="ReasoningContentIndependentOfPartition" file="src/test/llm/gemma4_generation/gemma4_chunk_invariance_test.cpp" line="175" status="run" result="completed" time="0.003" timestamp="2026-09-16T13:02:10.366" classname="Gemma4ChunkInvarianceTest" />
+  </testsuite>
+</testsuites>

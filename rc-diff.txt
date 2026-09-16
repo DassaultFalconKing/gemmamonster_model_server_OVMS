@@ -1,0 +1,3 @@
+A	docs/gemmamonster/promotion-20260916/COMMITS.md
+A	docs/gemmamonster/promotion-20260916/PR-CANDIDATE.md
+A	docs/gemmamonster/promotion-20260916/REPORT.md

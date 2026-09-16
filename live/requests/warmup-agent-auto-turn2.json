@@ -1,0 +1,76 @@
+{
+  "model": "gemma4-26-heretic",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a repository inspector. Use the provided tools to gather facts. Never invent file contents. When done, write a 3-sentence summary."
+    },
+    {
+      "role": "user",
+      "content": "Inspect the workspace directory: 1) list top-level files, 2) read binary-provenance.txt and report OVMS version + MIXED_OLD_RUNTIME value, 3) list the logs directory. Then summarize what this acceptance run is testing in 3 sentences."
+    },
+    {
+      "content": "",
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "id": "HhqsWh2u1",
+          "type": "function",
+          "function": {
+            "name": "list_dir",
+            "arguments": "{\"path\":\".\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "HhqsWh2u1",
+      "content": "README.md\nbench-2026.5.ps1\nbinary-provenance.txt\ncommands.txt\ncontrol-short.ps1\ndogfood.ps1\nenvironment.txt\nlaunch-00-known-good-2026.5.bat\nlaunch-20-u4-b4096-seq4-2026.5.bat\nlaunch-21-u4-b8192-seq4-2026.5.bat\nlogs\nprefix-test.ps1\nrequests\nresponses\nresults-summary.json\nresults.csv\nresults.csv.bak-20260916T0439Z\nresults.json\nruns-00-known-good-2026.5.json\nruns-20-u4-b4096-seq4-2026.5.json\nruns-21-u4-b8192-seq4-2026.5.json\nsemantic-gate.ps1\nsemantic-verdicts.txt\nstreams"
+    }
+  ],
+  "temperature": 0,
+  "max_tokens": 512,
+  "stream": false,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "list_dir",
+        "description": "List files in an acceptance workspace directory.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "read_file",
+        "description": "Read up to 5000 characters of a text file in the acceptance workspace.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto"
+}

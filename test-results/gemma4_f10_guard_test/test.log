@@ -1,0 +1,21 @@
+Executing tests from //src/test/llm/gemma4_generation:gemma4_f10_guard_test
+-----------------------------------------------------------------------------
+Running main() from gmock_main.cc
+[==========] Running 5 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 5 tests from Gemma4F10GuardTest
+[ RUN      ] Gemma4F10GuardTest.OversizedCandidateIsRejectedWithoutTruncateAndExecute
+[       OK ] Gemma4F10GuardTest.OversizedCandidateIsRejectedWithoutTruncateAndExecute (331 ms)
+[ RUN      ] Gemma4F10GuardTest.ExcessiveContainerDepthIsRejectedWithoutCommittedDelta
+[       OK ] Gemma4F10GuardTest.ExcessiveContainerDepthIsRejectedWithoutCommittedDelta (1 ms)
+[ RUN      ] Gemma4F10GuardTest.UnterminatedNativeStringRecoversAtEnvelopeBoundary
+[       OK ] Gemma4F10GuardTest.UnterminatedNativeStringRecoversAtEnvelopeBoundary (0 ms)
+[ RUN      ] Gemma4F10GuardTest.UnterminatedJsonStringRecoversAtEnvelopeBoundary
+[       OK ] Gemma4F10GuardTest.UnterminatedJsonStringRecoversAtEnvelopeBoundary (0 ms)
+[ RUN      ] Gemma4F10GuardTest.UnterminatedContainerRecoversAtEnvelopeBoundary
+[       OK ] Gemma4F10GuardTest.UnterminatedContainerRecoversAtEnvelopeBoundary (0 ms)
+[----------] 5 tests from Gemma4F10GuardTest (333 ms total)
+
+[----------] Global test environment tear-down
+[==========] 5 tests from 1 test suite ran. (619 ms total)
+[  PASSED  ] 5 tests.

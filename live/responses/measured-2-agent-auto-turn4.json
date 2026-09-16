@@ -1,0 +1,16 @@
+{
+  "http_status": 200,
+  "finish_reason": "length",
+  "usage": {
+    "prompt_tokens": 1712,
+    "completion_tokens": 512,
+    "total_tokens": 2224
+  },
+  "wall_seconds": 25.54700000000048,
+  "ttft_seconds": null,
+  "message": {
+    "content": "The top-level files in the directory are `README.md`, `bench-2026.5.ps1`, `binary-provenance.txt`, `commands.txt`, `control-short.ps1`, `dogfood.ps1`, `environment.txt`, `launch-00-known-good-2026.5.bat`, `launch-20-u4-b4096-seq4-2026.5.bat`, `launch-21-u4-b8192-seq4-2026.5.bat`, `logs`, `prefix-test.ps1`, `requests`, `responses`, `results-summary.json`, `results.csv`, `results.csv.bak-20260916T0439Z`, `results.json`, `runs-00-known-good-2026.5.json`, `runs-20-u4-b4096-seq4-2026.5.json`, `runs-21-u4-b8192-seq4-2026.5.json`, `semantic-gate.ps1`, `semantic-verdicts.txt`, and `streams`.\n\nIn `binary-provenance.txt`, the OVMS version is `OpenVINO Model Server 2026.5.0.b722aa440` and the `MIXED_OLD_RUNTIME` value is `NO`.\n\nThe `logs` directory contains several log files, including `cmd-00.txt`, `dogfood-transcript.txt`, `ovms-00-known-good-2026.5.log`, `ovms-00-known-good-2026.5.log.err`, `ovms-20-u4-b4096-seq4-2026.5-attempt1-died0432.log`, `ovms-20-u4-b4096-seq4-2026.5.log`, `ovms-20u4b4096seq4-longonly.log`, `ovms-20u4b4096seq4-longonly.",
+    "role": "assistant",
+    "tool_calls": []
+  }
+}

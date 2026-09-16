@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="11" failures="0" disabled="0" errors="0" time="0.722" timestamp="2026-09-16T13:05:40.473" name="AllTests">
+  <testsuite name="Gemma4RenderedPromptStateTest" tests="11" failures="0" disabled="0" skipped="0" errors="0" time="0.722" timestamp="2026-09-16T13:05:40.473">
+    <testcase name="ClassifiesRenderedContinuationSuffixes" file="src/test/llm/gemma4_generation/gemma4_rendered_prompt_state_test.cpp" line="66" status="run" result="completed" time="0" timestamp="2026-09-16T13:05:40.473" classname="Gemma4RenderedPromptStateTest" />
+    <testcase name="HistoricalFakeMarkersDoNotOpenCurrentTurn" file="src/test/llm/gemma4_generation/gemma4_rendered_prompt_state_test.cpp" line="80" status="run" result="completed" time="0" timestamp="2026-09-16T13:05:40.473" classname="Gemma4RenderedPromptStateTest" />
+    <testcase name="ToolResultFollowUpContinuesCurrentThoughtOnly" file="src/test/llm/gemma4_generation/gemma4_rendered_prompt_state_test.cpp" line="88" status="run" result="completed" time="0.001" timestamp="2026-09-16T13:05:40.473" classname="Gemma4RenderedPromptStateTest" />
+    <testcase name="ThinkingDisabledHistoryRemainsClosed" file="src/test/llm/gemma4_generation/gemma4_rendered_prompt_state_test.cpp" line="105" status="run" result="completed" time="0" timestamp="2026-09-16T13:05:40.475" classname="Gemma4RenderedPromptStateTest" />
+    <testcase name="MalformedPartialThoughtPrefixIsNotGuessedOpen" file="src/test/llm/gemma4_generation/gemma4_rendered_prompt_state_test.cpp" line="115" status="run" result="completed" time="0" timestamp="2026-09-16T13:05:40.475" classname="Gemma4RenderedPromptStateTest" />
+    <testcase name="RequiredOpenThoughtUsesResidualWithoutSecondOpener" file="src/test/llm/gemma4_generation/gemma4_rendered_prompt_state_test.cpp" line="121" status="run" result="completed" time="0" timestamp="2026-09-16T13:05:40.475" classname="Gemma4RenderedPromptStateTest" />
+    <testcase name="NamedOpenThoughtKeepsSelectedToolRequired" file="src/test/llm/gemma4_generation/gemma4_rendered_prompt_state_test.cpp" line="132" status="run" result="completed" time="0" timestamp="2026-09-16T13:05:40.475" classname="Gemma4RenderedPromptStateTest" />
+    <testcase name="AutoOpenThoughtClosesThenRetainsLazyTrigger" file="src/test/llm/gemma4_generation/gemma4_rendered_prompt_state_test.cpp" line="143" status="run" result="completed" time="0" timestamp="2026-09-16T13:05:40.475" classname="Gemma4RenderedPromptStateTest" />
+    <testcase name="ClosedThoughtKeepsOrdinaryHardGrammar" file="src/test/llm/gemma4_generation/gemma4_rendered_prompt_state_test.cpp" line="155" status="run" result="completed" time="0" timestamp="2026-09-16T13:05:40.475" classname="Gemma4RenderedPromptStateTest" />
+    <testcase name="OpenThoughtAdaptationIsIdempotentAndKeepsSingleCallPolicy" file="src/test/llm/gemma4_generation/gemma4_rendered_prompt_state_test.cpp" line="164" status="run" result="completed" time="0" timestamp="2026-09-16T13:05:40.475" classname="Gemma4RenderedPromptStateTest" />
+    <testcase name="DetectorUsesTheSameOpenThoughtState" file="src/test/llm/gemma4_generation/gemma4_rendered_prompt_state_test.cpp" line="176" status="run" result="completed" time="0.72" timestamp="2026-09-16T13:05:40.475" classname="Gemma4RenderedPromptStateTest" />
+  </testsuite>
+</testsuites>

@@ -1,0 +1,14 @@
+{
+  "call": {
+    "id": "bNXfsfVvZ",
+    "type": "function",
+    "function": {
+      "name": "list_dir",
+      "arguments": "{\"path\":\"logs\"}"
+    }
+  },
+  "parsed_arguments": {
+    "path": "logs"
+  },
+  "result": "cmd-00.txt\ndogfood-transcript.txt\novms-00-known-good-2026.5.log\novms-00-known-good-2026.5.log.err\novms-20-u4-b4096-seq4-2026.5-attempt1-died0432.log\novms-20-u4-b4096-seq4-2026.5.log\novms-20u4b4096seq4-longonly.log\novms-20u4b4096seq4-longonly.log.err\novms-21-u4-b8192-seq4-2026.5.log\novms-22-u4-b4096-seq1-2026.5.log\novms-22-u4-b4096-seq1-2026.5.log.err"
+}

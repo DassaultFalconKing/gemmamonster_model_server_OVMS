@@ -1,0 +1,25 @@
+{
+  "http_status": 200,
+  "finish_reason": "tool_calls",
+  "usage": {
+    "prompt_tokens": 88,
+    "completion_tokens": 23,
+    "total_tokens": 111
+  },
+  "wall_seconds": 2.3440000000009604,
+  "ttft_seconds": null,
+  "message": {
+    "content": "",
+    "role": "assistant",
+    "tool_calls": [
+      {
+        "id": "ZoiB2SzRz",
+        "type": "function",
+        "function": {
+          "name": "read_file",
+          "arguments": "{\"path\":\"binary-provenance.txt\"}"
+        }
+      }
+    ]
+  }
+}

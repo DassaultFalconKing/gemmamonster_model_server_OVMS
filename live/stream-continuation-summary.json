@@ -1,0 +1,66 @@
+[
+  {
+    "case": "warmup-stream-required",
+    "status": "PASS",
+    "total_assistant_turns": 3,
+    "performed": [
+      [
+        "list_dir",
+        "."
+      ],
+      [
+        "read_file",
+        "binary-provenance.txt"
+      ]
+    ],
+    "final": "The OVMS version is **OpenVINO Model Server 2026.5.0.b722aa440**."
+  },
+  {
+    "case": "measured-1-stream-required",
+    "status": "PASS",
+    "total_assistant_turns": 3,
+    "performed": [
+      [
+        "list_dir",
+        "."
+      ],
+      [
+        "read_file",
+        "binary-provenance.txt"
+      ]
+    ],
+    "final": "The OVMS version is **OpenVINO Model Server 2026.5.0.b722aa440**."
+  },
+  {
+    "case": "measured-2-stream-required",
+    "status": "PASS",
+    "total_assistant_turns": 3,
+    "performed": [
+      [
+        "list_dir",
+        "."
+      ],
+      [
+        "read_file",
+        "binary-provenance.txt"
+      ]
+    ],
+    "final": "The OVMS version is **OpenVINO Model Server 2026.5.0.b722aa440**."
+  },
+  {
+    "case": "measured-3-stream-required",
+    "status": "PASS",
+    "total_assistant_turns": 3,
+    "performed": [
+      [
+        "list_dir",
+        "."
+      ],
+      [
+        "read_file",
+        "binary-provenance.txt"
+      ]
+    ],
+    "final": "The OVMS version is **OpenVINO Model Server 2026.5.0.b722aa440**."
+  }
+]

@@ -1,0 +1,68 @@
+Executing tests from //src/test/llm/gemma4_generation:gemma4_generation_policy_test
+-----------------------------------------------------------------------------
+Running main() from gmock_main.cc
+[==========] Running 27 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 11 tests from Gemma4GenerationPolicyTest
+[ RUN      ] Gemma4GenerationPolicyTest.RequiredToolChoiceInstallsNativeStructuredGrammar
+[       OK ] Gemma4GenerationPolicyTest.RequiredToolChoiceInstallsNativeStructuredGrammar (1 ms)
+[ RUN      ] Gemma4GenerationPolicyTest.AutoUsesLazyNativeToolTrigger
+[       OK ] Gemma4GenerationPolicyTest.AutoUsesLazyNativeToolTrigger (0 ms)
+[ RUN      ] Gemma4GenerationPolicyTest.NamedChoiceRestrictsGrammarToSelectedTool
+[       OK ] Gemma4GenerationPolicyTest.NamedChoiceRestrictsGrammarToSelectedTool (0 ms)
+[ RUN      ] Gemma4GenerationPolicyTest.ActiveToolsRejectCompetingResponseFormat
+[       OK ] Gemma4GenerationPolicyTest.ActiveToolsRejectCompetingResponseFormat (0 ms)
+[ RUN      ] Gemma4GenerationPolicyTest.ToolChoiceNoneLeavesResponseFormatAvailable
+[       OK ] Gemma4GenerationPolicyTest.ToolChoiceNoneLeavesResponseFormatAvailable (0 ms)
+[ RUN      ] Gemma4GenerationPolicyTest.RequiredWithoutToolsIsRejected
+[       OK ] Gemma4GenerationPolicyTest.RequiredWithoutToolsIsRejected (0 ms)
+[ RUN      ] Gemma4GenerationPolicyTest.ValidToolNamesAreAcceptedInRequiredMode
+[       OK ] Gemma4GenerationPolicyTest.ValidToolNamesAreAcceptedInRequiredMode (0 ms)
+[ RUN      ] Gemma4GenerationPolicyTest.InvalidToolNamesAreRejectedInRequiredMode
+[       OK ] Gemma4GenerationPolicyTest.InvalidToolNamesAreRejectedInRequiredMode (0 ms)
+[ RUN      ] Gemma4GenerationPolicyTest.InvalidToolNameIsRejectedForNamedChoice
+[       OK ] Gemma4GenerationPolicyTest.InvalidToolNameIsRejectedForNamedChoice (0 ms)
+[ RUN      ] Gemma4GenerationPolicyTest.InvalidToolNameIsRejectedForAutoChoice
+[       OK ] Gemma4GenerationPolicyTest.InvalidToolNameIsRejectedForAutoChoice (0 ms)
+[ RUN      ] Gemma4GenerationPolicyTest.HardChoiceRequiresSuccessfulGrammarValidation
+[       OK ] Gemma4GenerationPolicyTest.HardChoiceRequiresSuccessfulGrammarValidation (0 ms)
+[----------] 11 tests from Gemma4GenerationPolicyTest (1 ms total)
+
+[----------] 16 tests from Gemma4ApiValidationTest
+[ RUN      ] Gemma4ApiValidationTest.InvalidRequiredGrammarReturnsInvalidArgumentWithoutFallback
+[       OK ] Gemma4ApiValidationTest.InvalidRequiredGrammarReturnsInvalidArgumentWithoutFallback (1 ms)
+[ RUN      ] Gemma4ApiValidationTest.InvalidAutoGrammarKeepsOptionalFallback
+[       OK ] Gemma4ApiValidationTest.InvalidAutoGrammarKeepsOptionalFallback (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.InvalidNamedPolicyReturnsStatusInsteadOfThrowing
+[       OK ] Gemma4ApiValidationTest.InvalidNamedPolicyReturnsStatusInsteadOfThrowing (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.ChatCompletionsRejectsHardToolChoiceWithoutUsableTools
+[       OK ] Gemma4ApiValidationTest.ChatCompletionsRejectsHardToolChoiceWithoutUsableTools (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.ResponsesRejectsHardToolChoiceWithoutUsableTools
+[       OK ] Gemma4ApiValidationTest.ResponsesRejectsHardToolChoiceWithoutUsableTools (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.HttpRejectsInvalidToolNames
+[       OK ] Gemma4ApiValidationTest.HttpRejectsInvalidToolNames (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.HttpAcceptsValidToolNames
+[       OK ] Gemma4ApiValidationTest.HttpAcceptsValidToolNames (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.HttpRejectsReservedToolDeclarations
+[       OK ] Gemma4ApiValidationTest.HttpRejectsReservedToolDeclarations (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.HttpRejectsReservedNamedToolChoices
+[       OK ] Gemma4ApiValidationTest.HttpRejectsReservedNamedToolChoices (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.ParallelFalseReachesRequestAndBoundsRequiredGrammar
+[       OK ] Gemma4ApiValidationTest.ParallelFalseReachesRequestAndBoundsRequiredGrammar (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.ParallelTrueAndDefaultAllowRequiredRepetition
+[       OK ] Gemma4ApiValidationTest.ParallelTrueAndDefaultAllowRequiredRepetition (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.ParallelFalseBoundsNamedToolGrammar
+[       OK ] Gemma4ApiValidationTest.ParallelFalseBoundsNamedToolGrammar (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.ParallelFalseBoundsAutoAfterLazyTrigger
+[       OK ] Gemma4ApiValidationTest.ParallelFalseBoundsAutoAfterLazyTrigger (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.ParallelTrueAllowsAutoRepetitionAfterLazyTrigger
+[       OK ] Gemma4ApiValidationTest.ParallelTrueAllowsAutoRepetitionAfterLazyTrigger (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.ParallelPolicyRejectsNonBooleanHttpValue
+[       OK ] Gemma4ApiValidationTest.ParallelPolicyRejectsNonBooleanHttpValue (0 ms)
+[ RUN      ] Gemma4ApiValidationTest.ResponsesEchoesExplicitParallelFalse
+[       OK ] Gemma4ApiValidationTest.ResponsesEchoesExplicitParallelFalse (0 ms)
+[----------] 16 tests from Gemma4ApiValidationTest (5 ms total)
+
+[----------] Global test environment tear-down
+[==========] 27 tests from 2 test suites ran. (16 ms total)
+[  PASSED  ] 27 tests.

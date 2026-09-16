@@ -1,0 +1,14 @@
+{
+  "call": {
+    "id": "HhqsWh2u1",
+    "type": "function",
+    "function": {
+      "name": "list_dir",
+      "arguments": "{\"path\":\".\"}"
+    }
+  },
+  "parsed_arguments": {
+    "path": "."
+  },
+  "result": "README.md\nbench-2026.5.ps1\nbinary-provenance.txt\ncommands.txt\ncontrol-short.ps1\ndogfood.ps1\nenvironment.txt\nlaunch-00-known-good-2026.5.bat\nlaunch-20-u4-b4096-seq4-2026.5.bat\nlaunch-21-u4-b8192-seq4-2026.5.bat\nlogs\nprefix-test.ps1\nrequests\nresponses\nresults-summary.json\nresults.csv\nresults.csv.bak-20260916T0439Z\nresults.json\nruns-00-known-good-2026.5.json\nruns-20-u4-b4096-seq4-2026.5.json\nruns-21-u4-b8192-seq4-2026.5.json\nsemantic-gate.ps1\nsemantic-verdicts.txt\nstreams"
+}

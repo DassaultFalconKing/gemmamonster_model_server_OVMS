@@ -1,0 +1,51 @@
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+DEBUG: Rule 'rules_foreign_cc' indicated that a canonical reproducible form can be obtained by modifying arguments commit = "1fb8a1ed9100236590c2a9441d79811aefaabcf8"
+DEBUG: Repository rules_foreign_cc instantiated at:
+  C:/git/gemma4-rc-main-promotion-20260916/WORKSPACE:225:15: in <toplevel>
+Repository rule git_repository defined at:
+  C:/o/eltdc46k/external/bazel_tools/tools/build_defs/repo/git.bzl:181:33: in <toplevel>
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+DEBUG: Rule 'pybind11_bazel' indicated that a canonical reproducible form can be obtained by modifying arguments sha256 = "b72c5b44135b90d1ffaba51e08240be0b91707ac60bea08bb4d84b47316211bb"
+DEBUG: Repository pybind11_bazel instantiated at:
+  C:/git/gemma4-rc-main-promotion-20260916/WORKSPACE:340:13: in <toplevel>
+Repository rule http_archive defined at:
+  C:/o/eltdc46k/external/bazel_tools/tools/build_defs/repo/http.bzl:372:31: in <toplevel>
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+DEBUG: C:/o/eltdc46k/external/org_tensorflow/third_party/py/python_repo.bzl:96:14: 
+HERMETIC_PYTHON_VERSION variable was not set correctly, using default version.
+Python 3.12 will be used.
+To select Python version, either set HERMETIC_PYTHON_VERSION env variable in
+your shell:
+  export HERMETIC_PYTHON_VERSION=3.12
+OR pass it as an argument to bazel command directly or inside your .bazelrc
+file:
+  --repo_env=HERMETIC_PYTHON_VERSION=3.12
+DEBUG: C:/o/eltdc46k/external/org_tensorflow/third_party/py/python_repo.bzl:107:10: Using hermetic Python 3.12
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions
+ checking cached actions

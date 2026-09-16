@@ -1,0 +1,33 @@
+Executing tests from //src/test/llm/gemma4_generation:gemma4_rendered_prompt_state_test
+-----------------------------------------------------------------------------
+Running main() from gmock_main.cc
+[==========] Running 11 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 11 tests from Gemma4RenderedPromptStateTest
+[ RUN      ] Gemma4RenderedPromptStateTest.ClassifiesRenderedContinuationSuffixes
+[       OK ] Gemma4RenderedPromptStateTest.ClassifiesRenderedContinuationSuffixes (0 ms)
+[ RUN      ] Gemma4RenderedPromptStateTest.HistoricalFakeMarkersDoNotOpenCurrentTurn
+[       OK ] Gemma4RenderedPromptStateTest.HistoricalFakeMarkersDoNotOpenCurrentTurn (0 ms)
+[ RUN      ] Gemma4RenderedPromptStateTest.ToolResultFollowUpContinuesCurrentThoughtOnly
+[       OK ] Gemma4RenderedPromptStateTest.ToolResultFollowUpContinuesCurrentThoughtOnly (1 ms)
+[ RUN      ] Gemma4RenderedPromptStateTest.ThinkingDisabledHistoryRemainsClosed
+[       OK ] Gemma4RenderedPromptStateTest.ThinkingDisabledHistoryRemainsClosed (0 ms)
+[ RUN      ] Gemma4RenderedPromptStateTest.MalformedPartialThoughtPrefixIsNotGuessedOpen
+[       OK ] Gemma4RenderedPromptStateTest.MalformedPartialThoughtPrefixIsNotGuessedOpen (0 ms)
+[ RUN      ] Gemma4RenderedPromptStateTest.RequiredOpenThoughtUsesResidualWithoutSecondOpener
+[       OK ] Gemma4RenderedPromptStateTest.RequiredOpenThoughtUsesResidualWithoutSecondOpener (0 ms)
+[ RUN      ] Gemma4RenderedPromptStateTest.NamedOpenThoughtKeepsSelectedToolRequired
+[       OK ] Gemma4RenderedPromptStateTest.NamedOpenThoughtKeepsSelectedToolRequired (0 ms)
+[ RUN      ] Gemma4RenderedPromptStateTest.AutoOpenThoughtClosesThenRetainsLazyTrigger
+[       OK ] Gemma4RenderedPromptStateTest.AutoOpenThoughtClosesThenRetainsLazyTrigger (0 ms)
+[ RUN      ] Gemma4RenderedPromptStateTest.ClosedThoughtKeepsOrdinaryHardGrammar
+[       OK ] Gemma4RenderedPromptStateTest.ClosedThoughtKeepsOrdinaryHardGrammar (0 ms)
+[ RUN      ] Gemma4RenderedPromptStateTest.OpenThoughtAdaptationIsIdempotentAndKeepsSingleCallPolicy
+[       OK ] Gemma4RenderedPromptStateTest.OpenThoughtAdaptationIsIdempotentAndKeepsSingleCallPolicy (0 ms)
+[ RUN      ] Gemma4RenderedPromptStateTest.DetectorUsesTheSameOpenThoughtState
+[       OK ] Gemma4RenderedPromptStateTest.DetectorUsesTheSameOpenThoughtState (720 ms)
+[----------] 11 tests from Gemma4RenderedPromptStateTest (722 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 1 test suite ran. (722 ms total)
+[  PASSED  ] 11 tests.

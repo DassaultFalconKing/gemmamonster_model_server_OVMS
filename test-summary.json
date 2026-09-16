@@ -1,0 +1,50 @@
+{
+  "tested_head": "239f70d95e5c4eb54fd911dbe438825bd7b47848",
+  "status": "PASS",
+  "cache_test_results": false,
+  "total_tests": 64,
+  "targets": [
+    {
+      "target": "//src/test/llm/gemma4_generation:gemma4_generation_policy_test",
+      "status": "PASS",
+      "tests": 27,
+      "skipped": 0,
+      "failures": 0
+    },
+    {
+      "target": "//src/test/llm/gemma4_generation:gemma4_phantom_tool_call_test",
+      "status": "PASS",
+      "tests": 12,
+      "skipped": 0,
+      "failures": 0
+    },
+    {
+      "target": "//src/test/llm/gemma4_generation:gemma4_chunk_invariance_test",
+      "status": "PASS",
+      "tests": 4,
+      "skipped": 0,
+      "failures": 0
+    },
+    {
+      "target": "//src/test/llm/gemma4_generation:gemma4_rendered_prompt_state_test",
+      "status": "PASS",
+      "tests": 11,
+      "skipped": 0,
+      "failures": 0
+    },
+    {
+      "target": "//src/test/llm/gemma4_generation:gemma4_f7_contract_test",
+      "status": "PASS",
+      "tests": 5,
+      "skipped": 0,
+      "failures": 0
+    },
+    {
+      "target": "//src/test/llm/gemma4_generation:gemma4_f10_guard_test",
+      "status": "PASS",
+      "tests": 5,
+      "skipped": 0,
+      "failures": 0
+    }
+  ]
+}

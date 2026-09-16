@@ -1,0 +1,21 @@
+Executing tests from //src/test/llm/gemma4_generation:gemma4_f7_contract_test
+-----------------------------------------------------------------------------
+Running main() from gmock_main.cc
+[==========] Running 5 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 5 tests from Gemma4F7ContractTest
+[ RUN      ] Gemma4F7ContractTest.NativeArrayMatrixMatchesUpstreamSemantics
+[       OK ] Gemma4F7ContractTest.NativeArrayMatrixMatchesUpstreamSemantics (253 ms)
+[ RUN      ] Gemma4F7ContractTest.MalformedOrUnclosedArrayCommitsNoCall
+[       OK ] Gemma4F7ContractTest.MalformedOrUnclosedArrayCommitsNoCall (1 ms)
+[ RUN      ] Gemma4F7ContractTest.HttpAcceptsOnlyUnambiguouslyObjectRootSchemas
+[       OK ] Gemma4F7ContractTest.HttpAcceptsOnlyUnambiguouslyObjectRootSchemas (0 ms)
+[ RUN      ] Gemma4F7ContractTest.ToolWithoutParametersGetsCanonicalEmptyObjectSchema
+[       OK ] Gemma4F7ContractTest.ToolWithoutParametersGetsCanonicalEmptyObjectSchema (0 ms)
+[ RUN      ] Gemma4F7ContractTest.DuplicateToolNamesWithDifferentSchemasAreRejected
+[       OK ] Gemma4F7ContractTest.DuplicateToolNamesWithDifferentSchemasAreRejected (0 ms)
+[----------] 5 tests from Gemma4F7ContractTest (255 ms total)
+
+[----------] Global test environment tear-down
+[==========] 5 tests from 1 test suite ran. (407 ms total)
+[  PASSED  ] 5 tests.
