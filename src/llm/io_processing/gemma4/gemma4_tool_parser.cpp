@@ -654,4 +654,3 @@ std::optional<Delta> Gemma4ToolParser::parseChunk(const std::string& chunk,
 }
 
 }  // namespace ovms
-
