@@ -17,12 +17,14 @@
 
 #include <cstddef>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
 
 #include <openvino/genai/tokenizer.hpp>
 #include <rapidjson/document.h>
+#include <rapidjson/reader.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 #include <gtest/gtest.h>
@@ -34,6 +36,26 @@
 
 namespace ovms {
 namespace test {
+
+class NumberPreservingJsonWriter : public rapidjson::Writer<rapidjson::StringBuffer> {
+public:
+    explicit NumberPreservingJsonWriter(rapidjson::StringBuffer& buffer) :
+        rapidjson::Writer<rapidjson::StringBuffer>(buffer) {}
+
+    bool RawNumber(const char* value, rapidjson::SizeType length, bool) {
+        return RawValue(value, length, rapidjson::kNumberType);
+    }
+};
+
+inline std::optional<std::string> compactJsonLosslessly(const std::string& input) {
+    rapidjson::StringStream stream(input.c_str());
+    rapidjson::Reader reader;
+    rapidjson::StringBuffer buffer;
+    NumberPreservingJsonWriter writer(buffer);
+    if (!reader.Parse<rapidjson::kParseNumbersAsStringsFlag>(stream, writer) || stream.Tell() != input.size())
+        return std::nullopt;
+    return std::string(buffer.GetString(), buffer.GetSize());
+}
 
 // Serialize a Delta to a rapidjson::Document for use in test assertions that compare
 // JSON strings.  Re-parses the serializer output so tests can use HasMember() etc.
@@ -104,18 +126,15 @@ inline ParsedOutput parseWithStreamer(
     streamer.end();
 
     // Compact arguments JSON and drop incomplete calls that never emitted args.
+    // Preserve numeric lexemes exactly so the helper does not manufacture a
+    // double-normalization regression after the production parser emitted them.
     ToolCalls_t completedToolCalls;
     completedToolCalls.reserve(toolCalls.size());
     for (auto& tc : toolCalls) {
         if (tc.arguments.empty())
             continue;
-        rapidjson::Document argsDoc;
-        if (!argsDoc.Parse(tc.arguments.c_str()).HasParseError()) {
-            rapidjson::StringBuffer sb;
-            rapidjson::Writer<rapidjson::StringBuffer> w(sb);
-            argsDoc.Accept(w);
-            tc.arguments = sb.GetString();
-        }
+        if (auto compacted = compactJsonLosslessly(tc.arguments))
+            tc.arguments = std::move(*compacted);
         completedToolCalls.push_back(std::move(tc));
     }
     result.toolCalls = std::move(completedToolCalls);
