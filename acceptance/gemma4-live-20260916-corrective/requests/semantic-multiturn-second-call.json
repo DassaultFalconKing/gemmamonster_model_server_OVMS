@@ -1,0 +1,77 @@
+{
+  "messages": [
+    {
+      "content": "What's the weather in San Francisco?",
+      "role": "user"
+    },
+    {
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "arguments": "{\"location\":\"San Francisco, CA\"}"
+          },
+          "id": "kzJ5tzYsQ"
+        }
+      ],
+      "role": "assistant"
+    },
+    {
+      "role": "tool",
+      "content": "San Francisco: 72F and sunny.",
+      "tool_call_id": "kzJ5tzYsQ"
+    },
+    {
+      "content": "Thanks. Now add 17 and 25 using the add tool.",
+      "role": "user"
+    }
+  ],
+  "max_tokens": 256,
+  "tool_choice": "required",
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "parameters": {
+          "required": [
+            "location"
+          ],
+          "properties": {
+            "location": {
+              "description": "City, e.g. Boston, MA",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "description": "Get current weather for a location"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "add_numbers",
+        "parameters": {
+          "required": [
+            "a",
+            "b"
+          ],
+          "properties": {
+            "a": {
+              "type": "number"
+            },
+            "b": {
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        "description": "Add two numbers"
+      }
+    }
+  ],
+  "model": "gemma4-26-heretic"
+}

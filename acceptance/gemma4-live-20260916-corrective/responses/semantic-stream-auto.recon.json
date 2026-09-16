@@ -1,0 +1,12 @@
+{
+  "usage": {
+    "prompt_tokens": 84,
+    "completion_tokens": 21,
+    "total_tokens": 105
+  },
+  "content": "",
+  "finish_reason": "tool_calls",
+  "tool_args": "{\"location\":\"San Francisco, CA\"}",
+  "tool_name": "get_weather",
+  "http_status": 200
+}

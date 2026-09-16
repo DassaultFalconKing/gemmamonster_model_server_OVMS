@@ -1,0 +1,9 @@
+data: {"choices":[{"index":0,"delta":{"role":"assistant","content":null},"finish_reason":null}],"created":1789557002,"model":"gemma4-26-heretic","object":"chat.completion.chunk"}
+
+data: {"choices":[{"index":0,"logprobs":null,"delta":{"tool_calls":[{"id":"fWCRsV1GF","type":"function","index":0,"function":{"name":"get_weather","arguments":"{\"location\":\"San Francisco, CA\"}"}}]},"finish_reason":null}],"created":1789557002,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+data: {"choices":[{"index":0,"logprobs":null,"delta":{},"finish_reason":"tool_calls"}],"created":1789557002,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":null}
+
+data: {"choices":[],"created":1789557002,"model":"gemma4-26-heretic","object":"chat.completion.chunk","usage":{"prompt_tokens":84,"completion_tokens":21,"total_tokens":105}}
+
+data: [DONE]

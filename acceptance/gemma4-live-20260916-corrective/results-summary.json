@@ -1,0 +1,83 @@
+[
+  {
+    "profile": "00-known-good-2026.5",
+    "workload": "long32k",
+    "runs": "18.62/19.29/19.41",
+    "mean": 19.11,
+    "min": 18.62,
+    "max": 19.41,
+    "stddev": 0.43
+  },
+  {
+    "profile": "00-known-good-2026.5",
+    "workload": "medium8k",
+    "runs": "23.52/23.83/23.47",
+    "mean": 23.61,
+    "min": 23.47,
+    "max": 23.83,
+    "stddev": 0.2
+  },
+  {
+    "profile": "00-known-good-2026.5",
+    "workload": "short",
+    "runs": "26.29/26.15/26.57",
+    "mean": 26.34,
+    "min": 26.15,
+    "max": 26.57,
+    "stddev": 0.21
+  },
+  {
+    "profile": "20-u4-b4096-seq4-2026.5",
+    "workload": "long32k",
+    "runs": "19.02/19.12/19.9",
+    "mean": 19.35,
+    "min": 19.02,
+    "max": 19.9,
+    "stddev": 0.48
+  },
+  {
+    "profile": "20-u4-b4096-seq4-2026.5",
+    "workload": "medium8k",
+    "runs": "23.06/23.44/23.49",
+    "mean": 23.33,
+    "min": 23.06,
+    "max": 23.49,
+    "stddev": 0.24
+  },
+  {
+    "profile": "20-u4-b4096-seq4-2026.5",
+    "workload": "short",
+    "runs": "23.75/23.79/23.65",
+    "mean": 23.73,
+    "min": 23.65,
+    "max": 23.79,
+    "stddev": 0.07
+  },
+  {
+    "profile": "21-u4-b8192-seq4-2026.5",
+    "workload": "long32k",
+    "runs": "19.3/19.34/19.27",
+    "mean": 19.3,
+    "min": 19.27,
+    "max": 19.34,
+    "stddev": 0.04
+  },
+  {
+    "profile": "21-u4-b8192-seq4-2026.5",
+    "workload": "medium8k",
+    "runs": "23.67/23.54/22.83",
+    "mean": 23.35,
+    "min": 22.83,
+    "max": 23.67,
+    "stddev": 0.45
+  },
+  {
+    "profile": "21-u4-b8192-seq4-2026.5",
+    "workload": "short",
+    "runs": "26.13/26.18/26.31",
+    "mean": 26.21,
+    "min": 26.13,
+    "max": 26.31,
+    "stddev": 0.09
+  }
+]

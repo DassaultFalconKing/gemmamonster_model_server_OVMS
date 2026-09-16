@@ -1,0 +1,99 @@
+{
+  "messages": [
+    {
+      "content": "What's the weather in San Francisco?",
+      "role": "user"
+    },
+    {
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "arguments": "{\"location\":\"San Francisco, CA\"}"
+          },
+          "id": "kzJ5tzYsQ"
+        }
+      ],
+      "role": "assistant"
+    },
+    {
+      "role": "tool",
+      "content": "San Francisco: 72F and sunny.",
+      "tool_call_id": "kzJ5tzYsQ"
+    },
+    {
+      "content": "Thanks. Now add 17 and 25 using the add tool.",
+      "role": "user"
+    },
+    {
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "add_numbers",
+            "arguments": "{\"a\":17,\"b\":25}"
+          },
+          "id": "VYHt81Dw5"
+        }
+      ],
+      "role": "assistant"
+    },
+    {
+      "role": "tool",
+      "content": "42",
+      "tool_call_id": "VYHt81Dw5"
+    },
+    {
+      "content": "What is the sum? Answer in one sentence.",
+      "role": "user"
+    }
+  ],
+  "max_tokens": 128,
+  "tool_choice": "auto",
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "parameters": {
+          "required": [
+            "location"
+          ],
+          "properties": {
+            "location": {
+              "description": "City, e.g. Boston, MA",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "description": "Get current weather for a location"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "add_numbers",
+        "parameters": {
+          "required": [
+            "a",
+            "b"
+          ],
+          "properties": {
+            "a": {
+              "type": "number"
+            },
+            "b": {
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        "description": "Add two numbers"
+      }
+    }
+  ],
+  "model": "gemma4-26-heretic"
+}

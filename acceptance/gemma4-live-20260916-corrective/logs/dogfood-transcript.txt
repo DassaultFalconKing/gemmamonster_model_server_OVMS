@@ -1,0 +1,6 @@
+TURN 1 calls: list_dir({"path":"."})
+TURN 2 calls: read_file({"path":"binary-provenance.txt"})
+TURN 3 calls: list_dir({"path":"logs"})
+TURN 4 FINAL: The top-level directory contains several batch and PowerShell scripts, configuration files like `environment.txt`, and various JSON/CSV result files. The `binary-provenance.txt` file specifies the OVMS version as `OpenVINO Model Server 2026.5.0.b722aa440` and the `MIXED_OLD_RUNTIME` value is `NO`. The `logs` directory contains detailed execution logs for various test scenarios, including known-good runs and specific configuration attempts.
+
+This acceptance run is testing the stability and performance of the OpenVINO Model Server (OVMS) version 2026.5.0.0. It evaluates different configurations, such as varying batch sizes (b4096, b8192) and sequence lengths (seq1, seq4), to ensure correct behavior. The presence of "known-good" logs suggests the run is validating new configurations against a baseline to ensure no regressions in the runtime or environment.

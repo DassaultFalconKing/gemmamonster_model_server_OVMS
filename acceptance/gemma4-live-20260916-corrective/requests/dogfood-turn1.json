@@ -1,0 +1,56 @@
+{
+  "tool_choice": "auto",
+  "max_tokens": 512,
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a repository inspector. Use the provided tools to gather facts. Never invent file contents. When done, write a 3-sentence summary."
+    },
+    {
+      "role": "user",
+      "content": "Inspect the workspace directory: 1) list top-level files, 2) read binary-provenance.txt and report OVMS version + MIXED_OLD_RUNTIME value, 3) list the logs directory. Then summarize what this acceptance run is testing in 3 sentences."
+    }
+  ],
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "parameters": {
+          "properties": {
+            "path": {
+              "description": "Relative path, e.g. '.' or 'logs'",
+              "type": "string"
+            }
+          },
+          "type": "object",
+          "required": [
+            "path"
+          ]
+        },
+        "name": "list_dir",
+        "description": "List files in a directory under the workspace"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "parameters": {
+          "properties": {
+            "path": {
+              "description": "Relative file path, e.g. 'binary-provenance.txt'",
+              "type": "string"
+            }
+          },
+          "type": "object",
+          "required": [
+            "path"
+          ]
+        },
+        "name": "read_file",
+        "description": "Read first 5KB of a text file under the workspace"
+      }
+    }
+  ],
+  "model": "gemma4-26-heretic"
+}

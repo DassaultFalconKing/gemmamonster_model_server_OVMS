@@ -1,0 +1,9 @@
+{
+  "tool_errors": 0,
+  "server_errors": 0,
+  "hangs": "NO",
+  "note": "shell-confusion n/a (no shell tool exposed)",
+  "tool_calls": 3,
+  "turns": 4,
+  "premature_final": "NO"
+}

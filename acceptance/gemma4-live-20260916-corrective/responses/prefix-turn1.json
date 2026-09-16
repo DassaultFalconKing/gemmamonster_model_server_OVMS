@@ -1,0 +1,8 @@
+{
+  "wall_ms": 26005,
+  "input_tokens": 16107,
+  "output_tokens": 29,
+  "ttft_ms": 25995,
+  "text": "The refactor plan involves optimizing the scheduler's performance by implementing a more efficient batching mechanism and a robust retry policy for failed tasks.",
+  "tag": "turn1"
+}

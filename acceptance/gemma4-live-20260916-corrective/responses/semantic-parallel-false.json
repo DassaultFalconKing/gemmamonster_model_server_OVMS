@@ -1,0 +1,31 @@
+{
+  "choices": [
+    {
+      "finish_reason": "tool_calls",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "id": "Xa01lXHKQ",
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "arguments": "{\"location\":\"San Francisco, CA\"}"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "created": 1789557005,
+  "model": "gemma4-26-heretic",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 92,
+    "completion_tokens": 21,
+    "total_tokens": 113
+  }
+}

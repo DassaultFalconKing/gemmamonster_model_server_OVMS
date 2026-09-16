@@ -1,0 +1,34 @@
+{
+  "messages": [
+    {
+      "content": "Report weather for San Francisco and for Boston. Call the weather tool for each city.",
+      "role": "user"
+    }
+  ],
+  "parallel_tool_calls": false,
+  "max_tokens": 256,
+  "tool_choice": "required",
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "parameters": {
+          "required": [
+            "location"
+          ],
+          "properties": {
+            "location": {
+              "description": "City, e.g. Boston, MA",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "description": "Get current weather for a location"
+      }
+    }
+  ],
+  "model": "gemma4-26-heretic"
+}

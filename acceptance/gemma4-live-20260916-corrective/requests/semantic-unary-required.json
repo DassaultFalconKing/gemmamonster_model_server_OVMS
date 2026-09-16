@@ -1,0 +1,33 @@
+{
+  "messages": [
+    {
+      "content": "What's the weather in San Francisco?",
+      "role": "user"
+    }
+  ],
+  "max_tokens": 256,
+  "tool_choice": "required",
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "parameters": {
+          "required": [
+            "location"
+          ],
+          "properties": {
+            "location": {
+              "description": "City, e.g. Boston, MA",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "description": "Get current weather for a location"
+      }
+    }
+  ],
+  "model": "gemma4-26-heretic"
+}
