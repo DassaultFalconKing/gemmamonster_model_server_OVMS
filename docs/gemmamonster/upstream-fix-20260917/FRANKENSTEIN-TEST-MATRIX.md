@@ -24,7 +24,7 @@ fresh compatible XGrammar upstream
 
 The purpose of the Frankenstein ladder is to prove which parts of our delta are still necessary, which must be adapted to newer upstream interfaces, and which have become redundant because upstream independently absorbed equivalent behavior.
 
-This document is the authority for candidate identity, build composition, retained-delta accounting, gates, promotion, and evidence layout.
+This document is the authority for candidate identity, build composition, retained-delta accounting, gates, promotion, host-state hygiene, and evidence layout.
 
 ## 2. Three independent axes
 
@@ -302,6 +302,7 @@ Legend: `REQ` required to promote; `OBS` useful observation; `CTRL` expected con
 | G10 dependency-axis A/B equivalence | n/a | n/a | n/a | baseline | C4 == C3 | C5 == C4 | C6 >= C5 |
 | G11 retained-delta ledger closed | n/a | n/a | n/a | OBS | OBS | OBS | REQ |
 | G12 no behavior lost by upstream pruning | n/a | n/a | n/a | baseline | OBS | OBS | REQ |
+| G13 host-state / reboot / cache hygiene | OBS | REQ | REQ | REQ | REQ | REQ | REQ |
 
 ## 8. Exact automated gates
 
@@ -451,6 +452,70 @@ Also preserve build command/log, test command/exit code, test logs, live payload
 
 No candidate is promoted from memory, screenshots, or an artifact directory whose binary/dependency identity is unknown.
 
+### Heavy-operation serialization rule
+
+The host is treated as a single heavy-operation lane for compilation and GPU/runtime acceptance.
+
+Before starting any heavyweight operation (full/incremental OVMS build, GenAI/XGrammar build, Bazel acceptance run, long-context live run, or candidate switch):
+
+1. verify the previous compilation has completed successfully, **or explicitly cancel it and record that run as non-evidence**;
+2. do not start a second heavy build while another candidate is still compiling;
+3. stop the previous `ovms.exe`/prototype runtime before launching another candidate;
+4. confirm the previous listener is gone and the intended REST port is free before the next runtime starts;
+5. do not collect performance or runtime acceptance evidence while unrelated heavy compilation is consuming CPU/RAM/disk bandwidth;
+6. if a candidate build is still active, wait for completion or cancel it cleanly before switching branch/dependency identities.
+
+Overlapping heavy operations make attribution ambiguous. Results obtained under overlapping candidate runtimes or concurrent heavy builds are diagnostic only and cannot promote a candidate.
+
+### Reboot and GPU-cache hygiene protocol
+
+A reboot is a runtime-boundary operation, not a ritual after every source edit.
+
+**Mandatory reboot before acceptance runtime** when any of the following is true:
+
+- switching to a candidate with a different GenAI binary or XGrammar dependency (`C2 -> C3` only if the actual GenAI/XGrammar binary changes; always for `C3 -> C4`, `C4 -> C5`, and fresh `C6`);
+- an OVMS/GPU run ended in GPU context fatal, `CL_OUT_OF_RESOURCES`, wedged executor/quarantine, driver reset, device-loss style error, or a process that did not release GPU resources cleanly;
+- the previous candidate used the GPU and the next result will be used as promotion evidence after a dependency/binary change;
+- a clean C6 acceptance sequence is beginning;
+- host state is otherwise uncertain (stale runtime, failed build/test leaving device resources resident, unexplained memory pressure, or inconsistent runtime behavior).
+
+A reboot is **not required** between source-only parser edits that reuse the exact same GenAI/XGrammar/OpenVINO binaries and have not started GPU runtime, provided the previous build/test process tree is fully stopped.
+
+Before the reboot boundary:
+
+1. stop `ovms.exe` and any prototype/agent process using the candidate;
+2. let active compilation finish, or cancel it explicitly and mark that build attempt non-evidence;
+3. stop stray build/test processes from the previous candidate (`bazel`, `cl`, `link`, `cmake`, `ninja`, test binaries) when they are no longer part of an intentional running build;
+4. preserve logs/manifests before deleting candidate-local caches or output trees.
+
+After reboot and before first acceptance runtime:
+
+1. confirm no previous OVMS instance is running and the REST port is free;
+2. clear candidate-local OpenVINO/GenAI/XGrammar/GPU compilation caches used by the previous runtime identity when those caches are configured or present;
+3. clear the explicit OpenVINO compiled-model/cache directory used by the test harness, if one is configured;
+4. clear candidate-local XGrammar/structured-output generated cache artifacts, if persisted by the build/runtime setup;
+5. do **not** reuse a cache directory across candidates whose GenAI/XGrammar/OpenVINO identity differs;
+6. retain source/download caches that cannot affect generated GPU kernels or compiled-model/runtime behavior; the goal is runtime-state isolation, not gratuitous redownloading;
+7. start only the intended candidate, then record fresh process/binary identity and hashes in the manifest before live gates.
+
+For promotion evidence, cache policy is conservative:
+
+- `C1` parser-only CPU/unit gates may reuse build caches because runtime dependencies are unchanged.
+- `C2-C5` may reuse source/download caches, but GPU/runtime acceptance must not reuse candidate-local compiled-model/GPU/XGrammar runtime caches across dependency identities.
+- `C6` requires a fresh reboot plus clean runtime/GPU cache state before the final live acceptance sequence.
+
+If cache location is controlled by environment/configuration, record the exact configured paths in the candidate manifest. If the active GPU/OpenVINO cache location cannot be established, treat the host as dirty and reboot/clean the known candidate-local runtime/output roots before collecting acceptance evidence.
+
+A result is `DIRTY_HOST_NON_EVIDENCE` if any of these are true:
+
+- previous candidate runtime was still resident when the next one started;
+- heavy compilations overlapped;
+- GPU fault occurred and no reboot followed before acceptance retest;
+- dependency identity changed but runtime/GPU caches were knowingly reused;
+- binary/process identity at test start was not recorded.
+
+`DIRTY_HOST_NON_EVIDENCE` runs may be useful for debugging but cannot satisfy C2-C6 promotion gates.
+
 ## 11. Promotion order
 
 1. Finish C1 parser repair and record its exact HEAD.
@@ -466,7 +531,7 @@ No candidate is promoted from memory, screenshots, or an artifact directory whos
 11. Classify every local change as `RETAIN`, `ADAPT`, `DROP_UPSTREAMED`, or `SPLIT_PR`.
 12. Construct C6 from fresh upstream heads **plus every `RETAIN`/`ADAPT` change**.
 13. Prove every `DROP_UPSTREAMED` item through equivalent upstream behavior and the same focused/full gates.
-14. Run full C6 gate from a clean build root.
+14. Run full C6 gate from a clean build root and clean rebooted runtime/GPU state.
 15. Generate clean reviewer-facing commit series and PR split map from the proven C6 tree.
 16. Only C6 is eligible to become the source of the upstream PR(s).
 
@@ -498,6 +563,7 @@ Before opening upstream PR(s), `SUPER-UPSTREAM` requires all of:
 - exact long named unary GREEN;
 - exact long named streaming >=3/3 GREEN;
 - dogfood replay GREEN;
+- G13 host-state / reboot / cache hygiene satisfied for final runtime evidence;
 - final diff contains only intended files;
 - reviewer-facing history excludes evidence/checkpoint/revert debris;
 - PR split/order across OVMS / GenAI / XGrammar is explicit.
