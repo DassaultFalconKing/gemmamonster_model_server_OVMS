@@ -1,0 +1,15 @@
+[  PASSED  ] 12 tests.
+[  PASSED  ] 5 tests.
+[  PASSED  ] 4 tests.
+[  PASSED  ] 27 tests.
+[  PASSED  ] 11 tests.
+[  PASSED  ] 5 tests.
+INFO: Build completed successfully, 1091 total actions
+//src/test/llm/gemma4_generation:gemma4_chunk_invariance_test            PASSED in 0.8s
+//src/test/llm/gemma4_generation:gemma4_f10_guard_test                   PASSED in 0.8s
+//src/test/llm/gemma4_generation:gemma4_f7_contract_test                 PASSED in 0.4s
+//src/test/llm/gemma4_generation:gemma4_generation_policy_test           PASSED in 0.1s
+//src/test/llm/gemma4_generation:gemma4_phantom_tool_call_test           PASSED in 0.8s
+//src/test/llm/gemma4_generation:gemma4_rendered_prompt_state_test       PASSED in 0.4s
+Executed 6 out of 6 tests: 6 tests pass.
+INFO: Build completed successfully, 1091 total actions

@@ -1,0 +1,85 @@
+# ovms_test failing blocks (trimmed) — 229 ran, 213 passed, 16 failed
+# full log: bazel-out/x64_windows-opt/testlogs/src/ovms_test/test.log
+# HEAD d582668e6, filter Gemma4*+HttpOpenAIHandlerParsingTest, py_on
+
+============================== HttpOpenAIHandlerParsingTest.OutputParserInitializationDependsOnParserNames
+[ RUN      ] HttpOpenAIHandlerParsingTest.OutputParserInitializationDependsOnParserNames
+unknown file: error: C++ exception with description "Check 'm_ireq_queue_tokenizer' failed at src\cpp\src\tokenizer\tokenizer_impl.cpp:628:
+
+============================== HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceNotInProvidedList
+[ RUN      ] HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceNotInProvidedList
+src/test/http_openai_handler_test.cpp(419): error: Expected equality of these values:
+    Which is: INVALID_ARGUMENT
+    Which is: OK
+
+============================== Gemma4UpstreamRefitContractTest.PreservesValidNumberLexemesLosslessly
+[ RUN      ] Gemma4UpstreamRefitContractTest.PreservesValidNumberLexemesLosslessly
+src/test/llm/output_parsers/gemma4_upstream_refit_contract_test.cpp(154): error: Expected equality of these values:
+    Which is: "{\"x\":1.2345678901234566e-13}"
+    Which is: "{\"x\":123456789012345678901234567890.12345678901234567890e-42}"
+
+============================== Gemma4OutputParserTest.ParseTwoToolCallsAtOnce
+[ RUN      ] Gemma4OutputParserTest.ParseTwoToolCallsAtOnce
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(275): error: Expected equality of these values:
+    Which is: 0
+
+============================== Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsArgumentsStreaming
+[ RUN      ] Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsArgumentsStreaming
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(117): error: Failed
+Mismatch between expectedDelta and doc for chunk: {files
+
+============================== Gemma4OutputParserTest.ParseToolCallOutputWithThreeToolCalls
+[ RUN      ] Gemma4OutputParserTest.ParseToolCallOutputWithThreeToolCalls
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(407): error: Expected equality of these values:
+    Which is: 0
+
+============================== Gemma4OutputParserTest.ParseToolCallWithMultipleUtfCharsStreaming
+[ RUN      ] Gemma4OutputParserTest.ParseToolCallWithMultipleUtfCharsStreaming
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(117): error: Failed
+Mismatch between expectedDelta and doc for chunk: {content
+
+============================== Gemma4OutputParserTest.ParseToolCallArgumentValueWithUnclosedQuoteAndBraceMidStream
+[ RUN      ] Gemma4OutputParserTest.ParseToolCallArgumentValueWithUnclosedQuoteAndBraceMidStream
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(117): error: Failed
+Mismatch between expectedDelta and doc for chunk: {new_text
+
+============================== Gemma4OutputParserTest.HolisticStreaming
+[ RUN      ] Gemma4OutputParserTest.HolisticStreaming
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(117): error: Failed
+Mismatch between expectedDelta and doc for chunk: {array
+
+============================== Gemma4OutputParserTest.StreamingWithBiggerChunks
+[ RUN      ] Gemma4OutputParserTest.StreamingWithBiggerChunks
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(117): error: Failed
+Mismatch between expectedDelta and doc for chunk: {array:
+
+============================== Gemma4OutputParserTest.StreamingWithWhitespacesBetweenToolCalls
+[ RUN      ] Gemma4OutputParserTest.StreamingWithWhitespacesBetweenToolCalls
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(117): error: Failed
+Mismatch between expectedDelta and doc for chunk: {array
+
+============================== Gemma4OutputParserTest.StreamingWithToolCallWithEmptyParams
+[ RUN      ] Gemma4OutputParserTest.StreamingWithToolCallWithEmptyParams
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(117): error: Failed
+Mismatch between expectedDelta and doc for chunk: {}
+
+============================== Gemma4OutputParserTest.StreamingWithToolResponseTokenAtTheEndOfGeneration
+[ RUN      ] Gemma4OutputParserTest.StreamingWithToolResponseTokenAtTheEndOfGeneration
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(117): error: Failed
+Mismatch between expectedDelta and doc for chunk: {arg1:
+
+============================== Gemma4OutputParserTest.StreamingWithMissingEndTagBeforeStop
+[ RUN      ] Gemma4OutputParserTest.StreamingWithMissingEndTagBeforeStop
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(117): error: Failed
+Mismatch between expectedDelta and doc for chunk: {a:
+
+============================== Gemma4OutputParserTest.ParseToolCallWithArgumentMissingEquals
+[ RUN      ] Gemma4OutputParserTest.ParseToolCallWithArgumentMissingEquals
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(818): error: Expected equality of these values:
+    Which is: 0
+
+============================== Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingEscapedQuotes
+[ RUN      ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingEscapedQuotes
+src/test/llm/output_parsers/gemma4_output_parser_test.cpp(864): error: Expected equality of these values:
+    Which is: "{\"code\":\"print(\\\\\\\"hello world\\\\\\\")\",\"verbose\":true}"
+    Which is: "{\"code\":\"print(\\\"hello world\\\")\",\"verbose\":true}"
