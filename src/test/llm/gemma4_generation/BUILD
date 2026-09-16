@@ -94,3 +94,17 @@ cc_test(
     linkopts = COMMON_STATIC_LIBS_LINKOPTS,
     linkstatic = 1,
 )
+
+cc_test(
+    name = "gemma4_whitespace_bound_test",
+    srcs = ["gemma4_whitespace_bound_test.cpp"],
+    deps = [
+        "@com_google_googletest//:gtest_main",
+        "//src/llm:generation_config_builders",
+        "//third_party:genai",
+    ],
+    copts = COPTS_TESTS,
+    local_defines = COMMON_LOCAL_DEFINES,
+    linkopts = COMMON_STATIC_LIBS_LINKOPTS,
+    linkstatic = 1,
+)
