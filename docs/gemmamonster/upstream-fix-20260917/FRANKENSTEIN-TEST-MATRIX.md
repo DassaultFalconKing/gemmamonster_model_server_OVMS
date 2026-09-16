@@ -7,9 +7,24 @@ Date: 2026-09-17
 
 Validate the Gemma4 stack as a sequence of deliberately mixed candidates. Each candidate changes only one major dependency/source axis at a time so a RED result remains attributable.
 
-The final promotion target is `SUPER-UPSTREAM`: fresh OVMS upstream + clean Gemma4 series + fresh OpenVINO GenAI upstream + fresh compatible XGrammar upstream + bounded JSON-schema whitespace.
+The final promotion target is `SUPER-UPSTREAM`.
 
-This document is the authority for candidate identity, build composition, gates, promotion, and evidence layout.
+`SUPER-UPSTREAM` does **not** mean stock upstream with our work removed. It means:
+
+```text
+fresh OVMS upstream
++ minimal retained Gemma4 OVMS delta
+
+fresh OpenVINO GenAI upstream
++ minimal retained bounded-whitespace GenAI delta, if still required
+
+fresh compatible XGrammar upstream
++ only the compatibility/pin delta still required after upstream comparison
+```
+
+The purpose of the Frankenstein ladder is to prove which parts of our delta are still necessary, which must be adapted to newer upstream interfaces, and which have become redundant because upstream independently absorbed equivalent behavior.
+
+This document is the authority for candidate identity, build composition, retained-delta accounting, gates, promotion, and evidence layout.
 
 ## 2. Three independent axes
 
@@ -17,7 +32,7 @@ This document is the authority for candidate identity, build composition, gates,
 
 - `O0` upstream Gemma4 PR baseline: `d582668e6405e5d4cffbf050e9ee7303f7b94ef0`.
 - Its upstream base at matrix creation: `openvinotoolkit/model_server:main` `204d3bf3ba6f8e2aeb489c5eeb7ab46c79fde482`.
-- `O1` parser/evidence repair: `fix/gemma4-upstream-evidence-triage-20260917`, matrix-time HEAD `405c3887aa893076489a7ae1a48926d9f186478e`, final HEAD to be pinned after the last HTTP expectation repair.
+- `O1` parser/evidence repair: `fix/gemma4-upstream-evidence-triage-20260917`, matrix-time repair line; final HEAD to be pinned after the last HTTP expectation repair.
 - `O2` OVMS whitespace call-site repair: production commit `a3a7004bdca0454fa905f38077299aa7a94a1c99` plus focused whitespace test/build registration from `fix/gemma4-whitespace-regression-1609` (`3ed4ad8...` handoff HEAD).
 - `O3` clean reviewer-facing Gemma4 series regenerated on the freshly re-resolved OVMS upstream head immediately before PR.
 
@@ -27,8 +42,8 @@ At matrix creation, `d582668` is 5 commits ahead and 0 behind `204d3bf`, so OVMS
 
 - `G0` stock old base: `fe818c0467feb17b87c5adfb3f7e28dd70b76e99`.
 - `G1` old-base whitespace repair: `e00eada6f4cce794ac3b3f6053cdb0c9dc569e68`, test pin `d636c405e9b822a7008d4475a0d550a82d52a02f`.
-- `G2` upstream master at matrix creation: `438e06189a07fe464fe39c544ac7997b73ca973d` + clean replay of the two whitespace commits.
-- `G3` freshly re-resolved GenAI master immediately before PR + clean whitespace series.
+- `G2` upstream master at matrix creation: `438e06189a07fe464fe39c544ac7997b73ca973d` + clean replay of the whitespace contract/implementation.
+- `G3` freshly re-resolved GenAI master immediately before PR + only the retained whitespace delta still required after upstream comparison.
 
 `fe818c04..438e061` is 20 upstream commits. `src/cpp/include/openvino/genai/generation_config.hpp` and `src/cpp/CMakeLists.txt` are byte-identical across those two upstream heads, so there is no direct file-level conflict with our whitespace API/pin patch. Runtime interaction still requires testing because the 20 commits include Continuous Batching changes.
 
@@ -39,7 +54,7 @@ At matrix creation, `d582668` is 5 commits ahead and 0 behind `204d3bf`, so OVMS
 - `X2` XGrammar upstream `main` at matrix creation: `f6043f4daafd0d018f77c3ec07bcfcd70b7e0532`.
 - `X3` freshly re-resolved XGrammar upstream head immediately before PR.
 
-`X2` is 7 commits ahead and 0 behind `X1`. Current upstream still exposes `max_whitespace_cnt` in structural-tag / JSON-schema paths. Its HEAD commit explicitly reports differential validation against `9aa840b6`, including whitespace-limit cases. We still treat `X1 -> X2` as a separate experiment rather than trusting upstream test prose as a substitute for our Gemma4 runtime gate.
+`X2` is 7 commits ahead and 0 behind `X1`. Current upstream still exposes `max_whitespace_cnt` in structural-tag / JSON-schema paths. Its HEAD reports differential validation against `9aa840b6`, including whitespace-limit cases. We still treat `X1 -> X2` as a separate experiment rather than substituting upstream test prose for our Gemma4 runtime gate.
 
 ## 3. Known control behavior
 
@@ -47,8 +62,8 @@ At matrix creation, `d582668` is 5 commits ahead and 0 behind `204d3bf`, so OVMS
 
 On `d582668`:
 
-- 6 / 6 Bazel targets passed.
-- 64 / 64 cases passed.
+- 6 / 6 Bazel targets passed;
+- 64 / 64 cases passed;
 - exit code 0.
 
 Targets:
@@ -98,13 +113,13 @@ Control result:
 
 | ID | Candidate | OVMS | GenAI | XGrammar | Changes isolated | Promotion signal |
 |---|---|---|---|---|---|---|
-| C0 | `BASE-CONTROL` | `O0` | `G0` | `X0` | none | reproduce known controls: 64/64; archived 213/229; long unary PASS / long stream degenerates |
+| C0 | `BASE-CONTROL` | `O0` | `G0` | `X0` | none | reproduce controls: 64/64; archived 213/229; long unary PASS / long stream degenerates |
 | C1 | `PARSER-ONLY` | final `O1` | `G0` | `X0` | OVMS parser + stale-test reconciliation only | 229/229 with fixtures + 64/64; whitespace live failure may remain |
 | C2 | `WHITESPACE-OLDBASE` | `O0 + O2` | `G1` | `X1` | grammar-level whitespace repair only | GenAI whitespace tests + OVMS whitespace test + live stream >=3/3 |
-| C3 | `FRANKENSTEIN-OLD` | `O1 + O2` | `G1` | `X1` | full OVMS repair stack, old GenAI base | 229/229 + 64/64 + live stream >=3/3 + dogfood replay |
+| C3 | `FRANKENSTEIN-OLD` | `O1 + O2` | `G1` | `X1` | complete local repair stack on old GenAI base | 229/229 + 64/64 + live stream >=3/3 + dogfood replay |
 | C4 | `FRANKENSTEIN-NEWGENAI` | byte-identical to C3 | `G2` | `X1` | GenAI 20-commit upstream delta only | behavior must match C3; new RED => GenAI delta/interaction suspect |
-| C5 | `FRANKENSTEIN-NEWXGRAMMAR` | byte-identical to C3/C4 | byte-identical GenAI whitespace code to C4 except pin | `X2` | XGrammar 7-commit upstream delta only | behavior must match C4; new RED => XGrammar delta/interaction suspect |
-| C6 | `SUPER-UPSTREAM` | `O3` | `G3` | `X3` | all freshly re-resolved upstreams, clean histories | every gate GREEN + clean-build reproducibility + reviewer-ready diffs |
+| C5 | `FRANKENSTEIN-NEWXGRAMMAR` | byte-identical to C3/C4 | byte-identical GenAI whitespace logic to C4 except pin | `X2` | XGrammar 7-commit upstream delta only | behavior must match C4; new RED => XGrammar delta/interaction suspect |
+| C6 | `SUPER-UPSTREAM` | fresh OVMS + retained `O3` delta | fresh GenAI + retained `G3` delta | fresh compatible XGrammar | all fresh upstreams + minimal proven local delta | every gate GREEN + clean-build reproducibility + delta ledger closed + reviewer-ready diffs |
 
 ## 5. Construction rules
 
@@ -138,7 +153,7 @@ Planned branch:
 
 Base: `d582668`.
 
-Carry only net source/test changes from C1 and O2. Exclude repair-session audit/revert/checkpoint debris from the executable history. GenAI stays exactly `e00eada6`; XGrammar stays exactly `9aa840b6`.
+Carry only net source/test changes from C1 and O2. Exclude repair-session audit/revert/checkpoint debris from executable history. GenAI stays exactly `e00eada6`; XGrammar stays exactly `9aa840b6`.
 
 ### C4 `FRANKENSTEIN-NEWGENAI`
 
@@ -187,24 +202,88 @@ Before executing, audit `9aa840b6..f6043f4` and record the seven commits. Becaus
 
 ### C6 `SUPER-UPSTREAM`
 
+`SUPER-UPSTREAM` is the final integration candidate, not a stock-upstream control.
+
+It must preserve the behavior proven by C1-C5 while minimizing implementation delta against fresh upstream heads.
+
 Immediately before construction:
 
 1. re-resolve `openvinotoolkit/model_server:main`;
 2. re-resolve `openvinotoolkit/openvino.genai:master`;
 3. re-resolve `mlc-ai/xgrammar:main`;
 4. record all three exact SHAs;
-5. compare each with C3/C4/C5 bases;
-6. regenerate clean reviewer-facing OVMS and GenAI histories;
-7. pin the exact XGrammar SHA demonstrated GREEN by the fresh candidate.
+5. compare each fresh head with C3/C4/C5 bases;
+6. create a layer-by-layer retained-delta ledger;
+7. replay/adapt only the delta still semantically required;
+8. regenerate clean reviewer-facing OVMS and GenAI histories;
+9. pin the exact XGrammar SHA demonstrated GREEN by the fresh candidate;
+10. run every gate from a clean build root.
 
 Planned branches:
 
 - OVMS: `upstream/gemma4-tool-calling-super-20260917`;
 - GenAI: `upstream/schema-whitespace-bound-super-20260917`.
 
-C6 must not contain evidence/checkpoint commits, accidental broad test edits, audit/revert pairs, or machine-local paths/logs.
+C6 must not contain evidence/checkpoint commits, accidental broad test edits, audit/revert pairs, machine-local paths/logs, or historical compatibility code that fresh upstream makes redundant.
 
-## 6. Gate matrix
+## 6. SUPER-UPSTREAM retained-delta contract
+
+Every piece of our current code delta must receive exactly one disposition before C6 promotion:
+
+| State | Meaning | Requirement |
+|---|---|---|
+| `RETAIN` | behavior is still absent upstream; carry our implementation forward | exact source/tests + reason + GREEN gate |
+| `ADAPT` | behavior is still required but newer upstream changed the interface/mechanism | old behavior mapping, new implementation mapping, focused regression test |
+| `DROP_UPSTREAMED` | fresh upstream independently provides equivalent behavior | upstream commit/implementation evidence + semantic equivalence test + full relevant GREEN gates |
+| `SPLIT_PR` | required change belongs in a different upstream repository/PR | target repo, dependency relation, ordering requirement, independent test evidence |
+
+Rules:
+
+- `DROP_UPSTREAMED` is **not** granted because a cherry-pick conflicts, the diff looks smaller, or the new upstream happens to compile.
+- A local feature may disappear from the C6 textual diff only after equivalent behavior is identified in upstream and the same contract/live gates pass without our old implementation.
+- Commit identity is not semantic identity. A rewritten or refactored upstream implementation may replace ours only if behavior is proven equivalent.
+- Zero local delta on a layer is allowed and desirable only when upstream already contains the required behavior.
+- No known-good behavior from C3/C4/C5 may silently disappear during cleanup/rebase.
+
+Minimum OVMS delta inventory to classify:
+
+- Gemma4 tool parser behavior;
+- recursive native arguments;
+- escaped delimited strings;
+- lossless argument handling contract;
+- atomic envelope publication;
+- malformed/incomplete fail-closed behavior;
+- chunk invariance;
+- request-boundary tool policy validation;
+- rendered prompt state / reasoning transitions;
+- Gemma4 generation policy;
+- whitespace-bound GenAI call-site;
+- tests required to prove each contract.
+
+Minimum GenAI delta inventory to classify:
+
+- `StructuredOutputConfig::JSONSchema` optional `max_whitespace_cnt` API;
+- serialization into structural JSON-schema format;
+- equality / string representation semantics;
+- C++ contract tests;
+- XGrammar version/pin needed to consume that field.
+
+Minimum XGrammar delta inventory to classify:
+
+- support for `max_whitespace_cnt` in JSON-schema conversion;
+- propagation through structural-tag format;
+- compatibility of current converter/compiler APIs with GenAI;
+- whether any local XGrammar patch remains at all.
+
+The resulting C6 manifest must include a table:
+
+```text
+layer | current local change | disposition | fresh-upstream evidence | C6 implementation | proving gate
+```
+
+This table becomes part of PR evidence.
+
+## 7. Gate matrix
 
 Legend: `REQ` required to promote; `OBS` useful observation; `CTRL` expected control behavior.
 
@@ -221,8 +300,10 @@ Legend: `REQ` required to promote; `OBS` useful observation; `CTRL` expected con
 | G8 intended-file/source-diff audit | REQ | REQ | REQ | REQ | REQ | REQ | REQ |
 | G9 clean build/output root | OBS | OBS | OBS | OBS | OBS | OBS | REQ |
 | G10 dependency-axis A/B equivalence | n/a | n/a | n/a | baseline | C4 == C3 | C5 == C4 | C6 >= C5 |
+| G11 retained-delta ledger closed | n/a | n/a | n/a | OBS | OBS | OBS | REQ |
+| G12 no behavior lost by upstream pruning | n/a | n/a | n/a | baseline | OBS | OBS | REQ |
 
-## 7. Exact automated gates
+## 8. Exact automated gates
 
 ### G1 GenAI whitespace API
 
@@ -282,7 +363,7 @@ Run the six targets in section 3 with:
 
 Promotion expectation: 6/6 targets, 64/64 cases, exit 0. Historical 64/64 cannot be reused for a new candidate HEAD.
 
-## 8. Live gates
+## 9. Live gates
 
 ### G5/G6 exact long-context named pair
 
@@ -302,6 +383,7 @@ Interpretation boundary:
 - C3 GREEN, C4 RED => GenAI upstream delta/interaction primary suspect.
 - C4 GREEN, C5 RED => XGrammar upstream delta/interaction primary suspect.
 - C5 GREEN => fresh XGrammar is a viable input to `SUPER-UPSTREAM`.
+- C5 GREEN, C6 RED => investigate only fresh-head movement, delta adaptation/pruning, or clean-build environment before touching known-good behavior.
 
 ### G7 dogfood replay
 
@@ -316,7 +398,7 @@ Replay:
 
 No parser leakage, malformed executable call, whitespace degeneration, or protocol break.
 
-## 9. Build isolation and evidence
+## 10. Build isolation and evidence
 
 Recommended artifact root:
 
@@ -357,11 +439,19 @@ openvino_genai_dll_sha256
 started_at
 ```
 
-Also preserve build command/log, test command/exit code, test logs, live payloads, raw HTTP/SSE, and server log.
+C6 additionally requires:
+
+```text
+retained_delta_manifest
+upstream_equivalence_evidence
+pr_split_map
+```
+
+Also preserve build command/log, test command/exit code, test logs, live payloads, raw HTTP/SSE, server log, and final source diff.
 
 No candidate is promoted from memory, screenshots, or an artifact directory whose binary/dependency identity is unknown.
 
-## 10. Promotion order
+## 11. Promotion order
 
 1. Finish C1 parser repair and record its exact HEAD.
 2. Finish currently-running C2 old-base GenAI/whitespace build and tests.
@@ -372,15 +462,34 @@ No candidate is promoted from memory, screenshots, or an artifact directory whos
 7. Build C5 by changing only XGrammar `9aa840b6 -> f6043f4`.
 8. Require C5 GREEN.
 9. Re-resolve all three upstream heads.
-10. Construct C6 `SUPER-UPSTREAM` from clean histories and exact fresh heads.
-11. Run full C6 gate from a clean build root.
-12. Only C6 is eligible to become the source of the upstream PR(s).
+10. Build the retained-delta ledger for OVMS / GenAI / XGrammar.
+11. Classify every local change as `RETAIN`, `ADAPT`, `DROP_UPSTREAMED`, or `SPLIT_PR`.
+12. Construct C6 from fresh upstream heads **plus every `RETAIN`/`ADAPT` change**.
+13. Prove every `DROP_UPSTREAMED` item through equivalent upstream behavior and the same focused/full gates.
+14. Run full C6 gate from a clean build root.
+15. Generate clean reviewer-facing commit series and PR split map from the proven C6 tree.
+16. Only C6 is eligible to become the source of the upstream PR(s).
 
-## 11. Final PR gate
+## 12. Expected payoff
+
+The matrix is designed to produce four concrete outcomes:
+
+1. **Regression attribution** — C3 -> C4 isolates GenAI movement; C4 -> C5 isolates XGrammar movement; C5 -> C6 isolates final fresh-head/delta-replay effects.
+2. **Causal proof of the whitespace repair** — C2 proves the grammar-level fix independently; C3 proves coexistence with parser hardening.
+3. **Minimal maintainable delta** — code already absorbed upstream is removed only with evidence; code still required remains explicit and reviewable.
+4. **Upstream-ready narrative** — the final PR is based on current upstream code plus a small, enumerated, tested behavioral delta rather than a historical fork stack.
+
+Performance improvement is not assumed. Any TTFT/decode/runtime improvement is secondary evidence and must be measured separately. The primary success criterion is semantic/runtime compatibility with a minimal explainable delta.
+
+## 13. Final PR gate
 
 Before opening upstream PR(s), `SUPER-UPSTREAM` requires all of:
 
-- exact OVMS / GenAI / XGrammar SHAs recorded;
+- exact fresh OVMS / GenAI / XGrammar SHAs recorded;
+- complete retained-delta ledger;
+- every historical local change classified;
+- every `DROP_UPSTREAMED` item backed by upstream implementation evidence and proving tests;
+- every `RETAIN`/`ADAPT` item present in the C6 source tree;
 - clean build succeeds;
 - GenAI whitespace tests 4/4;
 - OVMS whitespace-bound test GREEN;
@@ -390,6 +499,7 @@ Before opening upstream PR(s), `SUPER-UPSTREAM` requires all of:
 - exact long named streaming >=3/3 GREEN;
 - dogfood replay GREEN;
 - final diff contains only intended files;
-- reviewer-facing history excludes evidence/checkpoint/revert debris.
+- reviewer-facing history excludes evidence/checkpoint/revert debris;
+- PR split/order across OVMS / GenAI / XGrammar is explicit.
 
-A clean merge/rebase is not a runtime acceptance signal. Every dependency-axis promotion is evidence-driven.
+A clean merge/rebase is not a runtime acceptance signal. A smaller diff is not automatically a better diff. `SUPER-UPSTREAM` is accepted only when fresh upstream code and our **remaining necessary behavioral delta** are both accounted for and proven together.
