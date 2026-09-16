@@ -125,7 +125,10 @@ class NativeValueParser {
         pos += Gemma4ToolParser::TOOL_ARGS_STRING_INDICATOR.size();
         const size_t end = input.find(Gemma4ToolParser::TOOL_ARGS_STRING_INDICATOR, pos);
         if (end == std::string::npos) return false;
-        writer.String(input.data() + pos, static_cast<rapidjson::SizeType>(end - pos));
+        const std::string raw = input.substr(pos, end - pos);
+        const std::string encoded = escapeAsJsonString(raw);
+        if (!writer.RawValue(encoded.data(), static_cast<rapidjson::SizeType>(encoded.size()), rapidjson::kStringType))
+            return false;
         pos = end + Gemma4ToolParser::TOOL_ARGS_STRING_INDICATOR.size();
         return true;
     }
