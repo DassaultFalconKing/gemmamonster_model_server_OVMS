@@ -69,7 +69,7 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
 
         ov::genai::StructuredOutputConfig::Tag tag;
         tag.begin = "<|tool_call>call:" + toolName;
-        tag.content = ov::genai::StructuredOutputConfig::JSONSchema(toolSchemaWrapper.stringRepr);
+        tag.content = ov::genai::StructuredOutputConfig::JSONSchema(toolSchemaWrapper.stringRepr, 2);
         tag.end = "<tool_call|>";
         return tag;
     }
