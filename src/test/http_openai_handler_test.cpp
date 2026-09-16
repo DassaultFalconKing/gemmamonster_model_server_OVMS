@@ -3493,7 +3493,7 @@ TEST_F(HttpOpenAIHandlerParsingTest, ParseRequestWithTools_Provided3_ChoiceLast)
 }
 
 // Provide get_weather1, get_weather2, get_weather3 but take one - get_weather4 which does not exist
-// Expect OK and no tool selected
+// Expect INVALID_ARGUMENT: hard named tool must resolve to a declared tool
 TEST_F(HttpOpenAIHandlerParsingTest, ParseRequestWithTools_Provided3_ChoiceNotInProvidedList) {
     std::string providedTools = R"(
        {"type": "function", "function": {"name": "get_weather1", "description": "Get current temperature for a given location.", "parameters": {"type": "object", "properties": {"location": {"type": "string", "description": "City and country e.g. Bogot\u00e1, Colombia"}}, "required": ["location"], "additionalProperties": false}, "strict": true}},
@@ -3501,7 +3501,7 @@ TEST_F(HttpOpenAIHandlerParsingTest, ParseRequestWithTools_Provided3_ChoiceNotIn
        {"type": "function", "function": {"name": "get_weather3", "description": "Get current temperature for a given location.", "parameters": {"type": "object", "properties": {"location": {"type": "string", "description": "City and country e.g. Bogot\u00e1, Colombia"}}, "required": ["location"], "additionalProperties": false}, "strict": true}}
 )";
     std::string toolsChoice = R"({"type": "function", "function": {"name": "get_weather4"}})";
-    assertRequestWithTools(providedTools, toolsChoice, std::vector<std::string>{});
+    assertRequestWithTools(providedTools, toolsChoice, absl::StatusCode::kInvalidArgument);
 }
 
 // Provide get_weather1, get_weather2, get_weather3 but tool_choice is not of type function
