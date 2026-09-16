@@ -1,6 +1,6 @@
 # Gemma4 upstream evidence triage — live handoff
 
-Status: `TRIAGE_16_OF_16_CLASSIFIED / TEST_HELPER_FIX_COMMITTED / PARSER_FIX_COMMITTED / LEGACY_PARSER_TESTS_RECONCILED / SOURCE_DIFF_AUDITED / FRANKENSTEIN_MATRIX_DEFINED / HTTP_STALE_EXPECTATION_PENDING / HOST_GREEN_NOT_RUN`
+Status: `TRIAGE_16_OF_16_CLASSIFIED / TEST_HELPER_FIX_COMMITTED / PARSER_FIX_COMMITTED / LEGACY_PARSER_TESTS_RECONCILED / SOURCE_DIFF_AUDITED / FRANKENSTEIN_MATRIX_DEFINED / HTTP_STALE_EXPECTATION_RECONCILED / HOST_GREEN_NOT_RUN`
 
 ## Immutable inputs
 
@@ -121,6 +121,13 @@ TEST_F(HttpOpenAIHandlerParsingTest, ParseRequestWithTools_Provided3_ChoiceNotIn
 ```
 
 Do not weaken production request validation to satisfy the old `OK` expectation.
+
+Stage record 2026-09-17: edit applied as `d554273a5` (`test(gemma4): stale hard-named
+tool expectation now requires INVALID_ARGUMENT`, `src/test/http_openai_handler_test.cpp`
+2+/2-, comment updated). Note: branch snippet with `vector<string> providedTools` does
+not match the `assertRequestWithTools(string, string, StatusCode)` helper signature;
+applied the minimal compilable form (same raw-JSON tools, `kInvalidArgument` status).
+C1 host gate (focused 229 + semantic 64) still NOT_RUN on this HEAD.
 
 ## Verification state
 
