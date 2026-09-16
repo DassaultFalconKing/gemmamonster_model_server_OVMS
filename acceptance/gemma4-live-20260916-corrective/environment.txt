@@ -1,0 +1,14 @@
+CORRECTIVE GEMMA4 LIVE ACCEPTANCE - environment
+DATE_UTC: 2026-09-16
+BRANCH: staging/gemma4-upstream-refit-clean-20260915
+HEAD: e6458ef78636113edf12f1aee6bc36825e773651
+GPU: Intel Arc 140V (32 GB unified memory)
+MODEL_PATH: C:\llm\models\OpenVINO\Wondernutts\gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov
+MODEL_NAME: gemma4-26-heretic
+ENDPOINT: http://127.0.0.1:18091/v3
+REST_PORT: 18091
+REST_BIND: 127.0.0.1
+CACHE_DIR: C:\llm\cache\gemmamonster
+MTP_ASSISTANT_IR: absent (C:\llm\models\OpenVINO\gemma4-26b-mtp-assistant-ov\openvino_mtp_model.xml not found) => MTP SKIPPED_NO_ASSISTANT_IR
+BASE_PIPELINE: VLM_CB / GPU / reasoning_parser=gemma4 / tool_parser=gemma4 / enable_tool_guided_generation=true / dynamic_split_fuse=true / cache_size=0
+KV_ROUTE_DECISION: --kv_cache_precision documents only u8/empty (no u4); U4 passed ONLY via --plugin_config {"KV_CACHE_PRECISION":"u4"}; never both flags together.

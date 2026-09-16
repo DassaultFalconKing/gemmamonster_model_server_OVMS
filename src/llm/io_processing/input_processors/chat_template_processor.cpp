@@ -16,7 +16,6 @@
 
 #include "chat_template_processor.hpp"
 
-#include <memory>
 #include <optional>
 #include <string>
 #include <utility>
@@ -25,92 +24,8 @@
 #include "../../../logging.hpp"
 
 namespace ovms {
-
-namespace {
-
-bool promptEndsInOpenGemma4Reasoning(const std::string& renderedPrompt) {
-    static const std::string marker = "<|channel>thought";
-    const size_t end = renderedPrompt.find_last_not_of(" \t\r\n");
-    if (end == std::string::npos || end + 1 < marker.size()) {
-        return false;
-    }
-    return renderedPrompt.compare(end + 1 - marker.size(), marker.size(), marker) == 0;
-}
-
-}  // namespace
-
-bool adaptGemma4HardToolGrammarForRenderedPrompt(
-    ov::genai::GenerationConfig& config,
-    const std::string& renderedPrompt) {
-    using Structured = ov::genai::StructuredOutputConfig;
-
-    if (!config.structured_output_config.has_value() || !promptEndsInOpenGemma4Reasoning(renderedPrompt)) {
-        return false;
-    }
-    auto& structuralConfig = config.structured_output_config->structural_tags_config;
-    if (!structuralConfig.has_value()) {
-        return false;
-    }
-    auto* root = std::get_if<Structured::StructuralTag>(&structuralConfig.value());
-    if (root == nullptr) {
-        return false;
-    }
-    auto* alternativesHolder = std::get_if<std::shared_ptr<Structured::Union>>(root);
-    if (alternativesHolder == nullptr || !*alternativesHolder || (*alternativesHolder)->elements.size() != 2) {
-        return false;
-    }
-
-    auto& alternatives = **alternativesHolder;
-    auto* requiredHolder = std::get_if<std::shared_ptr<Structured::TagsWithSeparator>>(&alternatives.elements[0]);
-    auto* thoughtSequenceHolder = std::get_if<std::shared_ptr<Structured::Concat>>(&alternatives.elements[1]);
-    if (requiredHolder == nullptr || !*requiredHolder || thoughtSequenceHolder == nullptr || !*thoughtSequenceHolder) {
-        return false;
-    }
-
-    const auto& requiredTags = **requiredHolder;
-    const auto& thoughtSequence = **thoughtSequenceHolder;
-    if (!requiredTags.at_least_one || requiredTags.tags.empty() || thoughtSequence.elements.size() != 2) {
-        return false;
-    }
-    auto* thoughtHolder = std::get_if<std::shared_ptr<Structured::Tag>>(&thoughtSequence.elements[0]);
-    auto* repeatedRequiredHolder = std::get_if<std::shared_ptr<Structured::TagsWithSeparator>>(&thoughtSequence.elements[1]);
-    if (thoughtHolder == nullptr || !*thoughtHolder || repeatedRequiredHolder == nullptr || !*repeatedRequiredHolder ||
-        *repeatedRequiredHolder != *requiredHolder) {
-        return false;
-    }
-
-    const auto& thought = **thoughtHolder;
-    if (thought.begin != "<|channel>thought\n" || thought.end != "<channel|>") {
-        return false;
-    }
-    for (const auto& tag : requiredTags.tags) {
-        if (tag.begin.rfind("<|tool_call>call:", 0) != 0 || tag.end != "<tool_call|>") {
-            return false;
-        }
-    }
-
-    auto triggered = std::make_shared<Structured::TriggeredTags>();
-    triggered->triggers = {"<|tool_call>"};
-    triggered->tags = requiredTags.tags;
-    triggered->at_least_one = true;
-    triggered->stop_after_first = requiredTags.stop_after_first;
-    Structured::StructuralTag adapted = triggered;
-    structuralConfig = adapted;
-    return true;
-}
-
-#if (PYTHON_DISABLE == 0)
-ChatTemplateProcessor::ChatTemplateProcessor(ov::genai::Tokenizer& tokenizer,
-    PyJinjaTemplateProcessor& templateProcessor) :
-    tokenizer(tokenizer),
-    templateProcessor(templateProcessor) {}
-
-ChatTemplateProcessor::ChatTemplateProcessor(ov::genai::Tokenizer& tokenizer) :
-    tokenizer(tokenizer),
-    templateProcessor(std::nullopt) {}
-
-std::string ChatTemplateProcessor::serializeForPyJinja(const ov::genai::ChatHistory& chatHistory) {
-    // Build the minimal JSON object that PyJinjaTemplateProcessor::applyChatTemplate expects:
+std::string ChatTemplateProcessor::serializeForJinja(const ov::genai::ChatHistory& chatHistory) {
+    // Build the minimal JSON object expected by Jinja runtime/in-process handlers:
     // {"messages":[...], "tools":[...], "chat_template_kwargs":{...}}
     std::string json = "{\"messages\":" + chatHistory.get_messages().to_json_string();
     const auto& tools = chatHistory.get_tools();
@@ -125,10 +40,12 @@ std::string ChatTemplateProcessor::serializeForPyJinja(const ov::genai::ChatHist
     return json;
 }
 
-#else
-ChatTemplateProcessor::ChatTemplateProcessor(ov::genai::Tokenizer& tokenizer) :
-    tokenizer(tokenizer) {}
-#endif
+ChatTemplateProcessor::ChatTemplateProcessor(ov::genai::Tokenizer& tokenizer,
+    bool useMinja,
+    const PreparedRuntimeChatTemplate* preparedRuntimeChatTemplate) :
+    tokenizer(tokenizer),
+    useMinja(useMinja),
+    preparedRuntimeChatTemplate(preparedRuntimeChatTemplate) {}
 
 absl::Status ChatTemplateProcessor::extractAddGenerationPrompt(const ov::genai::ChatHistory& chatHistory,
     ov::genai::JsonContainer& kwargs, bool& addGenerationPrompt) {
@@ -159,18 +76,23 @@ absl::Status ChatTemplateProcessor::process(InputRequest& req) {
         SPDLOG_LOGGER_TRACE(llm_calculator_logger, "chatTemplateKwargs: {}", chatHistory.get_extra_context().empty() ? std::string("<none>") : chatHistory.get_extra_context().to_json_string());
     }
 
-#if (PYTHON_DISABLE == 0)
-    if (templateProcessor.has_value()) {
-        const std::string jsonBody = serializeForPyJinja(chatHistory);
-        std::string promptText;
-        const bool success = PyJinjaTemplateProcessor::applyChatTemplate(
-            templateProcessor.value().get(), jsonBody, promptText);
-        if (!success) {
-            return absl::Status(absl::StatusCode::kInvalidArgument, promptText);
+    const std::string jsonBody = serializeForJinja(chatHistory);
+
+    if (!useMinja && preparedRuntimeChatTemplate != nullptr && preparedRuntimeChatTemplate->isPrepared()) {
+        std::string runtimeOutput;
+        RuntimeChatTemplateError runtimeError = RuntimeChatTemplateError::NONE;
+        auto runtimeStatus = tryApplyPreparedChatTemplateRuntime(
+            *preparedRuntimeChatTemplate,
+            jsonBody,
+            runtimeOutput,
+            &runtimeError);
+        if (runtimeStatus == RuntimeChatTemplateStatus::APPLIED) {
+            req.promptText = std::move(runtimeOutput);
+        } else if (runtimeStatus == RuntimeChatTemplateStatus::ERROR) {
+            (void)runtimeError;
+            return absl::Status(absl::StatusCode::kInvalidArgument, runtimeOutput);
         }
-        req.promptText = std::move(promptText);
     } else {
-#endif
         const auto& tools = chatHistory.get_tools();
         ov::genai::JsonContainer kwargs;
         bool addGenerationPrompt = true;
@@ -190,30 +112,12 @@ absl::Status ChatTemplateProcessor::process(InputRequest& req) {
             return absl::Status(absl::StatusCode::kInvalidArgument,
                 "Failed to apply chat template. The model either does not have chat template or has an invalid one.");
         }
-#if (PYTHON_DISABLE == 0)
     }
-#endif
 
     if (req.promptText.empty()) {
         return absl::Status(absl::StatusCode::kInvalidArgument,
             "Final prompt after applying chat template is empty");
     }
-
-    // Current Google Gemma4 continues the same model turn after a tool response
-    // and, with thinking enabled, can leave the rendered prompt ending in an open
-    // thought channel. The hard grammar was built before rendering and therefore
-    // described a new-turn suffix. Reconcile it here, where prompt state is known.
-    if (adaptGemma4HardToolGrammarForRenderedPrompt(req.generationConfig, req.promptText)) {
-        try {
-            req.generationConfig.structured_output_config.value().validate(tokenizer);
-        } catch (const std::exception& e) {
-            SPDLOG_LOGGER_DEBUG(llm_calculator_logger,
-                "Gemma4 prompt-aware hard tool grammar validation failed: {}", e.what());
-            return absl::Status(absl::StatusCode::kInvalidArgument,
-                std::string("Gemma4 prompt-aware hard tool grammar validation failed: ") + e.what());
-        }
-    }
-
     return absl::OkStatus();
 }
 

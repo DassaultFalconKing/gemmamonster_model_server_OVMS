@@ -97,11 +97,10 @@ public:
     void unsetStructuredOutputConfig();
 
     /*
-     * Model-specific policy for structured-output validation failures. The generic
-     * serving path historically falls back to unguided generation; builders that
-     * represent a hard API contract may override this to keep the grammar fail-closed.
+     * Returns true when structured-output validation is part of a hard request contract.
+     * Callers must fail the request on validation error instead of silently removing the constraint.
      */
-    virtual bool shouldPreserveStructuredOutputOnValidationFailure() const { return false; }
+    virtual bool requiresValidStructuredOutput() const { return false; }
 
     /*
      * Fills generation config with values read from OpenAI request.

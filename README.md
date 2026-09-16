@@ -1,24 +1,10 @@
-# Project Gemmamonster — OpenVINO Model Server for Gemma 4+ Agents
+# OpenVINO&trade; Model Server
 
-**Current release candidate: [GEMMAMONSTER 2026.4 RC — 17064400](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/releases/tag/gemmamonster-2026.4-rc-whitespace-17064400) · [Download Windows x64 ZIP](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/releases/download/gemmamonster-2026.4-rc-whitespace-17064400/gemmamonster-2026.4-rc-whitespace-17064400-windows-x64.zip) · [All fork releases](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/releases).**
-
-This is the frozen Gemma4 tool-calling RC. GitHub's `Latest` shortcut selects the older non-prerelease; use the explicit RC link above. Source: `170644006a5334cb971b05824e4a8c95b495c4e2`. The package is unchanged.
-
-**A specialized OpenVINO Model Server (OVMS) fork for Gemma 4+ agentic AI, reliable tool calling, structured output, reasoning, and multi-turn agent loops.**
-
-Project Gemmamonster exists for users who specifically need **OVMS with Gemma agents**. It takes a proven OVMS checkout and concentrates production experience, Google Gemma research, competitor behavior, parser hardening, grammar constraints, and real agent-loop testing into the strongest Gemma 4+ integration we can build.
-
-This is intentionally based on the fast and stable **OVMS 2026.4** line. We spent two days migrating to OVMS 2026.5 and then porting the resulting Gemma functionality back after 2026.5 proved unstable for this workload. The version difference from upstream is therefore deliberate, documented, and tested—not neglect.
-
-If you need general-purpose OpenVINO Model Server or support for unrelated model families, use the [official OpenVINO Model Server](https://github.com/openvinotoolkit/model_server). If you need **OpenVINO Model Server for Gemma 4+, tool calling, or an agentic loop**, this is the Project Gemmamonster fork.
-
-This fork is temporary by design. Its preferred end state is for the useful Gemma work to be accepted upstream so that Project Gemmamonster no longer needs to exist as a separate server.
-
-The underlying server remains OpenVINO Model Server, with its original project history, attribution, and Apache 2.0 license.
+**High-performance model serving for Generative AI and classic deep learning — powered by [OpenVINO](https://github.com/openvinotoolkit/openvino) and optimized for Intel hardware.**
 
 [![Apache License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](https://github.com/openvinotoolkit/model_server/blob/main/LICENSE)
 [![Docker Pulls](https://img.shields.io/docker/pulls/openvino/model_server.svg)](https://hub.docker.com/r/openvino/model_server)
-[![GitHub Release](https://img.shields.io/github/v/release/openvinotoolkit/model_server)](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/releases)
+[![GitHub Release](https://img.shields.io/github/v/release/openvinotoolkit/model_server)](https://github.com/openvinotoolkit/model_server/releases)
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows-blue)](https://docs.openvino.ai/2026/model-server/ovms_docs_deploying_server.html)
 
 ---
@@ -169,7 +155,7 @@ print("Top-1 class index:", int(np.argmax(output[0])))
 | Model repository | [Preparing models](https://docs.openvino.ai/2026/model-server/ovms_docs_models_repository.html) |
 | Client libraries | [Writing client code](https://docs.openvino.ai/2026/model-server/ovms_docs_server_app.html) |
 | Demos & examples | [Demos](https://docs.openvino.ai/2026/model-server/ovms_docs_demos.html) |
-| Release notes | [GitHub Releases](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/releases) |
+| Release notes | [GitHub Releases](https://github.com/openvinotoolkit/model_server/releases) |
 
 ---
 
@@ -186,7 +172,7 @@ docker pull openvino/model_server:weekly        # pre-production version with al
 - [Docker Hub](https://hub.docker.com/r/openvino/model_server)
 - [Red Hat Ecosystem Catalog](https://catalog.redhat.com/software/containers/intel/openvino-model-server/607833052937385fc98515de)
 
-**GEMMAMONSTER binary packages** (Windows x64): [Fork Releases](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/releases)
+**Binary official packages** (Linux & Windows): [GitHub Releases](https://github.com/openvinotoolkit/model_server/releases)
 
 
 Binary pre-production packages (Linux & Windows): [storage.openvinotoolkit.org](https://storage.openvinotoolkit.org/repositories/openvino_model_server/packages/weekly/)

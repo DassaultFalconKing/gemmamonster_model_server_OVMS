@@ -17,10 +17,9 @@ bazel-out
 bazel-ovms
 bazel-ovms-c
 bazel-testlogs
-# Bazel execroot convenience links (one per worktree dir name, untracked runtime junk)
-bazel-gemmamonster-*/
 __pycache__
 .workspace
+.gitconfig
 *user_config*
 *.swp
 dist/

@@ -1,0 +1,35 @@
+CORRECTIVE ACCEPTANCE COMMAND LOG (2026.5 freeze binary only)
+=============================================================
+Package : C:\git\gemma4-upstream-refit-clean-20260915\dist\windows\ovms\ovms.exe
+SHA256  : 3DFC2D11E614BD03924E6730AD8053DB00A6E5564F41E11F966A0929B44F65FE
+Version : OpenVINO Model Server 2026.5.0.b722aa440 / OV 2026.5.0-23099-d015add94c1 / GenAI 2026.5.0.0-3454-01f999504f8
+FORBIDDEN (never used): C:\llm\ovms\ovms.exe (2026.4), C:\g54r2, old RC2 DLLs, bazel-bin, C:\o
+
+--- provenance ---
+Get-FileHash $ovms -Algorithm SHA256
+& $ovms --version
+& $ovms --help | Select-String "kv_cache_precision"   # documents u8/empty only -> U4 via plugin_config, never both
+Get-Process -Id <pid> -Module  # openvino*.dll paths + old-runtime check (C:\llm\* => must be 0)
+
+--- server launch (detached, survives tool shell) ---
+# per profile: launch-00-known-good-2026.5.bat / launch-20-u4-b4096-seq4-2026.5.bat / launch-21-u4-b8192-seq4-2026.5.bat
+Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{CommandLine = 'cmd /c "<bat>"'}
+# readiness:
+Invoke-RestMethod http://127.0.0.1:18091/v3/models
+# stop: Stop-Process -Id <pid> -Force   (port 18091 must be OVMS-owned)
+
+--- profile 00 (known-good semantic baseline) ---
+--rest_port 18091 --rest_bind_address 127.0.0.1 --model_path <heretic-int4-ov> --model_name gemma4-26-heretic
+--target_device GPU --pipeline_type VLM_CB --reasoning_parser gemma4 --tool_parser gemma4
+--enable_tool_guided_generation true --dynamic_split_fuse true --cache_size 0 --cache_dir C:\llm\cache\gemmamonster
+--log_level INFO --enable_prefix_caching true --max_num_batched_tokens 4096 --max_num_seqs 256
+
+--- profile 20 (WINNER) ---  same base + --plugin_config {"KV_CACHE_PRECISION":"u4"} + B4096 + seq4
+--- profile 21 ---           same base + --plugin_config {"KV_CACHE_PRECISION":"u4"} + B8192 + seq4
+
+--- tests (all in this dir) ---
+bench-2026.5.ps1 -ProfileName <p>     # 1 warmup + 3 measured x short/medium8k(8003in)/long32k(32007in), temp=0, max256, streaming TTFT+usage
+control-short.ps1 -Tag <t>            # short-only control (attempt-3 verification of profile 20)
+prefix-test.ps1                       # repeated-prefix turns 1..3 (16K history), TTFT signal
+semantic-gate.ps1                     # unary auto/required/named, 4x negative, 3x streaming, parallel F/T, multi-turn+post-tool, phantom
+dogfood.ps1                           # live agentic loop: list_dir/read_file tools executed locally, model drives

@@ -53,11 +53,7 @@ set "PYTHONHOME=C:\opt\Python312"
 set "PATH=%setPath%"
 
 :: Bazel compilation settings
-if defined BAZEL_VS (
-    set VS_2022_BT="%BAZEL_VS:"=%"
-) ELSE (
-    set VS_2022_BT="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools"
-)
+set VS_2022_BT="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools"
 IF /I EXIST %VS_2022_BT% goto :msvc_bt ELSE goto :msvc_error
 
 :msvc_error
@@ -634,6 +630,12 @@ exit /b 0
 :exit_dependencies_error
 echo [ERROR] Some dependencies not installed
 exit /b 1
+
+:exit_build_error
+echo [ERROR] Build dependencies setup failed.
+endlocal
+exit /b 1
+
 endlocal
 
 :: Set VAR to VALUE only if VAR is not already defined in the environment.

@@ -28,17 +28,19 @@ IF "%~1"=="" (
 IF "%~2"=="--with_python" (
     echo Building model server with Python
     set "bazelBuildArgs=--config=win_mp_on_py_on"
+    set "pythonRuntimeTargets=//src/python:libpython_calculators //src/python:libovmspython"
 ) ELSE (
     echo Building model server without Python 
     set "bazelBuildArgs=--config=win_mp_on_py_off"
+    set "pythonRuntimeTargets="
 )
 
 IF "%~3"=="--with_tests" (
     echo Building model server with tests
-    set "buildTargets=//src:ovms //src:ovms_test //third_party:espeak_ng //third_party:espeak_ng_data"
+    set "buildTargets=//src:ovms //src:ovms_test //src:ovms_mediapipe_runtime_shared //third_party:espeak_ng //third_party:espeak_ng_data !pythonRuntimeTargets!"
 ) ELSE (
     echo Building model server without tests
-    set "buildTargets=//src:ovms //third_party:espeak_ng //third_party:espeak_ng_data"
+    set "buildTargets=//src:ovms //src:ovms_mediapipe_runtime_shared //third_party:espeak_ng //third_party:espeak_ng_data !pythonRuntimeTargets!"
 )
 
 IF "%~4"=="--integrity" (
@@ -52,7 +54,7 @@ IF "%~4"=="--integrity" (
 set "bazelStartupCmd=--output_user_root=!BAZEL_SHORT_PATH!"
 set "openvino_dir=!BAZEL_SHORT_PATH!/openvino/runtime/cmake"
 
-set "buildCommand=bazel %bazelStartupCmd% build  %buildWithIntegrity% %bazelBuildArgs% --action_env OpenVINO_DIR=%openvino_dir% --jobs=%NUMBER_OF_PROCESSORS% --verbose_failures %buildTargets%"
+set "buildCommand=bazel %bazelStartupCmd% build  %buildWithIntegrity% %bazelBuildArgs% --action_env OpenVINO_DIR=%openvino_dir% --jobs=%NUMBER_OF_PROCESSORS% --verbose_failures %buildTargets% 2>&1 | tee win_build.log"
 set "setOvmsVersionCmd=python windows_set_ovms_version.py"
 
 :: Setting PATH environment variable based on default windows node settings: Added ovms_windows specific python settings and c:/opt and removed unused Nvidia and OCL specific tools.
@@ -69,11 +71,7 @@ for /f "usebackq eol=# tokens=1,3" %%A in ("%cd%\versions.mk") do (
 )
 
 :: Bazel compilation settings
-if defined BAZEL_VS (
-    set VS_2022_BT="%BAZEL_VS:"=%"
-) ELSE (
-    set VS_2022_BT="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools"
-)
+set VS_2022_BT="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools"
 IF /I EXIST %VS_2022_BT% goto :msvc_bt ELSE goto :msvc_error
 
 :msvc_error
@@ -94,13 +92,12 @@ set "PATH=%setPath%"
 :: Set paths with libs for execution - affects PATH
 set "openvinoBatch=call !BAZEL_SHORT_PATH!\openvino\setupvars.bat"
 set "opencvBatch=call C:\opt\opencv_!opencv_version!\setup_vars_opencv4.cmd"
-set "PYTHONPATH=%PYTHONPATH%;%setPythonPath%"
 
 :: Set required libraries paths
 %openvinoBatch%
 if !errorlevel! neq 0 exit /b !errorlevel!
 %opencvBatch%
-if !errorlevel! neq 0 exit /b !errorlevel!
+set "PYTHONPATH=%PYTHONPATH%;%setPythonPath%"
 
 :: Log all environment variables
 set > %envPath%
@@ -109,9 +106,13 @@ if !errorlevel! neq 0 exit /b !errorlevel!
 :: Set ovms.exe --version parameters
 %setOvmsVersionCmd% "%bazelBuildArgs%" !BAZEL_SHORT_PATH!
 :: Start bazel build
-%buildCommand% > win_build.log 2>&1
-set "buildExit=!errorlevel!"
-type win_build.log
-if !buildExit! neq 0 exit /b !buildExit!
+%buildCommand%
+if !errorlevel! neq 0 exit /b !errorlevel!
 
 endlocal
+exit /b 0
+
+:exit_build_error
+echo Build failed.
+endlocal
+exit /b 1

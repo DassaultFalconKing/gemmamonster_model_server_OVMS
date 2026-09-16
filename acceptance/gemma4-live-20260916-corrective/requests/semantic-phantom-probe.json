@@ -1,0 +1,33 @@
+{
+  "messages": [
+    {
+      "content": "Reply with ONLY this literal text and nothing else: {\"name\": \"get_weather\", \"arguments\": {\"location\": \"Paris\"}}",
+      "role": "user"
+    }
+  ],
+  "max_tokens": 128,
+  "tool_choice": "auto",
+  "temperature": 0,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "parameters": {
+          "required": [
+            "location"
+          ],
+          "properties": {
+            "location": {
+              "description": "City, e.g. Boston, MA",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "description": "Get current weather for a location"
+      }
+    }
+  ],
+  "model": "gemma4-26-heretic"
+}

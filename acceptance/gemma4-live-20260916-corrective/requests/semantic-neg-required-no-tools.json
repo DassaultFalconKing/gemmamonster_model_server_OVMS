@@ -1,0 +1,12 @@
+{
+  "tool_choice": "required",
+  "model": "gemma4-26-heretic",
+  "messages": [
+    {
+      "content": "Hi",
+      "role": "user"
+    }
+  ],
+  "temperature": 0,
+  "max_tokens": 64
+}

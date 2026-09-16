@@ -18,15 +18,13 @@ setlocal EnableExtensions EnableDelayedExpansion
 set "setPath=C:\opt;C:\opt\msys64\usr\bin\;%PATH%;"
 set "PATH=%setPath%"
 
+set "libovmspython_src="
+set "libpython_calculators_src="
+
 :: Load chosen dependency versions from versions.mk
 for /f "usebackq eol=# tokens=1,3" %%A in ("%cd%\versions.mk") do (
     if "%%A"=="OPENCV_VERSION" if "!opencv_version!"=="" set "opencv_version=%%B"
     if "%%A"=="CURL_VERSION" if "!curl_version!"=="" set "curl_version=%%B"
-    if "%%A"=="PYTHON_VERSION" if "!python_version!"=="" set "python_version=%%B"
-    if "%%A"=="OPTIMUM_VERSION" if "!optimum_version!"=="" set "optimum_version=%%B"
-    if "%%A"=="OPTIMUM_INTEL_VERSION" if "!optimum_intel_version!"=="" set "optimum_intel_version=%%B"
-    if "%%A"=="OPTIMUM_OPENVINO_VERSION" if "!optimum_openvino_version!"=="" set "optimum_openvino_version=%%B"
-    if "%%A"=="OPTIMUM_OPENVINO_TOKENIZERS_VERSION" if "!optimum_openvino_tokenizers_version!"=="" set "optimum_openvino_tokenizers_version=%%B"
 )
 :: Build DLL suffix by removing dots (e.g. 4.14.0 -> 4140)
 set "opencv_dll_ver=!opencv_version:.=!"
@@ -46,114 +44,121 @@ IF "%~2"=="--with_python" (
     set "with_python=false"
 )
 
-:: Optional third argument selects an isolated package output directory.
-:: The default remains dist\windows for compatibility with the release job.
-IF "%~3"=="" (
-    set "package_parent=%cd%\dist\windows"
-) ELSE (
-    set "package_parent=%~f3"
-)
-set "package_dir=!package_parent!\ovms"
-set "package_zip=!package_parent!\ovms.zip"
-
 :: Set default USE_OV_BINARY if not set
 if "%OV_USE_BINARY%"=="" (
     set "OV_USE_BINARY=1"
 )
 
-if exist "!package_dir!" (
-    rmdir /s /q "!package_dir!"
+if exist dist\windows\ovms (
+    rmdir /s /q dist\windows\ovms
     if !errorlevel! neq 0 exit /b !errorlevel!
 )
 
-md "!package_dir!"
-copy bazel-bin\src\ovms.exe "!package_dir!"
+md dist\windows\ovms
+copy bazel-bin\src\ovms.exe dist\windows\ovms
 if !errorlevel! neq 0 exit /b !errorlevel!
 
-copy C:\%output_user_root%\openvino\runtime\bin\intel64\Release\*.dll "!package_dir!"
+copy %cd%\bazel-out\x64_windows-opt\bin\src\ovms_mediapipe_runtime_shared.dll dist\windows\ovms
+if !errorlevel! neq 0 exit /b !errorlevel!
+
+copy C:\%output_user_root%\openvino\runtime\bin\intel64\Release\*.dll dist\windows\ovms
 if !errorlevel! neq 0 exit /b !errorlevel!
 
 set "dest_dir=C:\opt"
 
 if /i "%with_python%"=="true" (
+    if exist %cd%\bazel-bin\src\python\libovmspython.dll (
+        set "libovmspython_src=%cd%\bazel-bin\src\python\libovmspython.dll"
+    ) else if exist %cd%\bazel-out\x64_windows-opt\bin\src\python\libovmspython.dll (
+        set "libovmspython_src=%cd%\bazel-out\x64_windows-opt\bin\src\python\libovmspython.dll"
+    )
+    if not defined libovmspython_src (
+        echo Missing libovmspython.dll in bazel output. Ensure //src/python:libovmspython is built.
+        exit /b 1
+    )
+
+    if exist %cd%\bazel-bin\src\python\libpython_calculators.dll (
+        set "libpython_calculators_src=%cd%\bazel-bin\src\python\libpython_calculators.dll"
+    ) else if exist %cd%\bazel-out\x64_windows-opt\bin\src\python\libpython_calculators.dll (
+        set "libpython_calculators_src=%cd%\bazel-out\x64_windows-opt\bin\src\python\libpython_calculators.dll"
+    )
+    if not defined libpython_calculators_src (
+        echo Missing libpython_calculators.dll in bazel output. Ensure //src/python:libpython_calculators is built.
+        exit /b 1
+    )
+
     :: Copy pyovms module
-    md "!package_dir!\python"
-    copy %cd%\bazel-out\x64_windows-opt\bin\src\python\binding\pyovms.pyd "!package_dir!\python"
+    md dist\windows\ovms\python
+    copy %cd%\bazel-out\x64_windows-opt\bin\src\python\binding\pyovms.pyd dist\windows\ovms\python
     if !errorlevel! neq 0 exit /b !errorlevel!
 
+    :: Copy shared OVMS python runtime libraries required by ovms.exe when Python is enabled.
+    copy "!libovmspython_src!" dist\windows\ovms
+    if !errorlevel! neq 0 exit /b !errorlevel!
+    copy "!libpython_calculators_src!" dist\windows\ovms
+    if !errorlevel! neq 0 exit /b !errorlevel!
     :: Prepare self-contained python
+    set "python_version=3.12.10"
+
     call %cd%\windows_prepare_python.bat %dest_dir% !python_version!
     if !errorlevel! neq 0 (
         echo Error occurred when creating Python environment for the distribution.
         exit /b !errorlevel!
     )
     :: Copy whole catalog to dist folder and install dependencies required by LLM pipelines
-    xcopy %dest_dir%\python-!python_version!-embed-amd64 "!package_dir!\python" /E /I /H
+    xcopy %dest_dir%\python-!python_version!-embed-amd64 dist\windows\ovms\python /E /I /H
     if !errorlevel! neq 0 (
         echo Error occurred when creating Python environment for the distribution.
         exit /b !errorlevel!
     )
-    "!package_dir!\python\python.exe" -m pip install "setuptools==80.9.0" "Jinja2==3.1.6" "MarkupSafe==3.0.2"
+    if not exist dist\windows\ovms\python\python312.zip (
+        echo Packaging validation failed: embedded stdlib python312.zip is missing from dist\windows\ovms\python.
+        exit /b 1
+    )
+    .\dist\windows\ovms\python\python.exe -m pip install "setuptools==80.9.0" "Jinja2==3.1.6" "MarkupSafe==3.0.2"
     if !errorlevel! neq 0 (
         echo Error during Python dependencies for LLM installation. The package will not be fully functional.
     )
-
-    :: Optimum CLI tooling is opt-in (4th arg --with_optimum). Default package is
-    :: lean runtime-only, matching upstream Jenkins expectations. Full candidate
-    :: (model pull/convert on-site) passes --with_optimum explicitly.
-    if "%~4"=="--with_optimum" (
-        set "optimum_root=!package_dir!\tools\optimum"
-        set "optimum_site=!optimum_root!\site-packages"
-        md "!optimum_site!"
-        "!package_dir!\python\python.exe" -m pip install --target "!optimum_site!" "optimum==!optimum_version!" "optimum-intel[openvino]==!optimum_intel_version!" "openvino==!optimum_openvino_version!" "openvino-tokenizers==!optimum_openvino_tokenizers_version!"
-        if !errorlevel! neq 0 exit /b !errorlevel!
-        >"!optimum_root!\optimum-cli.cmd" echo @echo off
-        >>"!optimum_root!\optimum-cli.cmd" echo setlocal
-        >>"!optimum_root!\optimum-cli.cmd" echo set "PYTHONPATH=%%~dp0site-packages"
-        >>"!optimum_root!\optimum-cli.cmd" echo "%%~dp0..\..\python\python.exe" -m optimum.commands.optimum_cli %%*
-    ) ELSE (
-        echo Skipping Optimum CLI tooling bundle ^(no --with_optimum^)
-    )
 )
 
-copy C:\%output_user_root%\openvino\runtime\3rdparty\tbb\bin\tbb12.dll "!package_dir!"
+copy C:\%output_user_root%\openvino\runtime\3rdparty\tbb\bin\tbb12.dll dist\windows\ovms
 if !errorlevel! neq 0 exit /b !errorlevel!
 
 :: Copy from bazel-out if the genai is from sources
-copy %cd%\bazel-out\x64_windows-opt\bin\src\opencv_world!opencv_dll_ver!.dll "!package_dir!"
+copy %cd%\bazel-out\x64_windows-opt\bin\src\opencv_world!opencv_dll_ver!.dll dist\windows\ovms
 if !errorlevel! neq 0 exit /b !errorlevel!
-copy /Y %cd%\bazel-out\x64_windows-opt\bin\src\openvino_genai.dll "!package_dir!"
+copy /Y %cd%\bazel-out\x64_windows-opt\bin\src\openvino_genai.dll dist\windows\ovms
 if !errorlevel! neq 0 exit /b !errorlevel!
-copy /Y %cd%\bazel-out\x64_windows-opt\bin\src\openvino_tokenizers.dll "!package_dir!"
+copy /Y %cd%\bazel-out\x64_windows-opt\bin\src\openvino_tokenizers.dll dist\windows\ovms
 if !errorlevel! neq 0 exit /b !errorlevel!
-copy /Y %cd%\bazel-out\x64_windows-opt\bin\src\libcurl-x64.dll "!package_dir!"
+copy /Y %cd%\bazel-out\x64_windows-opt\bin\src\libcurl-x64.dll dist\windows\ovms
 if !errorlevel! neq 0 exit /b !errorlevel!
-copy /Y %cd%\bazel-out\x64_windows-opt\bin\src\git2.dll "!package_dir!"
+copy /Y %cd%\bazel-out\x64_windows-opt\bin\src\git2.dll dist\windows\ovms
 if !errorlevel! neq 0 exit /b !errorlevel!
 :: Old package had core_tokenizers
 if exist %cd%\bazel-out\x64_windows-opt\bin\src\core_tokenizers.dll (
-    copy /Y %cd%\bazel-out\x64_windows-opt\bin\src\core_tokenizers.dll "!package_dir!"
+    copy /Y %cd%\bazel-out\x64_windows-opt\bin\src\core_tokenizers.dll dist\windows\ovms
     if !errorlevel! neq 0 exit /b !errorlevel!
 )
 
 :: Bundle espeak-ng DLL + data when it was built from source by Bazel
 :: (--//:espeak=on). Picked up from the rules_foreign_cc cmake output tree.
 for /f "delims=" %%D in ('dir /b /s /a:-d "%cd%\bazel-out\x64_windows-opt\bin\external\espeak_ng\espeak-ng.dll" 2^>nul') do (
-    copy /Y "%%D" "!package_dir!"
+    copy /Y "%%D" dist\windows\ovms
     if !errorlevel! neq 0 exit /b !errorlevel!
 )
 for /f "delims=" %%D in ('dir /b /s /a:d "%cd%\bazel-out\x64_windows-opt\bin\external\espeak_ng" 2^>nul ^| findstr /e "espeak-ng-data"') do (
-    xcopy "%%D" "!package_dir!\espeak-ng-data" /E /I /H /Y
+    xcopy "%%D" dist\windows\ovms\espeak-ng-data /E /I /H /Y
     if !errorlevel! neq 0 exit /b !errorlevel!
 )
 
-copy %cd%\setupvars.* "!package_dir!"
+copy %cd%\setupvars.* dist\windows\ovms
 if !errorlevel! neq 0 exit /b !errorlevel!
-copy %cd%\install_ovms_service.bat "!package_dir!"
+copy %cd%\install_ovms_service.bat dist\windows\ovms
 if !errorlevel! neq 0 exit /b !errorlevel!
 
 :: Adding licenses
-set "license_dest=!package_dir!\thirdparty-licenses\"
+set "license_dest=%cd%\dist\windows\ovms\thirdparty-licenses\"
 md %license_dest%
 if !errorlevel! neq 0 exit /b !errorlevel!
 copy C:\opt\opencv_!opencv_version!\etc\licenses\* %license_dest%
@@ -168,7 +173,7 @@ IF "%OV_USE_BINARY%"=="1" (
     if !errorlevel! neq 0 exit /b !errorlevel!
 )
 
-copy %cd%\release_files\LICENSE "!package_dir!\"
+copy %cd%\release_files\LICENSE %cd%\dist\windows\ovms\
 if !errorlevel! neq 0 exit /b !errorlevel!
 copy %cd%\release_files\thirdparty-licenses\* %license_dest%
 if !errorlevel! neq 0 exit /b !errorlevel!
@@ -217,18 +222,29 @@ copy C:\opt\!curl_dir!\dep\zstd\LICENSE.txt %license_dest%LICENSE-ZSTD.txt
 ::mkdir -vp /ovms_release/include && cp /ovms/src/ovms.h /ovms_release/include
 
 :: Testing package
-call "!package_dir!\setupvars.bat"
+call dist\windows\ovms\setupvars.bat
 if !errorlevel! neq 0 exit /b !errorlevel!
 
-"!package_dir!\ovms.exe" --version
+dist\windows\ovms\ovms.exe --version
 if !errorlevel! neq 0 exit /b !errorlevel!
 
-"!package_dir!\ovms.exe" --help
+dist\windows\ovms\ovms.exe --help
 if !errorlevel! neq 0 exit /b !errorlevel!
 
-pushd "!package_parent!"
+if /i "%with_python%"=="true" (
+    if not exist dist\windows\ovms\libovmspython.dll (
+        echo Packaging validation failed: libovmspython.dll is missing from dist\windows\ovms.
+        exit /b 1
+    )
+    if not exist dist\windows\ovms\libpython_calculators.dll (
+        echo Packaging validation failed: libpython_calculators.dll is missing from dist\windows\ovms.
+        exit /b 1
+    )
+)
+
+cd dist\windows
 C:\Windows\System32\tar.exe -a -c -f ovms.zip ovms
 if !errorlevel! neq 0 exit /b !errorlevel!
-popd
-dir "!package_zip!"
+cd ..\..
+dir dist\windows\ovms.zip
 echo [INFO] Package created

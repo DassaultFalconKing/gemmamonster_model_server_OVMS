@@ -15,8 +15,6 @@
 //*****************************************************************************
 
 #pragma once
-#include <algorithm>
-#include <cctype>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
@@ -38,42 +36,37 @@
 namespace ovms {
 
 class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
-    enum class ToolConstraintMode {
-        Disabled,
-        Auto,
-        Hard,
-    };
-
-    bool hardToolChoice{false};
-
-    static bool isValidToolName(const std::string& name) {
-        return !name.empty() && std::all_of(name.begin(), name.end(), [](unsigned char c) {
-            return std::isalnum(c) || c == '_' || c == '-' || c == '.';
-        });
-    }
+    bool hardToolPolicy = false;
 
     static bool isNamedToolChoice(const std::string& toolChoice) {
-        return !toolChoice.empty() && toolChoice != "auto" && toolChoice != "none" && toolChoice != "required";
+        return !toolChoice.empty() && toolChoice != "none" && toolChoice != "auto" && toolChoice != "required";
     }
 
-    static bool isHardToolChoiceImpl(const std::string& toolChoice) {
-        return toolChoice == "required" || isNamedToolChoice(toolChoice);
-    }
-
-    static ToolConstraintMode getToolConstraintMode(const OpenAIRequest& request) {
-        if (request.toolNameSchemaMap.empty() || request.toolChoice == "none") {
-            return ToolConstraintMode::Disabled;
+    static bool isSafeToolName(const std::string& name) {
+        // TODO: share one predicate with Gemma4ToolParser::saneToolName
+        // (src/llm/io_processing/gemma4/gemma4_tool_parser.cpp). Duplicated
+        // here to avoid a cross-component helper refactor in this change;
+        // both must accept exactly [A-Za-z0-9_.-]+.
+        if (name.empty())
+            return false;
+        for (unsigned char c : name) {
+            const bool ok = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_' || c == '-' || c == '.';
+            if (!ok)
+                return false;
         }
-        if (request.toolChoice.empty() || request.toolChoice == "auto") {
-            return ToolConstraintMode::Auto;
-        }
-        return ToolConstraintMode::Hard;
+        return true;
     }
 
-    static ov::genai::StructuredOutputConfig::Tag buildToolTag(const std::string& toolName, const ToolSchemaWrapper& toolSchemaWrapper) {
+    static ov::genai::StructuredOutputConfig::Tag buildToolTag(
+        const std::string& toolName,
+        const ToolSchemaWrapper& toolSchemaWrapper) {
+        if (!isSafeToolName(toolName)) {
+            throw std::invalid_argument("Gemma4 tool name '" + toolName + "' contains characters outside [A-Za-z0-9_.-]");
+        }
         if (toolSchemaWrapper.stringRepr.empty()) {
             throw std::invalid_argument("Gemma4 guided tool schema for '" + toolName + "' is empty");
         }
+
         ov::genai::StructuredOutputConfig::Tag tag;
         tag.begin = "<|tool_call>call:" + toolName;
         tag.content = ov::genai::StructuredOutputConfig::JSONSchema(toolSchemaWrapper.stringRepr);
@@ -81,71 +74,36 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
         return tag;
     }
 
-    static std::vector<ov::genai::StructuredOutputConfig::Tag> buildToolTags(const OpenAIRequest& request) {
-        std::vector<ov::genai::StructuredOutputConfig::Tag> tags;
+    static std::vector<ov::genai::StructuredOutputConfig::Tag> buildToolTags(
+        const OpenAIRequest& request) {
+        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags;
         if (isNamedToolChoice(request.toolChoice)) {
             const auto it = request.toolNameSchemaMap.find(request.toolChoice);
             if (it == request.toolNameSchemaMap.end()) {
                 throw std::invalid_argument("Gemma4 named tool_choice references an unavailable tool: " + request.toolChoice);
             }
-            if (!isValidToolName(it->first)) {
-                throw std::invalid_argument("Gemma4 tool name contains unsupported characters: " + it->first);
-            }
-            tags.push_back(buildToolTag(it->first, it->second));
-            return tags;
+            toolTags.push_back(buildToolTag(it->first, it->second));
+            return toolTags;
         }
-        tags.reserve(request.toolNameSchemaMap.size());
+
+        toolTags.reserve(request.toolNameSchemaMap.size());
         for (const auto& [toolName, toolSchemaWrapper] : request.toolNameSchemaMap) {
-            if (!isValidToolName(toolName)) {
-                throw std::invalid_argument("Gemma4 tool name contains unsupported characters: " + toolName);
-            }
-            tags.push_back(buildToolTag(toolName, toolSchemaWrapper));
+            toolTags.push_back(buildToolTag(toolName, toolSchemaWrapper));
         }
-        return tags;
+        return toolTags;
     }
 
-    static ov::genai::StructuredOutputConfig::StructuralTag buildTriggeredToolGrammar(
+    static ov::genai::StructuredOutputConfig::StructuralTag buildRequiredToolGrammar(
         std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags,
-        bool parallelToolCalls,
-        bool atLeastOne) {
+        bool stopAfterFirst) {
         using Structured = ov::genai::StructuredOutputConfig;
-        // The fde0762 sole-tag duplication was a superseded workaround. Pinned
-        // GenAI/xgrammar v0.1.31 repeats one alternative when stop_after_first=false.
-        auto triggeredTags = std::make_shared<Structured::TriggeredTags>();
-        triggeredTags->triggers = {"<|tool_call>"};
-        triggeredTags->tags = std::move(toolTags);
-        triggeredTags->at_least_one = atLeastOne;
-        // xgrammar's structural-tag contract maps parallel_tool_calls=false to
-        // stop_after_first=true. With the default true, later triggers remain legal.
-        triggeredTags->stop_after_first = !parallelToolCalls;
-        return triggeredTags;
-    }
-
-    static ov::genai::StructuredOutputConfig::StructuralTag buildAutoToolGrammar(
-        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags,
-        bool parallelToolCalls) {
-        // TriggeredTags supplies the free-text prefix. `auto` deliberately does
-        // not require the trigger, so ordinary prose remains legal.
-        return buildTriggeredToolGrammar(std::move(toolTags), parallelToolCalls, false);
-    }
-
-    static ov::genai::StructuredOutputConfig::StructuralTag buildMandatoryToolGrammar(
-        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags,
-        bool parallelToolCalls) {
-        using Structured = ov::genai::StructuredOutputConfig;
-        // Keep alternatives unique; stop_after_first alone controls multiplicity.
 
         auto requiredTags = std::make_shared<Structured::TagsWithSeparator>();
         requiredTags->tags = std::move(toolTags);
         requiredTags->separator = "";
         requiredTags->at_least_one = true;
-        requiredTags->stop_after_first = !parallelToolCalls;
+        requiredTags->stop_after_first = stopAfterFirst;
 
-        // On a normal new model turn, canonical Google Gemma4 can either call a
-        // tool immediately or emit a complete thought channel and then call it.
-        // Selecting a named tool restricts the available tags, not the thought
-        // phase. xgrammar rejects empty ConstString, so optional thought is a
-        // Union of tools-only versus thought-then-tools.
         auto thought = std::make_shared<Structured::Tag>();
         thought->begin = "<|channel>thought\n";
         thought->content = Structured::AnyText();
@@ -159,49 +117,58 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
         return alternatives;
     }
 
-public:
-    Gemma4GenerationConfigBuilder() = delete;
-    explicit Gemma4GenerationConfigBuilder(const ov::genai::GenerationConfig& baseConfig, bool enableToolGuidedGeneration, DecodingMethod decodingMethod) :
-        BaseGenerationConfigBuilder(baseConfig, enableToolGuidedGeneration, decodingMethod) {}
-
-    bool shouldPreserveStructuredOutputOnValidationFailure() const override {
-        return hardToolChoice;
+    static ov::genai::StructuredOutputConfig::StructuralTag buildAutoToolGrammar(
+        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags,
+        bool stopAfterFirst) {
+        using Structured = ov::genai::StructuredOutputConfig;
+        auto triggeredTags = std::make_shared<Structured::TriggeredTags>();
+        triggeredTags->triggers = {"<|tool_call>"};
+        triggeredTags->tags = std::move(toolTags);
+        triggeredTags->at_least_one = false;
+        triggeredTags->stop_after_first = stopAfterFirst;
+        return triggeredTags;
     }
 
-    void parseConfigFromRequest(const OpenAIRequest& request) override {
-        BaseGenerationConfigBuilder::parseConfigFromRequest(request);
-        hardToolChoice = isHardToolChoiceImpl(request.toolChoice);
+public:
+    Gemma4GenerationConfigBuilder() = delete;
+    explicit Gemma4GenerationConfigBuilder(
+        const ov::genai::GenerationConfig& baseConfig,
+        bool enableToolGuidedGeneration,
+        DecodingMethod decodingMethod) :
+        BaseGenerationConfigBuilder(baseConfig, enableToolGuidedGeneration, decodingMethod) {}
 
-        if (hardToolChoice && request.toolNameSchemaMap.empty()) {
+    void parseConfigFromRequest(const OpenAIRequest& request) override {
+        hardToolPolicy = false;
+        BaseGenerationConfigBuilder::parseConfigFromRequest(request);
+
+        const bool hardChoice = request.toolChoice == "required" || isNamedToolChoice(request.toolChoice);
+        if (hardChoice && request.toolNameSchemaMap.empty()) {
             throw std::invalid_argument("Gemma4 hard tool_choice requires at least one available tool schema");
         }
-        if (request.responseFormat.has_value() && request.toolChoice != "none" && !request.toolNameSchemaMap.empty()) {
+
+        const bool activeTools = !request.toolNameSchemaMap.empty() && request.toolChoice != "none";
+        if (request.responseFormat.has_value() && activeTools) {
             throw std::invalid_argument("Gemma4 response_format cannot be combined with active tool generation constraints");
         }
-
-        const ToolConstraintMode mode = getToolConstraintMode(request);
-        if (mode == ToolConstraintMode::Disabled) {
+        if (!activeTools) {
             return;
         }
 
         auto toolTags = buildToolTags(request);
-        if (toolTags.empty()) {
-            throw std::invalid_argument("Gemma4 active tool_choice did not produce an enforceable tool tag");
+        const bool stopAfterFirst = !request.parallelToolCalls;
+        if (hardChoice) {
+            hardToolPolicy = true;
+            setStructuralTagsConfig(buildRequiredToolGrammar(std::move(toolTags), stopAfterFirst));
+            return;
         }
 
-        switch (mode) {
-        case ToolConstraintMode::Auto:
-            // OpenVINO GenAI TriggeredTags maps to xgrammar's lazy structural-tag
-            // dispatch: normal text is unconstrained until the tool marker appears,
-            // then the selected request tool name and JSON schema become authoritative.
-            setStructuralTagsConfig(buildAutoToolGrammar(std::move(toolTags), request.parallelToolCalls));
-            return;
-        case ToolConstraintMode::Hard:
-            setStructuralTagsConfig(buildMandatoryToolGrammar(std::move(toolTags), request.parallelToolCalls));
-            return;
-        case ToolConstraintMode::Disabled:
-            return;
+        if ((request.toolChoice.empty() || request.toolChoice == "auto") && enableToolGuidedGeneration) {
+            setStructuralTagsConfig(buildAutoToolGrammar(std::move(toolTags), stopAfterFirst));
         }
+    }
+
+    bool requiresValidStructuredOutput() const override {
+        return hardToolPolicy;
     }
 };
 
@@ -210,10 +177,12 @@ class GenerationConfigBuilder {
 
 public:
     GenerationConfigBuilder() = delete;
+    // Using tool parser name to select appropriate builder implementation to avoid introducing additional parameters. Might be insufficient in the future.
     explicit GenerationConfigBuilder(const ov::genai::GenerationConfig& baseConfig, std::string toolParserName, bool enableToolGuidedGeneration, DecodingMethod decodingMethod) {
         if (toolParserName == "llama3") {
             builder_impl = std::make_unique<Llama3GenerationConfigBuilder>(baseConfig, enableToolGuidedGeneration, decodingMethod);
         } else if (toolParserName == "qwen3") {
+            // Qwen3 and Hermes3 share the same mechanism for generating tool calls, so we can use Hermes3GenerationConfigBuilder
             builder_impl = std::make_unique<Hermes3GenerationConfigBuilder>(baseConfig, enableToolGuidedGeneration, decodingMethod);
         } else if (toolParserName == "hermes3") {
             builder_impl = std::make_unique<Hermes3GenerationConfigBuilder>(baseConfig, enableToolGuidedGeneration, decodingMethod);
@@ -231,24 +200,32 @@ public:
         }
     }
 
-    ov::genai::GenerationConfig& getConfig() { return builder_impl->getConfig(); }
-    void adjustConfigForDecodingMethod() { builder_impl->adjustConfigForDecodingMethod(); }
-    void validateStructuredOutputConfig(ov::genai::Tokenizer& tokenizer) { builder_impl->validateStructuredOutputConfig(tokenizer); }
+    ov::genai::GenerationConfig& getConfig() {
+        return builder_impl->getConfig();
+    }
+
+    void adjustConfigForDecodingMethod() {
+        builder_impl->adjustConfigForDecodingMethod();
+    }
+
+    void validateStructuredOutputConfig(ov::genai::Tokenizer& tokenizer) {
+        builder_impl->validateStructuredOutputConfig(tokenizer);
+    }
 
     void unsetStructuredOutputConfig() {
-        if (builder_impl->shouldPreserveStructuredOutputOnValidationFailure()) {
-            SPDLOG_LOGGER_WARN(llm_calculator_logger,
-                "Refusing to clear structured output after validation failure for Gemma4 required/named tool_choice; keeping generation fail-closed.");
-            return;
-        }
         builder_impl->unsetStructuredOutputConfig();
+    }
+
+    bool requiresValidStructuredOutput() const {
+        return builder_impl->requiresValidStructuredOutput();
     }
 
     void parseConfigFromRequest(const OpenAIRequest& request) {
         builder_impl->parseConfigFromRequest(request);
     }
 
-    bool hasHardToolChoice() const { return builder_impl->shouldPreserveStructuredOutputOnValidationFailure(); }
-    void addStopString(const std::string& decodedStopString) { builder_impl->addStopString(decodedStopString); }
+    void addStopString(const std::string& decodedStopString) {
+        builder_impl->addStopString(decodedStopString);
+    }
 };
 }  // namespace ovms
