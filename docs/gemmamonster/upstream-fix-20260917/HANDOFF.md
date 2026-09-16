@@ -1,6 +1,6 @@
 # Gemma4 upstream evidence triage — live handoff
 
-Status: `PLAN_COMMITTED / IMPLEMENTATION_NOT_YET_COMMITTED / HOST_GREEN_NOT_RUN`
+Status: `PLAN_COMMITTED / TEST_HELPER_FIX_COMMITTED / PARSER_FIX_PENDING / HOST_GREEN_NOT_RUN`
 
 ## Immutable inputs
 
@@ -9,6 +9,7 @@ Status: `PLAN_COMMITTED / IMPLEMENTATION_NOT_YET_COMMITTED / HOST_GREEN_NOT_RUN`
 - Evidence commit: `167e3ba44f1bc0ef6d906a999954942c6a00d1df`
 - Working branch: `fix/gemma4-upstream-evidence-triage-20260917`
 - Plan commit: `71dce5e19f86aa7d9553ab5701aa40b012f44057`
+- Lossless test-helper fix: `d7e26e7d0ace229ee74066f9957e3f423cbcd238`
 - Clean split leaf to mirror only after GREEN: `62676e2e4`
 - Separate whitespace repair: `fix/gemma4-whitespace-regression-1609` + GenAI `e00eada6`; do not mix.
 
@@ -20,7 +21,7 @@ Raw evidence: 229 filtered cases, 213 passed, 16 failed.
 |---|---:|---|
 | missing `opt-125m` tokenizer | 1 | environmental; no product fix |
 | unknown hard-named tool expected OK by old test | 1 | stale expectation; keep INVALID_ARGUMENT |
-| huge numeric lexeme changed to double | 1 | test helper bug: `parseWithStreamer()` reparses through DOM and normal writer |
+| huge numeric lexeme changed to double | 1 | test helper bug: fixed in `d7e26e7d` |
 | 2/3 calls in one native envelope | 2 | stale expectation; accepted parser intentionally rejects implicit multicall envelope |
 | partial streaming early tool-call deltas | 9 | stale timing expectation; accepted contract commits only a complete validated envelope |
 | `broken{malformed_arg}` accepted by old test | 1 | stale expectation; malformed native argument must fail closed |
@@ -32,9 +33,9 @@ Note: evidence prose says 8 streaming cases, raw `ovmstest-failing-blocks.txt` c
 
 ### Lossless numbers
 
-Production `gemma4_tool_parser.cpp` already uses a SAX `NumberPreservingWriter` for native numeric scalars. The failing test then routes accumulated arguments through `src/test/llm/output_parsers/output_parser_test_utils.hpp::parseWithStreamer()`, which parses into `rapidjson::Document` and serializes with a normal writer. That test-only roundtrip converts the long lexeme through `double`.
+Production `gemma4_tool_parser.cpp` already uses a SAX `NumberPreservingWriter` for native numeric scalars. The failing test routed accumulated arguments through `src/test/llm/output_parsers/output_parser_test_utils.hpp::parseWithStreamer()`, which reparsed them into `rapidjson::Document` and serialized with a normal writer. That test-only roundtrip converted the long lexeme through `double`.
 
-Repair target: test helper only; compact via RapidJSON Reader + `kParseNumbersAsStringsFlag` + RawNumber writer.
+Committed repair `d7e26e7d`: test helper now compacts JSON with RapidJSON Reader + `kParseNumbersAsStringsFlag` + RawNumber writer, preserving numeric lexemes.
 
 ### Escaped delimited strings
 
@@ -44,13 +45,19 @@ Historical `escapeAsJsonString()` tries to parse valid JSON escapes and falls ba
 
 Commit `909e21f07` intentionally made a public tool-call delta appear only after one complete validated envelope, and intentionally rejects multiple `call:` entries inside one envelope. Request-boundary commits (`355ae00c1`, `3755dc85b`, `cf6fc0412`) intentionally reject invalid hard tool choices. Do not weaken these paths to satisfy legacy upstream tests.
 
+## Verification state
+
+- Evidence RED on base: `229 ran / 213 passed / 16 failed`.
+- Source inspection: complete for all 16 failures.
+- Host/Bazel GREEN after `d7e26e7d`: **not run in this environment**.
+- Do not claim the number test is GREEN until the host gate runs.
+
 ## Next exact actions
 
-1. Commit lossless JSON compaction in test helper.
-2. Commit escaped-delimited-string parser repair.
-3. Reconcile stale HTTP/parser test expectations, including nine streaming timing cases.
-4. Run focused 229-case host gate with the evidence environment.
-5. Run fresh six-target / 64-case semantic gate.
-6. Only after GREEN, mirror/regenerate onto split leaf `62676e2e4`.
+1. Commit escaped-delimited-string parser repair.
+2. Reconcile stale HTTP/parser test expectations, including nine streaming timing cases.
+3. Run focused 229-case host gate with the evidence environment.
+4. Run fresh six-target / 64-case semantic gate.
+5. Only after GREEN, mirror/regenerate onto split leaf `62676e2e4`.
 
 Implementation plan: `docs/superpowers/plans/2026-09-17-gemma4-upstream-evidence-triage.md`.
