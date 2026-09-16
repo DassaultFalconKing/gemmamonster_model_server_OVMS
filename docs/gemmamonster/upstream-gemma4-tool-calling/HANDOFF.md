@@ -182,18 +182,26 @@ Design (Google Gemma — authority; OVMS — native impl с выделенным
 vLLM/SGLang/llama.cpp/Transformers — comparative only), Validation (contracts + exact tests на final HEAD),
 Compatibility (no peer deps, non-Gemma preserved, GPU/MTP/perf out of scope).
 
-## 8. Статус на момент написания
+## 8. Статус (обновлено: transplant закоммичен, dist атрибутирован)
 
 - [x] refs resolved
 - [x] delta определён
 - [x] branch от upstream/main создана
-- [x] transplant 27 файлов staged (single transplant, semantic split — следующий шаг)
+- [x] transplant 27 файлов закоммичен (`7c07208`; semantic split — следующий шаг)
+- [x] dist атрибутирован (`DIST-ATTRIBUTION.md`: staging/gemma4-upstream-refit-clean-20260915 @ 43bc254,
+      ovms.exe SHA256 == accepted BINARY_SHA256; `src/` ветки == источнику dist
+      минус 1 hygiene-строка EOF в `gemma4_tool_parser.cpp`, коммит `4536180`)
+- [ ] test gate на новом HEAD (в работе)
+- [x] `git diff --check`: остаётся FAIL ТОЛЬКО по `src/llm/BUILD` —
+      файл целиком CRLF уже в upstream blob (714/714 строк), наши добавленные
+      строки наследуют кодировку файла. Все остальные файлы PASS
+      (EOF blank line в `gemma4_tool_parser.cpp` удалён). Перед PR решить:
+      оставить как есть (pre-existing условие upstream) или нормализовать —
+      нормализация = rewrite 714 строк, противоречит minimal delta.
 - [ ] semantic commit series
-- [ ] test gate на новом HEAD
-- [ ] diff audit per-file + `git diff --check`
 - [ ] upstream docs (focused, вне этой папки)
 - [ ] удалить эту папку из PR diff
 
 ```text
-UPSTREAM_PR_NOT_READY (на момент написания доки)
+UPSTREAM_PR_NOT_READY (test gate в работе)
 ```
