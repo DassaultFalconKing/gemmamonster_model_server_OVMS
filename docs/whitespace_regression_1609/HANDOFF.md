@@ -10,6 +10,8 @@ This file is the interruption-safe work ledger for the named-tool streaming whit
 - Current OVMS GenAI pin: `fe818c0467feb17b87c5adfb3f7e28dd70b76e99`
 - Current XGrammar pin through that GenAI commit: `v0.1.31`
 - Historical working XGrammar repair revision: `9aa840b6d16abf094f3e8e2ac9c10465b77656c9`
+- GenAI companion branch: `DassaultFalconKing/openvino.genai:fix/schema-whitespace-bound-fe818c04-2026.5`
+- GenAI RED contract commit: `d636c405e9b822a7008d4475a0d550a82d52a02f`
 
 ## Evidence read
 
@@ -27,13 +29,24 @@ The stream/unary observation is evidence of where the divergent legal branch sur
 
 Current `openvino.genai@fe818c04` exposes only `JSONSchema(schema)` and pins XGrammar `v0.1.31`. That XGrammar `JSONSchemaFormat` has no per-tag whitespace bound.
 
-The previously validated 2026.4 repair used two coordinated changes:
+The previously validated 2026.4 repair used three coordinated changes:
 
 1. GenAI typed API: `JSONSchema(schema, max_whitespace_cnt)`; serialize the bound into structural-tag JSON.
 2. XGrammar revision `9aa840b6...`, which accepts and applies per-tag `max_whitespace_cnt`.
 3. OVMS Gemma4 builder: every tool JSON schema uses `max_whitespace_cnt=2`.
 
 The current 2026.5 repair must port that narrow dependency capability onto the exact `fe818c04` pin. It must **not** downgrade GenAI to the 2026.4 line.
+
+## TDD checkpoint
+
+GenAI companion branch was created directly from `fe818c0467...`. Commit `d636c405...` adds four regression cases before implementation:
+
+- legacy one-argument JSONSchema serialization stays unchanged;
+- bound `2` is serialized as `max_whitespace_cnt=2`;
+- explicit zero is preserved;
+- equality includes whitespace policy.
+
+At the parent API these tests are source-level RED: `JSONSchema` has no `max_whitespace_cnt` member and no two-argument constructor. A native compile was not executed in this remote environment; do not mislabel this checkpoint as a runtime/build result.
 
 ## Explicit non-fixes
 
@@ -49,7 +62,7 @@ The current 2026.5 repair must port that narrow dependency capability onto the e
 - [x] S1 — read Cursor + Codex reports and original capture.
 - [x] S2 — trace current OVMS builder, GenAI pin and XGrammar capability.
 - [x] S3 — confirm historical repair shape and exact XGrammar support.
-- [ ] S4 — create companion GenAI branch from exact `fe818c04`; add regression contract first.
+- [x] S4 — create companion GenAI branch from exact `fe818c04`; add regression contract first.
 - [ ] S5 — port typed whitespace-bound API + exact XGrammar repair revision; inspect diff.
 - [ ] S6 — add OVMS Gemma4 regression contract for bound=2 before production change.
 - [ ] S7 — change only Gemma4 `buildToolTag()` to apply bound=2.
@@ -59,4 +72,4 @@ The current 2026.5 repair must port that narrow dependency capability onto the e
 
 ## Current resume point
 
-**Resume at S4.** Create the GenAI companion branch from `fe818c0467feb17b87c5adfb3f7e28dd70b76e99`; preserve legacy `JSONSchema(schema)` serialization and add bounded/zero/equality regression coverage before changing the API implementation.
+**Resume at S5.** Port only the established JSONSchema optional-bound API and XGrammar revision `9aa840b6...` onto `openvino.genai@fe818c04`; then inspect the branch diff before touching OVMS production code.
