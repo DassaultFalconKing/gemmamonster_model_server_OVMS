@@ -416,6 +416,75 @@ C:\git\artifacts\gemma4-frankenstein-20260917\
 
 C1-C5 may use incremental compilation, but each candidate must have a distinct artifact/output identity. C6 requires a clean build/output root; cached downloads are allowed, stale compiled objects from another candidate are not final evidence.
 
+### Build Reuse Strategy (binding)
+
+No candidate except the final C6-FINAL requires a full clean build. Cold-build
+ledger for the whole ladder:
+
+```text
+C0  reuse pinned known-good artifact                        (no build)
+C1  incremental Bazel: //src:ovms_test + 6 semantic targets (no dist build)
+C2  ONE GenAI cold build (G1/X1) + incremental OVMS         (cold: GenAI once)
+C3  REUSE C2 GenAI binaries verbatim; OVMS-only increment   (no build)
+C4  incremental GenAI G1->G2 in the SAME CMake build dir, then Bazel
+    increment (headers invalidate dependents, .lib relinks)  (no build)
+C5  targeted XGrammar swap inside the SAME GenAI build dir
+    (drop only _deps/xgrammar-{src,build,subbuild}, reconfigure, rebuild;
+    OVMS is headers-unchanged => relink/package only)        (no build)
+C6-PREFLIGHT  incremental from C5 on warm trees              (no build)
+C6-FINAL      the ONLY full clean-from-scratch evidence build (cold)
+```
+
+Rules:
+
+1. C1 never needs `ovms.exe` distribution packaging. Bazel builds exactly the
+   test dependency closure. Do not run `windows_build.bat` + packaging for C1.
+2. C2 GenAI outputs become an IMMUTABLE artifact the moment the build succeeds:
+   `openvino_genai.dll` / `.lib` / `include/openvino/genai/...` + `manifest.txt`
+   with SHAs. C3 must consume these exact bits (SHA-verified) and must NOT
+   recompile GenAI: only the OVMS axis changes (O0+whitespace -> O1+whitespace).
+3. C3->C4 GenAI moves by `checkout/rebase` + `cmake configure` + `cmake --build`
+   in the EXISTING build dir. MSBuild recompiles changed TUs only. Install the
+   result into a NEW immutable slot, never over the C2 slot.
+4. C4->C5 changes only the XGrammar pin consumed via FetchContent. Verify with
+   `git -C <build>/_deps/xgrammar-src rev-parse HEAD` == exact X2 SHA. If the
+   old checkout sticks, delete only the three xgrammar `_deps` dirs, never the
+   whole GenAI tree. Expected impact: XGrammar objects + GenAI relink.
+5. OVMS after a GenAI change is also incremental: `windows_genai` is an ordinary
+   external repository (headers + .lib + .dll). Changed headers invalidate only
+   dependent C++ actions; new .lib relinks; new .dll restages. NEVER `bazel clean`
+   between C3/C4/C5. If GenAI public headers are unchanged (C4->C5 typical case),
+   zero OVMS recompiles + relink is the CORRECT expected outcome, not a miss.
+6. GenAI runtimes live in immutable slots, never as mutations of one `C:\opt`
+   tree (a second mutation overwrites the first candidate's identity):
+   ```text
+   C:\git\gemma4-runtimes\
+     G0-X0\  G1-X1\  G2-X1\  G2-X2\  G3-X3\
+       manifest.txt  (GenAI SHA, XGrammar SHA, openvino_genai.dll/lib SHAs)
+   ```
+   Consume via `--override_repository=windows_genai=<slot>`; fallback is a
+   junction/copy overlay only if the flag misbehaves on this harness. A run
+   against a mutated shared tree without recorded identity is
+   `DIRTY_HOST_NON_EVIDENCE` by definition.
+7. Worktrees per candidate are for source safety; they must NOT force full
+   rebuilds. Share one Bazel disk cache (`--disk_cache=C:/o/gemmamonster-bazel-cache`)
+   across C1-C5 worktrees (separate output bases, content-addressed hits).
+   C6-FINAL disables the disk cache: it must prove a clean build, not a warm one.
+8. C6 runs in two passes: C6-PREFLIGHT incremental on warm trees (compile + 4/4
+   GenAI + focused OVMS + 229 + 64 + long unary + long stream); only when GREEN,
+   C6-FINAL from an empty build root + empty Bazel output root + reboot + clean
+   runtime/GPU caches. This avoids the classic waste: 90 minutes of clean build
+   ending on a missing include in the first adapted file.
+9. "Clean" before C6-FINAL preserves: git objects, downloaded archives,
+   NuGet/Python downloads, Bazel repository/download cache, CMake dep downloads,
+   models, toolchains, MSVC, base OpenVINO install. It recreates ONLY: GenAI
+   build dir, OVMS Bazel output root, candidate runtime staging, generated
+   objects, candidate GPU/runtime caches. Clean source build, not format-C.
+
+Consequence: after the C2 GenAI cold build succeeds, the next from-scratch
+build in the entire program is C6-FINAL. Any agent proposing seven full rebuilds
+for seven candidates is misreading this document.
+
 Each candidate must contain an identity manifest with at least:
 
 ```text
