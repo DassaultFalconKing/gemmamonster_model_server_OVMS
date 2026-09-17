@@ -1,11 +1,12 @@
 # C2 WHITESPACE-OLDBASE — candidate handoff
 
 candidate_id: C2-whitespace-oldbase
-status: BUILD_PASS / TEST_NOT_RUN / LIVE_NOT_RUN
+status: RESEARCH_CHECKPOINT_LOCKED / BUILD_PASS / G1_PASS / LIVE_G5_G6_PASS / PROMOTION_INCOMPLETE
 
 repo: DassaultFalconKing/gemmamonster_model_server_OVMS
-branch: test/gemma4-c2-whitespace-oldbase-20260917
-worktree: C:\git\gemmamonster-C2
+candidate_branch: test/gemma4-c2-whitespace-oldbase-20260917
+coordination_branch: fix/gemma4-upstream-evidence-triage-20260917
+worktree_at_execution: C:\git\gemmamonster-C2
 
 remote_head_before_work: 3ed4ad8dc (origin/fix/gemma4-whitespace-regression-1609 tip)
 local_head_before_work: 3ed4ad8dc
@@ -36,46 +37,65 @@ wiring_history (one-axis purity kept):
   - 933beb7f2 WORKSPACE windows_genai -> G1 slot; llm_engine.bzl reverted
   - eebda599f WORKSPACE windows_openvino -> G1 slot (header shadowing fix)
 
-test_state: NOT_RUN (no C2 test gate required by matrix; G2/G3 proven on C1 line)
-passed_gates: build, G1 (GenAI StructuredOutputJSONSchema 4/4 PASS on G1 tree, evidence C2-whitespace-oldbase/g1-4of4.log)
-failed_gates: none outstanding
-not_run_gates: G2, G7
+# Gate state
 
-live_gates_G5_G6: GREEN 2026-09-17 on C2 PID 21528 (:18091, isolated cache C:\llm\cache\c2-whitespace-oldbase)
+test_state: PARTIAL / RESEARCH QUESTION ANSWERED
+passed_gates:
+  - build
+  - G1 GenAI StructuredOutputJSONSchema 4/4 PASS on G1 tree (evidence C2-whitespace-oldbase/g1-4of4.log)
+  - G5 unary live gate PASS
+  - G6 streaming live gate PASS 3/3
+  - G13 host-state/reboot/cache hygiene recorded GREEN for the executed live gate
+failed_gates: none observed in the gates that were run
+not_run_or_unclosed_promotion_gates:
+  - G2 OVMS whitespace-bound focused test
+  - G4 full 64-case semantic suite on this exact C2 candidate
+  - G7 dogfood replay
+  - G8 formal promotion diff-audit closure
+
+C2 is intentionally frozen as a research checkpoint rather than extended with more baseline/retest work. The missing promotion gates above are NOT to be backfilled by mutating or rebuilding this identity; downstream candidates must carry the required gates forward.
+
+# Live verification
+
+live_gates_G5_G6: GREEN 2026-09-17 on recorded C2 runtime PID 21528 (:18091, isolated cache C:\llm\cache\c2-whitespace-oldbase)
 fixture_note: original 2026-09-16 paragraph text was never archived; fixture reconstructed
   (5-sentence runbook paragraph, Reps=50) and calibrated to prompt=5232 (recorded 5234, delta 2).
   Tools/schemas/named choice/temperature/max_tokens identical. Canonical requests + raw
   outputs: g5-unary-request.json, g5-unary.json, g6-stream-request.json, g6-stream-{1,2,3}.sse.txt.
   Gate script: g5g6-gate.ps1 (reusable for C3-C6).
-G5 unary: finish=tool_calls, search_docs{"query":"dead-letter prefix handling"}, 22 completion (matches 2026-09-16 3c: 23 tokens, same args)
-G6 streams 3/3: saw_tool_call=True, finish=tool_calls, ws_only=0, 22-23 out — Sept-16 whitespace degeneration GONE
-server_state: alive post-gate, no OOM/ERROR, dynamic cache 77% of 461MB
-C2_QUESTION_ANSWERED: YES — bounded-grammar repair (O2 call-site + G1/X1) fixes live streaming degeneration without parser repairs
+G5 unary: finish=tool_calls, search_docs{"query":"dead-letter prefix handling"}, 22 completion (historical 2026-09-16 comparison: 23 tokens, same args)
+G6 streams 3/3: saw_tool_call=True, finish=tool_calls, ws_only=0, 22-23 out — recorded Sept-16 whitespace degeneration absent on C2
+server_state_at_gate_end: alive post-gate, no OOM/ERROR, dynamic cache 77% of 461MB
+runtime_state_now: NOT_REPROBED; C2 runtime is intentionally not touched again for identity preservation
+C2_RESEARCH_QUESTION_ANSWERED: YES — bounded-grammar repair (O2 call-site + G1/X1) produced correct live streaming tool calls without parser repairs
+
+# Distribution / binary identity
 
 dist_package: C:\git\gemmamonster-C2\dist\windows\ovms.zip (149MB, 37 files)
-dist_verified: ovms.exe C96E7819… + openvino_genai.dll 92AB145C… (G1); --version reports OpenVINO 2026.5.0-23084-4977f92a234 + GenAI 2026.5.0.0-3447-e00eada6f4c
+dist_verified: ovms.exe C96E7819…E333C2 + openvino_genai.dll 92AB145C…F35AED (G1); --version reports OpenVINO 2026.5.0-23084-4977f92a234 + GenAI 2026.5.0.0-3447-e00eada6f4c
 
-runtime_state: not started (no dist package yet)
-host_state: GREEN (post-reboot; Available 16.3GB at C2 start; single lane held throughout)
-reboot_state: rebooted 2026-09-17 before C2 construction
-cache_state: C:/o shared output bases (uqyspfra=C1, 2ax5nbrk=C2); no cross-candidate runtime cache use (no runtime started)
+host_state_at_live_gate: GREEN (fresh reboot; single heavy-operation lane; isolated candidate runtime cache)
+reboot_state: rebooted 2026-09-17 before C2 construction/live sequence
+cache_state: isolated runtime cache C:\llm\cache\c2-whitespace-oldbase; build output bases recorded separately
 
 artifact_root: C:\git\artifacts\gemma4-frankenstein-20260917\C2-whitespace-oldbase\
 ovms_exe_sha256: C96E7819AFDCFE04CC3A2D423E17C94BBC2E5EAFCC28C8FE7FF4EE333C22740A
 openvino_genai_dll_sha256: 92AB145C8CF238E1F37CF84C2F72F93D3D978E9B7F7CFC726208D3B9FCF35AED
 openvino_genai_lib_sha256: 5AA71A0C49857C96E634783643DBAFD4EFC1D856E40F8701822C601260F0A77F
-genai_slot: C:\opt\openvino_g1\runtime (headers+dll+lib overlaid on dev20260911 base; canonical move to C:\git\gemma4-runtimes\G1-X1\ pending C3 consumption)
+genai_slot_at_execution: C:\opt\openvino_g1\runtime
+identity_lock: docs/gemmamonster/upstream-fix-20260917/identities/C2-whitespace-oldbase.identity-lock.md
 
-changed_files (vs O2 tip 3ed4ad8dc): WORKSPACE (2 hunks, wiring only)
-source_diff_summary: no production/test source change; build-wiring only
+changed_files_vs_O2_tip_3ed4ad8dc: WORKSPACE (2 hunks, wiring only)
+source_diff_summary: no parser/validation production source change; candidate-specific dependency wiring only
 
-known_blockers:
-  - dist package for live run not built yet (windows_create_package flow) — next heavy op
-  - G1 GenAI C++ tests 4/4 NOT_RUN on G1 binaries (required before C2 live promotion per gate table)
+# Freeze / handoff rule
+
+known_blockers: none for using C2 as the frozen research checkpoint; C2 is not claimed as a fully promoted matrix candidate
 
 next_exact_action:
-  1. run GenAI StructuredOutputJSONSchema 4/4 against G1 build tree (G1 gate)
-  2. package C2 dist (windows_create_package equivalent) into C2 artifact root
-  3. reboot + clean candidate runtime caches, launch C2 on :18091, run G5/G6 exact long-context gates
+  1. do NOT rebuild, rerun, overwrite, or mutate C2/G1-X1 for additional evidence
+  2. construct C3 by adding the proven C1 parser repair delta while consuming the exact frozen G1/X1 identity byte-for-byte
+  3. verify C3 GenAI/XGrammar artifacts against the C2 identity-lock hashes before running C3 gates
+  4. close required C3 gates there instead of reopening C2
 
-resume_point: C2 binary GREEN and fingerprinted; continue at next_exact_action step 1.
+resume_point: C2 research checkpoint frozen; continue with C3 construction from the exact C2 dependency identity plus C1 parser repairs.
