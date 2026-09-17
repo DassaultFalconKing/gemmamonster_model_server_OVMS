@@ -625,7 +625,9 @@ TEST_F(Gemma4OutputParserTest, HolisticStreaming) {
         {"99", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"}}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"ANOTHER_CONTENT_AFTER_TOOL_CALL", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"ANOTHER_CONTENT_AFTER_TOOL_CALL"}})"},
+        // Post-call prose is buffered in TOOL_CALLS_WAITING_FOR_TOOL and flushed at stream end (no loss, deferred emission)
+        {"ANOTHER_CONTENT_AFTER_TOOL_CALL", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"", ov::genai::GenerationFinishReason::STOP, R"({"delta":{"content":"ANOTHER_CONTENT_AFTER_TOOL_CALL"}})"},
     };
 
     assertStreamingVec(chunkToDeltaVec);
@@ -641,7 +643,9 @@ TEST_F(Gemma4OutputParserTest, StreamingWithBiggerChunks) {
         {"[42, 17, 89, 5, 33],order:<|\"|>descending<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, expectedAtomicToolCall("sort", expectedArgs)},
-        {"ANOTHER_CONTENT_AFTER_TOOL_CALL", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"ANOTHER_CONTENT_AFTER_TOOL_CALL"}})"},
+        // Post-call prose is buffered in TOOL_CALLS_WAITING_FOR_TOOL and flushed at stream end (no loss, deferred emission)
+        {"ANOTHER_CONTENT_AFTER_TOOL_CALL", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"", ov::genai::GenerationFinishReason::STOP, R"({"delta":{"content":"ANOTHER_CONTENT_AFTER_TOOL_CALL"}})"},
     };
 
     assertStreamingVec(chunkToDeltaVec);
@@ -698,7 +702,9 @@ TEST_F(Gemma4OutputParserTest, StreamingWithWhitespacesBetweenToolCalls) {
         {" 13", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"And some content after second tool call", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"And some content after second tool call"}})"},
+        // Post-call prose is buffered in TOOL_CALLS_WAITING_FOR_TOOL and flushed at stream end (no loss, deferred emission)
+        {"And some content after second tool call", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"", ov::genai::GenerationFinishReason::STOP, R"({"delta":{"content":"And some content after second tool call"}})"},
     };
 
     assertStreamingVec(chunkToDeltaVec);
