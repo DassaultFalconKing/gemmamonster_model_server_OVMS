@@ -23,8 +23,10 @@ def llm_engine():
     llm_engine_repository(name="_llm_engine")
     new_git_repository(
         name = "llm_engine",
-        remote = "https://github.com/openvinotoolkit/openvino.genai",
-        commit = "2689c9ec9e28b83421f3fa5d380b10dd10dc3379",
+        # C2 FRANKENSTEIN-OLD wiring: old-base whitespace GenAI fork (G1). Recorded in
+        # C2 identity manifest; stock pin was openvinotoolkit 2689c9ec.
+        remote = "https://github.com/DassaultFalconKing/openvino.genai",
+        commit = "e00eada6f4cce794ac3b3f6053cdb0c9dc569e68",
         build_file = "@_llm_engine//:BUILD",
         init_submodules = True,
         recursive_init_submodules = True,
