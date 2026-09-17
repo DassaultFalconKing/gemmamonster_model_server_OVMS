@@ -39,7 +39,18 @@ wiring_history (one-axis purity kept):
 test_state: NOT_RUN (no C2 test gate required by matrix; G2/G3 proven on C1 line)
 passed_gates: build, G1 (GenAI StructuredOutputJSONSchema 4/4 PASS on G1 tree, evidence C2-whitespace-oldbase/g1-4of4.log)
 failed_gates: none outstanding
-not_run_gates: G2, G5, G6, G7
+not_run_gates: G2, G7
+
+live_gates_G5_G6: GREEN 2026-09-17 on C2 PID 21528 (:18091, isolated cache C:\llm\cache\c2-whitespace-oldbase)
+fixture_note: original 2026-09-16 paragraph text was never archived; fixture reconstructed
+  (5-sentence runbook paragraph, Reps=50) and calibrated to prompt=5232 (recorded 5234, delta 2).
+  Tools/schemas/named choice/temperature/max_tokens identical. Canonical requests + raw
+  outputs: g5-unary-request.json, g5-unary.json, g6-stream-request.json, g6-stream-{1,2,3}.sse.txt.
+  Gate script: g5g6-gate.ps1 (reusable for C3-C6).
+G5 unary: finish=tool_calls, search_docs{"query":"dead-letter prefix handling"}, 22 completion (matches 2026-09-16 3c: 23 tokens, same args)
+G6 streams 3/3: saw_tool_call=True, finish=tool_calls, ws_only=0, 22-23 out — Sept-16 whitespace degeneration GONE
+server_state: alive post-gate, no OOM/ERROR, dynamic cache 77% of 461MB
+C2_QUESTION_ANSWERED: YES — bounded-grammar repair (O2 call-site + G1/X1) fixes live streaming degeneration without parser repairs
 
 dist_package: C:\git\gemmamonster-C2\dist\windows\ovms.zip (149MB, 37 files)
 dist_verified: ovms.exe C96E7819… + openvino_genai.dll 92AB145C… (G1); --version reports OpenVINO 2026.5.0-23084-4977f92a234 + GenAI 2026.5.0.0-3447-e00eada6f4c
