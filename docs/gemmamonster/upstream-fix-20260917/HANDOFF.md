@@ -180,8 +180,18 @@ The old `64/64` is baseline evidence only, not proof for this repaired HEAD.
 
 1. apply the single pending HTTP stale-expectation edit;
 2. audit final C1 source diff vs `d582668`;
-3. run C1 focused 229-case host gate with both fixtures;
+3. run C1 host gate (focused 229-case host gate with both fixtures; fixture note: E4B junction
+provided, `facebook/opt-125m` absent on host so ceiling is 228/229 environmental);
 4. run fresh C1 64-case semantic gate;
+
+Stage record 2026-09-17 (C1 G3): first run 225/229 — 3 streaming failures
+(HolisticStreaming, StreamingWithBiggerChunks, StreamingWithWhitespacesBetweenToolCalls)
+triaged as incomplete reconciliation in `dd3845f`, not product bug: post-call prose is
+buffered in `TOOL_CALLS_WAITING_FOR_TOOL` (upstream pre-transplant design) and flushed
+at stream end — STOP-probe returned the trailing content verbatim, no loss. Reconciled
+all three (trailing `NONE`=nullopt + STOP flush proof). Rerun: **228/229**, only
+`OutputParserInitializationDependsOnParserNames` fails (environmental, opt-125m absent).
+Artifacts: `C:\git\artifacts\gemma4-frankenstein-20260917\C1-parser-only\`.
 5. finish/record C2 currently-running old-base whitespace build and live gate;
 6. construct C3 only after C1 and C2 satisfy their own required gates;
 7. promote sequentially through C4 (fresh GenAI), C5 (fresh XGrammar), then C6 `SUPER-UPSTREAM`;
