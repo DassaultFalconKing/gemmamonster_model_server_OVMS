@@ -29,7 +29,15 @@ passed_gates:
   - G3 focused 228/229 (only environmental opt-125m; evidence C5/c5-g3.log, test-228.log)
   - G4 semantic 6/6 64/64 PASS (evidence C5/c5-g4.log)
 failed_gates: none
-not_run_gates: G2-strict, G5, G6 (live), G7-refresh (source identical to C4 except WORKSPACE)
+not_run_gates: G2-strict (same fixture-generation cause as C3/C4; spot-check on C4 GREEN)
+
+live_G5_G6: GREEN 2026-09-18 on C5 PID 12504 (same 5232-token fixture:
+  unary tool_calls 23tok; streams 3/3 tool_calls ws_only=0). Fourth candidate identical.
+live_like_suite: byte-for-byte same verdicts as C4 in all 6 cases (parallel, required,
+  nocall-text, emptyparams stop-empty pre-existing, unicode 2-call, unknown fail-closed
+  INVALID_ARGUMENT with identical message). Zero XGrammar-move regressions. Evidence C5/livelike/.
+G7-refresh: PASS (C4->C5 delta is WORKSPACE wiring only).
+C5_VERDICT: PROMOTED (with G2-strict open, same documented cause). C5 supersedes C4.
 
 dist_package: C:\git\gemmamonster-C5\dist\windows\ovms.zip (149MB)
 dist_verified: ovms.exe D1F2B8AB… + openvino_genai.dll 8C7F1F0C… (X2) +
