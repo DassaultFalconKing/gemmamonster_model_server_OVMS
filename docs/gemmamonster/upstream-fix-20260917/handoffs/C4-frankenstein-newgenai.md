@@ -53,4 +53,15 @@ next_exact_action:
   2. clean C4 runtime cache, launch C4 dist :18091, G5/G6 same 5232-token fixture + live-like suite
   3. G2/G7 refresh, C4 promotion verdict, then C5 (XGrammar f6043f4)
 
+live_G5_G6: GREEN 2026-09-17 on C4 PID 12352 (same 5232-token fixture as C2/C3:
+  unary tool_calls 23tok; streams 3/3 tool_calls ws_only=0). Evidence C4/g5-unary.json, g6-stream-*.sse.txt.
+live_like_suite: 5/6 behavior PASS on C4 (parallel unary+stream, required unary+stream,
+  auto-no-call text/stop both paths, unicode 2-call both paths, unknown-named-tool
+  fail-closed INVALID_ARGUMENT both paths with message "Hard tool_choice requires a
+  matching tool with a usable parameters schema"). Evidence C4/livelike/, script livelike-suite.ps1.
+  emptyparams-named-noop: stop + empty + no call on C4 AND identically on C2/G1 control
+  (same 7 completion tokens) -> PRE-EXISTING, NOT a C4/G2 regression. Out of C4 scope.
+  (One protocol violation noted: C3 server was briefly launched while C4 compiled;
+  no evidence was collected during overlap; server killed before any gate ran.)
+
 resume_point: C4 dist GREEN and fingerprinted; continue at next_exact_action step 1.
