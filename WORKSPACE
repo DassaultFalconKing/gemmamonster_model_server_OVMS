@@ -266,7 +266,9 @@ new_local_repository(
 new_local_repository(
     name = "windows_openvino",
     build_file = "@//third_party/openvino:openvino_windows.BUILD",
-    path = "C:\\opt\\openvino\\runtime",
+    # C2: same G1 slot — its /I root otherwise shadows windows_genai with stale
+    # dev20260911 genai headers (C2440). Core is a byte-copy of C:\opt\openvino\runtime.
+    path = "C:\\opt\\openvino_g1\\runtime",
 )
 
 new_local_repository(
