@@ -266,18 +266,16 @@ new_local_repository(
 new_local_repository(
     name = "windows_openvino",
     build_file = "@//third_party/openvino:openvino_windows.BUILD",
-    # C3 FRANKENSTEIN-OLD wiring: G1 slot (e00eada + XGrammar 9aa840b6). Its /I root
-    # otherwise shadows windows_genai with stale dev20260911 genai headers (C2440).
-    # Core is a byte-copy of C:\opt\openvino\runtime. Same bits as C2 (SHA-verified reuse).
-    path = "C:\\opt\\openvino_g1\\runtime",
+    # C4 FRANKENSTEIN-NEWGENAI wiring: G2-X1 immutable slot (GenAI 881684e7 on
+    # upstream 3abf349b, XGrammar X1). See slot manifest.
+    path = "C:\\git\\gemma4-runtimes\\G2-X1\\runtime",
 )
 
 new_local_repository(
     name = "windows_genai",
     build_file = "@//third_party/genai:genai_windows.BUILD",
-    # C3 FRANKENSTEIN-OLD wiring: G1 runtime slot (e00eada + XGrammar 9aa840b6),
-    # same SHA-verified bits as C2. Recorded in C3 identity manifest.
-    path = "C:\\opt\\openvino_g1\\runtime",
+    # C4 FRANKENSTEIN-NEWGENAI wiring: G2-X1 immutable slot. See slot manifest.
+    path = "C:\\git\\gemma4-runtimes\\G2-X1\\runtime",
 )
 
 new_local_repository(
