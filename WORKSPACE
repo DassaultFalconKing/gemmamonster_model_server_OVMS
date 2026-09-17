@@ -272,7 +272,9 @@ new_local_repository(
 new_local_repository(
     name = "windows_genai",
     build_file = "@//third_party/genai:genai_windows.BUILD",
-    path = "C:\\opt\\openvino\\runtime",
+    # C2 FRANKENSTEIN-OLD wiring: G1 runtime (e00eada + XGrammar 9aa840b6) overlaid on
+    # the dev20260911 base. Recorded in C2 identity manifest; stock path was C:\opt\openvino\runtime.
+    path = "C:\\opt\\openvino_g1\\runtime",
 )
 
 new_local_repository(
