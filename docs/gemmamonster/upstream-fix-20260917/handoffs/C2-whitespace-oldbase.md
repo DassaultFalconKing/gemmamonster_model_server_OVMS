@@ -37,9 +37,12 @@ wiring_history (one-axis purity kept):
   - eebda599f WORKSPACE windows_openvino -> G1 slot (header shadowing fix)
 
 test_state: NOT_RUN (no C2 test gate required by matrix; G2/G3 proven on C1 line)
-passed_gates: build
+passed_gates: build, G1 (GenAI StructuredOutputJSONSchema 4/4 PASS on G1 tree, evidence C2-whitespace-oldbase/g1-4of4.log)
 failed_gates: none outstanding
-not_run_gates: G1 (GenAI 4/4 on G1 binaries), G2, G5, G6, G7
+not_run_gates: G2, G5, G6, G7
+
+dist_package: C:\git\gemmamonster-C2\dist\windows\ovms.zip (149MB, 37 files)
+dist_verified: ovms.exe C96E7819… + openvino_genai.dll 92AB145C… (G1); --version reports OpenVINO 2026.5.0-23084-4977f92a234 + GenAI 2026.5.0.0-3447-e00eada6f4c
 
 runtime_state: not started (no dist package yet)
 host_state: GREEN (post-reboot; Available 16.3GB at C2 start; single lane held throughout)
