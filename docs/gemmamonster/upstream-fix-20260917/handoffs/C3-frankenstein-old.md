@@ -29,7 +29,16 @@ passed_gates:
   - G3 focused 228/229 (only OutputParserInitializationDependsOnParserNames environmental opt-125m; evidence c3-g3.log, test-228.log)
   - G4 semantic 6/6 64/64 PASS (evidence c3-g4.log)
 failed_gates: none
-not_run_gates: G2 (dogfood replay), G5, G6 (live long-context), G7 (source/diff audit)
+not_run_gates: G2-strict (see below), prefix-turn probes (no recorded expected outputs)
+G2_dogfood: STRICT-REPLAY NOT_RUN — CAUSE: archived requests (list_dir/read_file inspector flow)
+  and archived expected outputs (get_weather/calculator calls, 221-token prompts) are from
+  different fixture generations and cannot be compared field-wise. Behavior spot-check on C3
+  GREEN: turn1 list_dir{"."}, turn2 read_file{binary-provenance.txt}, turn4 stop + factually
+  correct 3-sentence summary (version 2026.5.0.b722aa440, MIXED_OLD_RUNTIME=NO). Raw: g2-turn{1,2,4}.json.
+G5 unary: finish=tool_calls, search_docs{"query":"dead-letter prefix handling"}, 23 completion, prompt 5232
+G6 streams 3/3: tool_calls, ws_only=0, 22-23 out — same fixture as C2, same GREEN
+G7 audit: PASS — production diff vs d582668 is exactly gemma4_tool_parser.cpp (escaped strings)
+  + generation_config_builder.hpp (whitespace call-site); rest is tests + WORKSPACE wiring
 
 dist_package: C:\git\gemmamonster-C3\dist\windows\ovms.zip (149MB)
 dist_verified: ovms.exe 07F3B9FE… (differs from C2 C96E7819 as expected: parser+whitespace) +
