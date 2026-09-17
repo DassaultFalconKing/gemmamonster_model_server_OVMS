@@ -266,16 +266,16 @@ new_local_repository(
 new_local_repository(
     name = "windows_openvino",
     build_file = "@//third_party/openvino:openvino_windows.BUILD",
-    # C4 FRANKENSTEIN-NEWGENAI wiring: G2-X1 immutable slot (GenAI 881684e7 on
-    # upstream 3abf349b, XGrammar X1). See slot manifest.
-    path = "C:\\git\\gemma4-runtimes\\G2-X1\\runtime",
+    # C5 FRANKENSTEIN-NEWXGRAMMAR wiring: G2-X2 immutable slot (GenAI 15e8f897,
+    # XGrammar f6043f4). See slot manifest.
+    path = "C:\\git\\gemma4-runtimes\\G2-X2\\runtime",
 )
 
 new_local_repository(
     name = "windows_genai",
     build_file = "@//third_party/genai:genai_windows.BUILD",
-    # C4 FRANKENSTEIN-NEWGENAI wiring: G2-X1 immutable slot. See slot manifest.
-    path = "C:\\git\\gemma4-runtimes\\G2-X1\\runtime",
+    # C5 FRANKENSTEIN-NEWXGRAMMAR wiring: G2-X2 immutable slot. See slot manifest.
+    path = "C:\\git\\gemma4-runtimes\\G2-X2\\runtime",
 )
 
 new_local_repository(
@@ -647,4 +647,5 @@ cc_library(
 )
 """,
 )
+
 
