@@ -192,6 +192,11 @@ at stream end — STOP-probe returned the trailing content verbatim, no loss. Re
 all three (trailing `NONE`=nullopt + STOP flush proof). Rerun: **228/229**, only
 `OutputParserInitializationDependsOnParserNames` fails (environmental, opt-125m absent).
 Artifacts: `C:\git\artifacts\gemma4-frankenstein-20260917\C1-parser-only\`.
+
+Stage record 2026-09-17 (C1 G4): semantic gate **6/6 targets, 64/64 cases PASS**
+on `2ec9530df` (`--config=win_mp_on_py_off`, build 249s). C1 source gates complete:
+G3 228/229 (1 environmental) + G4 64/64. Remaining for C1: live GPU gates are n/a
+(CPU-only candidate); C1 promotion waits on C2 live + C3 construction per matrix order.
 5. finish/record C2 currently-running old-base whitespace build and live gate;
 6. construct C3 only after C1 and C2 satisfy their own required gates;
 7. promote sequentially through C4 (fresh GenAI), C5 (fresh XGrammar), then C6 `SUPER-UPSTREAM`;
