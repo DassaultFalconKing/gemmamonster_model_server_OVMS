@@ -481,6 +481,20 @@ Rules:
    build dir, OVMS Bazel output root, candidate runtime staging, generated
    objects, candidate GPU/runtime caches. Clean source build, not format-C.
 
+### C6 refresh rule (binding decision 2026-09-17)
+
+At C6-PREFLIGHT, refresh GenAI and XGrammar to fresh upstream HEADs and prove
+with full gates (one axis per candidate still applies on the way up: C5 pins
+XGrammar to `f6043f4` first, C6-PREFLIGHT moves to HEAD after C5 is GREEN).
+Our pins (`9aa840b6` etc.) stay in force through C5; nothing is refreshed
+early just because a new HEAD appeared.
+
+The OVMS server line is the exception: it rebases onto fresh upstream master
+ONLY if the merge is clean. If upstream moved through our delta with
+conflicts, the server stays on its proven line, the conflict is recorded as a
+blocker with CAUSE, and C6-FINAL ships the proven server + fresh GenAI/XGrammar.
+No silent conflict resolution, no forced merge to chase HEAD.
+
 Consequence: after the C2 GenAI cold build succeeds, the next from-scratch
 build in the entire program is C6-FINAL. Any agent proposing seven full rebuilds
 for seven candidates is misreading this document.
