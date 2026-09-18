@@ -266,9 +266,10 @@ new_local_repository(
 new_local_repository(
     name = "windows_openvino",
     build_file = "@//third_party/openvino:openvino_windows.BUILD",
-    # C5 FRANKENSTEIN-NEWXGRAMMAR wiring: G2-X2 immutable slot (GenAI 15e8f897,
-    # XGrammar f6043f4). See slot manifest.
-    path = "C:\\git\\gemma4-runtimes\\G2-X2\\runtime",
+    # F3: same TOKEN-REPAIR-ACTIVE slot — otherwise its /I root (listed first) shadows
+    # windows_genai with stale GenAI headers and splits the StructuralTag variant (LNK2001).
+    # Core is the same OpenVINO base copy.
+    path = "C:\\git\\gemma4-runtimes\\TOKEN-REPAIR-ACTIVE\\runtime",
 )
 
 new_local_repository(
