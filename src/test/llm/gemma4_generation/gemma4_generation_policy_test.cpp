@@ -103,9 +103,11 @@ TEST(Gemma4GenerationPolicyTest, NamedChoiceRestrictsGrammarToSelectedTool) {
 
     const auto* grammar = getStructuralTag(builder.getConfig());
     ASSERT_NE(grammar, nullptr);
-    const std::string text = structuralTagText(*grammar);
-    EXPECT_NE(text.find("<|tool_call>call:weather"), std::string::npos);
-    EXPECT_EQ(text.find("<|tool_call>call:clock"), std::string::npos);
+    const auto* raw = std::get_if<std::string>(grammar);
+    ASSERT_NE(raw, nullptr);
+    EXPECT_NE(raw->find("\"begin\":{\"type\":\"token\",\"token\":\"<|tool_call>\"}"), std::string::npos);
+    EXPECT_NE(raw->find("\"value\": \"call:weather\""), std::string::npos);
+    EXPECT_EQ(raw->find("\"value\": \"call:clock\""), std::string::npos);
 }
 
 TEST(Gemma4GenerationPolicyTest, ActiveToolsRejectCompetingResponseFormat) {
@@ -222,17 +224,17 @@ bool parallelPolicy(const OpenAIRequest&, long) {
 }
 
 std::optional<bool> requiredStopsAfterFirst(const ov::genai::GenerationConfig& config) {
-    using Structured = ov::genai::StructuredOutputConfig;
     const auto* grammar = getStructuralTag(config);
     if (grammar == nullptr)
         return std::nullopt;
-    const auto* alternatives = std::get_if<std::shared_ptr<Structured::Union>>(grammar);
-    if (alternatives == nullptr || !*alternatives || (*alternatives)->elements.empty())
+    const auto* raw = std::get_if<std::string>(grammar);
+    if (raw == nullptr || raw->find("\"type\":\"tags_with_separator\"") == std::string::npos)
         return std::nullopt;
-    const auto* tags = std::get_if<std::shared_ptr<Structured::TagsWithSeparator>>(&(*alternatives)->elements.front());
-    if (tags == nullptr || !*tags)
-        return std::nullopt;
-    return (*tags)->stop_after_first;
+    if (raw->find("\"stop_after_first\":true") != std::string::npos)
+        return true;
+    if (raw->find("\"stop_after_first\":false") != std::string::npos)
+        return false;
+    return std::nullopt;
 }
 
 std::optional<bool> autoStopsAfterFirst(const ov::genai::GenerationConfig& config) {
