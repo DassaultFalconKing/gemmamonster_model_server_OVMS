@@ -38,6 +38,10 @@ struct OutputParsingConfig {
     bool needsSpecialTokens = false;
     bool defaultDecodingWithSpecialTokens = false;
     bool preambleStartTagsRequireBoundary = false;
+
+    // A reasoning parser may opt into treating a tool start marker as an
+    // implicit reasoning end. This is format-specific and defaults to false.
+    bool toolStartTerminatesReasoning = false;
 };
 
 }  // namespace ovms
