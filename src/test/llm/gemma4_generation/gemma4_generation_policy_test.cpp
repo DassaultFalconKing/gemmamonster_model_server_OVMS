@@ -71,8 +71,7 @@ TEST(Gemma4GenerationPolicyTest, RequiredToolChoiceInstallsNativeStructuredGramm
     EXPECT_TRUE(builder.getConfig().structured_output_config.has_value());
 }
 
-TEST(Gemma4GenerationPolicyTest, AutoUsesLazyNativeToolTrigger) {
-    using Structured = ov::genai::StructuredOutputConfig;
+TEST(Gemma4GenerationPolicyTest, AutoUsesTokenLevelToolTrigger) {
     ov::genai::GenerationConfig baseConfig;
     GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
 
@@ -80,15 +79,15 @@ TEST(Gemma4GenerationPolicyTest, AutoUsesLazyNativeToolTrigger) {
 
     const auto* grammar = getStructuralTag(builder.getConfig());
     ASSERT_NE(grammar, nullptr);
-    const auto* triggered = std::get_if<std::shared_ptr<Structured::TriggeredTags>>(grammar);
-    ASSERT_NE(triggered, nullptr);
-    ASSERT_TRUE(*triggered);
-    ASSERT_EQ((*triggered)->triggers.size(), 1u);
-    EXPECT_EQ((*triggered)->triggers[0], "<|tool_call>");
-    EXPECT_FALSE((*triggered)->at_least_one);
-    ASSERT_EQ((*triggered)->tags.size(), 1u);
-    EXPECT_EQ((*triggered)->tags[0].begin, "<|tool_call>call:weather");
-    EXPECT_EQ((*triggered)->tags[0].end, "<tool_call|>");
+    const auto* raw = std::get_if<std::string>(grammar);
+    ASSERT_NE(raw, nullptr);
+    EXPECT_NE(raw->find("\"type\":\"token_triggered_tags\""), std::string::npos);
+    EXPECT_NE(raw->find("\"trigger_tokens\":[\"<|tool_call>\"]"), std::string::npos);
+    EXPECT_NE(raw->find("\"begin\":{\"type\":\"token\",\"token\":\"<|tool_call>\"}"), std::string::npos);
+    EXPECT_NE(raw->find("\"value\": \"call:weather\""), std::string::npos);
+    EXPECT_NE(raw->find("\"required\":[\"city\"]"), std::string::npos);
+    EXPECT_NE(raw->find("\"max_whitespace_cnt\": 2"), std::string::npos);
+    EXPECT_NE(raw->find("\"end\":{\"type\":\"token\",\"token\":\"<tool_call|>\"}"), std::string::npos);
 }
 
 TEST(Gemma4GenerationPolicyTest, NamedChoiceRestrictsGrammarToSelectedTool) {
@@ -237,14 +236,17 @@ std::optional<bool> requiredStopsAfterFirst(const ov::genai::GenerationConfig& c
 }
 
 std::optional<bool> autoStopsAfterFirst(const ov::genai::GenerationConfig& config) {
-    using Structured = ov::genai::StructuredOutputConfig;
     const auto* grammar = getStructuralTag(config);
     if (grammar == nullptr)
         return std::nullopt;
-    const auto* triggered = std::get_if<std::shared_ptr<Structured::TriggeredTags>>(grammar);
-    if (triggered == nullptr || !*triggered)
+    const auto* raw = std::get_if<std::string>(grammar);
+    if (raw == nullptr || raw->find("\"type\":\"token_triggered_tags\"") == std::string::npos)
         return std::nullopt;
-    return (*triggered)->stop_after_first;
+    if (raw->find("\"stop_after_first\":true") != std::string::npos)
+        return true;
+    if (raw->find("\"stop_after_first\":false") != std::string::npos)
+        return false;
+    return std::nullopt;
 }
 }  // namespace
 
