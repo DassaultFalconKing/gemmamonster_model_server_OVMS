@@ -94,28 +94,73 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
         return toolTags;
     }
 
-    static ov::genai::StructuredOutputConfig::StructuralTag buildRequiredToolGrammar(
-        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags,
+    static std::string buildTokenToolTagJson(
+        const ov::genai::StructuredOutputConfig::Tag& tag) {
+        using Structured = ov::genai::StructuredOutputConfig;
+        static constexpr const char* TOOL_TRIGGER = "<|tool_call>";
+
+        if (tag.begin.rfind(TOOL_TRIGGER, 0) != 0) {
+            throw std::logic_error("Gemma4 token grammar expected tool tag to begin with <|tool_call>");
+        }
+
+        const std::string trailingBegin = tag.begin.substr(std::char_traits<char>::length(TOOL_TRIGGER));
+        std::ostringstream oss;
+        oss << "{\"type\":\"tag\","
+            << "\"begin\":{\"type\":\"token\",\"token\":" << Structured::format_for_json(TOOL_TRIGGER) << "},"
+            << "\"content\":{\"type\":\"sequence\",\"elements\":["
+            << Structured::ConstString(trailingBegin).to_json() << ","
+            << std::visit([](const auto& g) { return Structured::structural_tag_to_json(g); }, tag.content)
+            << "]},"
+            << "\"end\":{\"type\":\"token\",\"token\":" << Structured::format_for_json(tag.end) << "}}";
+        return oss.str();
+    }
+
+    static std::string buildTokenToolTagsJson(
+        const std::vector<ov::genai::StructuredOutputConfig::Tag>& toolTags) {
+        std::ostringstream oss;
+        for (size_t i = 0; i < toolTags.size(); ++i) {
+            oss << buildTokenToolTagJson(toolTags[i]);
+            if (i + 1 != toolTags.size())
+                oss << ",";
+        }
+        return oss.str();
+    }
+
+    static std::string buildRequiredTokenToolListJson(
+        const std::vector<ov::genai::StructuredOutputConfig::Tag>& toolTags,
+        bool stopAfterFirst) {
+        std::ostringstream oss;
+        oss << "{\"type\":\"tags_with_separator\","
+            << "\"tags\":[" << buildTokenToolTagsJson(toolTags) << "],"
+            << "\"separator\":\"\","
+            << "\"at_least_one\":true,"
+            << "\"stop_after_first\":" << (stopAfterFirst ? "true" : "false")
+            << "}";
+        return oss.str();
+    }
+
+    static ov::genai::StructuredOutputConfig::StructuralTag buildTokenRequiredToolGrammar(
+        const std::vector<ov::genai::StructuredOutputConfig::Tag>& toolTags,
         bool stopAfterFirst) {
         using Structured = ov::genai::StructuredOutputConfig;
+        const std::string requiredTools = buildRequiredTokenToolListJson(toolTags, stopAfterFirst);
 
-        auto requiredTags = std::make_shared<Structured::TagsWithSeparator>();
-        requiredTags->tags = std::move(toolTags);
-        requiredTags->separator = "";
-        requiredTags->at_least_one = true;
-        requiredTags->stop_after_first = stopAfterFirst;
+        std::ostringstream thought;
+        thought << "{\"type\":\"tag\","
+                << "\"begin\":{\"type\":\"token\",\"token\":" << Structured::format_for_json("<|channel>") << "},"
+                << "\"content\":{\"type\":\"sequence\",\"elements\":["
+                << Structured::ConstString("thought\\n").to_json() << ","
+                << "{\"type\":\"any_tokens\"}]},"
+                << "\"end\":{\"type\":\"token\",\"token\":" << Structured::format_for_json("<channel|>") << "}}";
 
-        auto thought = std::make_shared<Structured::Tag>();
-        thought->begin = "<|channel>thought\n";
-        thought->content = Structured::AnyText();
-        thought->end = "<channel|>";
-
-        auto thoughtThenTools = std::make_shared<Structured::Concat>();
-        thoughtThenTools->elements = {thought, requiredTags};
-
-        auto alternatives = std::make_shared<Structured::Union>();
-        alternatives->elements = {requiredTags, thoughtThenTools};
-        return alternatives;
+        std::ostringstream oss;
+        oss << "{\"type\":\"structural_tag\",\"format\":{"
+            << "\"type\":\"or\",\"elements\":["
+            << requiredTools << ","
+            << "{\"type\":\"sequence\",\"elements\":["
+            << thought.str() << "," << requiredTools << "]}"
+            << "]}}";
+        return oss.str();
     }
 
     static ov::genai::StructuredOutputConfig::StructuralTag buildTokenAutoToolGrammar(
@@ -128,28 +173,9 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
         oss << "{\"type\":\"structural_tag\",\"format\":{"
             << "\"type\":\"token_triggered_tags\","
             << "\"trigger_tokens\":[" << Structured::format_for_json(TOOL_TRIGGER) << "],"
-            << "\"tags\":[";
-
-        for (size_t i = 0; i < toolTags.size(); ++i) {
-            const auto& tag = toolTags[i];
-            if (tag.begin.rfind(TOOL_TRIGGER, 0) != 0) {
-                throw std::logic_error("Gemma4 token-trigger experiment expected tool tag to begin with <|tool_call>");
-            }
-
-            const std::string trailingBegin = tag.begin.substr(std::char_traits<char>::length(TOOL_TRIGGER));
-            oss << "{\"type\":\"tag\","
-                << "\"begin\":{\"type\":\"token\",\"token\":" << Structured::format_for_json(TOOL_TRIGGER) << "},"
-                << "\"content\":{\"type\":\"sequence\",\"elements\":["
-                << Structured::ConstString(trailingBegin).to_json() << ","
-                << std::visit([](const auto& g) { return Structured::structural_tag_to_json(g); }, tag.content)
-                << "]},"
-                << "\"end\":{\"type\":\"token\",\"token\":" << Structured::format_for_json(tag.end) << "}}";
-            if (i + 1 != toolTags.size())
-                oss << ",";
-        }
-
-        oss << "],\"at_least_one\":false,\"stop_after_first\":"
-            << (stopAfterFirst ? "true" : "false")
+            << "\"tags\":[" << buildTokenToolTagsJson(toolTags) << "],"
+            << "\"at_least_one\":false,"
+            << "\"stop_after_first\":" << (stopAfterFirst ? "true" : "false")
             << "}}";
         return oss.str();
     }
@@ -183,7 +209,7 @@ public:
         const bool stopAfterFirst = !request.parallelToolCalls;
         if (hardChoice) {
             hardToolPolicy = true;
-            setStructuralTagsConfig(buildRequiredToolGrammar(std::move(toolTags), stopAfterFirst));
+            setStructuralTagsConfig(buildTokenRequiredToolGrammar(toolTags, stopAfterFirst));
             return;
         }
 
