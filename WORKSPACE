@@ -274,8 +274,8 @@ new_local_repository(
 new_local_repository(
     name = "windows_genai",
     build_file = "@//third_party/genai:genai_windows.BUILD",
-    # C5 FRANKENSTEIN-NEWXGRAMMAR wiring: G2-X2 immutable slot. See slot manifest.
-    path = "C:\\git\\gemma4-runtimes\\G2-X2\\runtime",
+    # Empty-args repair track: mutable GenAI install slot. Keep G2-X2 immutable as the C5 control.
+    path = "C:\\git\\gemma4-runtimes\\TOKEN-REPAIR-ACTIVE\\runtime",
 )
 
 new_local_repository(
