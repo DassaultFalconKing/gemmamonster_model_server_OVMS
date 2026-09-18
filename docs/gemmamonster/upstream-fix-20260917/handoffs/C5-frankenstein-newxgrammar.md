@@ -29,7 +29,13 @@ passed_gates:
   - G3 focused 228/229 (only environmental opt-125m; evidence C5/c5-g3.log, test-228.log)
   - G4 semantic 6/6 64/64 PASS (evidence C5/c5-g4.log)
 failed_gates: none
-not_run_gates: G2-strict (same fixture-generation cause as C3/C4; spot-check on C4 GREEN)
+not_run_gates: none remaining (G2 closed by pack, see below)
+
+G2 canonical pack: GREEN 2026-09-18 (dogfood session 03 on live C5).
+  Evidence C:\git\artifacts\gemma4-frankenstein-20260917\C6-g2pack\:
+  turns 1-4 unary tool_calls (perfect inspector chain), g6 SSE search_docs 5232,
+  prefix 1-3 SSE text stop (~16K prompts, coherent). All sane, no spam/length/hallucination.
+C5_VERDICT: PROMOTED and PINNED as the working candidate. C5 supersedes C4.
 
 live_G5_G6: GREEN 2026-09-18 on C5 PID 12504 (same 5232-token fixture:
   unary tool_calls 23tok; streams 3/3 tool_calls ws_only=0). Fourth candidate identical.
