@@ -411,10 +411,63 @@ std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse,
     }
 
     if (processingPhase == REASONING) {
-        const auto status = streamOutputCache.lookupTag(reasoningParser->getParsingConfig().endTag);
-        if (status == TagLookupStatus::FOUND_COMPLETE)
+        const auto& reasoningConfig = reasoningParser->getParsingConfig();
+        const auto reasoningEndStatus = streamOutputCache.lookupTag(reasoningConfig.endTag);
+
+        if (reasoningConfig.toolStartTerminatesReasoning && applyToolParser) {
+            const auto& toolStartTags = toolParser->getParsingConfig().startTags;
+            const auto toolStartStatus = streamOutputCache.lookupTags(toolStartTags);
+
+            if (toolStartStatus == TagLookupStatus::FOUND_COMPLETE) {
+                const std::string& buffer = streamOutputCache.getBuffer();
+
+                size_t toolStartPos = std::string::npos;
+                for (const auto& tag : toolStartTags) {
+                    const size_t pos = buffer.find(tag);
+                    if (pos != std::string::npos &&
+                        (toolStartPos == std::string::npos || pos < toolStartPos))
+                        toolStartPos = pos;
+                }
+
+                const size_t reasoningEndPos =
+                    reasoningConfig.endTag.empty() ? std::string::npos : buffer.find(reasoningConfig.endTag);
+
+                // Gemma4 may transition directly from an open thought channel into
+                // a tool call. The earliest structural boundary owns the transition.
+                if (toolStartPos != std::string::npos &&
+                    (reasoningEndPos == std::string::npos || toolStartPos < reasoningEndPos)) {
+                    const std::string reasoningPrefix = buffer.substr(0, toolStartPos);
+                    const std::string toolRemainder = buffer.substr(toolStartPos);
+
+                    streamOutputCache.clear();
+                    processingPhase = TOOL_CALLS_PROCESSING_TOOL;
+                    streamOutputCache.add(toolRemainder);
+
+                    if (!reasoningPrefix.empty()) {
+                        auto reasoningDelta = reasoningParser->parseChunk(
+                            reasoningPrefix,
+                            tokens,
+                            finishReason);
+                        if (reasoningDelta.has_value())
+                            return reasoningDelta;
+                    }
+
+                    return parseToolCallChunk(tokens, finishReason);
+                }
+            }
+
+            // Hold an incomplete tool opener in the reasoning phase so structural
+            // bytes cannot leak into reasoning_content before the opener completes.
+            if (toolStartStatus == TagLookupStatus::FOUND_INCOMPLETE &&
+                reasoningEndStatus != TagLookupStatus::FOUND_COMPLETE &&
+                finishReason == ov::genai::GenerationFinishReason::NONE)
+                return std::nullopt;
+        }
+
+        if (reasoningEndStatus == TagLookupStatus::FOUND_COMPLETE)
             return parseReasoningChunk(tokens, finishReason, UNKNOWN);
-        if (status == TagLookupStatus::FOUND_INCOMPLETE && finishReason == ov::genai::GenerationFinishReason::NONE)
+        if (reasoningEndStatus == TagLookupStatus::FOUND_INCOMPLETE &&
+            finishReason == ov::genai::GenerationFinishReason::NONE)
             return std::nullopt;
         return parseReasoningChunk(tokens, finishReason);
     }
