@@ -162,6 +162,36 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallOutputWithSingleToolCallAndReasoning
     }
 }
 
+TEST_F(Gemma4OutputParserTest, ToolCallStartInsideOpenReasoningChannelImplicitlyEndsReasoning) {
+    // Gemma4 can begin a tool call before emitting the explicit <channel|> closer.
+    // The tool opener is therefore a semantic phase boundary, not reasoning text.
+    // This is the same contract used by current vLLM Gemma4 and by reasoning
+    // parsers that treat tool-start as an implicit reasoning close.
+    const std::string input =
+        "<|channel>thought\n"
+        "Need to inspect the repository before answering.\n"
+        "<|tool_call>call:example_tool{arg1:<|\"|>value1<|\"|>,arg2:42}<tool_call|>";
+
+    auto generatedTensor = gemma4Tokenizer->encode(input).input_ids;
+    std::vector<int64_t> generatedTokens(
+        generatedTensor.data<int64_t>(),
+        generatedTensor.data<int64_t>() + generatedTensor.get_size());
+
+    ParsedOutput parsedOutput = ovms::test::parseWithStreamer(
+        *gemma4Tokenizer,
+        *outputParserWithRegularToolParsing,
+        generatedTokens,
+        true,
+        true);
+
+    EXPECT_EQ(parsedOutput.content, "");
+    EXPECT_EQ(parsedOutput.reasoning, "Need to inspect the repository before answering.\n");
+    ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
+    EXPECT_EQ(parsedOutput.toolCalls[0].name, "example_tool");
+    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{\"arg1\":\"value1\",\"arg2\":42}");
+    EXPECT_FALSE(parsedOutput.toolCalls[0].id.empty());
+}
+
 TEST_F(Gemma4OutputParserTest, ParseReasoningWithoutToolCall) {
     std::string inputWithProperClosure = "<|channel>thought\nSome reasoning content<channel|>SOME CONTENT WITHOUT TOOL CALL";
 
