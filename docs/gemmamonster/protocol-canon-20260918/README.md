@@ -248,3 +248,39 @@ Every recovery patch must identify:
 - neighboring contracts that must remain unchanged.
 
 That rule exists because a branch can preserve a commit-shaped history while still losing the thing the commit was supposed to guarantee. We have now demonstrated that failure mode in this repository.
+
+
+## 10. Canonical document set and execution status
+
+The protocol canon is complete only as the following set:
+
+- `README.md` — resolved parser/generation verdicts and evidence ownership;
+- `CONTRACT-REGISTRY.md` — compact behavioral contracts that future refits must preserve;
+- `RECOVERY-PLAN.md` — ordered C5 repair -> transition validation -> generation characterization -> C6 reconstruction plan;
+- `AGENTIC-TRANSITIONS.md` — required single-generation, streaming, and real multi-turn agentic transition matrix.
+
+Detailed source archaeology remains evidence, not the execution authority:
+
+- `../parser-archaeology-20260918/LOST-FIX-MATRIX.md`;
+- generation-policy archaeology at commit `8399ed747a78c9e82568c8cf3cea3f1bae7736e2`.
+
+Current phase status:
+
+```
+PHASE A / DOCUMENTATION:
+    COMPLETE
+
+PRODUCTION PARSER PORT:
+    NOT STARTED
+
+AGENTIC TRANSITION IMPLEMENTATION/TESTING:
+    NOT STARTED
+
+GENERATION-POLICY PATCH:
+    NOT AUTHORIZED WITHOUT RAW-TOKEN EVIDENCE
+
+C6:
+    BLOCKED ON C5 RECOVERY + TRANSITION GREEN
+```
+
+The next implementation session must treat these four files as one authority set. If an older report conflicts with them, this protocol canon wins unless new executed evidence explicitly amends it.
