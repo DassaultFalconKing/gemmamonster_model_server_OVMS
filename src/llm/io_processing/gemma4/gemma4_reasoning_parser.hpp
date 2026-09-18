@@ -46,6 +46,9 @@ public:
             cfg.tokenIdStartTags = {"<|channel>"};
             cfg.endTag = "<channel|>";
             cfg.needsSpecialTokens = true;
+            // Gemma4 may enter a tool call directly from an open thought channel.
+            // Keep this opt-in local to Gemma4; other reasoning formats remain explicit-end only.
+            cfg.toolStartTerminatesReasoning = true;
             return cfg;
         }()) {
         resolveSpecialTokenIds();
