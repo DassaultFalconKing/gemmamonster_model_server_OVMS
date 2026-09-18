@@ -34,7 +34,7 @@ OpenAIRequest namedWeatherRequest() {
     return request;
 }
 
-const ov::genai::StructuredOutputConfig::JSONSchema* namedToolSchema(
+const std::string* namedToolGrammar(
     const ov::genai::GenerationConfig& config) {
     using Structured = ov::genai::StructuredOutputConfig;
     if (!config.structured_output_config || !config.structured_output_config->structural_tags_config)
@@ -45,16 +45,7 @@ const ov::genai::StructuredOutputConfig::JSONSchema* namedToolSchema(
     if (grammar == nullptr)
         return nullptr;
 
-    const auto* alternatives = std::get_if<std::shared_ptr<Structured::Union>>(grammar);
-    if (alternatives == nullptr || !*alternatives || (*alternatives)->elements.empty())
-        return nullptr;
-
-    const auto* requiredTags = std::get_if<std::shared_ptr<Structured::TagsWithSeparator>>(
-        &(*alternatives)->elements.front());
-    if (requiredTags == nullptr || !*requiredTags || (*requiredTags)->tags.size() != 1u)
-        return nullptr;
-
-    return std::get_if<Structured::JSONSchema>(&(*requiredTags)->tags.front().content);
+    return std::get_if<std::string>(grammar);
 }
 }  // namespace
 
@@ -64,9 +55,10 @@ TEST(Gemma4WhitespaceBoundTest, NamedToolSchemaBoundsInterElementWhitespace) {
 
     builder.parseConfigFromRequest(namedWeatherRequest());
 
-    const auto* schema = namedToolSchema(builder.getConfig());
-    ASSERT_NE(schema, nullptr);
-    ASSERT_TRUE(schema->max_whitespace_cnt.has_value());
-    EXPECT_EQ(*schema->max_whitespace_cnt, 2);
-    EXPECT_NE(schema->to_json().find("\"max_whitespace_cnt\": 2"), std::string::npos);
+    const auto* grammar = namedToolGrammar(builder.getConfig());
+    ASSERT_NE(grammar, nullptr);
+    EXPECT_NE(grammar->find("\"max_whitespace_cnt\": 2"), std::string::npos);
+    EXPECT_NE(grammar->find("\"required\":[\"city\"]"), std::string::npos);
+    EXPECT_NE(grammar->find("\"begin\":{\"type\":\"token\",\"token\":\"<|tool_call>\"}"), std::string::npos);
+    EXPECT_NE(grammar->find("\"end\":{\"type\":\"token\",\"token\":\"<tool_call|>\"}"), std::string::npos);
 }
