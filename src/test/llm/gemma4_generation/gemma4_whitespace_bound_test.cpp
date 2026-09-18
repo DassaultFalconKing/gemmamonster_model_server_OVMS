@@ -70,3 +70,27 @@ TEST(Gemma4WhitespaceBoundTest, NamedToolSchemaBoundsInterElementWhitespace) {
     EXPECT_EQ(*schema->max_whitespace_cnt, 2);
     EXPECT_NE(schema->to_json().find("\"max_whitespace_cnt\": 2"), std::string::npos);
 }
+
+// Empty-args attribution (2026-09-18 live probe): a raw `call:calculator{} envelope
+// must pass the parser untouched, so an empty `arguments:"{}"` in API output can only
+// originate pre-parser. This leg pins the schema-ingestion side: `required` fields
+// from the OpenAI tool declaration must survive verbatim into the rendered JSONSchema
+// handed to guided generation. Parser passthrough of `{}` is already pinned by
+// Gemma4OutputParserTest.StreamingWithToolCallWithEmptyParams.
+TEST(Gemma4WhitespaceBoundTest, NamedToolSchemaPreservesRequiredFields) {
+    OpenAIRequest request;
+    request.toolChoice = "calculator";
+    request.toolNameSchemaMap.emplace(
+        "calculator",
+        ToolSchemaWrapper{nullptr,
+            R"({"type":"object","properties":{"expression":{"type":"string"}},"required":["expression"]})"});
+
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+
+    builder.parseConfigFromRequest(request);
+
+    const auto* schema = namedToolSchema(builder.getConfig());
+    ASSERT_NE(schema, nullptr);
+    EXPECT_NE(schema->value.find("\"required\":[\"expression\"]"), std::string::npos);
+}
