@@ -18,6 +18,7 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -117,16 +118,40 @@ class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
         return alternatives;
     }
 
-    static ov::genai::StructuredOutputConfig::StructuralTag buildAutoToolGrammar(
-        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags,
+    static ov::genai::StructuredOutputConfig::StructuralTag buildTokenAutoToolGrammar(
+        const std::vector<ov::genai::StructuredOutputConfig::Tag>& toolTags,
         bool stopAfterFirst) {
         using Structured = ov::genai::StructuredOutputConfig;
-        auto triggeredTags = std::make_shared<Structured::TriggeredTags>();
-        triggeredTags->triggers = {"<|tool_call>"};
-        triggeredTags->tags = std::move(toolTags);
-        triggeredTags->at_least_one = false;
-        triggeredTags->stop_after_first = stopAfterFirst;
-        return triggeredTags;
+        static constexpr const char* TOOL_TRIGGER = "<|tool_call>";
+
+        std::ostringstream oss;
+        oss << "{\"type\":\"structural_tag\",\"format\":{"
+            << "\"type\":\"token_triggered_tags\","
+            << "\"trigger_tokens\":[" << Structured::format_for_json(TOOL_TRIGGER) << "],"
+            << "\"tags\":[";
+
+        for (size_t i = 0; i < toolTags.size(); ++i) {
+            const auto& tag = toolTags[i];
+            if (tag.begin.rfind(TOOL_TRIGGER, 0) != 0) {
+                throw std::logic_error("Gemma4 token-trigger experiment expected tool tag to begin with <|tool_call>");
+            }
+
+            const std::string trailingBegin = tag.begin.substr(std::char_traits<char>::length(TOOL_TRIGGER));
+            oss << "{\"type\":\"tag\","
+                << "\"begin\":{\"type\":\"token\",\"token\":" << Structured::format_for_json(TOOL_TRIGGER) << "},"
+                << "\"content\":{\"type\":\"sequence\",\"elements\":["
+                << Structured::ConstString(trailingBegin).to_json() << ","
+                << std::visit([](const auto& g) { return Structured::structural_tag_to_json(g); }, tag.content)
+                << "]},"
+                << "\"end\":{\"type\":\"token\",\"token\":" << Structured::format_for_json(tag.end) << "}}";
+            if (i + 1 != toolTags.size())
+                oss << ",";
+        }
+
+        oss << "],\"at_least_one\":false,\"stop_after_first\":"
+            << (stopAfterFirst ? "true" : "false")
+            << "}}";
+        return oss.str();
     }
 
 public:
@@ -163,7 +188,7 @@ public:
         }
 
         if ((request.toolChoice.empty() || request.toolChoice == "auto") && enableToolGuidedGeneration) {
-            setStructuralTagsConfig(buildAutoToolGrammar(std::move(toolTags), stopAfterFirst));
+            setStructuralTagsConfig(buildTokenAutoToolGrammar(toolTags, stopAfterFirst));
         }
     }
 
