@@ -543,3 +543,53 @@ TEST_F(Gemma4ApiValidationTest, ResponsesEchoesExplicitParallelFalse) {
     ASSERT_TRUE(responseDoc["parallel_tool_calls"].IsBool());
     EXPECT_FALSE(responseDoc["parallel_tool_calls"].GetBool());
 }
+
+
+TEST(Gemma4GenerationPolicyTest, RequiredUsesTokenControlBoundaries) {
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+    builder.parseConfigFromRequest(weatherRequest("required"));
+
+    const auto* grammar = getStructuralTag(builder.getConfig());
+    ASSERT_NE(grammar, nullptr);
+    const auto* raw = std::get_if<std::string>(grammar);
+    ASSERT_NE(raw, nullptr);
+
+    EXPECT_NE(raw->find("\"type\":\"tags_with_separator\""), std::string::npos);
+    EXPECT_NE(raw->find("\"begin\":{\"type\":\"token\",\"token\":\"<|tool_call>\"}"), std::string::npos);
+    EXPECT_NE(raw->find("\"end\":{\"type\":\"token\",\"token\":\"<tool_call|>\"}"), std::string::npos);
+    EXPECT_NE(raw->find("\"value\": \"call:weather\""), std::string::npos);
+    EXPECT_NE(raw->find("\"required\":[\"city\"]"), std::string::npos);
+}
+
+TEST(Gemma4GenerationPolicyTest, RequiredReasoningPathUsesTokenChannelAndAnyTokens) {
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+    builder.parseConfigFromRequest(weatherRequest("required"));
+
+    const auto* grammar = getStructuralTag(builder.getConfig());
+    ASSERT_NE(grammar, nullptr);
+    const auto* raw = std::get_if<std::string>(grammar);
+    ASSERT_NE(raw, nullptr);
+
+    EXPECT_NE(raw->find("\"token\":\"<|channel>\""), std::string::npos);
+    EXPECT_NE(raw->find("\"value\": \"thought\\n\""), std::string::npos);
+    EXPECT_NE(raw->find("\"type\":\"any_tokens\""), std::string::npos);
+    EXPECT_NE(raw->find("\"token\":\"<channel|>\""), std::string::npos);
+}
+
+TEST(Gemma4GenerationPolicyTest, ControlMarkersAreNotSerializedAsStringTagBoundaries) {
+    ov::genai::GenerationConfig baseConfig;
+    GenerationConfigBuilder builder(baseConfig, "gemma4", true, DecodingMethod::STANDARD);
+    builder.parseConfigFromRequest(weatherRequest("required"));
+
+    const auto* grammar = getStructuralTag(builder.getConfig());
+    ASSERT_NE(grammar, nullptr);
+    const auto* raw = std::get_if<std::string>(grammar);
+    ASSERT_NE(raw, nullptr);
+
+    EXPECT_EQ(raw->find("\"begin\":\"<|tool_call>"), std::string::npos);
+    EXPECT_EQ(raw->find("\"end\":\"<tool_call|>\""), std::string::npos);
+    EXPECT_EQ(raw->find("\"begin\":\"<|channel>"), std::string::npos);
+    EXPECT_EQ(raw->find("\"end\":\"<channel|>\""), std::string::npos);
+}
