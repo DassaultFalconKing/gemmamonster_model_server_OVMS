@@ -483,3 +483,122 @@ This must be verified for both:
 - new/strict Gemma4 templates.
 
 A parser/tool-calling implementation is not agentically complete if the first call succeeds but its own valid OpenAI response cannot be replayed into the next turn.
+
+
+---
+
+## 14. Executed 2x2 representation matrix — 2026-09-19
+
+The ambiguity around `function.arguments` versus tool-message `content` has now been resolved by live A/B.
+
+Observed matrix:
+
+| assistant `function.arguments` | tool-message `content` | Result |
+|---|---|---|
+| STRING | STRING | **HTTP 400 — arguments mapping error** |
+| STRING | OBJECT | **HTTP 400 — arguments mapping error** |
+| OBJECT | STRING | **HTTP 200 — stop** |
+| OBJECT | OBJECT | **HTTP 200 — stop** |
+
+### Experimental conclusion
+
+The outcome is controlled by exactly one axis:
+
+```text
+function.arguments
+```
+
+The `tool.content` representation does not change the current result.
+
+Therefore:
+
+```text
+arguments STRING
+    -> FAIL
+
+arguments OBJECT/MAPPING
+    -> PASS
+```
+
+This is now executed evidence, not inference.
+
+### Sept-15 `str has no attribute get` disposition
+
+The older `'str' has no attribute 'get'` observation did not reproduce in any current 2x2 cell.
+
+In particular:
+
+```text
+arguments OBJECT
+tool.content OBJECT
+    -> HTTP 200
+```
+
+Therefore that older failure is not part of the current compatibility defect.
+
+Canonical status:
+
+```text
+Sept-15 str.get:
+    HISTORICAL / NON-REPRODUCED ON CURRENT STACK
+    NOT A BLOCKER FOR ARGUMENTS NORMALIZATION
+```
+
+Do not use it as evidence against the string -> mapping repair.
+
+---
+
+## 15. Confirmed repair requirement
+
+The template boundary must normalize assistant tool-call arguments before rendering.
+
+Confirmed contract:
+
+```text
+OpenAI/API history:
+    function.arguments = JSON STRING
+
+template-bound history:
+    function.arguments = OBJECT/MAPPING
+```
+
+The live 2x2 proves that this conversion is necessary and sufficient for the reproduced failure.
+
+The repair must preserve:
+
+```text
+public API output:
+    STRING
+
+internal template input:
+    OBJECT
+```
+
+---
+
+## 16. Promotion acceptance
+
+After the repair, rerun the exact same 2x2.
+
+Required result:
+
+| assistant `function.arguments` | tool-message `content` | Expected after normalization |
+|---|---|---|
+| STRING | STRING | **200** |
+| STRING | OBJECT | **200** |
+| OBJECT | STRING | **200** |
+| OBJECT | OBJECT | **200** |
+
+Additional live acceptance:
+
+```text
+reasoning
+ -> tool A
+ -> tool result
+ -> reasoning
+ -> tool B
+ -> tool result
+ -> final answer
+```
+
+No template error may occur when the assistant tool-call history is replayed in standard OpenAI string form.
