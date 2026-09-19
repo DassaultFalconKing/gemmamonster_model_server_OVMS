@@ -183,6 +183,15 @@ absl::Status OpenAIApiHandler::ensureArgumentsInToolCalls(Value& messageObj) {
 }
 
 absl::Status OpenAIApiHandler::parseTools() {
+    auto parallelToolCallsIt = doc.FindMember("parallel_tool_calls");
+    if (parallelToolCallsIt != doc.MemberEnd() && !parallelToolCallsIt->value.IsNull()) {
+        if (!parallelToolCallsIt->value.IsBool())
+            return absl::InvalidArgumentError("parallel_tool_calls is not a boolean");
+        request.parallelToolCalls = parallelToolCallsIt->value.GetBool();
+    } else {
+        request.parallelToolCalls = true;
+    }
+
     auto toolChoiceIt = doc.FindMember("tool_choice");
     std::string toolChoice{"auto"};
     if (toolChoiceIt != doc.MemberEnd() && !toolChoiceIt->value.IsNull()) {
@@ -379,6 +388,9 @@ absl::StatusOr<InputRequest> OpenAIApiHandler::extractInputRequest(GenerationCon
     try {
         configBuilder.validateStructuredOutputConfig(tokenizer);
     } catch (const std::exception& e) {
+        if (configBuilder.requiresValidStructuredOutput()) {
+            return absl::InvalidArgumentError(absl::StrCat("Structured output validation failed for required generation policy: ", e.what()));
+        }
         SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "Tool guided generation will not be applied due to JSON schema validation failure: {}", e.what());
         configBuilder.unsetStructuredOutputConfig();
     }

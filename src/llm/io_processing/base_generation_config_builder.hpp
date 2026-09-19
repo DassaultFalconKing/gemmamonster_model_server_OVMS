@@ -97,6 +97,12 @@ public:
     void unsetStructuredOutputConfig();
 
     /*
+     * Returns true when structured-output validation is part of a hard request contract.
+     * Callers must fail the request on validation error instead of silently removing the constraint.
+     */
+    virtual bool requiresValidStructuredOutput() const { return false; }
+
+    /*
      * Fills generation config with values read from OpenAI request.
      * If extended, model specific implementation should call base class method first to fill in common configuration
      * and then set model specific parameters.
