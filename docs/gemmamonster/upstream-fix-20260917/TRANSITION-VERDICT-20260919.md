@@ -39,7 +39,16 @@ Each cell states its evidence layer (unit Layer-2 / live Layer-4 / none).
 - B-series (chunk-split invariance) for the new transitions: NOT RUN live.
 - F-series raw-token correlation: NOT captured live (usage only).
 
-## Consequence for stamping
+## Focused live probes 2026-09-19 (server C5fixed `gemma4` — substitution recorded)
+
+- A01: INCONCLUSIVE (call-only, no prose generated). A04: PASS. C03/C04: PARTIAL
+  (first transition exact, model never attempts second half in one turn).
+- D03: PASS. D04: PASS (after fixing my own harness bug — array-as-content, correct 400).
+- D07: PARTIAL (batched 2-call proven; strict reason->answer->tool interleave not observed).
+- Zero marker leaks/dups/fabrications/swallows anywhere. Full detail:
+  `C6-transitions/VERDICT.md` + raws (note: first inline attempts voided by shell quoting).
+
+## Consequence for stamping (updated)
 
 "ALL C5 GATES GREEN" is WITHDRAWN as a claim. Correct stamp:
 "Listed gates green; transition matrix PARTIAL — 7 named gaps above."
