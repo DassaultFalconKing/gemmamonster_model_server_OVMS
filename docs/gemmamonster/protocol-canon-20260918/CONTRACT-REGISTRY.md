@@ -166,3 +166,40 @@ S01/S02 preserved?
 ```
 
 A green build without this contract check is insufficient evidence for a Gemma4 forward-port.
+
+
+---
+
+## H-series — chat history / template boundary
+
+| ID | Contract | Status | Canonical evidence / note |
+|---|---|---|---|
+| H01 | OpenAI assistant tool-call history with string `function.arguments` must survive roundtrip into next turn | **NEWLY EXPOSED GAP** | Old `7d00c5fe` live two-turn evidence passed with string args; strict new template rejects same representation |
+| H02 | Public OpenAI `function.arguments` remains JSON string | RETAINED API CONTRACT | Do not mutate wire format to satisfy internal Jinja |
+| H03 | Template-bound copy may normalize valid JSON-string arguments to object/mapping | RECOMMENDED REPAIR | Localize conversion at ChatHistory -> template boundary |
+| H04 | Already-object arguments remain object | REQUIRED | Normalizer must be idempotent, not double-decode |
+| H05 | Invalid/non-object JSON argument strings fail at request/template boundary | REQUIRED | Prefer clear INVALID_ARGUMENT over deep Mediapipe/LLMExecutor failure |
+| H06 | Tool-message content typing is independent from assistant function.arguments typing | UNRESOLVED A/B | Sept-15 `str.get` observation may belong to tool-content iteration, not arguments mapping |
+
+### H01 acceptance loop
+
+```
+turn 1:
+  assistant reasoning
+  -> tool A
+  -> API response arguments STRING
+
+client:
+  replays assistant tool_call unchanged
+  + tool result
+
+internal template copy:
+  arguments OBJECT/MAPPING
+
+turn 2:
+  reasoning -> tool B
+  OR
+  reasoning -> final answer
+```
+
+The first tool call is not sufficient acceptance. The server must be able to consume its own valid OpenAI tool-call response on the next request.
