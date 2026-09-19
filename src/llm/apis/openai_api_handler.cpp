@@ -194,6 +194,54 @@ void setCanonicalEmptyObjectSchema(rapidjson::Value& function, rapidjson::Docume
     parameters.AddMember("properties", rapidjson::Value(rapidjson::kObjectType), allocator);
     function.AddMember("parameters", parameters, allocator);
 }
+
+absl::Status normalizeToolCallArgumentsForTemplate(ov::genai::ChatHistory& chatHistory) {
+    auto& messages = chatHistory.get_messages();
+    for (size_t messageIndex = 0; messageIndex < messages.size(); ++messageIndex) {
+        auto message = messages[messageIndex];
+        if (!message.is_object() || !message.contains("tool_calls"))
+            continue;
+
+        auto toolCalls = message["tool_calls"];
+        if (!toolCalls.is_array())
+            return absl::InvalidArgumentError("tool_calls must be an array");
+
+        for (size_t toolIndex = 0; toolIndex < toolCalls.size(); ++toolIndex) {
+            auto toolCall = toolCalls[toolIndex];
+            if (!toolCall.is_object() || !toolCall.contains("function"))
+                return absl::InvalidArgumentError("Each tool_call must have a 'function' object");
+
+            auto function = toolCall["function"];
+            if (!function.is_object())
+                return absl::InvalidArgumentError("Each tool_call must have a 'function' object");
+
+            if (!function.contains("arguments")) {
+                function["arguments"] = ov::genai::JsonContainer::object();
+                continue;
+            }
+
+            auto arguments = function["arguments"];
+            if (arguments.is_object())
+                continue;
+            if (!arguments.is_string())
+                return absl::InvalidArgumentError("tool_calls[].function.arguments must be a JSON object or a JSON-encoded object string");
+
+            ov::genai::JsonContainer parsedArguments;
+            try {
+                parsedArguments = ov::genai::JsonContainer::from_json_string(arguments.get_string());
+            } catch (const std::exception& e) {
+                return absl::InvalidArgumentError(
+                    absl::StrCat("tool_calls[].function.arguments must contain valid JSON object text: ", e.what()));
+            }
+
+            if (!parsedArguments.is_object())
+                return absl::InvalidArgumentError("tool_calls[].function.arguments must decode to a JSON object");
+
+            arguments = parsedArguments;
+        }
+    }
+    return absl::OkStatus();
+}
 }  // namespace
 
 ov::genai::JsonContainer rapidJsonValueToJsonContainer(const rapidjson::Value& value) {
@@ -596,6 +644,15 @@ absl::StatusOr<InputRequest> OpenAIApiHandler::extractInputRequest(GenerationCon
         // Populate tools and chat_template_kwargs on the copied ChatHistory so
         // ChatTemplateProcessor can access them via get_tools()/get_extra_context().
         auto& chatHistory = std::get<ov::genai::ChatHistory>(req.input);
+        // OpenAI history carries function.arguments as a JSON string, while
+        // strict Gemma4 chat templates require a mapping. Normalize only the
+        // copied template-bound history so the public OpenAI contract remains
+        // unchanged.
+        if (toolParserName == "gemma4" || reasoningParserName == "gemma4") {
+            auto status = normalizeToolCallArgumentsForTemplate(chatHistory);
+            if (!status.ok())
+                return status;
+        }
         auto toolsResult = parseToolsToJsonContainer();
         if (!toolsResult.ok()) {
             return toolsResult.status();
