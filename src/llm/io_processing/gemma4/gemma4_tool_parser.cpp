@@ -62,12 +62,6 @@ std::string Gemma4ToolParser::parseArrayParameter(const std::string& argumentStr
     return parsedArray;
 }
 
-std::string Gemma4ToolParser::parseObjectParameter(const std::string& argumentStr) {
-    std::string body = argumentStr.substr(1, argumentStr.size() - 2);
-    trim(body);
-    if (body.empty()) {
-        return "{}";
-    }
 void trimLocal(std::string& value) {
     auto notSpace = [](unsigned char c) { return !std::isspace(c); };
     value.erase(value.begin(), std::find_if(value.begin(), value.end(), notSpace));
@@ -218,6 +212,14 @@ class NativeValueParser {
         std::string token = input.substr(start, pos - start);
         trimLocal(token);
         return !token.empty() && writeJsonScalar(token);
+    }
+}
+
+std::string Gemma4ToolParser::parseObjectParameter(const std::string& argumentStr) {
+    std::string body = argumentStr.substr(1, argumentStr.size() - 2);
+    trim(body);
+    if (body.empty()) {
+        return "{}";
     }
 
     std::string parsedObject = "{";
