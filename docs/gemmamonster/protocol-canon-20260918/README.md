@@ -321,3 +321,37 @@ template domain:
 Do not alter public OpenAI serialization.
 
 The historical exact-head `7d00c5fe63c5f81e6c06972a974cd57fd7180326` is important evidence: its two-turn live session passed while the source still lacked any string -> mapping adapter. That makes the current issue a compatibility gap exposed by stricter template semantics, not evidence of another silently dropped parser patch.
+
+
+## 12. Tool-history 2x2 closed; repair authorized
+
+Executed current-stack matrix:
+
+```text
+args STRING + tool.content STRING -> 400
+args STRING + tool.content OBJECT -> 400
+args OBJECT + tool.content STRING -> 200
+args OBJECT + tool.content OBJECT -> 200
+```
+
+Therefore:
+
+- `function.arguments` is the deciding axis;
+- `tool.content` is not part of this reproduced defect;
+- Sept-15 `str.get` is historical/non-reproduced on the current stack;
+- template-bound string -> mapping normalization is now an evidence-backed required repair.
+
+Implementation proposal:
+
+`TOOL-HISTORY-TEMPLATE-FIX-PROPOSAL-20260919.md`
+
+Preferred seam:
+
+```text
+OpenAIApiHandler::extractInputRequest()
+    req.input = request.chatHistory
+    -> normalize copied tool-call arguments
+    -> ChatTemplateProcessor
+```
+
+Public OpenAI `function.arguments` remains a JSON string.
