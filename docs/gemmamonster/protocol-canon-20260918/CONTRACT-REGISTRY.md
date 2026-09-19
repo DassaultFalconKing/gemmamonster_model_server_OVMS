@@ -174,12 +174,12 @@ A green build without this contract check is insufficient evidence for a Gemma4 
 
 | ID | Contract | Status | Canonical evidence / note |
 |---|---|---|---|
-| H01 | OpenAI assistant tool-call history with string `function.arguments` must survive roundtrip into next turn | **NEWLY EXPOSED GAP** | Old `7d00c5fe` live two-turn evidence passed with string args; strict new template rejects same representation |
+| H01 | OpenAI assistant tool-call history with string `function.arguments` must survive roundtrip into next turn | **CONFIRMED COMPATIBILITY GAP** | Current 2x2: STRING args fail regardless of tool.content; OBJECT args pass regardless of tool.content |
 | H02 | Public OpenAI `function.arguments` remains JSON string | RETAINED API CONTRACT | Do not mutate wire format to satisfy internal Jinja |
-| H03 | Template-bound copy may normalize valid JSON-string arguments to object/mapping | RECOMMENDED REPAIR | Localize conversion at ChatHistory -> template boundary |
+| H03 | Template-bound copy normalizes valid JSON-string arguments to object/mapping | **REQUIRED REPAIR** | Executed 2x2 proves mapping is the deciding axis; localize conversion at ChatHistory -> template boundary |
 | H04 | Already-object arguments remain object | REQUIRED | Normalizer must be idempotent, not double-decode |
 | H05 | Invalid/non-object JSON argument strings fail at request/template boundary | REQUIRED | Prefer clear INVALID_ARGUMENT over deep Mediapipe/LLMExecutor failure |
-| H06 | Tool-message content typing is independent from assistant function.arguments typing | UNRESOLVED A/B | Sept-15 `str.get` observation may belong to tool-content iteration, not arguments mapping |
+| H06 | Tool-message content typing is independent from assistant function.arguments typing | **CONFIRMED CURRENTLY** | 2x2 shows STRING/OBJECT tool.content does not affect result; Sept-15 `str.get` did not reproduce |
 
 ### H01 acceptance loop
 
@@ -203,3 +203,17 @@ turn 2:
 ```
 
 The first tool call is not sufficient acceptance. The server must be able to consume its own valid OpenAI tool-call response on the next request.
+
+
+### H-series live proof
+
+Executed 2x2:
+
+```text
+args STRING + content STRING -> 400
+args STRING + content OBJECT -> 400
+args OBJECT + content STRING -> 200
+args OBJECT + content OBJECT -> 200
+```
+
+Therefore H03 is no longer merely a preferred design. It is the required compatibility adaptation for the reproduced strict-template failure.
