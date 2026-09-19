@@ -24,7 +24,7 @@
 
 namespace ovms {
 class Gemma4ToolParser : public BaseOutputParser {
-protected:
+public:
     static const std::string TOOL_CALL_START_TAG;
     static const std::string TOOL_CALL_END_TAG;
     static const std::string TOOL_CALL_NAME_PREFIX;
@@ -41,6 +41,7 @@ protected:
     static const int64_t reasoningTokenId;
     static const int64_t reasoningEndTokenId;
 
+protected:
     enum class State {
         Content,             // Content -> ToolCallStarted (on TOOL_CALL_START_TAG)
         ToolCallStarted,     // ToolCallStarted -> ToolCallParameters (on TOOL_ARGS_START_INDICATOR, emits name)

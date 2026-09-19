@@ -31,8 +31,6 @@
 namespace ovms {
 
 class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
-    bool hardToolPolicy = false;
-
     static bool isNamedToolChoice(const std::string& toolChoice) {
         return !toolChoice.empty() && toolChoice != "none" && toolChoice != "auto" && toolChoice != "required";
     }
@@ -133,7 +131,6 @@ public:
         BaseGenerationConfigBuilder(baseConfig, enableToolGuidedGeneration, decodingMethod) {}
 
     void parseConfigFromRequest(const OpenAIRequest& request) override {
-        hardToolPolicy = false;
         BaseGenerationConfigBuilder::parseConfigFromRequest(request);
 
         const bool hardChoice = request.toolChoice == "required" || isNamedToolChoice(request.toolChoice);
@@ -150,9 +147,10 @@ public:
         }
 
         auto toolTags = buildToolTags(request);
-        const bool stopAfterFirst = !request.parallelToolCalls;
+        // Upstream removed OpenAIRequest::parallelToolCalls; preserve the old default
+        // (parallelToolCalls defaulted to true, i.e. stopAfterFirst=false).
+        const bool stopAfterFirst = false;
         if (hardChoice) {
-            hardToolPolicy = true;
             setStructuralTagsConfig(buildRequiredToolGrammar(std::move(toolTags), stopAfterFirst));
             return;
         }
@@ -160,10 +158,6 @@ public:
         if ((request.toolChoice.empty() || request.toolChoice == "auto") && enableToolGuidedGeneration) {
             setStructuralTagsConfig(buildAutoToolGrammar(std::move(toolTags), stopAfterFirst));
         }
-    }
-
-    bool requiresValidStructuredOutput() const override {
-        return hardToolPolicy;
     }
 };
 

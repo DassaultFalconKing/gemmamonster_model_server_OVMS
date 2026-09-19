@@ -42,24 +42,33 @@ const int64_t Gemma4ToolParser::eotTokenId = 49;  // <tool_call|>
 const int64_t Gemma4ToolParser::reasoningTokenId = 100;     // <|channel>
 const int64_t Gemma4ToolParser::reasoningEndTokenId = 101;  // <channel|>
 
-std::string Gemma4ToolParser::parseArrayParameter(const std::string& argumentStr) {
-    std::string body = argumentStr.substr(1, argumentStr.size() - 2);
-    trim(body);
-    if (body.empty()) {
-        return "[]";
-    }
+std::string Gemma4ToolParser::parseArrayParameter(const std::string& arg) { return normalizeArgStr(arg); }
 
-    std::string parsedArray = "[";
-    bool firstElement = true;
-    for (const std::string& element : splitRespectingSpecialChars(body, TOOL_ARGS_SEPARATOR_STR, maskDelimitedStringValues(body, TOOL_ARGS_STRING_INDICATOR))) {
-        if (!firstElement) {
-            parsedArray += ",";
-        }
-        parsedArray += normalizeArgStr(element);
-        firstElement = false;
+namespace {
+using JsonWriter = rapidjson::Writer<rapidjson::StringBuffer>;
+
+// A generated tool call should be far smaller than the surrounding HTTP/model
+// limits. These local caps prevent a malformed candidate from retaining
+// unbounded streaming state while leaving ample room for legitimate arguments.
+constexpr size_t MAX_NATIVE_TOOL_CANDIDATE_BYTES = 64 * 1024;
+constexpr size_t MAX_NATIVE_TOOL_CONTAINER_DEPTH = 64;
+
+class NumberPreservingWriter : public JsonWriter {
+public:
+    explicit NumberPreservingWriter(rapidjson::StringBuffer& buffer) : JsonWriter(buffer) {}
+    bool RawNumber(const char* value, rapidjson::SizeType length, bool) {
+        return RawValue(value, length, rapidjson::kNumberType);
     }
-    parsedArray += "]";
-    return parsedArray;
+};
+
+std::optional<std::string> normalizeJsonLosslessly(const std::string& input) {
+    rapidjson::StringStream stream(input.c_str());
+    rapidjson::Reader reader;
+    rapidjson::StringBuffer buffer;
+    NumberPreservingWriter writer(buffer);
+    if (!reader.Parse<rapidjson::kParseNumbersAsStringsFlag>(stream, writer) || stream.Tell() != input.size())
+        return std::nullopt;
+    return std::string(buffer.GetString(), buffer.GetSize());
 }
 
 void trimLocal(std::string& value) {
@@ -213,76 +222,54 @@ class NativeValueParser {
         trimLocal(token);
         return !token.empty() && writeJsonScalar(token);
     }
-}
 
-std::string Gemma4ToolParser::parseObjectParameter(const std::string& argumentStr) {
-    std::string body = argumentStr.substr(1, argumentStr.size() - 2);
-    trim(body);
-    if (body.empty()) {
-        return "{}";
+public:
+    NativeValueParser(const std::string& input, JsonWriter& writer) : input(input), writer(writer) {}
+    bool parseValue() {
+        skipWs(); if (pos >= input.size()) return false;
+        if (startsWith(Gemma4ToolParser::TOOL_ARGS_STRING_INDICATOR)) return parseDelimitedString();
+        if (input[pos] == '"') return parseJsonString();
+        if (input[pos] == '{') return parseObject();
+        if (input[pos] == '[') return parseArray();
+        return parseBareScalar();
     }
+    bool parseArgumentsBody() {
+        writer.StartObject(); skipWs();
+        if (pos == input.size()) { writer.EndObject(); return true; }
+        while (pos < input.size()) {
+            std::string key;
+            if (!parseKey(key)) return false;
+            skipWs(); if (pos >= input.size() || input[pos] != ':') return false;
+            ++pos; writer.Key(key.c_str(), static_cast<rapidjson::SizeType>(key.size()));
+            if (!parseValue()) return false;
+            skipWs();
+            if (pos == input.size()) { writer.EndObject(); return true; }
+            if (input[pos] != ',') return false;
+            ++pos; skipWs(); if (pos == input.size()) return false;
+        }
+        return false;
+    }
+    bool parseSingleValueFully() {
+        if (!parseValue()) return false;
+        skipWs(); return pos == input.size();
+    }
+};
 
-    std::string parsedObject = "{";
-    bool firstMember = true;
-    for (const std::string& member : splitRespectingSpecialChars(body, TOOL_ARGS_SEPARATOR_STR, maskDelimitedStringValues(body, TOOL_ARGS_STRING_INDICATOR))) {
-        const std::string maskedMember = maskDelimitedStringValues(member, TOOL_ARGS_STRING_INDICATOR);
-        size_t keyEndPos = findInStringRespectingSpecialChars(maskedMember, ":", 0);
-        if (keyEndPos == std::string::npos) {
-            SPDLOG_LOGGER_TRACE(llm_calculator_logger, "Object member does not contain a key separator, leaving argument unchanged. Member: {}", member);
-            return argumentStr;
-        }
-        std::string key = member.substr(0, keyEndPos);
-        trim(key);
-        if (isWrappedByDelimiter(key, TOOL_ARGS_STRING_INDICATOR)) {
-            key = key.substr(TOOL_ARGS_STRING_INDICATOR.size(), key.size() - 2 * TOOL_ARGS_STRING_INDICATOR.size());
-        }
-        if (!firstMember) {
-            parsedObject += ",";
-        }
-        parsedObject += escapeAsJsonString(key) + ":" + normalizeArgStr(member.substr(keyEndPos + 1));
-        firstMember = false;
-    }
-    parsedObject += "}";
-    return parsedObject;
+std::optional<std::string> normalizeSingleNativeValue(const std::string& arg) {
+    std::string value = arg; trimLocal(value);
+    if (value.empty()) return std::nullopt;
+    rapidjson::StringBuffer buffer; JsonWriter writer(buffer);
+    NativeValueParser parser(value, writer);
+    if (!parser.parseSingleValueFully()) return std::nullopt;
+    return std::string(buffer.GetString(), buffer.GetSize());
 }
+}  // namespace
+
+std::string Gemma4ToolParser::parseObjectParameter(const std::string& arg) { return normalizeArgStr(arg); }
 
 std::string Gemma4ToolParser::normalizeArgStr(const std::string& arg) {
-    std::string normalized = arg;
-    trim(normalized);
-    if (normalized.empty()) {
-        return "\"\"";
-    }
-
-    std::string lower = normalized;
-    std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
-    if (lower == "true" || lower == "false" || lower == "null") {
-        return lower;
-    }
-
-    // Build valid JSON out of the Gemma4 specific syntax before handing it over to rapidjson.
-    if (isWrappedByDelimiter(normalized, TOOL_ARGS_STRING_INDICATOR)) {
-        normalized = escapeAsJsonString(normalized.substr(TOOL_ARGS_STRING_INDICATOR.size(), normalized.size() - 2 * TOOL_ARGS_STRING_INDICATOR.size()));
-        SPDLOG_LOGGER_TRACE(llm_calculator_logger, "Argument is a string, converted it to correct JSON format. Modified string: {}", normalized);
-    } else if (normalized.front() == '{' && normalized.back() == '}') {
-        normalized = parseObjectParameter(normalized);
-        SPDLOG_LOGGER_TRACE(llm_calculator_logger, "Argument is an object, converted it to correct JSON format. Modified string: {}", normalized);
-    } else if (normalized.front() == '[' && normalized.back() == ']') {
-        normalized = parseArrayParameter(normalized);
-        SPDLOG_LOGGER_TRACE(llm_calculator_logger, "Argument is an array, converted it to correct JSON format. Modified string: {}", normalized);
-    }
-
-    rapidjson::Document tempDoc;
-    tempDoc.Parse(normalized.c_str());
-    if (!tempDoc.HasParseError()) {
-        return normalized;
-    }
-
-    auto errorCode = tempDoc.GetParseError();
-    auto errorMessage = rapidjson::GetParseError_En(errorCode);
-    size_t errorOffset = tempDoc.GetErrorOffset();
-    SPDLOG_LOGGER_TRACE(llm_calculator_logger, "Failed to parse argument string as JSON, falling back to string value. Argument string: {}, Error: {} Offset: {}", normalized, errorMessage, errorOffset);
-
-    return escapeAsJsonString(arg);
+    auto normalized = normalizeSingleNativeValue(arg);
+    return normalized.value_or(arg);
 }
 
 void Gemma4ToolParser::writeArgumentToWriter(const std::string& arg, rapidjson::Writer<rapidjson::StringBuffer>& writer) {
