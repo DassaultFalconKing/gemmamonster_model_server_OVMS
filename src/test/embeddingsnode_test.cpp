@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //*****************************************************************************
+#include <algorithm>
 #include <string>
 
 #include <gmock/gmock.h>
@@ -28,8 +29,31 @@
 #include "test_file_utils.hpp"
 #include "test_utils.hpp"
 #include "platform_utils.hpp"
+#include "src/mediapipe_internal/node_initializer.hpp"
+#include "src/mediapipe_internal/graph_side_packets.hpp"
+#include "src/embeddings/embeddings_calculator_ov.pb.h"
 
 using namespace ovms;
+
+TEST(EmbeddingsNodeInitializerTest, MissingModelsReturnsInitializationError) {
+    TempDir tempDir;
+    mediapipe::CalculatorGraphConfig_Node node;
+    node.set_name("missing_embeddings");
+    node.set_calculator("EmbeddingsCalculatorOV");
+    mediapipe::EmbeddingsCalculatorOVOptions options;
+    options.set_models_path((tempDir.dir / "missing").string());
+    options.set_target_device("CPU");
+    node.add_node_options()->PackFrom(options);
+    GraphSidePackets sidePackets;
+    const auto& initializers = NodeInitializerRegistry::instance().all();
+    auto initializer = std::find_if(initializers.begin(), initializers.end(), [&node](const auto& candidate) {
+        return candidate->matches(node.calculator());
+    });
+    ASSERT_NE(initializer, initializers.end());
+    auto status = (*initializer)->initialize(node, "missing_model_graph", tempDir.dir.string(), sidePackets, nullptr);
+    EXPECT_EQ(status, StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED) << status.string();
+    EXPECT_TRUE(sidePackets.embeddingsServableMap.empty());
+}
 
 namespace {
 

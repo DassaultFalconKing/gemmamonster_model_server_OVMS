@@ -3,7 +3,7 @@
         {
             "config": {
                 "name": "dummy",
-                "base_path": "/ovms/src/test/dummy",
+                "base_path": "C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\dummy",
                 "shape": {"b":"(1,1:10)"},
                 "plugin_config": {"ENABLE_CPU_PINNING": false}
             }

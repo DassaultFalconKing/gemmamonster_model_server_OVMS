@@ -3,11 +3,11 @@
     "mediapipe_config_list": [
     {
         "name":"vlm_cb_regular",
-        "graph_path":"/ovms/src/test/llm/visual_language_model/vlm_cb_regular.pbtxt"
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\llm/visual_language_model/vlm_cb_regular.pbtxt"
     },
     {
         "name":"vlm_legacy_regular",
-        "graph_path":"/ovms/src/test/llm/visual_language_model/vlm_legacy_regular.pbtxt"
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\llm/visual_language_model/vlm_legacy_regular.pbtxt"
     }
     ]
 }

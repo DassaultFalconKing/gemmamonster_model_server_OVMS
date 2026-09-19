@@ -3,7 +3,7 @@
     "mediapipe_config_list": [
     {
         "name":"mediapipePythonBackend",
-        "graph_path":"/ovms/src/test/mediapipe/python/two_python_outputs_graph.pbtxt"
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\mediapipe/python/two_python_outputs_graph.pbtxt"
     }
     ]
 }

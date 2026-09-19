@@ -2,14 +2,14 @@
     "model_config_list": [
         {"config": {
                 "name": "scalar",
-                "base_path": "/ovms/src/test/scalar"
+                "base_path": "C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\scalar"
         }
         }
     ],
     "mediapipe_config_list": [
     {
         "name":"mediaScalar",
-        "graph_path":"/ovms/src/test/mediapipe/graphscalar.pbtxt"
+        "graph_path":"C:\\git\\gemmamonster-2026.4-unified-20260911\\src\\test\\mediapipe/graphscalar.pbtxt"
     }
     ]
 }
