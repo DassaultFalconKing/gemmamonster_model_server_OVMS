@@ -385,3 +385,50 @@ no parser/generation change
 This directly matches the live evidence and has a small blast radius.
 
 If the exact `JsonContainer` mutation API makes post-copy traversal awkward, acceptable fallback is to construct the copied template-bound `ChatHistory` from normalized tool-call objects during input preparation. The architectural rule remains unchanged: normalize the template copy, not the public OpenAI contract.
+
+
+---
+
+## 13. Implementation landed on C5fixed lane
+
+Implementation branch:
+
+`fix/gemma4-agentic-transition-recovery-c5-20260918`
+
+Implementation commit:
+
+`8c6f8b00912e8baa24fb1566a843b031584f1eaa`
+
+Subject:
+
+`fix(gemma4): normalize replayed tool arguments for templates`
+
+Touched production file:
+
+`src/llm/apis/openai_api_handler.cpp`
+
+Initial scope is deliberately Gemma4-only:
+
+```cpp
+if (toolParserName == "gemma4" || reasoningParserName == "gemma4") {
+    normalizeToolCallArgumentsForTemplate(chatHistory);
+}
+```
+
+Reason:
+
+- current live evidence is specific and complete for the strict Gemma4 template;
+- other model templates have not yet been cross-validated against forced object-shaped internal arguments;
+- the adapter itself is generic, so later generalization can be a separate evidence-backed change.
+
+The helper:
+
+- walks the copied template-bound `ChatHistory`;
+- leaves already-object arguments unchanged;
+- parses JSON-string arguments once;
+- requires an object root;
+- turns missing/null-like absent arguments into an empty object on the template copy;
+- returns clear `INVALID_ARGUMENT` for invalid or non-object string payloads;
+- leaves `request.chatHistory` and public OpenAI serialization unchanged.
+
+This commit has not been claimed BUILD/LIVE PASS in repository documentation yet. Required next evidence is cached incremental `//src:ovms` build plus the exact 2x2 and multi-turn live matrix.
