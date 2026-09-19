@@ -31,7 +31,11 @@ passed_gates:
 failed_gates: none
 not_run_gates: none remaining (G2 closed by pack, see below)
 
-G2 canonical pack: GREEN 2026-09-18 (dogfood session 03 on live C5).
+G2 canonical pack: GREEN 2026-09-18 (dogfood session 03 on live C5 + verified verdict
+`C6-g2pack/VERIFIED-G2-VERDICT.md` — agent's results.csv rejected as misparsed).
+Turns 1-3 tool_calls, turn4 stop+correct summary, g6 search_docs @5232, prefix 1-3
+stop+coherent @~16K. Response-level evidence (not transition contracts, see
+TRANSITION-VERDICT-20260919.md for the 7 named gaps).
   Evidence C:\git\artifacts\gemma4-frankenstein-20260917\C6-g2pack\:
   turns 1-4 unary tool_calls (perfect inspector chain), g6 SSE search_docs 5232,
   prefix 1-3 SSE text stop (~16K prompts, coherent). All sane, no spam/length/hallucination.
