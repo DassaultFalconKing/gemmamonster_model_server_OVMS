@@ -379,8 +379,8 @@ ov::genai::ChatHistory& OpenAIApiHandler::getChatHistory() {
 }
 
 absl::StatusOr<InputRequest> OpenAIApiHandler::extractInputRequest(GenerationConfigBuilder& configBuilder) {
-    configBuilder.parseConfigFromRequest(request);
     try {
+        configBuilder.parseConfigFromRequest(request);
         configBuilder.adjustConfigForDecodingMethod();
     } catch (const std::invalid_argument& e) {
         return absl::InvalidArgumentError(e.what());
