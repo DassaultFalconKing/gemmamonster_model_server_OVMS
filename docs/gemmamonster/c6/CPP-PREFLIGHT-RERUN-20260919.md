@@ -26,3 +26,16 @@ GEMMA4_BUILDER_ROUTING=PASS
 API_EXCEPTION_BOUNDARY=PASS
 
 FULL_BUILD=NOT_RUN (per task; clean checkpoint first)
+
+## Live gates on preflight dist (post-reboot, PID 16292)
+
+- G5/G6 (5232-token fixture): GREEN (unary tool_calls 23tok; streams 3/3 tool_calls).
+- Live-like 6/6 behaviors match C5 (incl. emptyparams stop-empty, unknown 400).
+- 7 focused probes: A04 PASS; D03/D04 PASS (D04 needed harness fix, recorded);
+  D07 calculator+407ch content; A01 INCONCLUSIVE; C03/C04 PARTIAL (generation-side).
+- G09 runtime: required/named+invalid-schema -> 400; auto+invalid -> 200-proceeds.
+  (Malformed declarations -> 400 for all choices, correct fail-closed.)
+- G12 runtime: omitted/true/false accepted (200); string form -> 400.
+- Evidence: C6-preflight/g5-*.json, g6-*.sse.txt, livelike/, *-request/response.json.
+- Incident: first 7-probe run clobbered C5fixed raws in C6-transitions/ (OutDir default);
+  C5fixed numbers survive in VERDICT.md + pushed handoff. Fresh raws moved here.
