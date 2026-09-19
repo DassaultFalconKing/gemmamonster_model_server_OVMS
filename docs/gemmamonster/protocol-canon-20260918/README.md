@@ -284,3 +284,40 @@ C6:
 ```
 
 The next implementation session must treat these four files as one authority set. If an older report conflicts with them, this protocol canon wins unless new executed evidence explicitly amends it.
+
+
+## 11. Newly exposed tool-history/template compatibility gap
+
+Canonical diagnosis:
+
+`TOOL-HISTORY-TEMPLATE-COMPAT-20260919.md`
+
+Verdict:
+
+```
+NOT a confirmed lost historical OVMS fix.
+
+OLD:
+    string arguments in assistant tool-call history
+    -> permissive model/template/runtime combination
+    -> two-turn PASS at 7d00c5fe
+
+CURRENT STRICT TEMPLATE:
+    same OpenAI string history
+    -> template requires mapping
+    -> INVALID_ARGUMENT before generation
+```
+
+The preferred repair boundary is the copy of `ChatHistory` destined for chat-template rendering:
+
+```
+OpenAI/API domain:
+    arguments = STRING
+
+template domain:
+    arguments = OBJECT/MAPPING
+```
+
+Do not alter public OpenAI serialization.
+
+The historical exact-head `7d00c5fe63c5f81e6c06972a974cd57fd7180326` is important evidence: its two-turn live session passed while the source still lacked any string -> mapping adapter. That makes the current issue a compatibility gap exposed by stricter template semantics, not evidence of another silently dropped parser patch.
