@@ -267,13 +267,17 @@ new_local_repository(
 new_local_repository(
     name = "windows_openvino",
     build_file = "@//third_party/openvino:openvino_windows.BUILD",
-    path = "C:\\opt\\openvino\\runtime",
+    # C6-PREFLIGHT wiring: G3-X3 immutable slot (GenAI 4864499b on upstream 0f4ebeab,
+    # XGrammar 1de42473). Both /I roots must resolve the same GenAI headers, else the
+    # StructuralTag variant splits (C2440/LNK2001 class). See slot manifest.
+    path = "C:\\git\\gemma4-runtimes\\G3-X3\\runtime",
 )
 
 new_local_repository(
     name = "windows_genai",
     build_file = "@//third_party/genai:genai_windows.BUILD",
-    path = "C:\\opt\\openvino\\runtime",
+    # C6-PREFLIGHT wiring: G3-X3 immutable slot. See slot manifest.
+    path = "C:\\git\\gemma4-runtimes\\G3-X3\\runtime",
 )
 
 new_local_repository(
@@ -650,4 +654,5 @@ cc_library(
 )
 """,
 )
+
 
