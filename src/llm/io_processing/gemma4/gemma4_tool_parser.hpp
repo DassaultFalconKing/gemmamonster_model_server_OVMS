@@ -76,6 +76,10 @@ public:
 
     std::optional<Delta> parseChunk(const std::string& chunk, const std::vector<int64_t>& tokens, ov::genai::GenerationFinishReason finishReason) override;
 
+    std::optional<Delta> drainPendingDelta() override {
+        return parseChunk("", {}, ov::genai::GenerationFinishReason::NONE);
+    }
+
     static std::string normalizeArgStr(const std::string& arg);
     static std::string parseArrayParameter(const std::string& argumentStr);
     static std::string parseObjectParameter(const std::string& argumentStr);

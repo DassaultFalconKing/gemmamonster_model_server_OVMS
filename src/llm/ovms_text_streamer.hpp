@@ -64,7 +64,8 @@ class OVMSTextStreamer : public ov::genai::TextStreamer {
 public:
     // For the finish-only case (nullopt from parseChunk + STOP finishReason),
     // a FinishDelta{} is passed so the caller can emit the finish_reason chunk.
-    // isLast is true when finish_reason != NONE — callers that push into a DeltaChannel
+    // isLast is true only for the final delta after draining buffered output.
+    // Callers that push into a DeltaChannel
     // should forward this flag to DeltaChannel::push() so the final delta and the
     // completion signal are observed atomically (no separate signalComplete() needed).
     using Callback = std::function<ov::genai::StreamingStatus(Delta, bool /*isLast*/)>;

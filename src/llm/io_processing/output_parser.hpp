@@ -137,8 +137,9 @@ public:
     //     No content is ever discarded at a phase transition — "nothing properly parsed is lost".
     //   - Correctness requires at least one subsequent call after every phase transition.
     //     The caller must provide a final call with finishReason != NONE (typically an empty
-    //     chunk) so the buffer is fully drained.  If that call is missing, any buffered
-    //     remainder from the last transition will be silently dropped.
+    //     chunk), followed by drainPendingDelta() until nullopt for parser-owned
+    //     buffered output. The drain does not advance additional phase transitions.
+    //     If the final call is missing, buffered remainders may be dropped.
     //   - Known limitation: if finishReason != NONE arrives while a start tag is only
     //     partially matched (FOUND_INCOMPLETE), the partial text is flushed as content rather
     //     than held for completion — this is unavoidable without more tokens.
@@ -150,6 +151,10 @@ public:
     // tokens holds the token IDs that produced chunkResponse (informational; used for
     // token-ID-based phase-start detection in OVMSTextStreamer).
     std::optional<Delta> parseChunk(const std::string& chunkResponse, const std::vector<int64_t>& tokens, const bool toolsAvailable, ov::genai::GenerationFinishReason finishReason);
+
+    // Drain parser-owned buffered deltas after the final parseChunk. Does not
+    // advance phases or repeat the finish notification for any parser.
+    std::optional<Delta> drainPendingDelta();
 
     // Decide decode mode dynamically based on parser phase and user preference.
     // Content/unknown phases use defaultDecodingWithSpecialTokens OR user preference.

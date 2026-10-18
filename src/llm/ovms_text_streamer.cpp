@@ -302,6 +302,29 @@ ov::genai::StreamingStatus OVMSTextStreamer::flush_chunk(
     }
 
     const bool isLast = (finish_reason != ov::genai::GenerationFinishReason::NONE);
+    if (isLast && m_output_parser) {
+        // One-delta lookahead keeps exactly one completion callback, without
+        // replaying STOP. Only opt-in parsers drain; nullopt terminates the loop.
+        for (;;) {
+            std::optional<Delta> next;
+            try {
+                next = m_output_parser->drainPendingDelta();
+            } catch (const std::exception& e) {
+                SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "Output parser failed, cancelling generation: {}", e.what());
+                m_had_parser_error = true;
+                m_callback(FinishDelta{}, true);
+                return ov::genai::StreamingStatus::CANCEL;
+            }
+            if (!next)
+                break;
+            if (delta) {
+                const auto status = m_callback(std::move(*delta), false);
+                if (status != ov::genai::StreamingStatus::RUNNING)
+                    return status;
+            }
+            delta = std::move(next);
+        }
+    }
     if (delta.has_value()) {
         return m_callback(std::move(*delta), isLast);
     }
