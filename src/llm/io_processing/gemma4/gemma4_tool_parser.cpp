@@ -303,8 +303,9 @@ std::optional<Delta> Gemma4ToolParser::wrapDeltaContent(const std::string& conte
     return ContentDelta{content};
 }
 
-ToolCallDelta Gemma4ToolParser::wrapDeltaArgs(const std::string& argsStr, int toolCallIndex) {
-    return ToolCallDelta{toolCallIndex, std::nullopt, std::nullopt, argsStr};
+ToolCallDelta Gemma4ToolParser::wrapCompletedToolCall() {
+    std::string id = this->toolCall.id.empty() ? generateRandomId() : this->toolCall.id;
+    return ToolCallDelta{this->toolCallIndex, std::move(id), this->toolCall.name, this->toolCall.arguments};
 }
 
 std::optional<Delta> Gemma4ToolParser::parseChunk(const std::string& chunk, const std::vector<int64_t>& /*tokens*/, ov::genai::GenerationFinishReason finishReason) {
@@ -312,12 +313,30 @@ std::optional<Delta> Gemma4ToolParser::parseChunk(const std::string& chunk, cons
         this->streamingContent += chunk;
     }
 
-    if (parseNewContent()) {
+    // Advance through silent transitions (start tag, opening `{`) in this chunk so a
+    // complete call can be published at the unmasked `}` without waiting for AfterToolCall.
+    // parseChunk still returns at most one delta; a later call in the same buffer is left
+    // for the next parseChunk.
+    for (;;) {
+        const State stateBefore = this->currentState;
+        const bool progressed = parseNewContent();
+        if (this->currentState == State::ToolCallStarted) {
+            if (stateBefore == State::ToolCallStarted && !progressed) {
+                break;
+            }
+            continue;
+        }
         if (this->currentState == State::ToolCallParameters) {
-            return ToolCallDelta{toolCallIndex, generateRandomId(), this->toolCall.name, ""};
+            if (!progressed) {
+                break;
+            }
+            continue;
+        }
+        if (!progressed) {
+            break;
         }
         if (this->currentState == State::ToolCallEnded) {
-            auto delta = wrapDeltaArgs(this->toolCall.arguments, toolCallIndex);
+            auto delta = wrapCompletedToolCall();
             this->toolCall = ToolCall{};
             return delta;
         }
@@ -344,20 +363,22 @@ std::optional<Delta> Gemma4ToolParser::parseChunk(const std::string& chunk, cons
         }
         if (this->currentState == State::AfterToolCall) {
             this->currentState = State::Content;
+            break;
         }
     }
 
     if (finishReason != ov::genai::GenerationFinishReason::NONE) {
-        // Unary/STOP flush can arrive after a chunk that only advanced one state
-        // (e.g. parsed the tool name but not yet the immediately following "}").
-        // Give the state machine one last chance to consume already-buffered data
-        // before deciding whether an arguments delta exists.
+        // STOP may arrive with a complete `}` already buffered but unpublished if the
+        // last NONE chunk only reached ToolCallParameters. Publish once, then clear so
+        // a missing end tag cannot re-emit arguments.
         if (this->currentState == State::ToolCallParameters) {
             parseToolCallParametersState();
         }
 
         if ((this->currentState == State::ToolCallParameters || this->currentState == State::ToolCallEnded) && !this->toolCall.arguments.empty()) {
-            return wrapDeltaArgs(this->toolCall.arguments, toolCallIndex);
+            auto delta = wrapCompletedToolCall();
+            this->toolCall = ToolCall{};
+            return delta;
         }
 
         if (this->currentState == State::Content && this->streamingPosition < this->streamingContent.size()) {
