@@ -43,8 +43,8 @@ protected:
 
     enum class State {
         Content,             // Content -> ToolCallStarted (on TOOL_CALL_START_TAG)
-        ToolCallStarted,     // ToolCallStarted -> ToolCallParameters (on TOOL_ARGS_START_INDICATOR, emits name)
-        ToolCallParameters,  // ToolCallParameters -> ToolCallEnded (on TOOL_ARGS_END_INDICATOR, emits args)
+        ToolCallStarted,     // ToolCallStarted -> ToolCallParameters (on TOOL_ARGS_START_INDICATOR; name is recorded, not published)
+        ToolCallParameters,  // ToolCallParameters -> ToolCallEnded (on unmasked TOOL_ARGS_END_INDICATOR, emits one full call)
         ToolCallEnded,       // ToolCallEnded -> ToolCallStarted (on TOOL_CALL_NAME_PREFIX) | AfterToolCall (on end tag)
         AfterToolCall        // AfterToolCall -> Content
     };
@@ -94,7 +94,7 @@ private:
     bool parseInToolCallEndedState();
 
     std::optional<Delta> wrapDeltaContent(const std::string& content);
-    ToolCallDelta wrapDeltaArgs(const std::string& argsStr, int toolCallIndex);
+    ToolCallDelta wrapCompletedToolCall();
 
     std::string streamingContent;
     size_t streamingPosition{0};

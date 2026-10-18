@@ -120,6 +120,54 @@ protected:
             }
         }
     }
+
+    static std::string compactJsonObject(const std::string& json) {
+        rapidjson::Document argsDoc;
+        if (argsDoc.Parse(json.c_str()).HasParseError()) {
+            return json;
+        }
+        rapidjson::StringBuffer sb;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
+        argsDoc.Accept(writer);
+        return sb.GetString();
+    }
+
+    ToolCalls_t collectLogicalToolCalls(const std::vector<std::pair<std::string, ov::genai::GenerationFinishReason>>& chunks) {
+        outputParserWithRegularToolParsing->resetStreamingState();
+        std::vector<ToolCall> toolCalls;
+        for (const auto& [chunk, finishReason] : chunks) {
+            std::optional<ovms::Delta> doc = outputParserWithRegularToolParsing->parseChunk(chunk, {}, true, finishReason);
+            if (!doc.has_value()) {
+                continue;
+            }
+            const auto* toolCallDelta = std::get_if<ToolCallDelta>(&*doc);
+            if (toolCallDelta == nullptr || toolCallDelta->index < 0) {
+                continue;
+            }
+            const auto idx = static_cast<size_t>(toolCallDelta->index);
+            if (idx >= toolCalls.size()) {
+                toolCalls.resize(idx + 1);
+            }
+            auto& toolCall = toolCalls[idx];
+            if (toolCallDelta->id) {
+                toolCall.id = *toolCallDelta->id;
+            }
+            if (toolCallDelta->name) {
+                toolCall.name = *toolCallDelta->name;
+            }
+            toolCall.arguments.append(toolCallDelta->arguments);
+        }
+        ToolCalls_t completed;
+        completed.reserve(toolCalls.size());
+        for (auto& toolCall : toolCalls) {
+            if (toolCall.arguments.empty()) {
+                continue;
+            }
+            toolCall.arguments = compactJsonObject(toolCall.arguments);
+            completed.push_back(std::move(toolCall));
+        }
+        return completed;
+    }
 };
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallOutputWithSingleToolCall) {
@@ -514,7 +562,7 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallWithArrayOfObjectsArgumentsStreaming
         {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"read_files", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{files", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"read_files"}}]}})"},
+        {"{files", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"{path", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
@@ -525,7 +573,7 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallWithArrayOfObjectsArgumentsStreaming
         {"{path:<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {R"(c:\opt\demo\hello_world_project\README.md)", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}]}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"files\":[{\"path\":\"c:\\\\opt\\\\demo\\\\hello_world_project\\\\hello.py\"},{\"path\":\"c:\\\\opt\\\\demo\\\\hello_world_project\\\\README.md\"}]}"}}]}})"},
+        {"}]}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"read_files","arguments":"{\"files\":[{\"path\":\"c:\\\\opt\\\\demo\\\\hello_world_project\\\\hello.py\"},{\"path\":\"c:\\\\opt\\\\demo\\\\hello_world_project\\\\README.md\"}]}"}}]}})"},
         {"<tool_call|>", ov::genai::GenerationFinishReason::STOP, std::nullopt},
     };
 
@@ -631,7 +679,7 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallWithMultipleUtfCharsStreaming) {
         {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"post", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"_tweet", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{content", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"post_tweet"}}]}})"},
+        {"{content", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"Check out the sorted report!", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {" 🚀", ov::genai::GenerationFinishReason::NONE, std::nullopt},
@@ -658,7 +706,7 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallWithMultipleUtfCharsStreaming) {
         {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"#currenttrend", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"]}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"content\":\"Check out the sorted report! 🚀 We've made improvements to the content. Tagging @currenttech and mentioning Julia for our insightful team. #currenttech #trend\",\"mentions\":[\"@currenttech\",\"Julia\"],\"tags\":[\"#currenttrend\"]}"}}]}})"},
+        {"]}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"post_tweet","arguments":"{\"content\":\"Check out the sorted report! 🚀 We've made improvements to the content. Tagging @currenttech and mentioning Julia for our insightful team. #currenttech #trend\",\"mentions\":[\"@currenttech\",\"Julia\"],\"tags\":[\"#currenttrend\"]}"}}]}})"},
         {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
     };
 
@@ -705,12 +753,12 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallArgumentValueWithUnclosedQuoteAndBra
         {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"editor", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{new_text", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"editor"}}]}})"},
+        {"{new_text", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":<|\"|>say ", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"\"hi}", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {" keep going", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"new_text\":\"say \\\"hi} keep going\"}"}}]}})"},
+        {"}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"editor","arguments":"{\"new_text\":\"say \\\"hi} keep going\"}"}}]}})"},
         {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
     };
 
@@ -747,7 +795,7 @@ TEST_F(Gemma4OutputParserTest, HolisticStreaming) {
         {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"sort", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{array", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"sort"}}]}})"},
+        {"{array", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"42", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
@@ -764,10 +812,10 @@ TEST_F(Gemma4OutputParserTest, HolisticStreaming) {
         {"desc", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"ending", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"array\":[42,17,89,5,33],\"order\":\"descending\"}"}}]}})"},
+        {"}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"sort","arguments":"{\"array\":[42,17,89,5,33],\"order\":\"descending\"}"}}]}})"},
         {"call:d", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"ummy", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{config", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":1,"function":{"name":"dummy"}}]}})"},
+        {"{config", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":{", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"name", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":", ov::genai::GenerationFinishReason::NONE, std::nullopt},
@@ -778,7 +826,7 @@ TEST_F(Gemma4OutputParserTest, HolisticStreaming) {
         {"value", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"99", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":1,"function":{"arguments":"{\"config\":{\"name\":\"astro_config\",\"value\":99}}"}}]}})"},
+        {"}}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":1,"function":{"name":"dummy","arguments":"{\"config\":{\"name\":\"astro_config\",\"value\":99}}"}}]}})"},
         {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"ANOTHER_CONTENT_AFTER_TOOL_CALL", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"ANOTHER_CONTENT_AFTER_TOOL_CALL"}})"},
     };
@@ -791,9 +839,9 @@ TEST_F(Gemma4OutputParserTest, StreamingWithBiggerChunks) {
         {"SOME_CONTENT", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"SOME_CONTENT"}})"},
         {"MORE_CONTENT<|tool_call>", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"MORE_CONTENT"}})"},
         {"call:sort", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{array:", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"sort"}}]}})"},
+        {"{array:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"[42, 17, 89, 5, 33],order:<|\"|>descending<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"array\":[42,17,89,5,33],\"order\":\"descending\"}"}}]}})"},
+        {"}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"sort","arguments":"{\"array\":[42,17,89,5,33],\"order\":\"descending\"}"}}]}})"},
         {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"ANOTHER_CONTENT_AFTER_TOOL_CALL", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"ANOTHER_CONTENT_AFTER_TOOL_CALL"}})"},
     };
@@ -807,7 +855,7 @@ TEST_F(Gemma4OutputParserTest, StreamingWithWhitespacesBetweenToolCalls) {
         {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"\n", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"call:sort", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{array", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"sort"}}]}})"},
+        {"{array", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":[", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"42", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {",", ov::genai::GenerationFinishReason::NONE, std::nullopt},
@@ -823,10 +871,10 @@ TEST_F(Gemma4OutputParserTest, StreamingWithWhitespacesBetweenToolCalls) {
         {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"desc", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"ending", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"array\":[42,17,89,5,33],\"order\":\"descending\"}"}}]}})"},
+        {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"sort","arguments":"{\"array\":[42,17,89,5,33],\"order\":\"descending\"}"}}]}})"},
         {" call:d", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"ummy", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{config", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":1,"function":{"name":"dummy"}}]}})"},
+        {"{config", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":{", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"name", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":", ov::genai::GenerationFinishReason::NONE, std::nullopt},
@@ -837,9 +885,9 @@ TEST_F(Gemma4OutputParserTest, StreamingWithWhitespacesBetweenToolCalls) {
         {"value", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"99", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"}}", ov ::genai ::GenerationFinishReason ::NONE, R"({"delta":{"tool_calls":[{"index":1,"function":{"arguments":"{\"config\":{\"name\":\"astro_config\",\"value\":99}}"}}]}})"},
+        {"}}", ov ::genai ::GenerationFinishReason ::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":1,"function":{"name":"dummy","arguments":"{\"config\":{\"name\":\"astro_config\",\"value\":99}}"}}]}})"},
         {"call: solve", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{e", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":2,"function":{"name":"solve"}}]}})"},
+        {"{e", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"quation", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {":<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"2", ov::genai::GenerationFinishReason::NONE, std::nullopt},
@@ -850,7 +898,7 @@ TEST_F(Gemma4OutputParserTest, StreamingWithWhitespacesBetweenToolCalls) {
         {"5)", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {" =", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {" 13", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":2,"function":{"arguments":"{\"equation\":\"2*(x+5) = 13\"}"}}]}})"},
+        {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":2,"function":{"name":"solve","arguments":"{\"equation\":\"2*(x+5) = 13\"}"}}]}})"},
         {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"And some content after second tool call", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"content":"And some content after second tool call"}})"},
     };
@@ -863,8 +911,8 @@ TEST_F(Gemma4OutputParserTest, StreamingWithToolCallWithEmptyParams) {
         {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"empty_params", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"empty_params"}}]}})"},
-        {"<tool_call|>", ov::genai::GenerationFinishReason::STOP, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{}"}}]}})"},
+        {"{}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"empty_params","arguments":"{}"}}]}})"},
+        {"<tool_call|>", ov::genai::GenerationFinishReason::STOP, std::nullopt},
     };
 
     assertStreamingVec(chunkToDeltaVec);
@@ -875,10 +923,10 @@ TEST_F(Gemma4OutputParserTest, StreamingWithToolResponseTokenAtTheEndOfGeneratio
         {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"dummy", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{arg1:", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"dummy"}}]}})"},
+        {"{arg1:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"value1", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"arg1\":\"value1\"}"}}]}})"},
+        {"<|\"|>}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"dummy","arguments":"{\"arg1\":\"value1\"}"}}]}})"},
         {"<tool_call|><|tool_response>", ov::genai::GenerationFinishReason::STOP, std::nullopt},
     };
 
@@ -893,13 +941,60 @@ TEST_F(Gemma4OutputParserTest, StreamingWithMissingEndTagBeforeStop) {
         {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"call:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"ls", ov::genai::GenerationFinishReason::NONE, std::nullopt},
-        {"{a:", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"ls"}}]}})"},
-        {"true}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"a\":true}"}}]}})"},
+        {"{a:", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"true}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"ls","arguments":"{\"a\":true}"}}]}})"},
         {"<|tool_response>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
         {"", ov::genai::GenerationFinishReason::STOP, std::nullopt},
     };
 
     assertStreamingVec(chunkToDeltaVec);
+}
+
+TEST_F(Gemma4OutputParserTest, StreamingPublishesFullToolCallAtClosingBrace) {
+    // Do not publish at the opening `{`, and do not wait for the outer end tag.
+    // One full ToolCallDelta (id, name, index, arguments) is due at the unmasked `}`.
+    std::vector<std::tuple<std::string, ov::genai::GenerationFinishReason, std::optional<std::string>>> chunkToDeltaVec{
+        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"call:get_weather", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"{city", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {":<|\"|>Warsaw<|\"|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":0,"function":{"name":"get_weather","arguments":"{\"city\":\"Warsaw\"}"}}]}})"},
+        {"call:get_time", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {"{zone", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+        {":<|\"|>UTC<|\"|>}", ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"id":"XXXXXXXXX","type":"function","index":1,"function":{"name":"get_time","arguments":"{\"zone\":\"UTC\"}"}}]}})"},
+        {"<tool_call|>", ov::genai::GenerationFinishReason::NONE, std::nullopt},
+    };
+
+    assertStreamingVec(chunkToDeltaVec);
+
+    const std::vector<std::pair<std::string, ov::genai::GenerationFinishReason>> fineChunks{
+        {"<|tool_call>", ov::genai::GenerationFinishReason::NONE},
+        {"call:get_weather", ov::genai::GenerationFinishReason::NONE},
+        {"{city", ov::genai::GenerationFinishReason::NONE},
+        {":<|\"|>Warsaw<|\"|>", ov::genai::GenerationFinishReason::NONE},
+        {"}", ov::genai::GenerationFinishReason::NONE},
+        {"call:get_time", ov::genai::GenerationFinishReason::NONE},
+        {"{zone", ov::genai::GenerationFinishReason::NONE},
+        {":<|\"|>UTC<|\"|>}", ov::genai::GenerationFinishReason::NONE},
+        {"<tool_call|>", ov::genai::GenerationFinishReason::NONE},
+    };
+    const std::vector<std::pair<std::string, ov::genai::GenerationFinishReason>> coarseChunks{
+        {"<|tool_call>call:get_weather{city:<|\"|>Warsaw<|\"|>}", ov::genai::GenerationFinishReason::NONE},
+        {"call:get_time{zone:<|\"|>UTC<|\"|>}<tool_call|>", ov::genai::GenerationFinishReason::NONE},
+    };
+
+    const ToolCalls_t fineCalls = collectLogicalToolCalls(fineChunks);
+    const ToolCalls_t coarseCalls = collectLogicalToolCalls(coarseChunks);
+    ASSERT_EQ(fineCalls.size(), 2);
+    ASSERT_EQ(coarseCalls.size(), fineCalls.size());
+    EXPECT_EQ(fineCalls[0].name, "get_weather");
+    EXPECT_EQ(fineCalls[0].arguments, R"({"city":"Warsaw"})");
+    EXPECT_EQ(fineCalls[1].name, "get_time");
+    EXPECT_EQ(fineCalls[1].arguments, R"({"zone":"UTC"})");
+    EXPECT_EQ(coarseCalls[0].name, fineCalls[0].name);
+    EXPECT_EQ(coarseCalls[0].arguments, fineCalls[0].arguments);
+    EXPECT_EQ(coarseCalls[1].name, fineCalls[1].name);
+    EXPECT_EQ(coarseCalls[1].arguments, fineCalls[1].arguments);
 }
 
 TEST_F(Gemma4OutputParserTest, StreamingContentWithTurnTokenAtTheEndOfGeneration) {
