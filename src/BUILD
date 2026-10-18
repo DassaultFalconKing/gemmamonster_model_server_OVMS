@@ -3004,6 +3004,50 @@ cc_library(
     local_defines = COMMON_LOCAL_DEFINES,
 )
 
+# Focused parser gates without linking the full server test executable.
+cc_test(
+    name = "gemma4_output_parser_test",
+    srcs = [
+        "test/llm/output_parsers/gemma4_output_parser_test.cpp",
+        "test/llm/output_parsers/output_parser_test_utils.hpp",
+    ],
+    deps = [
+        "@com_google_googletest//:gtest_main",
+        "@com_github_tencent_rapidjson//:rapidjson",
+        "//third_party:openvino",
+        "//third_party:genai",
+        ":test_platform_utils",
+        "//src/llm:text_streamer",
+        "//src/llm:output_parsers",
+        "//src/llm:io_processing_delta",
+        "//src/llm:openai_delta_serializer",
+    ],
+    copts = COPTS_TESTS,
+    local_defines = COMMON_LOCAL_DEFINES,
+    linkstatic = 1,
+)
+
+cc_test(
+    name = "output_parser_core_test",
+    srcs = [
+        "test/llm/output_parsers/base_output_parser_test.cpp",
+        "test/llm/output_parsers/partial_json_builder_test.cpp",
+        "test/llm/output_parsers/stream_output_cache_test.cpp",
+    ],
+    deps = [
+        "@com_google_googletest//:gtest_main",
+        "@com_github_tencent_rapidjson//:rapidjson",
+        "//third_party:openvino",
+        "//third_party:genai",
+        "//src/llm:output_parsers",
+        "//src/llm:io_processing_delta",
+        "//src/llm:openai_delta_serializer",
+    ],
+    copts = COPTS_TESTS,
+    local_defines = COMMON_LOCAL_DEFINES,
+    linkstatic = 1,
+)
+
 cc_library(
     name = "test_chat_template_workarounds",
     linkstatic = 1,

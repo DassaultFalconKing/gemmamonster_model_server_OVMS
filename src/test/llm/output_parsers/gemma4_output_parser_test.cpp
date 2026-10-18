@@ -1026,6 +1026,94 @@ TEST_F(Gemma4OutputParserTest, ToolCallsWithoutToolsInTheRequestStreaming) {
     }
 }
 
+// The parser can receive a buffered decoded chunk before the streamer's final
+// STOP. end() must drain every remaining call and signal completion only once.
+TEST_F(Gemma4OutputParserTest, StreamerStopDrainsBufferedCalls) {
+    for (const int count : {3, 7}) {
+        for (const bool closeEnvelope : {false, true}) {
+            SCOPED_TRACE(std::to_string(count) + (closeEnvelope ? " closed" : " missing end tag"));
+            outputParserWithRegularToolParsing->resetStreamingState();
+            std::string chunk = "<|tool_call>";
+            for (int i = 0; i < count; ++i)
+                chunk += "call:tool" + std::to_string(i) + "{value:" + std::to_string(i) + "}";
+            if (closeEnvelope)
+                chunk += "<tool_call|>";
+            auto first = outputParserWithRegularToolParsing->parseChunk(chunk, {}, true, ov::genai::GenerationFinishReason::NONE);
+            ASSERT_TRUE(first.has_value());
+            std::vector<ToolCallDelta> calls;
+            calls.push_back(std::get<ToolCallDelta>(*first));
+            int lastCount = 0;
+            auto parser = std::shared_ptr<OutputParser>(outputParserWithRegularToolParsing.get(), [](OutputParser*) {});
+            OVMSTextStreamer streamer(*gemma4Tokenizer, parser, true,
+                [&](Delta delta, bool last) {
+                    EXPECT_EQ(lastCount, 0) << "No callback is allowed after completion";
+                    if (auto* call = std::get_if<ToolCallDelta>(&delta))
+                        calls.push_back(*call);
+                    if (last)
+                        ++lastCount;
+                    return ov::genai::StreamingStatus::RUNNING;
+                },
+                {});
+            streamer.end();
+            EXPECT_FALSE(streamer.hadParserError());
+            EXPECT_EQ(lastCount, 1);
+            ASSERT_EQ(calls.size(), count);
+            for (int i = 0; i < count; ++i) {
+                EXPECT_EQ(calls[i].index, i);
+                EXPECT_EQ(calls[i].name, "tool" + std::to_string(i));
+                EXPECT_EQ(calls[i].arguments, "{\"value\":" + std::to_string(i) + "}");
+                ASSERT_TRUE(calls[i].id.has_value());
+                EXPECT_FALSE(calls[i].id->empty());
+            }
+        }
+    }
+}
+
+TEST_F(Gemma4OutputParserTest, BufferedCallsAreInvariantToDecodedChunkBoundaries) {
+    const std::string input = "<|tool_call>call:first{value:1}call:second{value:2}call:third{value:3}call:fourth{value:4}<tool_call|>";
+    for (const size_t width : {size_t{1}, size_t{2}, size_t{7}, input.size()}) {
+        SCOPED_TRACE(width);
+        outputParserWithRegularToolParsing->resetStreamingState();
+        std::vector<ToolCallDelta> calls;
+        for (size_t pos = 0; pos < input.size(); pos += width) {
+            auto delta = outputParserWithRegularToolParsing->parseChunk(input.substr(pos, width), {}, true, ov::genai::GenerationFinishReason::NONE);
+            if (delta) {
+                ASSERT_TRUE(std::holds_alternative<ToolCallDelta>(*delta));
+                calls.push_back(std::get<ToolCallDelta>(*delta));
+            }
+        }
+        int lastCount = 0;
+        auto parser = std::shared_ptr<OutputParser>(outputParserWithRegularToolParsing.get(), [](OutputParser*) {});
+        OVMSTextStreamer streamer(*gemma4Tokenizer, parser, true,
+            [&](Delta delta, bool last) {
+                EXPECT_EQ(lastCount, 0);
+                if (auto* call = std::get_if<ToolCallDelta>(&delta))
+                    calls.push_back(*call);
+                if (last)
+                    ++lastCount;
+                return ov::genai::StreamingStatus::RUNNING;
+            },
+            {});
+        streamer.end();
+        EXPECT_EQ(lastCount, 1);
+        ASSERT_EQ(calls.size(), 4);
+        const std::vector<std::string> names{"first", "second", "third", "fourth"};
+        for (size_t i = 0; i < calls.size(); ++i) {
+            EXPECT_EQ(calls[i].index, i);
+            EXPECT_EQ(calls[i].name, names[i]);
+            EXPECT_EQ(calls[i].arguments, "{\"value\":" + std::to_string(i + 1) + "}");
+        }
+    }
+    const auto encoded = gemma4Tokenizer->encode(input, ov::genai::add_special_tokens(false)).input_ids;
+    const std::vector<int64_t> tokens(encoded.data<int64_t>(), encoded.data<int64_t>() + encoded.get_size());
+    const auto output = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, tokens, true, true);
+    ASSERT_EQ(output.toolCalls.size(), 4);
+    EXPECT_EQ(output.toolCalls[2].name, "third");
+    EXPECT_EQ(output.toolCalls[2].arguments, "{\"value\":3}");
+    EXPECT_EQ(output.toolCalls[3].name, "fourth");
+    EXPECT_EQ(output.toolCalls[3].arguments, "{\"value\":4}");
+}
+
 // Malformed tool calls
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithMissingParentheses) {
