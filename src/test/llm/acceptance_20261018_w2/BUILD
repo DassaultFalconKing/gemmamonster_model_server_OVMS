@@ -48,3 +48,20 @@ cc_test(
     linkstatic = 1,
 )
 
+
+cc_test(
+    name = "policy_history_schema_test",
+    srcs = ["policy_history_schema_test.cpp"],
+    deps = [
+        "@com_google_googletest//:gtest_main",
+        "//src/llm:generation_config_builders",
+        "//src/llm:openai_completions_api_handler",
+        "//src/llm:openai_responses_handler",
+        "//third_party:genai",
+    ],
+    copts = COPTS_TESTS,
+    local_defines = COMMON_LOCAL_DEFINES,
+    linkopts = COMMON_STATIC_LIBS_LINKOPTS,
+    linkstatic = 1,
+)
+
