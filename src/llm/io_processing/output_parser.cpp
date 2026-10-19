@@ -15,6 +15,7 @@
 //*****************************************************************************
 
 #include <algorithm>
+#include <cctype>
 #include <unordered_set>
 
 #include "src/logging.hpp"
@@ -127,6 +128,12 @@ std::optional<Delta> OutputParser::parseContentChunk(ProcessingPhase newPhase) {
     processingPhase = newPhase;
     // Suppress preamble-only ContentDelta (empty text = structural tag consumed, nothing to emit).
     if (const auto* cd = std::get_if<ContentDelta>(&*result)) {
+        if (gemma4ToolHandoff) {
+            const auto newline = cd->text.rfind('\n');
+            const auto begin = newline == std::string::npos ? 0 : newline + 1;
+            gemma4LogicalBoundary = (newline != std::string::npos || gemma4LogicalBoundary) &&
+                                    std::all_of(cd->text.begin() + begin, cd->text.end(), [](unsigned char c) { return std::isspace(c) != 0; });
+        }
         if (cd->text.empty())
             return std::nullopt;
     }
@@ -148,7 +155,10 @@ std::optional<Delta> OutputParser::parseToolCallChunk(const std::vector<int64_t>
     }
     std::optional<Delta> result;
     try {
-        result = toolParser->parseChunk(streamOutputCache.getBuffer(), tokens, finishReason);
+        // The router owns the remainder. Deliver only this envelope so a later
+        // phase cannot be appended a second time to the tool parser's buffer.
+        const auto ownedChunk = toolEndMatch ? buffer.substr(0, toolEndMatch->position + toolEndMatch->length) : buffer;
+        result = toolParser->parseChunk(ownedChunk, tokens, finishReason);
     } catch (...) {
         streamOutputCache.clear();
         throw;
@@ -164,6 +174,28 @@ std::optional<Delta> OutputParser::parseReasoningChunk(const std::vector<int64_t
     if (!reasoningParser) {
         throw std::runtime_error("Reasoning parser is not available, cannot parse reasoning chunk");
     }
+    if (gemma4ToolHandoff && toolsEnabledForChunk) {
+        const auto toolStart = findEarliestTag(streamOutputCache.getBuffer(), toolParser->getParsingConfig().startTags);
+        const auto reasoningEnd = findEarliestTag(streamOutputCache.getBuffer(), reasoningParser->getParsingConfig().endTags);
+        if (toolStart && (!reasoningEnd || toolStart->position < reasoningEnd->position)) {
+            const auto buffer = streamOutputCache.getBuffer();
+            const auto prefix = buffer.substr(0, toolStart->position);
+            // Close only this Gemma4 reasoning segment; generation continues.
+            const auto& endTags = reasoningParser->getParsingConfig().endTags;
+            auto delta = reasoningParser->parseChunk(prefix + (endTags.empty() ? std::string{} : endTags.front()), tokens, ov::genai::GenerationFinishReason::NONE);
+            streamOutputCache.clear();
+            streamOutputCache.add(buffer.substr(toolStart->position));
+            processingPhase = UNKNOWN;
+            pendingGemma4ToolHandoff = true;
+            if (delta)
+                return delta;
+            pendingGemma4ToolHandoff = false;
+            return parseToolCallChunk(tokens, finishReason);
+        }
+        if (streamOutputCache.lookupTags(toolParser->getParsingConfig().startTags) == FOUND_INCOMPLETE &&
+            finishReason == ov::genai::GenerationFinishReason::NONE)
+            return std::nullopt;
+    }
     // Bytes after the end tag belong to the next phase — preserve them before clearing.
     std::string remainder;
     const auto& endTags = reasoningParser->getParsingConfig().endTags;
@@ -174,7 +206,8 @@ std::optional<Delta> OutputParser::parseReasoningChunk(const std::vector<int64_t
     }
     std::optional<Delta> result;
     try {
-        result = reasoningParser->parseChunk(streamOutputCache.getBuffer(), tokens, finishReason);
+        const auto ownedChunk = reasoningEndMatch ? buffer.substr(0, reasoningEndMatch->position + reasoningEndMatch->length) : buffer;
+        result = reasoningParser->parseChunk(ownedChunk, tokens, finishReason);
     } catch (...) {
         streamOutputCache.clear();
         throw;
@@ -252,9 +285,10 @@ OutputParser::OutputParser(ov::genai::Tokenizer& tokenizer, const std::string to
     else
         contentParser = std::make_unique<DefaultContentParser>(tokenizer);
 
-    defaultDecodingWithSpecialTokens =
-        (toolParser && toolParser->getParsingConfig().defaultDecodingWithSpecialTokens) ||
-        (reasoningParser && reasoningParser->getParsingConfig().defaultDecodingWithSpecialTokens);
+    gemma4ToolHandoff = toolParserName == "gemma4" && reasoningParserName == "gemma4";
+    defaultDecodingWithSpecialTokens = gemma4ToolHandoff ||
+                                       (toolParser && toolParser->getParsingConfig().defaultDecodingWithSpecialTokens) ||
+                                       (reasoningParser && reasoningParser->getParsingConfig().defaultDecodingWithSpecialTokens);
 
     if (llm_calculator_logger->should_log(spdlog::level::debug)) {
         std::string toolParsingConfigStr = toolParser ? toolParser->buildParsingConfigStringRepresentation() : "N/A";
@@ -285,6 +319,8 @@ std::string OutputParser::getToolParserStartTag() const {
 void OutputParser::resetStreamingState() {
     processingPhase = UNKNOWN;
     streamOutputCache.clear();
+    pendingGemma4ToolHandoff = false;
+    gemma4LogicalBoundary = true;
     if (toolParser)
         toolParser->resetState();
     if (reasoningParser)
@@ -361,12 +397,25 @@ void OutputParser::detectAndSetImplicitReasoningStart(const std::string& rendere
 }
 
 std::optional<Delta> OutputParser::drainPendingDelta() {
-    if (toolParser && (processingPhase == TOOL_CALLS_PROCESSING_TOOL || processingPhase == TOOL_CALLS_WAITING_FOR_TOOL))
-        return toolParser->drainPendingDelta();
-    return std::nullopt;
+    if (pendingGemma4ToolHandoff) {
+        pendingGemma4ToolHandoff = false;
+        return parseToolCallChunk({}, ov::genai::GenerationFinishReason::NONE);
+    }
+    if (toolParser && (processingPhase == TOOL_CALLS_PROCESSING_TOOL || processingPhase == TOOL_CALLS_WAITING_FOR_TOOL)) {
+        if (auto delta = toolParser->drainPendingDelta())
+            return delta;
+    }
+    // One OVMSTextStreamer::end() sends a single STOP. Closed envelopes and
+    // the text around them stay in this cache. Each drain call advances one
+    // ready phase. An incomplete tag returns nullopt and keeps the cache.
+    if (streamOutputCache.getBuffer().empty())
+        return std::nullopt;
+    return parseChunk("", {}, toolsEnabledForChunk, ov::genai::GenerationFinishReason::NONE);
 }
 
 std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, const std::vector<int64_t>& tokens, const bool toolsAvailable, ov::genai::GenerationFinishReason finishReason) {
+    toolsEnabledForChunk = toolsAvailable;
+    pendingGemma4ToolHandoff = false;
     /*
     Using appropriate parser based on the current processing phase
     Call to this method should return either result from parserContentChunk, parseToolCallChunk, parseReasoningChunk when we can determine the phase
@@ -380,6 +429,28 @@ std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, 
     bool applyToolParser = toolParserExistsAndSupportsStreaming && toolsAvailable;
 
     streamOutputCache.add(chunkResponse);
+    const auto lookupToolPreamble = [&]() {
+        if (!gemma4ToolHandoff)
+            return streamOutputCache.lookupTags(toolParser->getParsingConfig().preambleStartTags);
+        TagLookupStatus status = NOT_FOUND;
+        const auto& buffer = streamOutputCache.getBuffer();
+        for (const auto& tag : toolParser->getParsingConfig().preambleStartTags) {
+            for (size_t pos = 0; pos < buffer.size(); ++pos) {
+                const auto newline = pos == 0 ? std::string::npos : buffer.rfind('\n', pos - 1);
+                const size_t begin = newline == std::string::npos ? 0 : newline + 1;
+                if (!(newline != std::string::npos || gemma4LogicalBoundary) ||
+                    !std::all_of(buffer.begin() + begin, buffer.begin() + pos, [](unsigned char c) { return std::isspace(c) != 0; }))
+                    continue;
+                const auto length = std::min(tag.size(), buffer.size() - pos);
+                if (buffer.compare(pos, length, tag, 0, length) == 0) {
+                    if (length == tag.size())
+                        return FOUND_COMPLETE;
+                    status = FOUND_INCOMPLETE;
+                }
+            }
+        }
+        return status;
+    };
 
     if (llm_calculator_logger->should_log(spdlog::level::trace)) {
         std::string tokenIds;
@@ -428,6 +499,9 @@ std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, 
                 reasoningStartTagStatus = streamOutputCache.lookupTags(reasoningParser->getParsingConfig().preambleStartTags);
             }
             if (reasoningStartTagStatus == TagLookupStatus::FOUND_COMPLETE) {
+                TagLookupStatus endTagStatus = streamOutputCache.lookupTags(reasoningParser->getParsingConfig().endTags);
+                if (endTagStatus == TagLookupStatus::FOUND_COMPLETE)
+                    return parseReasoningChunk(tokens, finishReason, UNKNOWN);
                 return parseReasoningChunk(tokens, finishReason);
             }  // else startTagStatus is FOUND_INCOMPLETE or NOT_FOUND, we continue processing, so potential tool parser start tag is not missed
             anyStartTagStatus = reasoningStartTagStatus;
@@ -438,7 +512,7 @@ std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, 
             TagLookupStatus toolCallStartTagStatus = streamOutputCache.lookupTags(toolParser->getParsingConfig().startTags);
             if (toolCallStartTagStatus == TagLookupStatus::NOT_FOUND) {
                 // If tool call start tag is not found, check if any of the special start tags are found
-                toolCallStartTagStatus = streamOutputCache.lookupTags(toolParser->getParsingConfig().preambleStartTags);
+                toolCallStartTagStatus = lookupToolPreamble();
             }
             if (toolCallStartTagStatus == TagLookupStatus::FOUND_COMPLETE) {
                 return parseToolCallChunk(tokens, finishReason);
@@ -469,6 +543,8 @@ std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, 
         // TOOL_CALLS is the only phase that can be processed after CONTENT.
         if (applyToolParser) {
             TagLookupStatus toolStartTagStatus = streamOutputCache.lookupTags(toolParser->getParsingConfig().startTags);
+            if (toolStartTagStatus == NOT_FOUND && gemma4ToolHandoff)
+                toolStartTagStatus = lookupToolPreamble();
             if (toolStartTagStatus == TagLookupStatus::FOUND_COMPLETE) {
                 return parseToolCallChunk(tokens, finishReason);
             } else if (toolStartTagStatus == TagLookupStatus::FOUND_INCOMPLETE && finishReason == ov::genai::GenerationFinishReason::NONE) {

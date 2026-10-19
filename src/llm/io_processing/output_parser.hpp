@@ -92,6 +92,10 @@ private:
     ProcessingPhase processingPhase = UNKNOWN;
     StreamOutputCache streamOutputCache;
     bool implicitReasoningStart = false;
+    bool gemma4ToolHandoff = false;
+    bool pendingGemma4ToolHandoff = false;
+    bool toolsEnabledForChunk = false;
+    bool gemma4LogicalBoundary = true;
 
     // Baseline decode mode for content/unknown phases — true when the model/output format
     // needs special tokens visible before any parser-owned phase becomes active.
@@ -137,8 +141,8 @@ public:
     //     No content is ever discarded at a phase transition — "nothing properly parsed is lost".
     //   - Correctness requires at least one subsequent call after every phase transition.
     //     The caller must provide a final call with finishReason != NONE (typically an empty
-    //     chunk), followed by drainPendingDelta() until nullopt for parser-owned
-    //     buffered output. The drain does not advance additional phase transitions.
+    //     chunk), followed by drainPendingDelta() until nullopt. Each drain call emits
+    //     one parser-owned delta or advances one ready phase already closed in the cache.
     //     If the final call is missing, buffered remainders may be dropped.
     //   - Known limitation: if finishReason != NONE arrives while a start tag is only
     //     partially matched (FOUND_INCOMPLETE), the partial text is flushed as content rather

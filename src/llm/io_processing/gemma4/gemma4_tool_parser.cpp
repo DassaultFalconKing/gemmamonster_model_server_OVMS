@@ -917,7 +917,7 @@ std::optional<Delta> Gemma4ToolParser::parseChunk(const std::string& chunk, cons
         }
         if (this->currentState == State::AfterToolCall) {
             this->currentState = State::Content;
-            break;
+            continue;
         }
     }
 

@@ -1114,6 +1114,57 @@ TEST_F(Gemma4OutputParserTest, BufferedCallsAreInvariantToDecodedChunkBoundaries
     EXPECT_EQ(output.toolCalls[3].arguments, "{\"value\":4}");
 }
 
+TEST_F(Gemma4OutputParserTest, ImplicitReasoningToolHandoffPreservesAtomicRegistryCalls) {
+    ToolsSchemas_t tools;
+    tools.emplace("question", ToolSchemaWrapper{nullptr, R"({"type":"object","properties":{"x":{}}})"});
+    for (const std::vector<std::string>& chunks : std::vector<std::vector<std::string>>{
+             {"<|channel>thought\nsecret<|tool_call>call:question{x:1}"},
+             {"<|channel>thought\nsecret<|tool_", "call>call:question{x:1}"},
+             {"<|channel>thought\nsecret<channel|><|tool_call>call:question{x:1}"}}) {
+        auto parser = std::make_shared<OutputParser>(*gemma4Tokenizer, "gemma4", "gemma4", tools);
+        std::vector<ToolCallDelta> calls;
+        std::string reasoning;
+        auto collect = [&](Delta delta, bool) {
+            if (auto* call = std::get_if<ToolCallDelta>(&delta))
+                calls.push_back(*call);
+            if (auto* thought = std::get_if<ReasoningDelta>(&delta))
+                reasoning += thought->text;
+            return ov::genai::StreamingStatus::RUNNING;
+        };
+        for (const auto& chunk : chunks) {
+            auto delta = parser->parseChunk(chunk, {}, true, ov::genai::GenerationFinishReason::NONE);
+            if (delta)
+                collect(*delta, false);
+        }
+        OVMSTextStreamer streamer(*gemma4Tokenizer, parser, true, collect, {});
+        streamer.end();
+        EXPECT_EQ(reasoning, "secret");
+        ASSERT_EQ(calls.size(), 1);
+        EXPECT_EQ(calls[0].name, "question");
+        EXPECT_EQ(calls[0].arguments, "{\"x\":1}");
+    }
+}
+
+TEST_F(Gemma4OutputParserTest, UnavailableToolsAndNonGemmaReasoningRemainNonExecutable) {
+    for (const auto& names : std::vector<std::pair<std::string, std::string>>{{"gemma4", "gemma4"}, {"gemma4", "qwen3"}}) {
+        auto parser = std::make_shared<OutputParser>(*gemma4Tokenizer, names.first, names.second, EMPTY_TOOLS_SCHEMA);
+        const bool toolsAvailable = names.second == "qwen3";
+        const std::string input = (toolsAvailable ? "<think>example " : "<|channel>thought\nexample ") + std::string("<|tool_call>call:question{x:1}");
+        std::vector<Delta> deltas;
+        auto delta = parser->parseChunk(input, {}, toolsAvailable, ov::genai::GenerationFinishReason::NONE);
+        if (delta)
+            deltas.push_back(*delta);
+        OVMSTextStreamer streamer(*gemma4Tokenizer, parser, toolsAvailable,
+            [&](Delta value, bool) {
+                deltas.push_back(std::move(value));
+                return ov::genai::StreamingStatus::RUNNING;
+            },
+            {});
+        streamer.end();
+        EXPECT_TRUE(std::none_of(deltas.begin(), deltas.end(), [](const Delta& value) { return std::holds_alternative<ToolCallDelta>(value); }));
+    }
+}
+
 // Malformed tool calls
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithMissingParentheses) {
