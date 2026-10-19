@@ -570,6 +570,7 @@ ovms_cc_library( # TODO split further so we don't have to recompile everything w
             "io_processing/output_parser.cpp",
     ],
     deps = [
+        ":io_processing_gemma4_rendered_prompt_state",
         "@com_github_tencent_rapidjson//:rapidjson",
         "//src/port:rapidjson_document",
         "//src:libovmslogging",
@@ -720,6 +721,7 @@ ovms_cc_library(
     hdrs = ["execution_context_utils.hpp"],
     srcs = ["execution_context_utils_no_python.cpp"],
     deps = [
+        ":io_processing_gemma4_rendered_prompt_state",
         ":llm_calculators_plugin_loader",
         "//src/mediapipe_internal:graph_side_packets",
         "//src:libovmslogging",
@@ -766,3 +768,11 @@ ovms_cc_library(
 )
 
 
+
+ovms_cc_library(
+    name = "io_processing_gemma4_rendered_prompt_state",
+    hdrs = ["io_processing/gemma4/rendered_prompt_state.hpp"],
+    srcs = ["io_processing/gemma4/rendered_prompt_state.cpp"],
+    deps = ["//third_party:genai", "@com_github_tencent_rapidjson//:rapidjson"],
+    visibility = ["//visibility:public"],
+)

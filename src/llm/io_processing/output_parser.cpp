@@ -33,6 +33,7 @@
 #include "qwen3coder/qwen3coder_tool_parser.hpp"
 #include "devstral/tool_parser.hpp"
 #include "gemma4/gemma4_reasoning_parser.hpp"
+#include "gemma4/rendered_prompt_state.hpp"
 #include "gptoss/reasoning_parser.hpp"
 #include "lfm2/lfm2_tool_parser.hpp"
 #include "lfm2/lfm25_reasoning_parser.hpp"
@@ -387,11 +388,18 @@ void OutputParser::detectAndSetImplicitReasoningStart(const std::string& rendere
     if (!reasoningParser) {
         return;
     }
+    if (!gemma4ToolHandoff) {
     std::string trimmed = renderedPrompt;
     rtrim(trimmed);
     const auto& startTags = reasoningParser->getParsingConfig().startTags;
     bool detected = std::any_of(startTags.begin(), startTags.end(),
         [&](const std::string& tag) { return !tag.empty() && endsWith(trimmed, tag); });
+    setImplicitReasoningStart(detected);
+    return;
+    }
+    const auto& cfg = reasoningParser->getParsingConfig();
+    const bool detected = classifyRenderedPromptState(renderedPrompt, cfg.startTags,
+                              cfg.endTags.empty() ? std::string{} : cfg.endTags.front()) == Gemma4RenderedPromptState::OPEN_THOUGHT;
     setImplicitReasoningStart(detected);
     return;
 }

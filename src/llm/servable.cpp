@@ -42,6 +42,7 @@
 #include "llm_calculators_plugin_api.hpp"
 #include "ovms_text_streamer.hpp"
 #include "servable.hpp"
+#include "io_processing/gemma4/rendered_prompt_state.hpp"
 #include "text_utils.hpp"
 #include "../tokenize/tokenize_parser.hpp"
 
@@ -242,6 +243,15 @@ absl::Status GenAiServable::prepareInputs(std::shared_ptr<GenAiServableExecution
         return status;
     }
 
+    if (getProperties()->toolParserName == "gemma4") {
+        try {
+            if (adaptGemma4ToolGrammarForRenderedPrompt(req.generationConfig, req.promptText))
+                req.generationConfig.structured_output_config->validate(getProperties()->tokenizer);
+        } catch (const std::exception& e) {
+            // Never replace required/named policy with unconstrained generation.
+            return absl::InvalidArgumentError(std::string("Gemma4 rendered grammar validation failed: ") + e.what());
+        }
+    }
     if (executionContext->apiHandler->getOutputParser() != nullptr) {
         executionContext->apiHandler->getOutputParser()->detectAndSetImplicitReasoningStart(req.promptText);
     }
