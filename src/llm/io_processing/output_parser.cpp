@@ -389,13 +389,13 @@ void OutputParser::detectAndSetImplicitReasoningStart(const std::string& rendere
         return;
     }
     if (!gemma4ToolHandoff) {
-    std::string trimmed = renderedPrompt;
-    rtrim(trimmed);
-    const auto& startTags = reasoningParser->getParsingConfig().startTags;
-    bool detected = std::any_of(startTags.begin(), startTags.end(),
-        [&](const std::string& tag) { return !tag.empty() && endsWith(trimmed, tag); });
-    setImplicitReasoningStart(detected);
-    return;
+        std::string trimmed = renderedPrompt;
+        rtrim(trimmed);
+        const auto& startTags = reasoningParser->getParsingConfig().startTags;
+        bool detected = std::any_of(startTags.begin(), startTags.end(),
+            [&](const std::string& tag) { return !tag.empty() && endsWith(trimmed, tag); });
+        setImplicitReasoningStart(detected);
+        return;
     }
     const auto& cfg = reasoningParser->getParsingConfig();
     const bool detected = classifyRenderedPromptState(renderedPrompt, cfg.startTags,

@@ -17,6 +17,9 @@
 #include "openai_api_handler.hpp"
 
 #include <algorithm>
+#include <cctype>
+#include <unordered_set>
+#include <rapidjson/pointer.h>
 #include <cmath>
 #include <limits>
 #include <memory>
