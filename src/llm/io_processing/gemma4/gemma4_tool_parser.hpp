@@ -85,6 +85,9 @@ public:
     static std::string parseObjectParameter(const std::string& argumentStr);
 
 private:
+    static std::optional<std::string> parseNativeArgumentsBody(const std::string& body);
+    static std::optional<size_t> findMatchingContainerEnd(const std::string& text,
+        size_t openPos, char openChar, char closeChar, size_t& malformedEndTag, bool& candidateLimitExceeded);
     void writeArgumentToWriter(const std::string& arg, rapidjson::Writer<rapidjson::StringBuffer>& writer);
 
     std::pair<std::string, std::string> parseSingleArgument(const std::string& argumentStr);

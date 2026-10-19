@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <cctype>
 #include <utility>
+#include <rapidjson/reader.h>
 
 namespace ovms {
 
@@ -41,6 +42,457 @@ const int64_t Gemma4ToolParser::eotTokenId = 49;  // <tool_call|>
 
 const int64_t Gemma4ToolParser::reasoningTokenId = 100;     // <|channel>
 const int64_t Gemma4ToolParser::reasoningEndTokenId = 101;  // <channel|>
+
+namespace {
+const std::string NATIVE_STRING_MARKER = "<|\"|>";
+using JsonWriter = rapidjson::Writer<rapidjson::StringBuffer>;
+
+// A generated tool call should be far smaller than the surrounding HTTP/model
+// limits. These local caps prevent a malformed candidate from retaining
+// unbounded streaming state while leaving ample room for legitimate arguments.
+constexpr size_t MAX_NATIVE_TOOL_CANDIDATE_BYTES = 64 * 1024;
+constexpr size_t MAX_NATIVE_TOOL_CONTAINER_DEPTH = 64;
+
+class NumberPreservingWriter : public JsonWriter {
+public:
+    explicit NumberPreservingWriter(rapidjson::StringBuffer& buffer) :
+        JsonWriter(buffer) {}
+    bool RawNumber(const char* value, rapidjson::SizeType length, bool) {
+        return RawValue(value, length, rapidjson::kNumberType);
+    }
+};
+
+std::optional<std::string> normalizeJsonLosslessly(const std::string& input) {
+    rapidjson::StringStream stream(input.c_str());
+    rapidjson::Reader reader;
+    rapidjson::StringBuffer buffer;
+    NumberPreservingWriter writer(buffer);
+    if (!reader.Parse<rapidjson::kParseNumbersAsStringsFlag>(stream, writer) || stream.Tell() != input.size())
+        return std::nullopt;
+    return std::string(buffer.GetString(), buffer.GetSize());
+}
+
+void trimLocal(std::string& value) {
+    auto notSpace = [](unsigned char c) { return !std::isspace(c); };
+    value.erase(value.begin(), std::find_if(value.begin(), value.end(), notSpace));
+    value.erase(std::find_if(value.rbegin(), value.rend(), notSpace).base(), value.end());
+}
+
+bool saneToolName(const std::string& name) {
+    return !name.empty() && std::all_of(name.begin(), name.end(), [](unsigned char c) {
+        return std::isalnum(c) || c == '_' || c == '-' || c == '.';
+    });
+}
+
+bool isLogicalBoundary(const std::string& text, size_t pos) {
+    if (pos == 0)
+        return true;  // The generic router only enters on a boundary-validated preamble.
+    const size_t newline = text.rfind('\n', pos - 1);
+    if (newline == std::string::npos)
+        return false;
+    for (size_t i = newline + 1; i < pos; ++i) {
+        const char c = text[i];
+        if (c != ' ' && c != '\t' && c != '\r')
+            return false;
+    }
+    return true;
+}
+
+class NativeValueParser {
+    const std::string& input;
+    size_t pos{0};
+    JsonWriter& writer;
+
+    bool startsWith(const std::string& marker) const {
+        return pos + marker.size() <= input.size() && input.compare(pos, marker.size(), marker) == 0;
+    }
+    void skipWs() {
+        while (pos < input.size() && std::isspace(static_cast<unsigned char>(input[pos])))
+            ++pos;
+    }
+    bool writeJsonScalar(const std::string& token) {
+        auto normalized = normalizeJsonLosslessly(token);
+        if (!normalized || normalized->empty())
+            return false;
+        const char first = normalized->front();
+        rapidjson::Type type = rapidjson::kNumberType;
+        if (first == '"')
+            type = rapidjson::kStringType;
+        else if (first == 't')
+            type = rapidjson::kTrueType;
+        else if (first == 'f')
+            type = rapidjson::kFalseType;
+        else if (first == 'n')
+            type = rapidjson::kNullType;
+        else if (!(first == '-' || std::isdigit(static_cast<unsigned char>(first))))
+            return false;
+        return writer.RawValue(normalized->data(), static_cast<rapidjson::SizeType>(normalized->size()), type);
+    }
+    bool parseDelimitedString() {
+        if (!startsWith(NATIVE_STRING_MARKER))
+            return false;
+        pos += NATIVE_STRING_MARKER.size();
+        const size_t end = input.find(NATIVE_STRING_MARKER, pos);
+        if (end == std::string::npos)
+            return false;
+        const std::string raw = input.substr(pos, end - pos);
+        const std::string encoded = escapeAsJsonString(raw);
+        if (!writer.RawValue(encoded.data(), static_cast<rapidjson::SizeType>(encoded.size()), rapidjson::kStringType))
+            return false;
+        pos = end + NATIVE_STRING_MARKER.size();
+        return true;
+    }
+    bool parseJsonString() {
+        if (pos >= input.size() || input[pos] != '"')
+            return false;
+        const size_t start = pos++;
+        bool escaped = false;
+        while (pos < input.size()) {
+            const char c = input[pos++];
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+            if (c == '\\') {
+                escaped = true;
+                continue;
+            }
+            if (c == '"')
+                return writeJsonScalar(input.substr(start, pos - start));
+        }
+        return false;
+    }
+    bool parseKey(std::string& key) {
+        skipWs();
+        if (startsWith(NATIVE_STRING_MARKER)) {
+            pos += NATIVE_STRING_MARKER.size();
+            const size_t end = input.find(NATIVE_STRING_MARKER, pos);
+            if (end == std::string::npos)
+                return false;
+            key = input.substr(pos, end - pos);
+            pos = end + NATIVE_STRING_MARKER.size();
+            return true;
+        }
+        if (pos < input.size() && input[pos] == '"') {
+            const size_t start = pos++;
+            bool escaped = false;
+            while (pos < input.size()) {
+                const char c = input[pos++];
+                if (escaped) {
+                    escaped = false;
+                    continue;
+                }
+                if (c == '\\') {
+                    escaped = true;
+                    continue;
+                }
+                if (c == '"') {
+                    const std::string token = input.substr(start, pos - start);
+                    rapidjson::Document doc;
+                    doc.Parse(token.c_str());
+                    if (doc.HasParseError() || !doc.IsString())
+                        return false;
+                    key.assign(doc.GetString(), doc.GetStringLength());
+                    return true;
+                }
+            }
+            return false;
+        }
+        const size_t start = pos;
+        while (pos < input.size() && input[pos] != ':')
+            ++pos;
+        if (pos == input.size())
+            return false;
+        key = input.substr(start, pos - start);
+        trimLocal(key);
+        return !key.empty();
+    }
+    bool parseObject() {
+        if (pos >= input.size() || input[pos] != '{')
+            return false;
+        ++pos;
+        writer.StartObject();
+        skipWs();
+        if (pos < input.size() && input[pos] == '}') {
+            ++pos;
+            writer.EndObject();
+            return true;
+        }
+        while (pos < input.size()) {
+            std::string key;
+            if (!parseKey(key))
+                return false;
+            skipWs();
+            if (pos >= input.size() || input[pos] != ':')
+                return false;
+            ++pos;
+            writer.Key(key.c_str(), static_cast<rapidjson::SizeType>(key.size()));
+            if (!parseValue())
+                return false;
+            skipWs();
+            if (pos < input.size() && input[pos] == ',') {
+                ++pos;
+                skipWs();
+                continue;
+            }
+            if (pos < input.size() && input[pos] == '}') {
+                ++pos;
+                writer.EndObject();
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    bool parseArray() {
+        if (pos >= input.size() || input[pos] != '[')
+            return false;
+        ++pos;
+        writer.StartArray();
+        skipWs();
+        if (pos < input.size() && input[pos] == ']') {
+            ++pos;
+            writer.EndArray();
+            return true;
+        }
+        while (pos < input.size()) {
+            if (!parseValue())
+                return false;
+            skipWs();
+            if (pos < input.size() && input[pos] == ',') {
+                ++pos;
+                skipWs();
+                continue;
+            }
+            if (pos < input.size() && input[pos] == ']') {
+                ++pos;
+                writer.EndArray();
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    bool parseBareScalar() {
+        const size_t start = pos;
+        while (pos < input.size()) {
+            const char c = input[pos];
+            if (c == ',' || c == '}' || c == ']' || c == ')')
+                break;
+            ++pos;
+        }
+        std::string token = input.substr(start, pos - start);
+        trimLocal(token);
+        return !token.empty() && writeJsonScalar(token);
+    }
+
+public:
+    NativeValueParser(const std::string& input, JsonWriter& writer) :
+        input(input), writer(writer) {}
+    bool parseValue() {
+        skipWs();
+        if (pos >= input.size())
+            return false;
+        if (startsWith(NATIVE_STRING_MARKER))
+            return parseDelimitedString();
+        if (input[pos] == '"')
+            return parseJsonString();
+        if (input[pos] == '{')
+            return parseObject();
+        if (input[pos] == '[')
+            return parseArray();
+        return parseBareScalar();
+    }
+    bool parseArgumentsBody() {
+        writer.StartObject();
+        skipWs();
+        if (pos == input.size()) {
+            writer.EndObject();
+            return true;
+        }
+        while (pos < input.size()) {
+            std::string key;
+            if (!parseKey(key))
+                return false;
+            skipWs();
+            if (pos >= input.size() || input[pos] != ':')
+                return false;
+            ++pos;
+            writer.Key(key.c_str(), static_cast<rapidjson::SizeType>(key.size()));
+            if (!parseValue())
+                return false;
+            skipWs();
+            if (pos == input.size()) {
+                writer.EndObject();
+                return true;
+            }
+            if (input[pos] != ',')
+                return false;
+            ++pos;
+            skipWs();
+            if (pos == input.size())
+                return false;
+        }
+        return false;
+    }
+    bool parseSingleValueFully() {
+        if (!parseValue())
+            return false;
+        skipWs();
+        return pos == input.size();
+    }
+};
+
+std::optional<std::string> normalizeSingleNativeValue(const std::string& arg) {
+    std::string value = arg;
+    trimLocal(value);
+    if (value.empty())
+        return std::nullopt;
+    rapidjson::StringBuffer buffer;
+    JsonWriter writer(buffer);
+    NativeValueParser parser(value, writer);
+    if (!parser.parseSingleValueFully())
+        return std::nullopt;
+    return std::string(buffer.GetString(), buffer.GetSize());
+}
+}  // namespace
+
+std::optional<std::string> Gemma4ToolParser::parseNativeArgumentsBody(const std::string& body) {
+    rapidjson::StringBuffer buffer;
+    JsonWriter writer(buffer);
+    NativeValueParser parser(body, writer);
+    if (!parser.parseArgumentsBody())
+        return std::nullopt;
+    return std::string(buffer.GetString(), buffer.GetSize());
+}
+
+std::optional<size_t> Gemma4ToolParser::findMatchingContainerEnd(const std::string& text,
+    size_t openPos, char openChar, char closeChar, size_t& malformedEndTag,
+    bool& candidateLimitExceeded) {
+    malformedEndTag = std::string::npos;
+    candidateLimitExceeded = false;
+    if (openPos >= text.size() || text[openPos] != openChar)
+        return std::nullopt;
+    std::vector<char> closers{closeChar};
+    bool malformed = false;
+    size_t i = openPos + 1;
+    while (i < text.size()) {
+        if (i - openPos > MAX_NATIVE_TOOL_CANDIDATE_BYTES) {
+            candidateLimitExceeded = true;
+            malformedEndTag = text.find(TOOL_CALL_END_TAG, i);
+            return std::nullopt;
+        }
+        if (text.compare(i, TOOL_ARGS_STRING_INDICATOR.size(), TOOL_ARGS_STRING_INDICATOR) == 0) {
+            const size_t end = text.find(TOOL_ARGS_STRING_INDICATOR, i + TOOL_ARGS_STRING_INDICATOR.size());
+            if (end == std::string::npos) {
+                // An end tag before the closer is malformed only once the next
+                // envelope start is already buffered. A split closer may still arrive.
+                const size_t envelopeEnd = text.find(TOOL_CALL_END_TAG, i + TOOL_ARGS_STRING_INDICATOR.size());
+                if (envelopeEnd != std::string::npos &&
+                    text.find(TOOL_CALL_START_TAG + TOOL_CALL_NAME_PREFIX, envelopeEnd + TOOL_CALL_END_TAG.size()) != std::string::npos)
+                    malformedEndTag = envelopeEnd;
+                return std::nullopt;
+            }
+            if (end - openPos > MAX_NATIVE_TOOL_CANDIDATE_BYTES) {
+                candidateLimitExceeded = true;
+                malformedEndTag = text.find(TOOL_CALL_END_TAG, end);
+                return std::nullopt;
+            }
+            i = end + TOOL_ARGS_STRING_INDICATOR.size();
+            continue;
+        }
+        if (text[i] == '"') {
+            ++i;
+            bool escaped = false;
+            bool closed = false;
+            while (i < text.size()) {
+                if (i - openPos > MAX_NATIVE_TOOL_CANDIDATE_BYTES) {
+                    candidateLimitExceeded = true;
+                    malformedEndTag = text.find(TOOL_CALL_END_TAG, i);
+                    return std::nullopt;
+                }
+                if (!escaped && text.compare(i, TOOL_CALL_END_TAG.size(), TOOL_CALL_END_TAG) == 0) {
+                    const size_t after = i + TOOL_CALL_END_TAG.size();
+                    const size_t nextStart = text.find(TOOL_CALL_START_TAG + TOOL_CALL_NAME_PREFIX, after);
+                    const size_t limit = nextStart == std::string::npos ? text.size() : nextStart;
+                    bool quoteBeforeNext = false;
+                    bool lookEscaped = false;
+                    for (size_t j = after; j < limit; ++j) {
+                        if (lookEscaped) {
+                            lookEscaped = false;
+                            continue;
+                        }
+                        if (text[j] == '\\') {
+                            lookEscaped = true;
+                            continue;
+                        }
+                        if (text[j] == '"') {
+                            quoteBeforeNext = true;
+                            break;
+                        }
+                    }
+                    if (!quoteBeforeNext) {
+                        if (nextStart != std::string::npos)
+                            malformedEndTag = i;
+                        return std::nullopt;
+                    }
+                }
+                const char c = text[i++];
+                if (escaped) {
+                    escaped = false;
+                    continue;
+                }
+                if (c == '\\') {
+                    escaped = true;
+                    continue;
+                }
+                if (c == '"') {
+                    closed = true;
+                    break;
+                }
+            }
+            if (!closed)
+                return std::nullopt;
+            continue;
+        }
+        if (text.compare(i, TOOL_CALL_END_TAG.size(), TOOL_CALL_END_TAG) == 0) {
+            malformedEndTag = i;
+            return std::nullopt;
+        }
+        switch (text[i]) {
+        case '{':
+        case '[':
+        case '(':
+            if (closers.size() >= MAX_NATIVE_TOOL_CONTAINER_DEPTH) {
+                candidateLimitExceeded = true;
+                malformedEndTag = text.find(TOOL_CALL_END_TAG, i);
+                return std::nullopt;
+            }
+            if (text[i] == '{')
+                closers.push_back('}');
+            else if (text[i] == '[')
+                closers.push_back(']');
+            else
+                closers.push_back(')');
+            break;
+        case '}':
+        case ']':
+        case ')':
+            if (closers.empty() || closers.back() != text[i]) {
+                malformed = true;
+                break;
+            }
+            closers.pop_back();
+            if (closers.empty() && !malformed)
+                return i;
+            break;
+        default:
+            break;
+        }
+        ++i;
+    }
+    return std::nullopt;
+}
 
 std::string Gemma4ToolParser::parseArrayParameter(const std::string& argumentStr) {
     std::string body = argumentStr.substr(1, argumentStr.size() - 2);

@@ -219,22 +219,12 @@ std::string replaceSingleWithDoubleQuotes(const std::string& input) {
 }
 
 std::string escapeAsJsonString(const std::string& rawValue) {
-    std::string value = rawValue;
-    rapidjson::Document doc;
-
-    if (rawValue.size() >= 2 && rawValue.front() == '"' && rawValue.back() == '"') {
-        doc.Parse(rawValue.c_str());
-    } else {
-        doc.Parse(("\"" + rawValue + "\"").c_str());
-    }
-
-    if (!doc.HasParseError() && doc.IsString()) {
-        value.assign(doc.GetString(), doc.GetStringLength());
-    }
-
+    // Delimited Gemma bytes are literal argument text. A JSON parse here turns
+    // "\\" into one backslash and "\t" into a tab, then the writer emits the
+    // damaged form. Encode the raw bytes once.
     rapidjson::StringBuffer buffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-    writer.String(value.c_str(), static_cast<rapidjson::SizeType>(value.size()));
+    writer.String(rawValue.c_str(), static_cast<rapidjson::SizeType>(rawValue.size()));
     return buffer.GetString();
 }
 
