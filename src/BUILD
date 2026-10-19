@@ -3173,4 +3173,3 @@ cc_test(
     }),
     linkstatic = 1,
 )
-

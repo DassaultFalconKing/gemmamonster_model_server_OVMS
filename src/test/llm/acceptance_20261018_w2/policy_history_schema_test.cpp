@@ -159,4 +159,3 @@ TEST_F(PolicyHistorySchemaTest, IdenticalDuplicateToolSchemasAreKeptOnce) {
     ASSERT_EQ(responsesHandler.getRequest().toolNameSchemaMap.size(), 1u);
     EXPECT_EQ(responsesHandler.getRequest().toolNameSchemaMap.at("f").stringRepr, parameters);
 }
-

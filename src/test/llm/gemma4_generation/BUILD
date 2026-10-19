@@ -209,4 +209,3 @@ cc_test(
     linkopts = COMMON_STATIC_LIBS_LINKOPTS,
     linkstatic = 1,
 )
-
