@@ -3152,3 +3152,25 @@ ovms_cc_library(
     visibility = ["//visibility:public"],
     alwayslink = 1,
 )
+
+cc_test(
+    name = "invalid_template_context_safety_test",
+    srcs = ["test/llm/invalid_template_context_safety_test.cpp"],
+    deps = [
+        "@com_google_googletest//:gtest_main",
+        "//src/llm:genai_servables",
+        "//src/llm:llmcalculator_proto_owner",
+        "//src/llm:io_processing_input_processor",
+        "//src:test_platform_utils",
+        "//src:test_test_with_temp_dir",
+        "//third_party:genai",
+    ],
+    copts = COPTS_TESTS,
+    local_defines = COMMON_LOCAL_DEFINES,
+    linkopts = COMMON_STATIC_LIBS_LINKOPTS + select({
+        "//src:windows": ["ws2_32.lib"],
+        "//conditions:default": [],
+    }),
+    linkstatic = 1,
+)
+

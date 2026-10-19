@@ -273,12 +273,15 @@ Status GenAiServableInitializer::loadChatTemplate(std::shared_ptr<GenAiServableP
         }
 #endif
         if (properties->chatTemplateEngine == ChatTemplateEngine::MINJA && !probeChatTemplateBasicRenderMinja(properties->tokenizer)) {
+            // The probe already failed. Do not replace the template with an empty string and do not
+            // return before the context assignment below: a default Tokenizer has a null implementation.
+            // Caps probes would render this template again. ChatTemplateProcessor maps the later
+            // apply_chat_template failure to InvalidArgument. Completion uses the assigned tokenizer.
             SPDLOG_LOGGER_ERROR(llm_calculator_logger, "Chat template is not compatible with minja — basic rendering failed. "
-                                                       "Disabling /chat/completions endpoint for this model.");
-            properties->tokenizer.set_chat_template("");
-            return StatusCode::OK;
+                                                       "Chat requests will be rejected; completion serving continues.");
+        } else {
+            probeServableChatTemplateCaps(properties);
         }
-        probeServableChatTemplateCaps(properties);
     }
 
     // Populate the InputProcessorContext from the now-fully-initialized properties.
