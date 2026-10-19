@@ -81,6 +81,8 @@ struct OpenAIRequest {
     ToolsSchemas_t toolNameSchemaMap;
     // Holds value for tool_choice field as described in https://platform.openai.com/docs/api-reference/chat/create#chat_create-tool_choice
     std::string toolChoice;
+    // Omitted or null preserves the OpenAI default.
+    bool parallelToolCalls{true};
 
     bool skipSpecialTokens{true};
 
