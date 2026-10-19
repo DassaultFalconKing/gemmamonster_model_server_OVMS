@@ -385,6 +385,11 @@ std::optional<size_t> Gemma4ToolParser::findMatchingContainerEnd(const std::stri
         if (text.compare(i, TOOL_ARGS_STRING_INDICATOR.size(), TOOL_ARGS_STRING_INDICATOR) == 0) {
             const size_t end = text.find(TOOL_ARGS_STRING_INDICATOR, i + TOOL_ARGS_STRING_INDICATOR.size());
             if (end == std::string::npos) {
+                if (text.size() - openPos > MAX_NATIVE_TOOL_CANDIDATE_BYTES) {
+                    candidateLimitExceeded = true;
+                    malformedEndTag = text.find(TOOL_CALL_END_TAG, i + TOOL_ARGS_STRING_INDICATOR.size());
+                    return std::nullopt;
+                }
                 // An end tag before the closer is malformed only once the next
                 // envelope start is already buffered. A split closer may still arrive.
                 const size_t envelopeEnd = text.find(TOOL_CALL_END_TAG, i + TOOL_ARGS_STRING_INDICATOR.size());

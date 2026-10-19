@@ -52,7 +52,10 @@ TEST(Gemma4NativeReader, ExactAndBoundedArguments) {
         ASSERT_TRUE(!scan(text, 0, '{', '}', malformed, limit) && malformed != std::string::npos);
         ++assertions;
     }
-    for (const auto& text : {"{x:" + std::string(70, '[') + "0" + std::string(70, ']') + "}", "{x:" + std::string(70 * 1024, '1') + "}"}) {
+    for (const auto& text : {"{x:" + std::string(70, '[') + "0" + std::string(70, ']') + "}",
+             "{x:" + std::string(70 * 1024, '1') + "}",
+             "{x:<|\"|>" + std::string(70 * 1024, 'a'),
+             "{x:<|\"|>" + std::string(70 * 1024, 'a') + "}<tool_call|>"}) {
         size_t malformed; bool limit;
         ASSERT_TRUE(!scan(text, 0, '{', '}', malformed, limit) && limit);
         ++assertions;
