@@ -212,6 +212,11 @@ absl::Status OpenAIChatCompletionsHandler::parseMessages(std::optional<std::stri
         auto& obj = it->value.GetArray()[i];
         if (!obj.IsObject())
             return absl::InvalidArgumentError("Message is not a JSON object");
+        // Fill omitted tool-call arguments before the chat-history copy. The copy
+        // does not observe a later mutation of this object.
+        auto argumentsStatus = ensureArgumentsInToolCalls(obj);
+        if (argumentsStatus != absl::OkStatus())
+            return argumentsStatus;
         // Add new message to chat history with role, content, and tool-related fields (tool_calls, tool_call_id, name)
         // Other values are not stored in chat history, but are still present in the request object
         request.chatHistory.push_back({});
@@ -311,11 +316,6 @@ absl::Status OpenAIChatCompletionsHandler::parseMessages(std::optional<std::stri
         if (!lastMessage.contains("content")) {
             SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "Message does not have content field which might be an issue for some chat templates. Adding empty content.");
             lastMessage["content"] = "";
-        }
-        // If message has tool calls, make sure each tool call has "arguments" field
-        auto status = ensureArgumentsInToolCalls(obj);
-        if (status != absl::OkStatus()) {
-            return status;
         }
     }
     SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "Parsed messages successfully");
