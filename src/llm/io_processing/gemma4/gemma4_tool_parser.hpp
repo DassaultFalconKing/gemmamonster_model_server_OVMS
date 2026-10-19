@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <unordered_set>
 
 #include "src/llm/io_processing/base_output_parser.hpp"
 #include "src/port/rapidjson_stringbuffer.hpp"
@@ -66,12 +67,27 @@ public:
         BaseOutputParser(tokenizer,
             configOverride.has_value() ? std::move(*configOverride) : defaultParsingConfig()) {}
 
+    Gemma4ToolParser(ov::genai::Tokenizer& tokenizer, const ToolsSchemas_t& toolsSchemas) :
+        Gemma4ToolParser(tokenizer) {
+        for (const auto& [name, schema] : toolsSchemas) {
+            (void)schema;
+            allowedToolNames.insert(name);
+        }
+        enforceToolRegistry = !toolsSchemas.empty();
+        for (const auto& name : allowedToolNames) {
+            parsingConfig.preambleStartTags.push_back(TOOL_CALL_NAME_PREFIX + name + "{");
+            parsingConfig.preambleStartTags.push_back(TOOL_CALL_NAME_PREFIX + name + "(");
+        }
+    }
+
     void resetState() override {
         streamingContent.clear();
         streamingPosition = 0;
         currentState = State::Content;
         toolCall = {};
         toolCallIndex = -1;
+        rejectedCandidate = false;
+        argsOpen = '{';
     }
 
     std::optional<Delta> parseChunk(const std::string& chunk, const std::vector<int64_t>& tokens, ov::genai::GenerationFinishReason finishReason) override;
@@ -88,6 +104,10 @@ private:
     static std::optional<std::string> parseNativeArgumentsBody(const std::string& body);
     static std::optional<size_t> findMatchingContainerEnd(const std::string& text,
         size_t openPos, char openChar, char closeChar, size_t& malformedEndTag, bool& candidateLimitExceeded);
+    bool enforceToolRegistry{false};
+    bool rejectedCandidate{false};
+    char argsOpen{'{'};
+    std::unordered_set<std::string> allowedToolNames;
     void writeArgumentToWriter(const std::string& arg, rapidjson::Writer<rapidjson::StringBuffer>& writer);
 
     std::pair<std::string, std::string> parseSingleArgument(const std::string& argumentStr);

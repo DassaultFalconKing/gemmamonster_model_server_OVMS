@@ -641,6 +641,18 @@ std::vector<std::pair<std::string, std::string>> Gemma4ToolParser::parseArgument
 
 bool Gemma4ToolParser::parseInContentState() {
     size_t toolCallStartTagPos = this->streamingContent.find(TOOL_CALL_START_TAG, this->streamingPosition);
+    if (toolCallStartTagPos == std::string::npos && enforceToolRegistry) {
+        for (const auto& tag : parsingConfig.preambleStartTags) {
+            const size_t pos = streamingContent.find(tag, streamingPosition);
+            if (pos != std::string::npos && isLogicalBoundary(streamingContent, pos) &&
+                (toolCallStartTagPos == std::string::npos || pos < toolCallStartTagPos))
+                toolCallStartTagPos = pos;
+        }
+        if (toolCallStartTagPos == streamingPosition) {
+            currentState = State::ToolCallStarted;
+            return false;
+        }
+    }
     if (toolCallStartTagPos != std::string::npos) {
         if (toolCallStartTagPos > this->streamingPosition) {
             SPDLOG_LOGGER_TRACE(llm_calculator_logger, "Content found before tool call start tag at position: {}", toolCallStartTagPos);
@@ -657,7 +669,17 @@ bool Gemma4ToolParser::parseInContentState() {
 
 bool Gemma4ToolParser::parseInToolCallState() {
     size_t argsPos = this->streamingContent.find(TOOL_ARGS_START_INDICATOR, this->streamingPosition);
+    if (enforceToolRegistry) {
+        const auto paren = streamingContent.find('(', streamingPosition);
+        if (paren != std::string::npos && (argsPos == std::string::npos || paren < argsPos))
+            argsPos = paren;
+    }
     if (argsPos == std::string::npos) {
+        if (enforceToolRegistry && streamingContent.size() - streamingPosition > MAX_NATIVE_TOOL_CANDIDATE_BYTES) {
+            rejectedCandidate = true;
+            currentState = State::ToolCallParameters;
+            return parseToolCallParametersState();
+        }
         return false;
     }
 
@@ -670,15 +692,75 @@ bool Gemma4ToolParser::parseInToolCallState() {
 
     std::string toolName = this->streamingContent.substr(toolNameStart, argsPos - toolNameStart);
     trim(toolName);
+    if (enforceToolRegistry) {
+        toolName = streamingContent.substr(streamingPosition, argsPos - streamingPosition);
+        trim(toolName);
+        if (toolName.rfind(TOOL_CALL_NAME_PREFIX, 0) == 0)
+            toolName.erase(0, TOOL_CALL_NAME_PREFIX.size());
+        else if (!toolName.empty() && toolName.front() == ':')
+            toolName.erase(toolName.begin());
+        trim(toolName);
+    }
+    rejectedCandidate = enforceToolRegistry && (!saneToolName(toolName) || allowedToolNames.count(toolName) == 0);
     this->toolCall = ToolCall{generateRandomId(), toolName, ""};
     SPDLOG_LOGGER_TRACE(llm_calculator_logger, "Parsed tool name: {}", toolName);
     this->streamingPosition = argsPos + TOOL_ARGS_START_INDICATOR.length();
+    argsOpen = streamingContent[argsPos];
     this->currentState = State::ToolCallParameters;
-    this->toolCallIndex++;
     return true;
 }
 
 bool Gemma4ToolParser::parseToolCallParametersState() {
+    if (enforceToolRegistry) {
+        const size_t nextStart = streamingContent.find(TOOL_CALL_START_TAG, streamingPosition);
+        const size_t envelopeEnd = streamingContent.find(TOOL_CALL_END_TAG, streamingPosition);
+        if (rejectedCandidate) {
+            if (nextStart != std::string::npos && (envelopeEnd == std::string::npos || nextStart < envelopeEnd)) {
+                streamingPosition = nextStart;
+                toolCall = {};
+                rejectedCandidate = false;
+                currentState = State::Content;
+                return true;
+            }
+            if (envelopeEnd == std::string::npos) {
+                // Retain only the suffix needed to recognize a split end marker.
+                const size_t keep = TOOL_CALL_END_TAG.size() - 1;
+                if (streamingContent.size() > keep) {
+                    streamingContent.erase(0, streamingContent.size() - keep);
+                    streamingPosition = 0;
+                }
+                return false;
+            }
+            streamingPosition = envelopeEnd + TOOL_CALL_END_TAG.size();
+            toolCall = {};
+            currentState = State::ToolCallEnded;
+            return true;
+        }
+        size_t malformedEnd = std::string::npos;
+        bool overLimit = false;
+        auto close = findMatchingContainerEnd(streamingContent, streamingPosition - 1, argsOpen, argsOpen == '(' ? ')' : '}', malformedEnd, overLimit);
+        if (!close) {
+            if (malformedEnd != std::string::npos) {
+                streamingPosition = malformedEnd + TOOL_CALL_END_TAG.size();
+                toolCall = {};
+                currentState = State::ToolCallEnded;
+                return true;
+            }
+            if (overLimit) {
+                rejectedCandidate = true;
+                return parseToolCallParametersState();
+            }
+            return false;
+        }
+        const auto arguments = parseNativeArgumentsBody(streamingContent.substr(streamingPosition, *close - streamingPosition));
+        if (arguments)
+            toolCall.arguments = *arguments;
+        else
+            toolCall = {};
+        streamingPosition = *close + 1;
+        currentState = State::ToolCallEnded;
+        return true;
+    }
     if (this->streamingContent.back() == TOOL_ARGS_END_INDICATOR.back()) {
         SPDLOG_LOGGER_TRACE(llm_calculator_logger, "Tool arguments end indicator found at the end of streaming content, attempting to parse arguments: {}", this->streamingContent.substr(this->streamingPosition));
     }
@@ -715,6 +797,15 @@ bool Gemma4ToolParser::parseInToolCallEndedState() {
     size_t toolCallEndTagPos = this->streamingContent.find(TOOL_CALL_END_TAG, this->streamingPosition);
     SPDLOG_LOGGER_TRACE(llm_calculator_logger, "Current state: ToolCallEnded. Streaming content from current position: {}", this->streamingContent.substr(this->streamingPosition));
     if (nextToolCallPos != std::string::npos && nextToolCallPos < toolCallEndTagPos) {
+        if (enforceToolRegistry) {
+            auto gap = streamingContent.substr(streamingPosition, nextToolCallPos - streamingPosition);
+            trim(gap);
+            if (!gap.empty()) {
+                rejectedCandidate = true;
+                currentState = State::ToolCallParameters;
+                return parseToolCallParametersState();
+            }
+        }
         this->streamingPosition = nextToolCallPos;
         this->currentState = State::ToolCallStarted;
         SPDLOG_LOGGER_TRACE(llm_calculator_logger, "Detected next tool call at position: {}", nextToolCallPos);
@@ -756,6 +847,7 @@ std::optional<Delta> Gemma4ToolParser::wrapDeltaContent(const std::string& conte
 }
 
 ToolCallDelta Gemma4ToolParser::wrapCompletedToolCall() {
+    ++toolCallIndex;
     std::string id = this->toolCall.id.empty() ? generateRandomId() : this->toolCall.id;
     return ToolCallDelta{this->toolCallIndex, std::move(id), this->toolCall.name, this->toolCall.arguments};
 }
@@ -788,12 +880,22 @@ std::optional<Delta> Gemma4ToolParser::parseChunk(const std::string& chunk, cons
             break;
         }
         if (this->currentState == State::ToolCallEnded) {
+            if (this->toolCall.arguments.empty())
+                continue;
             auto delta = wrapCompletedToolCall();
             this->toolCall = ToolCall{};
             return delta;
         }
         if (this->currentState == State::Content) {
             size_t contentEnd = this->streamingContent.find(TOOL_CALL_START_TAG, this->streamingPosition);
+            if (enforceToolRegistry) {
+                for (const auto& tag : parsingConfig.preambleStartTags) {
+                    const size_t pos = streamingContent.find(tag, streamingPosition);
+                    if (pos != std::string::npos && isLogicalBoundary(streamingContent, pos) &&
+                        (contentEnd == std::string::npos || pos < contentEnd))
+                        contentEnd = pos;
+                }
+            }
             std::string content;
             if (contentEnd != std::string::npos) {
                 content = this->streamingContent.substr(this->streamingPosition, contentEnd - this->streamingPosition);
