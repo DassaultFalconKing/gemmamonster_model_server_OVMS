@@ -1,0 +1,219 @@
+//*****************************************************************************
+// Copyright 2025 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+#pragma once
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <sstream>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include <openvino/genai/generation_config.hpp>
+#include <openvino/genai/tokenizer.hpp>
+#include "../base_generation_config_builder.hpp"
+
+
+namespace ovms {
+class Gemma4GenerationConfigBuilder : public BaseGenerationConfigBuilder {
+    bool hardToolPolicy = false;
+
+    static bool isNamedToolChoice(const std::string& toolChoice) {
+        return !toolChoice.empty() && toolChoice != "none" && toolChoice != "auto" && toolChoice != "required";
+    }
+
+    static bool isSafeToolName(const std::string& name) {
+        // TODO: share one predicate with Gemma4ToolParser::saneToolName
+        // (src/llm/io_processing/gemma4/gemma4_tool_parser.cpp). Duplicated
+        // here to avoid a cross-component helper refactor in this change;
+        // both must accept exactly [A-Za-z0-9_.-]+.
+        if (name.empty())
+            return false;
+        for (unsigned char c : name) {
+            const bool ok = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_' || c == '-' || c == '.';
+            if (!ok)
+                return false;
+        }
+        return true;
+    }
+
+    static ov::genai::StructuredOutputConfig::Tag buildToolTag(
+        const std::string& toolName,
+        const ToolSchemaWrapper& toolSchemaWrapper) {
+        if (!isSafeToolName(toolName)) {
+            throw std::invalid_argument("Gemma4 tool name '" + toolName + "' contains characters outside [A-Za-z0-9_.-]");
+        }
+        if (toolSchemaWrapper.stringRepr.empty()) {
+            throw std::invalid_argument("Gemma4 guided tool schema for '" + toolName + "' is empty");
+        }
+
+        ov::genai::StructuredOutputConfig::Tag tag;
+        tag.begin = "<|tool_call>call:" + toolName;
+        tag.content = ov::genai::StructuredOutputConfig::JSONSchema(toolSchemaWrapper.stringRepr, 2);
+        tag.end = "<tool_call|>";
+        return tag;
+    }
+
+    static std::vector<ov::genai::StructuredOutputConfig::Tag> buildToolTags(
+        const OpenAIRequest& request) {
+        std::vector<ov::genai::StructuredOutputConfig::Tag> toolTags;
+        if (isNamedToolChoice(request.toolChoice)) {
+            const auto it = request.toolNameSchemaMap.find(request.toolChoice);
+            if (it == request.toolNameSchemaMap.end()) {
+                throw std::invalid_argument("Gemma4 named tool_choice references an unavailable tool: " + request.toolChoice);
+            }
+            toolTags.push_back(buildToolTag(it->first, it->second));
+            return toolTags;
+        }
+
+        toolTags.reserve(request.toolNameSchemaMap.size());
+        for (const auto& [toolName, toolSchemaWrapper] : request.toolNameSchemaMap) {
+            toolTags.push_back(buildToolTag(toolName, toolSchemaWrapper));
+        }
+        return toolTags;
+    }
+
+    static std::string buildTokenToolTagJson(
+        const ov::genai::StructuredOutputConfig::Tag& tag) {
+        using Structured = ov::genai::StructuredOutputConfig;
+        static constexpr const char* TOOL_TRIGGER = "<|tool_call>";
+
+        if (tag.begin.rfind(TOOL_TRIGGER, 0) != 0) {
+            throw std::logic_error("Gemma4 token grammar expected tool tag to begin with <|tool_call>");
+        }
+
+        const std::string trailingBegin = tag.begin.substr(std::char_traits<char>::length(TOOL_TRIGGER));
+        std::ostringstream oss;
+        oss << "{\"type\":\"tag\","
+            << "\"begin\":{\"type\":\"token\",\"token\":" << Structured::format_for_json(TOOL_TRIGGER) << "},"
+            << "\"content\":{\"type\":\"sequence\",\"elements\":["
+            << Structured::ConstString(trailingBegin).to_json() << ","
+            << std::visit([](const auto& g) { return Structured::structural_tag_to_json(g); }, tag.content)
+            << "]},"
+            << "\"end\":{\"type\":\"token\",\"token\":" << Structured::format_for_json(tag.end) << "}}";
+        return oss.str();
+    }
+
+    static std::string buildTokenToolTagsJson(
+        const std::vector<ov::genai::StructuredOutputConfig::Tag>& toolTags) {
+        std::ostringstream oss;
+        for (size_t i = 0; i < toolTags.size(); ++i) {
+            oss << buildTokenToolTagJson(toolTags[i]);
+            if (i + 1 != toolTags.size())
+                oss << ",";
+        }
+        return oss.str();
+    }
+
+    static std::string buildRequiredTokenToolListJson(
+        const std::vector<ov::genai::StructuredOutputConfig::Tag>& toolTags,
+        bool stopAfterFirst) {
+        std::ostringstream oss;
+        oss << "{\"type\":\"tags_with_separator\","
+            << "\"tags\":[" << buildTokenToolTagsJson(toolTags) << "],"
+            << "\"separator\":\"\","
+            << "\"at_least_one\":true,"
+            << "\"stop_after_first\":" << (stopAfterFirst ? "true" : "false")
+            << "}";
+        return oss.str();
+    }
+
+    static ov::genai::StructuredOutputConfig::StructuralTag buildTokenRequiredToolGrammar(
+        const std::vector<ov::genai::StructuredOutputConfig::Tag>& toolTags,
+        bool stopAfterFirst) {
+        using Structured = ov::genai::StructuredOutputConfig;
+        const std::string requiredTools = buildRequiredTokenToolListJson(toolTags, stopAfterFirst);
+
+        std::ostringstream thought;
+        thought << "{\"type\":\"tag\","
+                << "\"begin\":{\"type\":\"token\",\"token\":" << Structured::format_for_json("<|channel>") << "},"
+                << "\"content\":{\"type\":\"sequence\",\"elements\":["
+                << Structured::ConstString("thought\n").to_json() << ","
+                << "{\"type\":\"any_tokens\"}]},"
+                << "\"end\":{\"type\":\"token\",\"token\":" << Structured::format_for_json("<channel|>") << "}}";
+
+        std::ostringstream oss;
+        oss << "{\"type\":\"structural_tag\",\"format\":{"
+            << "\"type\":\"or\",\"elements\":["
+            << requiredTools << ","
+            << "{\"type\":\"sequence\",\"elements\":["
+            << thought.str() << "," << requiredTools << "]}"
+            << "]}}";
+        return oss.str();
+    }
+
+    static ov::genai::StructuredOutputConfig::StructuralTag buildTokenAutoToolGrammar(
+        const std::vector<ov::genai::StructuredOutputConfig::Tag>& toolTags,
+        bool stopAfterFirst) {
+        using Structured = ov::genai::StructuredOutputConfig;
+        static constexpr const char* TOOL_TRIGGER = "<|tool_call>";
+
+        std::ostringstream oss;
+        oss << "{\"type\":\"structural_tag\",\"format\":{"
+            << "\"type\":\"token_triggered_tags\","
+            << "\"trigger_tokens\":[" << Structured::format_for_json(TOOL_TRIGGER) << "],"
+            << "\"tags\":[" << buildTokenToolTagsJson(toolTags) << "],"
+            << "\"at_least_one\":false,"
+            << "\"stop_after_first\":" << (stopAfterFirst ? "true" : "false")
+            << "}}";
+        return oss.str();
+    }
+
+public:
+    Gemma4GenerationConfigBuilder() = delete;
+    explicit Gemma4GenerationConfigBuilder(
+        const ov::genai::GenerationConfig& baseConfig,
+        bool enableToolGuidedGeneration,
+        DecodingMethod decodingMethod) :
+        BaseGenerationConfigBuilder(baseConfig, enableToolGuidedGeneration, decodingMethod) {}
+
+    void parseConfigFromRequest(const OpenAIRequest& request) override {
+        hardToolPolicy = false;
+        BaseGenerationConfigBuilder::parseConfigFromRequest(request);
+
+        const bool hardChoice = request.toolChoice == "required" || isNamedToolChoice(request.toolChoice);
+        if (hardChoice && request.toolNameSchemaMap.empty()) {
+            throw std::invalid_argument("Gemma4 hard tool_choice requires at least one available tool schema");
+        }
+
+        const bool activeTools = !request.toolNameSchemaMap.empty() && request.toolChoice != "none";
+        if (request.responseFormat.has_value() && activeTools) {
+            throw std::invalid_argument("Gemma4 response_format cannot be combined with active tool generation constraints");
+        }
+        if (!activeTools) {
+            return;
+        }
+
+        auto toolTags = buildToolTags(request);
+        const bool stopAfterFirst = !request.parallelToolCalls;
+        if (hardChoice) {
+            hardToolPolicy = true;
+            setStructuralTagsConfig(buildTokenRequiredToolGrammar(toolTags, stopAfterFirst));
+            return;
+        }
+
+        if ((request.toolChoice.empty() || request.toolChoice == "auto") && enableToolGuidedGeneration) {
+            setStructuralTagsConfig(buildTokenAutoToolGrammar(toolTags, stopAfterFirst));
+        }
+    }
+
+    bool requiresValidStructuredOutput() const override {
+        return hardToolPolicy;
+    }
+};
+
+}  // namespace ovms
