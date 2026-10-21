@@ -1,3 +1,18 @@
+# Current follow-up:  tool continuations and HTTP400 measured
+
+- ACTIVE_STAGE:  20 controlled tool-result continuations and 17 negative HTTP400 transport cases completed.
+- BASE_SHA / TESTED_SOURCE / REVERT_POINT: `5c777c174a80f0d72175985d963c8831da522761`; CURRENT_HEAD: resolve git HEAD after this evidence-only change.
+- WORK_BRANCH: `qwm01-request-schema`; remote feature/qwenmonster-qwm01-request-schema-20261021.
+- DEPENDENCY_LOCK: unchanged; candidate #802 not in installed GenAI/runtime.
+- LAST_GREEN_TESTS:  20/20 continuations (10 unary + 10 SSE); 17/17 real HTTP400 + diagnostic matches.
+- CURRENT_FAILURE: #650/inherited required gap OPEN; positive-after-error, Hermes, 100-city, 1/2/4 workloads NOT RUN. Wrapper exit1/Python exit not captured; semantic artifacts independently verified.
+- ROOT_CAUSE: runtime grammar/cohort work remains separate; low available RAM deferred extra generation/build.
+- NEXT_ACTION: resource-separated R1 matrix execution and explicit isolated cohort; complete remaining canonical/runtime acceptance.
+- EVIDENCE_PATH: FOLLOWUP-20261021.md; evidence/followup-20261021/RESULTS.json; raw logs private.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their original scope and are superseded only by the measured gates above.
+
 # OVMS test current measured checkpoint
 
 - ACTIVE_STAGE: end-of-day status published; Ornith live unary/SSE/tool smoke PASS; agent/HTTP400 still open.

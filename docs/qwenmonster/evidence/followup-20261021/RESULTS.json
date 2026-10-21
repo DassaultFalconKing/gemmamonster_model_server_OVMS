@@ -1,0 +1,347 @@
+{
+  "observed_utc": "2026-10-21T18:21:27.056568+00:00",
+  "tested_source_sha": "5c777c174a80f0d72175985d963c8831da522761",
+  "accepted": false,
+  "dependency_lock_changed": false,
+  "runtime_changed": false,
+  "agent_continuations": {
+    "status": "PASS",
+    "completed": 20,
+    "unary": 10,
+    "sse": 10,
+    "scope": "Controlled two-turn calls to a harmless local weather stub; exact assistant/tool replay and fresh post-dispatch receipt verified in final response.",
+    "autonomous_agent_subagent_cycle": "NOT RUN",
+    "session_workloads_1_2_4": "NOT RUN",
+    "wrapper_exit_code": 1,
+    "python_exit_code": "NOT CAPTURED",
+    "limitation": "Trailing shell exit syntax failed after all20 results were saved. Offline root review verified exact20 rows, distinct post-dispatch receipts, call ids and final responses. This is not a clean wrapper-stage exit0 claim."
+  },
+  "http400_transport": {
+    "status": "PASS:17 negative cases",
+    "passed": 17,
+    "failed": 0,
+    "unary": 15,
+    "stream": 2,
+    "positive_after_errors": "NOT RUN:resource limited",
+    "hermes_transport": "NOT RUN:no corresponding runtime",
+    "cases": [
+      {
+        "id": "unsupported_const",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "56e54e72e27777c2448604c64d7963fe208ac3cd63de4b66b031480b9e4c7532",
+        "response_sha256": "a44dbe716dda088f213f4bd2583b6e42ca2aa6ece0d7417a6a7ea36c73299a42"
+      },
+      {
+        "id": "wrong_root_array",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "125ed84f770ee6c22b96a0ba87f5a4682fb0c36a0dcceb41ff50b8337930a6b4",
+        "response_sha256": "4400517bf5e710a6a3866bc637ffa3a4c080e7b87f166740673aabab9a18658a"
+      },
+      {
+        "id": "missing_parameters",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "cc608c8a2e4e84d6cc45a9b645c8d7382de7ed77dadbad436592bcb401e98391",
+        "response_sha256": "e97293318f98331e9a874a7c88597a1f4f231244d654d5ced39edd5c552d6aa4"
+      },
+      {
+        "id": "named_missing",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "efd76f0a44a4cc4caa14fb44afd672ac44a85bd08291d44371c542726b7308fe",
+        "response_sha256": "7d0bb80ba483a9cd2e0c9f1521442a64abc7040916fdf71b1be7d1666d8ac076"
+      },
+      {
+        "id": "required_empty",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "047ced18fc40f9ad783f79364a5656dda96f64a30d5a11a6b70f84a4cf633520",
+        "response_sha256": "7d0bb80ba483a9cd2e0c9f1521442a64abc7040916fdf71b1be7d1666d8ac076"
+      },
+      {
+        "id": "reserved_name",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "9adf802c82161e52afb972298e22c0b1687b6285c89af1edec449fbaabf88a89",
+        "response_sha256": "191b2e536c952aec31765bf4510ba9b7a408f452f58279a7b7da675af918f2f1"
+      },
+      {
+        "id": "unsafe_name",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "c6c234ba0b1836e926712c5e2b85558f0a1f2f04adfff89577873afa18b61c75",
+        "response_sha256": "375eb2377dac995903d5092844ef9bd807776832999d48c8a4b9b813c11c0e5f"
+      },
+      {
+        "id": "conflicting_duplicate",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "2374b329d6039cbcbc91a9ded70ca9a16d21c480b81a1b4e2ac2fda5e7ef8e1a",
+        "response_sha256": "2159ed2882f9f2df95e53ebb0b20efb1a84badf65f7ca59e2dd503c01ad42e53"
+      },
+      {
+        "id": "schema_string",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "177328797c314b271984ba335c72fab273b0797ba0441b66860f4c46bd83cc91",
+        "response_sha256": "08931ad90ccc586dcddcb87f5bf31bafc93f1e7b72234e28443ad2a9425d3d68"
+      },
+      {
+        "id": "schema_bad_required",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "eb38a4965b40c843e0e3b1a5436ab18658d08269dc006ff1b55e757ee8cfb484",
+        "response_sha256": "a44dbe716dda088f213f4bd2583b6e42ca2aa6ece0d7417a6a7ea36c73299a42"
+      },
+      {
+        "id": "schema_remote_ref",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "12c15c2873ed9c6c6e7d4e5d6461cade85426ba48759a88da3b9accdcd08af0a",
+        "response_sha256": "a44dbe716dda088f213f4bd2583b6e42ca2aa6ece0d7417a6a7ea36c73299a42"
+      },
+      {
+        "id": "schema_new_dialect",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "893c74d5676438d7a9ff8c198df8edb5cc513c2096ab2a2f0ec1d9e2a34d22dd",
+        "response_sha256": "a44dbe716dda088f213f4bd2583b6e42ca2aa6ece0d7417a6a7ea36c73299a42"
+      },
+      {
+        "id": "schema_format",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "0f6327fca0d68adb71b9441c1543e5e482e05578de15c1ca3bdd07b0e5240a34",
+        "response_sha256": "a44dbe716dda088f213f4bd2583b6e42ca2aa6ece0d7417a6a7ea36c73299a42"
+      },
+      {
+        "id": "choice_invalid",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "b266bee68193d4b44a48c5dfec73e721c9016b2d960403db8bff01eb8eb3575a",
+        "response_sha256": "5f1ff718b8ea4e28886db3e50c742c05f72e3c6a98d22cfb1e0b9be2c663865b"
+      },
+      {
+        "id": "named_unsafe",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "42fa1aa792816d061d84c5bf05274c0a60518971460596d08127e6269bd0f113",
+        "response_sha256": "375eb2377dac995903d5092844ef9bd807776832999d48c8a4b9b813c11c0e5f"
+      },
+      {
+        "id": "unsupported_const_stream",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "97989ccd3184cc9fe2993e0705ff1630a09d1d0430b1527062219e624b73c11b",
+        "response_sha256": "9ce007142a64e467759481b2339a3a496ea84f06f1024650806fef06e17b48ec"
+      },
+      {
+        "id": "required_empty_stream",
+        "status": 400,
+        "status_mapping_pass": true,
+        "diagnostic_match": true,
+        "request_sha256": "e92c7c80123e78220f34b0e5271d1817081910696382ce927a6a16e077e368b3",
+        "response_sha256": "87c554169218b62aec9fa5ddaf0cf9598942dc8828e57f4a7c15dc7277e58267"
+      }
+    ]
+  },
+  "r1_guard_matrix": {
+    "candidate_sha": "b288dca18ee25d2f35197fb3971334ca049c8554",
+    "preparation": "READY:sealed-input preflight verified",
+    "rows": 28,
+    "inherited_defect_rows": 4,
+    "configure_build_native_execution": "NOT RUN",
+    "input_manifest_sha256": "9f2637bb82bc60af132fac297a73ad94a4633ef5ad37a9dd5d043c804d6b3c74"
+  },
+  "open": [
+    "XML #650",
+    "Inherited required-key grammar gap",
+    "#802 not in installed GenAI",
+    "Immutable R1 native execution and minProperties matrix",
+    "100 required-city generations",
+    "1/2/4 session workloads",
+    "Canonical prompt/token/mask and remaining acceptance gates"
+  ],
+  "private_evidence": {
+    "agent_summary_sha256": "320bd749baf21fce1c6fbd06b316266fea1675142c85de05493ed0ee4395b71d",
+    "agent_jsonl_sha256": "d4bbbe1d35245cb6c31b7bf0e594cfbecbaf3cd77440371d335b65dac1640876",
+    "agent_freshness_sha256": "c384bcf1063fb09d19ae3bae567d5d9dae832ab9f0691d91cfae68458ffc81f1",
+    "http_results_sha256": "5a98922af96150b9f6510da02d04662318a531263ad9c898433e10663cbae47d",
+    "cohort_review_sha256": "5bebbbac076d5122580ccf8edd586a9a67678f3ddf51dea4477782f340fc7f4e"
+  },
+  "runtime_identity": {
+    "model_name": "ornith-35b-ov",
+    "device": "GPU",
+    "offload_ratio": 20,
+    "executable_sha256": "C28D0D9DDEC50A22FD79855B360BC5F059A3F81939A68B2DFAB85521B4474933",
+    "public_source_lock_sha256": "50073124894C8B7E0DA7891F175772F15DC79E570E7AAB4A1C040C622943B12C",
+    "actual_loaded_modules": [
+      {
+        "name": "ovms.exe",
+        "sha256": "C28D0D9DDEC50A22FD79855B360BC5F059A3F81939A68B2DFAB85521B4474933"
+      },
+      {
+        "name": "openvino_genai.dll",
+        "sha256": "7892465A3BCA67E103E26B198F47FB1D5C0A98FC2CC7CB4616BA0E8D5AD054DA"
+      },
+      {
+        "name": "openvino.dll",
+        "sha256": "13A3C5A91BD6AA45D29271E08613056F09F0F7DD067250C2BAC6B02C96597C8F"
+      },
+      {
+        "name": "openvino_tokenizers.dll",
+        "sha256": "A7B4A454CCF9E242938E79038EC80B5BA8F07F1ED488138497E17C96F52B7F66"
+      },
+      {
+        "name": "openvino_auto_plugin.dll",
+        "sha256": "9B109EF81A6664868FBE54B1B72D496BA43282A6AC7448279FC8BA05F97E71E2"
+      },
+      {
+        "name": "openvino_auto_batch_plugin.dll",
+        "sha256": "EC1FB6BD0C2C2DB23AB83E527736EC02C231C13C5573794D66367A9E2A455634"
+      },
+      {
+        "name": "openvino_intel_cpu_plugin.dll",
+        "sha256": "0CF9706F38AD67535C09842B4678ACCD207C132364CFE63E5CBB2F2EAA5FDA77"
+      },
+      {
+        "name": "openvino_intel_gpu_plugin.dll",
+        "sha256": "7E94BC2F47E85239E3E0B2DD66A6F0D90DB4C1FFA4BEAF69A8F9A966A6788DAA"
+      },
+      {
+        "name": "openvino_hetero_plugin.dll",
+        "sha256": "207C7708F3FDB24A4B0832E2AA2A34669EBA26EAB14FCD5EFB156B7D9EB29D6C"
+      },
+      {
+        "name": "openvino_tokenizers.dll",
+        "sha256": "A7B4A454CCF9E242938E79038EC80B5BA8F07F1ED488138497E17C96F52B7F66"
+      },
+      {
+        "name": "openvino_ir_frontend.dll",
+        "sha256": "F4DB5C945CE4BBE055450B31D706DFC530F6FA79E9B8398C6832C2626AE192EF"
+      }
+    ],
+    "model_files": [
+      {
+        "sha256": "E84F32A23FDDA27689F868AA4A1A5621F41133E51A48D7F3EFCBEA2839574259",
+        "name": "chat_template.jinja",
+        "length": 7764
+      },
+      {
+        "sha256": "A2F437DCA9DBDF94133EEBE54B4057790701EE6DC5A7FD892EE2BFEA45445312",
+        "name": "config.json",
+        "length": 3188
+      },
+      {
+        "sha256": "07F857ABA5260B2EA2513F80DE8062D086661F00EADA0A3794964E665BA680F5",
+        "name": "generation_config.json",
+        "length": 213
+      },
+      {
+        "sha256": "4207385CFD1F364713239986DDEF36CB575018581F5136EE2B50451836FBFEA2",
+        "name": "openvino_config.json",
+        "length": 1212
+      },
+      {
+        "sha256": "48FC2C6A7A1056994982911EB9695826ACEF933C3D742364C56D16317A0B2A79",
+        "name": "openvino_detokenizer.bin",
+        "length": 3828184
+      },
+      {
+        "sha256": "DBBA69F73E6BD4946EEACEDFE8318308AD2AB3DE34FE514F4EBED4D3939F3F43",
+        "name": "openvino_detokenizer.xml",
+        "length": 15371
+      },
+      {
+        "sha256": "126B02C8379A78C09DC19DAE36010F8F0C26B72975B420854E4046D1A6B18812",
+        "name": "openvino_language_model.bin",
+        "length": 18646558250
+      },
+      {
+        "sha256": "69A35F875E0D333FC5B884312225F3134CA6D04C0C1493D92F8232BC4F26B80C",
+        "name": "openvino_language_model.xml",
+        "length": 7879887
+      },
+      {
+        "sha256": "19A529477AB6F90072CA3C874CA68EFB5278E9173C7192BF91D94C7271693A29",
+        "name": "openvino_text_embeddings_model.bin",
+        "length": 509056004
+      },
+      {
+        "sha256": "6844125B0C843B7FFF0B0E905098B82A1195A518DB2126FEF39EB2406D2F1A1D",
+        "name": "openvino_text_embeddings_model.xml",
+        "length": 5903
+      },
+      {
+        "sha256": "B829798D3E74080FF1C838A8308183DAEFFE4D8653B01ECE2007F2FFE4B3A1C1",
+        "name": "openvino_tokenizer.bin",
+        "length": 9631143
+      },
+      {
+        "sha256": "D4AD56C420356E99491EB9C09A89CAC2C524C6C412909FAB4CCA68FF16A35A62",
+        "name": "openvino_tokenizer.xml",
+        "length": 32401
+      },
+      {
+        "sha256": "A995B0D1C23A3247D580F74B491E82FC6FC023238D1248BF9FD1BAA12D41B578",
+        "name": "openvino_vision_embeddings_merger_model.bin",
+        "length": 443361892
+      },
+      {
+        "sha256": "664D41AE6EDD440B70E1A405AAADCF0983A5B4EE8D07253BBEBCC970F04E7D71",
+        "name": "openvino_vision_embeddings_merger_model.xml",
+        "length": 1322496
+      },
+      {
+        "sha256": "22D5EF784A6235CB837763E77638E8ACE72B2D6001DC6347A7300C8310BD0B48",
+        "name": "openvino_vision_embeddings_model.bin",
+        "length": 1776440
+      },
+      {
+        "sha256": "CAD8DDD2A0D2C96AA6F2DDED48C0E039C68941AC422E7DBEA615A40ED04CB976",
+        "name": "openvino_vision_embeddings_model.xml",
+        "length": 8642
+      },
+      {
+        "sha256": "261DB08F77E8FE70B1624F2472433E90CFA04FD7E579ABFCA7FEBDFA8E236799",
+        "name": "openvino_vision_embeddings_pos_model.bin",
+        "length": 2658820
+      },
+      {
+        "sha256": "46D001EE196CC143E541FBDF92EB5D038FA5D07B2854B639D18254DD672E4A1B",
+        "name": "openvino_vision_embeddings_pos_model.xml",
+        "length": 5873
+      },
+      {
+        "sha256": "6F32CE20DC35F57A7F9AD1EAC03525BD7D30F9DF8CEA6507E958279CC3657706",
+        "name": "tokenizer.json",
+        "length": 19989492
+      },
+      {
+        "sha256": "EA86ADBAD6AA3628FD04C56D3B5C01DC2D328E154E7BC4A3F04CBC3CFFAE55FC",
+        "name": "tokenizer_config.json",
+        "length": 1272
+      }
+    ],
+    "genai_source_attribution": "Not inferred from source lock; loaded DLL hash recorded, b288dca absent per current run provenance",
+    "private_preflight_sha256": "2358d14748fc73d93c2a1ddd7af085ef9472c8ca5b64decbbcc7aa071200cad1"
+  }
+}
