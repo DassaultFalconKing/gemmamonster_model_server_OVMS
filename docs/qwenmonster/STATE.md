@@ -1,14 +1,14 @@
 # OVMS test current measured checkpoint
 
-- ACTIVE_STAGE: XGrammar #802 R1 residual closed on companion branch; cohort proposal written; live acceptance prep next.
-- BASE_SHA: `e0772d161a81ed3420082af2bf68ab46d342e904`. CURRENT_HEAD / REVERT_POINT: resolve with `git rev-parse HEAD` (post-merge HTTP tip `872fb800f` plus this docs checkpoint).
+- ACTIVE_STAGE: live Ornith unary/SSE smoke on tip `ovms.exe`; Qwen3.8 deferred by operator.
+- BASE_SHA: `e0772d161a81ed3420082af2bf68ab46d342e904`. CURRENT_HEAD / REVERT_POINT: resolve with `git rev-parse HEAD`.
 - WORK_BRANCH: `qwm01-request-schema`; remote feature/qwenmonster-qwm01-request-schema-20261021.
-- DEPENDENCY_LOCK: unchanged published core lock (`c77d5e0d…` XGrammar). Candidate tip `b288dca18ee25d2f35197fb3971334ca049c8554` on `fix/qwenmonster-xml-empty-object-20261021` — proposal only, not locked.
-- LAST_GREEN_TESTS: full ovms_test build exit0, QWM2/2, tool controls11/11, parser controls148/148; native #802 R1 checks SUMMARY failures=0 (emptySchemas + tokenizer masks); staged GenAI DLL still without candidate.
-- CURRENT_FAILURE: HTTP400 transport, LIVE, AGENTIC NOT RUN; XML #650 OPEN; inherited undeclared-required empty XML acceptance remains OBSERVATION-only residual.
-- ROOT_CAUSE: #802 whitespace loop closed in candidate; live/runtime cohort rebuild and #650 mask repair not yet executed. See XGRAMMAR-802-COHORT-PROPOSAL.md and XGRAMMAR-650-NOTE.md.
-- NEXT_ACTION: pin canonical target model/tokenizer, build or locate OVMS server against current tip, run unary/SSE live gates; defer MoE/OTD; do not revise lock until runtime integration.
-- EVIDENCE_PATH: OVMS-TEST-HTTP-RESULTS.md; evidence/ovms-test-http-20261021/RESULTS.json; private hub logs xgrammar-802-native-checks-r1.log.
+- DEPENDENCY_LOCK: unchanged. XGrammar #802 candidate `b288dca…` proposal-only, not in staged GenAI DLL.
+- LAST_GREEN_TESTS: tip `//src:ovms` build PASS; LIVE-UNARY ornith-35b-ov HTTP200 content `OK.` (thinking off); LIVE-SSE smoke measured in private hub.
+- CURRENT_FAILURE: tool-loop/agentic gates NOT RUN; HTTP400 transport NOT RUN; XML #650 OPEN; #802 not locked into runtime.
+- ROOT_CAUSE: n/a for smoke; full acceptance checklist incomplete. Model pin `C:/llm/models/ornith-35b-ov` (Qwen3.6-35B-A3B Ornith INT4). Qwen3.8 later.
+- NEXT_ACTION: tool/required/zero-arg live cases on Ornith; then optional Qwen3.8 after LFS hydrate; keep ACCEPTED NO.
+- EVIDENCE_PATH: private hub `C:/gm/qwenmonster/live-ornith-20261021`; docs XGRAMMAR-802-COHORT-PROPOSAL.md / XGRAMMAR-650-NOTE.md.
 - ACCEPTED: NO.
 
 Historical snapshots follow and are superseded by the measured checkpoint above.
