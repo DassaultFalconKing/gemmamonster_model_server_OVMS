@@ -1,0 +1,63 @@
+{
+  "observed_utc": "2026-10-21T19:38:57.002695+00:00",
+  "base_sha": "86d1f26078466c18b517ca53833acbb28fc648f7",
+  "accepted": false,
+  "implementation": "Passive explicit-PID resource collector with before/after creation-time checks",
+  "focused_tests": {
+    "count": 10,
+    "exit_code": 0,
+    "red": "10 failures before implementation; separate zero-total validation RED/GREEN"
+  },
+  "combined_regression": {
+    "count": 28,
+    "exit_code": 0
+  },
+  "passive_idle": {
+    "status": "COMPLETE",
+    "samples": 3,
+    "available_mib": [
+      4154.4,
+      4163.09,
+      4163.13
+    ],
+    "rss_mib": [
+      714.59,
+      714.59,
+      714.59
+    ],
+    "private_mib": [
+      16436.7,
+      16436.7,
+      16436.7
+    ],
+    "rss_delta_bytes": 0,
+    "private_delta_bytes": 0,
+    "leak_status": "NOT_DETERMINED",
+    "jsonl_sha256": "16d670a3717912132104da3813a6807f733e776627daee1fcb7af1be7dbb10f8"
+  },
+  "retained_attempt": "First unquoted PowerShell creation timestamp was rounded; identity mismatch rejected before metric recording. Quoted retry passed; guard not weakened.",
+  "code_sha256": {
+    "scripts/qwenmonster/resource_probe.py": "f3b8e0cde644a925326cfea8b240ca9a462dd61ff3f9b5656a3931c6c7a8e12d",
+    "scripts/qwenmonster/tests/test_resource_probe.py": "df9cae424bc3b0aff8950e3fead0c0cf3dd5d00906603eb5d8dc2a0f5e875faf"
+  },
+  "logs_sha256": {
+    "FINAL-GREEN.json": "149918f15171c127e05d5ba6ffd765f5919a38874943e5188b5117115b02da7c",
+    "FINAL-GREEN.log": "c8ef6c0e717cb9c5d55911be4b631e0af134b4ca30572f5c7902e7b29e361f95",
+    "GREEN.json": "ce7476bb0f5477cdb471366792159ff3ecfae64013a1bb0862aebefffbe8d444",
+    "GREEN.log": "91f4197efe339a7e5ba8ed722391434712ad657a0048ac0e2651b1b9a97661de",
+    "RED-ZERO-TOTAL.json": "4f857dbd74506fe0c750bd4539281169bd2d6758dad4f908646cb0eda2cacbb6",
+    "RED-ZERO-TOTAL.log": "209264e8ccf120900af29937f350b3b6136dfb4e9935ceb5b0e5fa101f45538e",
+    "RED.json": "51a89491a309833a756117ff8203f49c6bc4b4d055eebc7d06e5ecf1d7f387d7",
+    "RED.log": "35b0716bd83fb6c22a0accd4f773b120b7e4c1c45aa888dc99e54947f3f7c9c9",
+    "REGRESSION.json": "d24eab8a1ef15fc4e87571bd197c9ef4797b09c721d8bb9e9b539b81962bf1df",
+    "REGRESSION.log": "3deac2700e8ab6c099cd88c758eb7ce457d575958bcc3b6ae90f046959a17b34"
+  },
+  "not_run": [
+    "load/soak/concurrency characterization",
+    "new model generation",
+    "native build",
+    "real process termination"
+  ],
+  "runtime_restarted": false,
+  "dependency_lock_changed": false
+}

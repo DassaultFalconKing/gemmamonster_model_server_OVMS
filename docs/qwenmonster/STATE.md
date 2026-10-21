@@ -1,3 +1,18 @@
+# Current implementation checkpoint: passive resource observer
+
+- ACTIVE_STAGE: resource collector implemented; 10 focused tests, 28 combined regressions and 3 passive idle samples completed.
+- BASE_SHA / REVERT_POINT: 86d1f26078466c18b517ca53833acbb28fc648f7; CURRENT_HEAD: resolve after commit.
+- WORK_BRANCH: qwm01-request-schema.
+- DEPENDENCY_LOCK: unchanged; running OVMS not restarted or reconfigured.
+- LAST_GREEN_TESTS: 10/10 resource tests; 28/28 combined runner/resource tests; 3/3 passive samples with exact PID/creation identity.
+- CURRENT_FAILURE: no failing current offline test. Load characterization, actual backend RED and native R1 still NOT RUN.
+- ROOT_CAUSE: past memory pressure not attributed; idle counters alone do not establish a leak.
+- NEXT_ACTION: correlate before/during/after resource observations with a bounded controlled run when resources permit; reproduce parser/CB cancellation behavior before product changes.
+- EVIDENCE_PATH: RESOURCE-PROBE.md; evidence/resource-probe-20261021/RESULTS.json; raw JSONL private.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: R1 runner hardening
 
 - ACTIVE_STAGE: first implementation unit complete: versioned runner/gate and18 offline regressions.

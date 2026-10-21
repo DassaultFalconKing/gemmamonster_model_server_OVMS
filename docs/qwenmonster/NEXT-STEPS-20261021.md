@@ -1,4 +1,6 @@
-> Implementation checkpoint: R1 result/cleanup hardening implemented with18/18 offline tests; executing-source hashes and absolute external paths bound to a new sealed preparation. Native R1 execution remains NOT RUN. Concrete legacy success gating traced statically; parser/CB terminal and cancellation changes still require actual RED. See R1-RUNNER-HARDENING.md.
+> Resource tooling checkpoint: passive collector and 10 tests implemented; 28 combined tests and 3 idle samples PASS. Before/during/after load characterization is not closed by idle results. See RESOURCE-PROBE.md.
+
+> Implementation checkpoint: R1 result/cleanup hardening implemented with 18/18 offline tests; executing-source hashes and absolute external paths bound to a new sealed preparation. Native R1 execution remains NOT RUN. Concrete legacy success gating traced statically; parser/CB terminal and cancellation changes still require actual RED. See R1-RUNNER-HARDENING.md.
 
 > External checkpoint: existing-server negative -> positive -> receipt continuation PASS with captured shell exit0. See EXTERNAL-GATES-20261021.md. Low available RAM now precedes stress/build work. Static review confirms visible API paths retain the actual finish reason; proposal A remains a parser/legacy investigation, not an established API mapping defect. R1 native execution remains NOT RUN; harden exact-row and timeout checks first.
 
