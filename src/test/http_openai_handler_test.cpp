@@ -455,6 +455,77 @@ protected:
     }
 };
 
+// QWM-01: malformed Qwen schemas must be rejected at request intake, before
+// an invalid completed call could be silently suppressed by the XML parser.
+// These are RED contract cases until the shared request/parser profile is wired.
+TEST_F(HttpOpenAIHandlerParsingTest, QwenXmlRequestSchemaProfileIntake) {
+    struct Case {
+        const char* label;
+        std::string tools;
+        std::string choice;
+        absl::StatusCode expected;
+    };
+    const auto tool = [](const std::string& name, const std::string& parameters) {
+        return std::string(R"({"type":"function","function":{"name":")") + name +
+               R"(","parameters":)" + parameters + "}}";
+    };
+    const std::string valid = R"({"type":"object","properties":{"city":{"type":"string"}},"required":["city"]})";
+    const std::string noArguments = R"({"type":"object","properties":{},"required":[]})";
+    const std::string unsupported = R"({"type":"object","properties":{"city":{"const":"Paris"}}})";
+    const std::string wrongRoot = R"({"type":"array","items":{"type":"string"}})";
+    const std::vector<Case> cases = {
+        {"valid required", "[" + tool("weather", valid) + "]", R"("required")", absl::StatusCode::kOk},
+        {"valid named", "[" + tool("weather", valid) + "]",
+            R"({"type":"function","function":{"name":"weather"}})", absl::StatusCode::kOk},
+        {"valid explicit no-args (matcher #802 tracked separately)",
+            "[" + tool("ping", noArguments) + "]", R"("auto")", absl::StatusCode::kOk},
+        {"unsupported Draft4 const", "[" + tool("weather", unsupported) + "]",
+            R"("auto")", absl::StatusCode::kInvalidArgument},
+        {"wrong root", "[" + tool("weather", wrongRoot) + "]",
+            R"("auto")", absl::StatusCode::kInvalidArgument},
+        {"missing parameters", R"([{"type":"function","function":{"name":"ping"}}])",
+            R"("auto")", absl::StatusCode::kInvalidArgument},
+        {"named missing", "[" + tool("weather", valid) + "]",
+            R"({"type":"function","function":{"name":"absent"}})", absl::StatusCode::kInvalidArgument},
+        {"required with no tools", "[]", R"("required")", absl::StatusCode::kInvalidArgument},
+        {"reserved function name", "[" + tool("required", valid) + "]",
+            R"("auto")", absl::StatusCode::kInvalidArgument},
+        {"unsafe function name", "[" + tool("bad<name", valid) + "]",
+            R"("auto")", absl::StatusCode::kInvalidArgument},
+        {"conflicting duplicate", "[" + tool("weather", valid) + "," + tool("weather", noArguments) + "]",
+            R"("auto")", absl::StatusCode::kInvalidArgument},
+        {"none ignores tools", "[" + tool("bad<name", unsupported) + "]",
+            R"("none")", absl::StatusCode::kOk},
+    };
+
+    for (const auto& tc : cases) {
+        SCOPED_TRACE(tc.label);
+        const std::string json =
+            R"({"model":"llama","messages":[{"role":"user","content":"test"}],"tools":)" +
+            tc.tools + R"(,"tool_choice":)" + tc.choice + "}";
+        doc.Parse(json.c_str());
+        ASSERT_FALSE(doc.HasParseError()) << json;
+        auto handler = createHandler(ovms::Endpoint::CHAT_COMPLETIONS, "qwen3coder");
+        const absl::Status status = handler->parseRequest(std::nullopt, 0, std::nullopt);
+        EXPECT_EQ(status.code(), tc.expected) << status.message() << "\n" << json;
+        if (tc.expected == absl::StatusCode::kInvalidArgument)
+            EXPECT_FALSE(status.message().empty());
+        if (tc.expected == absl::StatusCode::kOk && tc.choice != R"("none")")
+            EXPECT_TRUE(handler->areToolsAvailable());
+    }
+}
+
+TEST_F(HttpOpenAIHandlerParsingTest, QwenXmlSchemaProfileIsNotAppliedToHermesByAccident) {
+    // Explicitly preserve the existing non-Qwen request compatibility profile.
+    doc.Parse(R"({"model":"llama","messages":[{"role":"user","content":"test"}],
+        "tools":[{"type":"function","function":{"name":"weather",
+        "parameters":{"type":"object","properties":{"city":{"const":"Paris"}}}}}],
+        "tool_choice":"auto"})");
+    ASSERT_FALSE(doc.HasParseError());
+    auto handler = createHandler(ovms::Endpoint::CHAT_COMPLETIONS, "");
+    EXPECT_TRUE(handler->parseRequest(std::nullopt, 0, std::nullopt).ok());
+}
+
 class HttpOpenAIHandlerCommonParsingValidationTest : public HttpOpenAIHandlerParsingTest,
                                                      public ::testing::WithParamInterface<ovms::Endpoint> {
 protected:
