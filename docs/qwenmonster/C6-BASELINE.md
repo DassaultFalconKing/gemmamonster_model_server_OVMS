@@ -20,3 +20,7 @@
 - `OVMSTextStreamer::end()` currently sends `STOP` to the parser and does not preserve actual LENGTH semantics end-to-end.
 
 Do not infer live regression numbers from these source observations.
+
+## Public dependency lock update (2026-10-21)
+
+The exact C6 companion sources are now public. Source identities and local build preflight: `docs/qwenmonster/public-source-lock.json` and `PUBLIC-COHORT-INTEGRATION.md`. The pinned OVMS baseline remains `ba6ec792c3121850fea167fa7d7e190b25fcdc76`; no live upgrade or build has occurred. Do not mistake source publication for unit/runtime acceptance.

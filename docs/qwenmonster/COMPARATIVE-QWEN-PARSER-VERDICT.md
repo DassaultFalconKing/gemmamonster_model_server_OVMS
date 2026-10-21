@@ -79,9 +79,9 @@ M1 added ordered delta queue and STOP recovery limited to a completed `</functio
 
 ## 5. Version/gate caveats
 
-- OpenVINO GenAI **documented upstream header** supports `QwenXMLParametersFormat`; the exact C6 build-machine header/binary/XGrammar pin has not yet been identified. **Do not merge until versioned compile & structural-tag validation succeed**.
+- OpenVINO GenAI **locked patched fork source** now publicly verified at `DassaultFalconKing/openvino.genai@2decb9ec4bea827e01db47524352ad72d23b33ab`, together with XGrammar `c77d5e0d62411d17d4cf55d280463eb5b3bec7ba` and OpenVINO `b5bfb14860320ae2a44d0fc55d78caa9a9d789b9`. The actual C6 build-machine binary/runtime remains unverified. **Do not merge until versioned compile & structural-tag validation succeed**.
 - M1 test and code patches are committed but not built/benchmarked on live OVMS. The new policy is therefore experimental.
-- Gemma C5 `JSONSchema(..., 2)` and local GenAI/XGrammar whitespace patches are evidence for the **JSON grammar path**, not the Qwen `qwen_xml_parameter` path. The upstream GenAI API snapshot used for this dossier offers a one-parameter `JSONSchema` constructor; pin the local patched GenAI fork/build before relying on the two-parameter overload.
+- Gemma C5 `JSONSchema(..., 2)` and patched GenAI/XGrammar whitespace source are evidence for the **JSON grammar path**, not the Qwen `qwen_xml_parameter` path. The upstream GenAI snapshot offers a one-parameter constructor, whereas **our public fork's locked header** offers the two-parameter form and serializes `max_whitespace_cnt`. Source ambiguity resolved; matched build and XML grammar acceptance still pending.
 - Historical C5 verdict `24847c96805b28e4625fd85dbf98bece20ed2d3e`: whitespace **CONFIRMED FIXED**, unexpected empty args **NOT REPRODUCED** (267 later filled canonical calls). The latter does not cover parameterless tools.
 - For every discrepancy: `native output → vLLM semantic output → llama.cpp semantic output → OVMS events → OpenAI API`. Compare normalized tools `name + typed JSON + call order` and compare reasoning text separately. IDs may differ but must be unique/stable per call.
 - Never reclassify a model's *decision not to delegate* as a parser defect unless the native output contained a valid executable call that OVMS lost.
