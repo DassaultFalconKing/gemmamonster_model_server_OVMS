@@ -1,6 +1,17 @@
 # Qwenmonster M1/refit + M2 candidate acceptance
 
-Status: **NOT RUN**. Never infer results from this checklist.
+Status: **NOT ACCEPTED**. First focused iteration measured on 2026-10-21;
+the remaining live/prompt/agent checklist is NOT RUN. Never infer results from it.
+
+Measured: six-component source PASS; four test executables compiled; Qwen69/69,
+policy9/9, generic29/29, Gemma67/70 with the same three entry failures. The final
+combined Bazel command exited 1. Parser partition corpus: 14 cases / 2340 runs.
+Restricted schema regression: 36 cases. Synthetic hard/lazy native XML grammar
+compiles and valid examples complete, but malformed-close continuation and a
+1024-space zero-argument path remain reproducible. Existing native JSON controls
+31/31 do not repair XML. Full server and fresh locked dependency rebuild NOT RUN.
+See STATE.md and evidence/UNIT-RESULTS.json, GRAMMAR-COMPILE.json, NOT-RUN.json.
+Guided auto default remains OFF; RUNTIME UNVERIFIED.
 
 ## Build/protocol gates
 

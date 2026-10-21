@@ -1,0 +1,63 @@
+{
+  "scope": "focused compiler/unit + synthetic native matcher; no model acceptance",
+  "source_parent": "7ac3c7b22b0a61246bd54242e45ec22b8c13d1cc",
+  "tests": {
+    "qwenmonster_output_parser_test": {
+      "tests": "69",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "time": "0.355",
+      "timestamp": "2026-10-21T03:51:34.710",
+      "name": "AllTests",
+      "failed_tests": [],
+      "properties": {
+        "partition_cases": "14",
+        "partition_runs": "2340"
+      },
+      "cached_unchanged_in_final_run": false
+    },
+    "qwenmonster_generation_policy_test": {
+      "tests": "9",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "time": "0.001",
+      "timestamp": "2026-10-21T03:12:53.770",
+      "name": "AllTests",
+      "failed_tests": [],
+      "properties": {},
+      "cached_unchanged_in_final_run": true
+    },
+    "output_parser_core_test": {
+      "tests": "29",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "time": "0.003",
+      "timestamp": "2026-10-21T03:51:34.581",
+      "name": "AllTests",
+      "failed_tests": [],
+      "properties": {},
+      "cached_unchanged_in_final_run": false
+    },
+    "gemma4_output_parser_test": {
+      "tests": "70",
+      "failures": "3",
+      "disabled": "0",
+      "errors": "0",
+      "time": "0.593",
+      "timestamp": "2026-10-21T03:51:34.943",
+      "name": "AllTests",
+      "failed_tests": [
+        "ParseReasoningWithDuplicatedEndTagDoesNotEmitInterveningTextTwice",
+        "ParseToolCallOutputWithNoToolsInTheRequest",
+        "ParseToolCallWithStringArgumentsContainingEscapedQuotes"
+      ],
+      "properties": {},
+      "cached_unchanged_in_final_run": false
+    }
+  },
+  "tested_parser_commit": "f6f2a296d0574cf611cd2be6e31e3916c5858dbb",
+  "source_parent_note": "Parent before final duplicate guard; tested_parser_commit identifies exact code tested before commit. Subsequent changes are probe/evidence/docs only."
+}

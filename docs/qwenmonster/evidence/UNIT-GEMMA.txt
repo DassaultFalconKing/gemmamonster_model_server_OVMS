@@ -1,3 +1,7 @@
+Actual GTest output; repetitive warnings omitted.
+Full local log: C:\gm\qwenmonster\evidence\gemma4_output_parser_test-verified-full.txt
+SHA256: 4fff04f5e1dfb4a5c50c54ea83f5145e764301588c64ad43a4a15bf689758059
+
 Executing tests from //src:gemma4_output_parser_test
 -----------------------------------------------------------------------------
 Running main() from gmock_main.cc
@@ -5,21 +9,21 @@ Running main() from gmock_main.cc
 [----------] Global test environment set-up.
 [----------] 70 tests from Gemma4OutputParserTest
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallOutputWithSingleToolCall
-[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithSingleToolCall (208 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithSingleToolCall (191 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallOutputWithSingleToolCallAndReasoning
-[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithSingleToolCallAndReasoning (6 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithSingleToolCallAndReasoning (4 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseReasoningWithoutToolCall
-[       OK ] Gemma4OutputParserTest.ParseReasoningWithoutToolCall (3 ms)
+[       OK ] Gemma4OutputParserTest.ParseReasoningWithoutToolCall (2 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseReasoningWithThoughtKeywordEmbeddedInSentence
-[       OK ] Gemma4OutputParserTest.ParseReasoningWithThoughtKeywordEmbeddedInSentence (5 ms)
+[       OK ] Gemma4OutputParserTest.ParseReasoningWithThoughtKeywordEmbeddedInSentence (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseReasoningWithCorruptedKeyword
 [       OK ] Gemma4OutputParserTest.ParseReasoningWithCorruptedKeyword (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseReasoningWithDegenerateKeyword
-[       OK ] Gemma4OutputParserTest.ParseReasoningWithDegenerateKeyword (2 ms)
+[       OK ] Gemma4OutputParserTest.ParseReasoningWithDegenerateKeyword (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseReasoningWithSkippedKeywordLeavesEmptyHeaderLine
-[       OK ] Gemma4OutputParserTest.ParseReasoningWithSkippedKeywordLeavesEmptyHeaderLine (2 ms)
+[       OK ] Gemma4OutputParserTest.ParseReasoningWithSkippedKeywordLeavesEmptyHeaderLine (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseReasoningDoesNotTreatContentNewlineAsHeaderBoundary
-[       OK ] Gemma4OutputParserTest.ParseReasoningDoesNotTreatContentNewlineAsHeaderBoundary (2 ms)
+[       OK ] Gemma4OutputParserTest.ParseReasoningDoesNotTreatContentNewlineAsHeaderBoundary (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseReasoningWithOpenerFollowedByNoKeyword
 [       OK ] Gemma4OutputParserTest.ParseReasoningWithOpenerFollowedByNoKeyword (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseReasoningWithNoKeywordPreservesMultilineFirstLine
@@ -51,37 +55,37 @@ src/test/llm/output_parsers/gemma4_output_parser_test.cpp(372): error: Expected 
   inputWithoutSpecialTokens
     Which is: "call:example_tool{arg1:value1,arg2:42}"
 
-[  FAILED  ] Gemma4OutputParserTest.ParseToolCallOutputWithNoToolsInTheRequest (4 ms)
+[  FAILED  ] Gemma4OutputParserTest.ParseToolCallOutputWithNoToolsInTheRequest (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithObjectArguments
 [       OK ] Gemma4OutputParserTest.ParseToolCallWithObjectArguments (4 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithStringArguments
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithStringArguments (3 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithStringArguments (4 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithListOfStringsAsArgument
 [       OK ] Gemma4OutputParserTest.ParseToolCallWithListOfStringsAsArgument (5 ms)
 [ RUN      ] Gemma4OutputParserTest.ParserToolCallWithBooleanArgument
-[       OK ] Gemma4OutputParserTest.ParserToolCallWithBooleanArgument (2 ms)
+[       OK ] Gemma4OutputParserTest.ParserToolCallWithBooleanArgument (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseTwoToolCallsAtOnce
-[       OK ] Gemma4OutputParserTest.ParseTwoToolCallsAtOnce (6 ms)
+[       OK ] Gemma4OutputParserTest.ParseTwoToolCallsAtOnce (8 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithArrayArguments
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithArrayArguments (4 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithArrayArguments (5 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsArguments
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsArguments (7 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsArguments (8 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsWithMixedValueTypes
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsWithMixedValueTypes (7 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsWithMixedValueTypes (8 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithNestedArrayOfArrays
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithNestedArrayOfArrays (4 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithNestedArrayOfArrays (5 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithNestedArrayOfStringWithMaskedValues
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithNestedArrayOfStringWithMaskedValues (5 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithNestedArrayOfStringWithMaskedValues (6 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithStringWithMaskedValues
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithStringWithMaskedValues (4 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithStringWithMaskedValues (5 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithThoughtPreamble
 [       OK ] Gemma4OutputParserTest.ParseToolCallWithThoughtPreamble (5 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsArgumentsStreaming
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsArgumentsStreaming (1 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsArgumentsStreaming (0 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallOutputWithThreeToolCalls
-[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithThreeToolCalls (7 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithThreeToolCalls (9 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallOutputWithThreeToolCallsWithContentInBetween
-[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithThreeToolCallsWithContentInBetween (12 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithThreeToolCallsWithContentInBetween (13 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithEmptyArguments
 [       OK ] Gemma4OutputParserTest.ParseToolCallWithEmptyArguments (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithMultipleUtfChars
@@ -89,15 +93,15 @@ src/test/llm/output_parsers/gemma4_output_parser_test.cpp(372): error: Expected 
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithMultipleUtfCharsStreaming
 [       OK ] Gemma4OutputParserTest.ParseToolCallWithMultipleUtfCharsStreaming (1 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallArgumentValueContainingComma
-[       OK ] Gemma4OutputParserTest.ParseToolCallArgumentValueContainingComma (6 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallArgumentValueContainingComma (7 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallArgumentValueContainingBracesAndBrackets
-[       OK ] Gemma4OutputParserTest.ParseToolCallArgumentValueContainingBracesAndBrackets (6 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallArgumentValueContainingBracesAndBrackets (7 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallArgumentValueWithUnclosedQuoteAndBraceMidStream
 [       OK ] Gemma4OutputParserTest.ParseToolCallArgumentValueWithUnclosedQuoteAndBraceMidStream (0 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallOutputWithContentAndNoToolCalls
-[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithContentAndNoToolCalls (2 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithContentAndNoToolCalls (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallOutputWithContentAndSingleToolCall
-[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithContentAndSingleToolCall (5 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallOutputWithContentAndSingleToolCall (6 ms)
 [ RUN      ] Gemma4OutputParserTest.HolisticStreaming
 [       OK ] Gemma4OutputParserTest.HolisticStreaming (0 ms)
 [ RUN      ] Gemma4OutputParserTest.StreamingWithBiggerChunks
@@ -107,29 +111,29 @@ src/test/llm/output_parsers/gemma4_output_parser_test.cpp(372): error: Expected 
 [ RUN      ] Gemma4OutputParserTest.StreamingWithToolCallWithEmptyParams
 [       OK ] Gemma4OutputParserTest.StreamingWithToolCallWithEmptyParams (0 ms)
 [ RUN      ] Gemma4OutputParserTest.StreamingWithToolResponseTokenAtTheEndOfGeneration
-[       OK ] Gemma4OutputParserTest.StreamingWithToolResponseTokenAtTheEndOfGeneration (0 ms)
+[       OK ] Gemma4OutputParserTest.StreamingWithToolResponseTokenAtTheEndOfGeneration (1 ms)
 [ RUN      ] Gemma4OutputParserTest.StreamingWithMissingEndTagBeforeStop
-[       OK ] Gemma4OutputParserTest.StreamingWithMissingEndTagBeforeStop (0 ms)
+[       OK ] Gemma4OutputParserTest.StreamingWithMissingEndTagBeforeStop (1 ms)
 [ RUN      ] Gemma4OutputParserTest.StreamingPublishesFullToolCallAtClosingBrace
-[       OK ] Gemma4OutputParserTest.StreamingPublishesFullToolCallAtClosingBrace (0 ms)
+[       OK ] Gemma4OutputParserTest.StreamingPublishesFullToolCallAtClosingBrace (1 ms)
 [ RUN      ] Gemma4OutputParserTest.StreamingContentWithTurnTokenAtTheEndOfGeneration
-[       OK ] Gemma4OutputParserTest.StreamingContentWithTurnTokenAtTheEndOfGeneration (0 ms)
+[       OK ] Gemma4OutputParserTest.StreamingContentWithTurnTokenAtTheEndOfGeneration (1 ms)
 [ RUN      ] Gemma4OutputParserTest.ToolCallsWithoutToolsInTheRequestStreaming
-[       OK ] Gemma4OutputParserTest.ToolCallsWithoutToolsInTheRequestStreaming (0 ms)
+[       OK ] Gemma4OutputParserTest.ToolCallsWithoutToolsInTheRequestStreaming (1 ms)
 [ RUN      ] Gemma4OutputParserTest.StreamerStopDrainsBufferedCalls
-[       OK ] Gemma4OutputParserTest.StreamerStopDrainsBufferedCalls (0 ms)
+[       OK ] Gemma4OutputParserTest.StreamerStopDrainsBufferedCalls (1 ms)
 [ RUN      ] Gemma4OutputParserTest.BufferedCallsAreInvariantToDecodedChunkBoundaries
-[       OK ] Gemma4OutputParserTest.BufferedCallsAreInvariantToDecodedChunkBoundaries (5 ms)
+[       OK ] Gemma4OutputParserTest.BufferedCallsAreInvariantToDecodedChunkBoundaries (7 ms)
 [ RUN      ] Gemma4OutputParserTest.ImplicitReasoningToolHandoffPreservesAtomicRegistryCalls
-[       OK ] Gemma4OutputParserTest.ImplicitReasoningToolHandoffPreservesAtomicRegistryCalls (2 ms)
+[       OK ] Gemma4OutputParserTest.ImplicitReasoningToolHandoffPreservesAtomicRegistryCalls (4 ms)
 [ RUN      ] Gemma4OutputParserTest.UnavailableToolsAndNonGemmaReasoningRemainNonExecutable
-[       OK ] Gemma4OutputParserTest.UnavailableToolsAndNonGemmaReasoningRemainNonExecutable (1 ms)
+[       OK ] Gemma4OutputParserTest.UnavailableToolsAndNonGemmaReasoningRemainNonExecutable (2 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithMissingParentheses
 [       OK ] Gemma4OutputParserTest.ParseToolCallWithMissingParentheses (2 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithMissingClosingParenthesis
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithMissingClosingParenthesis (2 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithMissingClosingParenthesis (4 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithArgumentMissingEquals
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithArgumentMissingEquals (2 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithArgumentMissingEquals (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingComparison
 [       OK ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingComparison (4 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingBracesAndBrackets
@@ -145,7 +149,7 @@ src/test/llm/output_parsers/gemma4_output_parser_test.cpp(1237): error: Expected
 
 [  FAILED  ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingEscapedQuotes (4 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingApostrophes
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingApostrophes (5 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingApostrophes (4 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingBackslashes
 [       OK ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingBackslashes (5 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsArrayWithStringsContainingQuotes
@@ -153,7 +157,7 @@ src/test/llm/output_parsers/gemma4_output_parser_test.cpp(1237): error: Expected
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsObjectWithStringsContainingQuotes
 [       OK ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsObjectWithStringsContainingQuotes (6 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingNestedJSON
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingNestedJSON (4 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingNestedJSON (6 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithPythonReprArtifactInValue
 [       OK ] Gemma4OutputParserTest.ParseToolCallWithPythonReprArtifactInValue (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithUnwrappedValueLeadingSpace
@@ -163,13 +167,13 @@ src/test/llm/output_parsers/gemma4_output_parser_test.cpp(1237): error: Expected
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithEmptyStringArgument
 [       OK ] Gemma4OutputParserTest.ParseToolCallWithEmptyStringArgument (3 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithUnicodeCharactersInArguments
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithUnicodeCharactersInArguments (4 ms)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithUnicodeCharactersInArguments (5 ms)
 [ RUN      ] Gemma4OutputParserTest.ParseToolCallWithPythonCodeAsArgument
-[       OK ] Gemma4OutputParserTest.ParseToolCallWithPythonCodeAsArgument (11 ms)
-[----------] 70 tests from Gemma4OutputParserTest (488 ms total)
+[       OK ] Gemma4OutputParserTest.ParseToolCallWithPythonCodeAsArgument (12 ms)
+[----------] 70 tests from Gemma4OutputParserTest (495 ms total)
 
 [----------] Global test environment tear-down
-[==========] 70 tests from 1 test suite ran. (578 ms total)
+[==========] 70 tests from 1 test suite ran. (593 ms total)
 [  PASSED  ] 67 tests.
 [  FAILED  ] 3 tests, listed below:
 [  FAILED  ] Gemma4OutputParserTest.ParseReasoningWithDuplicatedEndTagDoesNotEmitInterveningTextTwice

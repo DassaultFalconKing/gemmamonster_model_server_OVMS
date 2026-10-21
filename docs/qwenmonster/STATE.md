@@ -1,65 +1,50 @@
-# QWENMONSTER checkpoint — comparative refit / model family protocol
+# QWENMONSTER local execution checkpoint
 
-Date: 2026-10-21
+Date: 2026-10-21. ACCEPTED: **NO**.
 
-## Local execution in progress
+- ACTIVE_STAGE: first source/build/unit iteration completed; native XML risks reproduced; live gates blocked.
+- BASE_SHA: `ba6ec792c3121850fea167fa7d7e190b25fcdc76` (accepted C6 left untouched).
+- WORK_BRANCH: `feature/qwenmonster-parser-invariants-20261021`.
+- CURRENT_HEAD: `a299bb9f3612e8d7a98da60e2d5ef834ab526660` (implementation/probe checkpoint before this documentation-only commit; resolve final branch tip with `git rev-parse HEAD`).
+- TESTED_PARSER_SHA: `f6f2a296d0574cf611cd2be6e31e3916c5858dbb`; final four-target run tested these exact code changes before their commit, plus evidence-only edits.
+- DEPENDENCY_LOCK: `public-source-lock.json`, unchanged. GenAI `2decb9ec4bea827e01db47524352ad72d23b33ab`; XGrammar `c77d5e0d62411d17d4cf55d280463eb5b3bec7ba`; OpenVINO `b5bfb14860320ae2a44d0fc55d78caa9a9d789b9`; Minja `83eb074e42140b0d1194d1dd61f29c31e4515ee9`; Tokenizers `d73028e255ddc279483fbc6e8ea90dc802e820f5`.
+- LAST_GREEN_TESTS: six-component source preflight; Qwen69/69 (no disabled tests), policy9/9 (unchanged cached result in final run), generic29/29; 14 partition cases / 2340 runs; existing native JSON/ExcludeToken controls31/31.
+- CURRENT_FAILURE: Gemma67/70, same three initial failures; XML matcher permits malformed close continuation and unbounded zero-argument whitespace path. Full server build, fresh locked dependency rebuild, canonical prompt and live/agent acceptance NOT RUN.
+- ROOT_CAUSE: rejected speculative identity contaminated the next call; generic streamer held ready arguments until end; malformed envelopes crossed transport boundaries; shallow validation and RapidJSON edge cases allowed invalid arguments. Implemented fail-closed fixes and active regressions. Native matcher masks require a separate compatible dependency fix.
+- NEXT_ACTION: investigate Gemma baseline separately; review/reproduce compatible XML matcher backports on dedicated dependency branches; propose explicit cohort revision if needed. Rebuild exact cohort and server, then pin actual model/tokenizer/template and run prompt/API/live/20-loop gates before promotion.
+- REVERT_POINT: execution entry `8cd25d63085637d112f616d62913e345a93d2233`; original C6 above.
+- EVIDENCE_PATH: `docs/qwenmonster/evidence/`; full local logs `C:/gm/qwenmonster/evidence/`.
+- ACCEPTED: **NO**. RUNTIME UNVERIFIED.
 
-- ACTIVE_STAGE: P0 lifecycle GREEN; partition corpus GREEN; prompt streamer drain under test
-- BASE_SHA: `ba6ec792c3121850fea167fa7d7e190b25fcdc76`
-- WORK_BRANCH: `feature/qwenmonster-parser-invariants-20261021`
-- CURRENT_HEAD: `ca78a4d` (committed lifecycle fix; current worktree adds partition/drain tests)
-- DEPENDENCY_LOCK: `public-source-lock.json`, unchanged
-- LAST_GREEN_TESTS: Qwen 66/66 after lifecycle fix; policy 9/9, generic 29/29;
-  native existing matcher 31/31; six-component source preflight
-- CURRENT_FAILURE: initial Gemma 67/70 (three retained pre-existing failures);
-  streamer publishes arguments only at final flush (RED retained, patch under test);
-  full schema and live acceptance remain open.
-- ROOT_CAUSE: unmatched speculative identity could steal a subsequent call;
-  fixed by validated-only publication. Streamer drained only on final flush.
-  Existing installed dependency cohort has Minja fixture-only checkout drift.
-- NEXT_ACTION: rerun four targets after prompt drain, retain exact baseline
-  comparison, extend malformed-envelope controls and record native XML probes.
-- REVERT_POINT: `8cd25d63085637d112f616d62913e345a93d2233`
-- EVIDENCE_PATH: `evidence/EXECUTION-CHECKPOINT.md`, source JSON reports;
-  raw local logs in `C:/gm/qwenmonster/evidence/`
-- ACCEPTED: **NO**
+## Measured scope and compatibility
 
-The checkpoint below is the inherited source-only handoff, retained for provenance.
-- ACTIVE_STAGE: **R2 refit candidate + R3 new generation policy candidate; ALL GATES UNVERIFIED**
-- BASE_SHA: `ba6ec792c3121850fea167fa7d7e190b25fcdc76`
-- M1_SOURCE_HEAD: `04eb7415f3ef760dfcd53be5fa4f6b33f51e7b01`
-- WORK_BRANCH: `feature/qwenmonster-parser-invariants-20261021` (active independent tests + source cohort)
-- PARENT_REFIT_BRANCH: `feature/qwenmonster-comparative-refit-20261021` (unmodified from this integration)
-- LAST_PARSER_CODE_SHA: `333a9893bbd0e4d06cd57c52e93141ddbc4ff7e7`
-- NEW_TESTS_SHA: `662037d5ed51f8855a3b371e8c8f7d26c018dede` (parser invariant tests)
-- PRE-FLIGHT_SOURCE_CODE_SHA: `5f8f90d69ef034b9c68ad43a97744f56947bea51` (offline checker tightened to require all six components for full PASS)
-- CURRENT_HEAD: resolve current tip of WORK_BRANCH; do not substitute review branch or local C6 checkout HEAD
-- LAST_GREEN_TESTS: **none**; remote code and documentation commits are not build/run evidence
-- CURRENT_FAILURE: canonical **public source** GenAI/XGrammar/OpenVINO/Minja/Tokenizers cohort now pinned; **actual build-machine checkout, loaded binaries, compilation and runtime still NOT verified**; canonical template/generation suffix oracle and required/open-think compatibility unresolved
-- NEXT_ACTION: run `scripts/qwenmonster/verify_public_cohort.py` against locked component checkouts (see PUBLIC-COHORT-INTEGRATION.md), then build focused Bazel gates and run four separate whitespace/empty-args controls (especially still-open XML #650/#802); only then Qwen unary/SSE and agentic
-- REVERT_POINT: M1 `04eb7415f3ef760dfcd53be5fa4f6b33f51e7b01` for new refit, original C6 `ba6ec792c3121850fea167fa7d7e190b25fcdc76` for full program
-- EVIDENCE_PATH: `docs/qwenmonster/ACCEPTANCE.md` (plan only), code/tests in `src/test/llm/` (not executed)
-- ACCEPTED: **NO**
+All four requested test executables compiled. The combined final Bazel command
+exited 1 because of the three unchanged Gemma failures; this is not a green full
+build. No candidate OVMS server executable was built or launched.
 
-## Current commits (read in order)
+Tool ID/name/index publication now waits for completed-call validation. The
+generic streamer drains ready output each flush with its existing final-delta
+lookahead. Outer tool transport markers are reserved in every XML parser state;
+they cannot be literal parameter data. See STREAMING-LIFECYCLE-DECISION.md and
+SCHEMA-VALIDATION-PROFILE.md for the supported restricted Draft 4 profile and
+compatibility limits. Guided auto default remains OFF.
 
-- `22a5fa5`: registry-check unknown names and typed argument fallback rejection; add two regression tests.
-- `1afab75`: Qwen XML generation-policy builder using native GenAI `QwenXMLParametersFormat`; factory and build registration.
-- `555d87e`: standalone generation-policy tests and Bazel target.
-- `8e0c006`: vLLM/llama.cpp comparison + OVMS model-family adaptation protocol MFP-1.
-- `333a989`: required-field checker and closing-marker test, positive zero-argument parser test.
+The exact source lock passes. Unit binaries reused the existing staged runtime;
+its Minja checkout differs only by one test fixture and its production headers
+match the lock. This is not a fresh locked-cohort binary rebuild. The synthetic
+native probe records loaded GenAI/OpenVINO module paths; no inference model or
+tokenizer was loaded. Do not transfer this result to actual model token masks.
 
-## Guardrails
-- No change to working `c6-head-mainline-20261020` or `gemma4` production parser.
-- Source verified != build verified != runtime accepted.
-- Do not merge/enable guided Qwen until GenAI pin and actual grammar acceptance pass.
-- Upstream XGrammar #650 and #802 were OPEN as checked 2026-10-21; associated PR #651, #803 and #837 OPEN/unmerged.
-- Gemma C5 historical verdict `24847c968`: JSON whitespace CONFIRMED FIXED; unexpected empty-args NOT REPRODUCED after 267 filled required calls. This is not evidence about zero-parameter XML tools.
-- Public GenAI/XGrammar forks are now available with source-locked SHA in `public-source-lock.json`: GenAI `2decb9ec4bea827e01db47524352ad72d23b33ab`, XGrammar `c77d5e0d62411d17d4cf55d280463eb5b3bec7ba`. Historical XGrammar `f228574c...` is also public on a legacy branch, and its semantic empty `ExcludeToken()` handling is visibly carried in the new source. **No loaded binary or matcher run verified.**
-- An unresolved issue is a live risk, not a blanket claim every build is broken.
+Independent read-only review found no remaining actionable important issue in
+the scoped parser/schema/drain changes after RED/GREEN corrections. This review
+does not establish live, model, dependency or release acceptance.
 
-## Public fork integration checkpoint
-- PUBLIC LOCK: `docs/qwenmonster/public-source-lock.json`, authoritative original `DassaultFalconKing/openvino.genai:docs/public-cohort-20261021/docs/public-source-lock.json`.
-- SOURCE PREFLIGHT: `scripts/qwenmonster/verify_public_cohort.py` (checks expected local checkout Git HEADs and select source markers; not run here).
-- CURRENT WORKSTREAM HEAD: see branch `feature/qwenmonster-parser-invariants-20261021`. This branch contains independent parser invariant tests and published public-source lock updates, but acceptance remains **NOT ACCEPTED**.
-- STAGE A0: **public dependency source identities verified**; A6 binary/runtime compatibility not verified.
+## Evidence index
+
+- `evidence/BUILD-FINAL.txt`, `UNIT-RESULTS.json`, `UNIT-*.txt`: real compiler/test outcomes.
+- `evidence/PUBLIC-COHORT-SOURCE-FINAL.json`, `PUBLIC-COHORT-BUILD-IDENTITY.md`: source and binary provenance boundaries.
+- `evidence/GRAMMAR-COMPILE.json`: synthetic hard/lazy XML compile, masks and whitespace traces.
+- `evidence/FAILURE-TRIAGE.md`: observed failures, smallest fixes and controls.
+- `evidence/NOT-RUN.json`: all unexecuted acceptance gates.
+- `evidence/*RED*.txt`: retained actual failing regressions, not inferred failures.
+- `evidence/EXECUTION-CHECKPOINT.md`: historical entry checkpoint; superseded by this file.

@@ -1,0 +1,79 @@
+Actual GTest output; repetitive warnings omitted.
+Full local log: C:\gm\qwenmonster\evidence\output_parser_core_test-verified-full.txt
+SHA256: a8e6e810f76724231a8cd6b7dff81cf6ce5e18d6b01dc2d6659906f98daf175d
+
+Executing tests from //src:output_parser_core_test
+-----------------------------------------------------------------------------
+Running main() from gmock_main.cc
+[==========] Running 29 tests from 3 test suites.
+[----------] Global test environment set-up.
+[----------] 2 tests from BaseOutputParserTest
+[ RUN      ] BaseOutputParserTest.wrapFirstDelta
+[       OK ] BaseOutputParserTest.wrapFirstDelta (0 ms)
+[ RUN      ] BaseOutputParserTest.wrapDelta
+[       OK ] BaseOutputParserTest.wrapDelta (0 ms)
+[----------] 2 tests from BaseOutputParserTest (0 ms total)
+
+[----------] 25 tests from PartialJsonBuilderTest
+[ RUN      ] PartialJsonBuilderTest.simpleCompleteJsonWithStringValue
+[       OK ] PartialJsonBuilderTest.simpleCompleteJsonWithStringValue (0 ms)
+[ RUN      ] PartialJsonBuilderTest.complexCompleteJsonWithDifferentValueTypes
+[       OK ] PartialJsonBuilderTest.complexCompleteJsonWithDifferentValueTypes (0 ms)
+[ RUN      ] PartialJsonBuilderTest.simpleUncompleteJsonWithStringValue
+[       OK ] PartialJsonBuilderTest.simpleUncompleteJsonWithStringValue (0 ms)
+[ RUN      ] PartialJsonBuilderTest.simpleCompleteJsonWithNumberValue
+[       OK ] PartialJsonBuilderTest.simpleCompleteJsonWithNumberValue (0 ms)
+[ RUN      ] PartialJsonBuilderTest.simpleUncompleteJsonWithNumberValue
+[       OK ] PartialJsonBuilderTest.simpleUncompleteJsonWithNumberValue (0 ms)
+[ RUN      ] PartialJsonBuilderTest.simpleUncompleteJsonWithNumberValueTwoKeys
+[       OK ] PartialJsonBuilderTest.simpleUncompleteJsonWithNumberValueTwoKeys (0 ms)
+[ RUN      ] PartialJsonBuilderTest.simpleCompleteJsonWithArrayValue
+[       OK ] PartialJsonBuilderTest.simpleCompleteJsonWithArrayValue (0 ms)
+[ RUN      ] PartialJsonBuilderTest.simpleUncompleteJsonWithArrayValue
+[       OK ] PartialJsonBuilderTest.simpleUncompleteJsonWithArrayValue (0 ms)
+[ RUN      ] PartialJsonBuilderTest.simpleUncompleteJsonWithArrayValueMultipleNesting
+[       OK ] PartialJsonBuilderTest.simpleUncompleteJsonWithArrayValueMultipleNesting (0 ms)
+[ RUN      ] PartialJsonBuilderTest.simpleUncompleteJsonWithStringValueWithExtraCharacters
+[       OK ] PartialJsonBuilderTest.simpleUncompleteJsonWithStringValueWithExtraCharacters (0 ms)
+[ RUN      ] PartialJsonBuilderTest.simpleJsonWithKeyWithoutValue
+[       OK ] PartialJsonBuilderTest.simpleJsonWithKeyWithoutValue (0 ms)
+[ RUN      ] PartialJsonBuilderTest.simpleJsonWithIncompleteKey
+[       OK ] PartialJsonBuilderTest.simpleJsonWithIncompleteKey (0 ms)
+[ RUN      ] PartialJsonBuilderTest.complexJsonWithIncompleteKey
+[       OK ] PartialJsonBuilderTest.complexJsonWithIncompleteKey (0 ms)
+[ RUN      ] PartialJsonBuilderTest.escapedCharactersSanityCheck
+[       OK ] PartialJsonBuilderTest.escapedCharactersSanityCheck (0 ms)
+[ RUN      ] PartialJsonBuilderTest.doubleBackslashBeforeQuote
+[       OK ] PartialJsonBuilderTest.doubleBackslashBeforeQuote (0 ms)
+[ RUN      ] PartialJsonBuilderTest.complexJsonIncrementalParsingSanityCheck
+[       OK ] PartialJsonBuilderTest.complexJsonIncrementalParsingSanityCheck (1 ms)
+[ RUN      ] PartialJsonBuilderTest.simpleJsonIncrementalParsing
+[       OK ] PartialJsonBuilderTest.simpleJsonIncrementalParsing (0 ms)
+[ RUN      ] PartialJsonBuilderTest.negativeCases
+[       OK ] PartialJsonBuilderTest.negativeCases (0 ms)
+[ RUN      ] PartialJsonBuilderTest.postJsonEndAdditions
+[       OK ] PartialJsonBuilderTest.postJsonEndAdditions (0 ms)
+[ RUN      ] PartialJsonBuilderTest.computeDeltaWithEmptyJson
+[       OK ] PartialJsonBuilderTest.computeDeltaWithEmptyJson (0 ms)
+[ RUN      ] PartialJsonBuilderTest.computeDeltaWithAddedMember
+[       OK ] PartialJsonBuilderTest.computeDeltaWithAddedMember (0 ms)
+[ RUN      ] PartialJsonBuilderTest.computeDeltaWithAddedNestedMember
+[       OK ] PartialJsonBuilderTest.computeDeltaWithAddedNestedMember (0 ms)
+[ RUN      ] PartialJsonBuilderTest.computeDeltaWithUnchangedNestedMember
+[       OK ] PartialJsonBuilderTest.computeDeltaWithUnchangedNestedMember (0 ms)
+[ RUN      ] PartialJsonBuilderTest.computeDeltaWithAddedNestedArrayElement
+[       OK ] PartialJsonBuilderTest.computeDeltaWithAddedNestedArrayElement (0 ms)
+[ RUN      ] PartialJsonBuilderTest.computeDeltaWithModifiedStringMember
+[       OK ] PartialJsonBuilderTest.computeDeltaWithModifiedStringMember (0 ms)
+[----------] 25 tests from PartialJsonBuilderTest (3 ms total)
+
+[----------] 2 tests from StreamOutputCacheTest
+[ RUN      ] StreamOutputCacheTest.LookupTag
+[       OK ] StreamOutputCacheTest.LookupTag (0 ms)
+[ RUN      ] StreamOutputCacheTest.LookupTags
+[       OK ] StreamOutputCacheTest.LookupTags (0 ms)
+[----------] 2 tests from StreamOutputCacheTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 29 tests from 3 test suites ran. (3 ms total)
+[  PASSED  ] 29 tests.

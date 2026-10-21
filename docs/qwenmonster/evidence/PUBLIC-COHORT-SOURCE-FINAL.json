@@ -1,0 +1,64 @@
+{
+  "cohort": "c6-head-20261019",
+  "source_checks": [
+    {
+      "component": "genai",
+      "path": "C:\\gm\\c6-head-20261019\\genai",
+      "pinned_sha": "2decb9ec4bea827e01db47524352ad72d23b33ab",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "2decb9ec4bea827e01db47524352ad72d23b33ab",
+      "dirty": false
+    },
+    {
+      "component": "xgrammar",
+      "path": "C:\\gm\\c6-head-20261019\\xgrammar",
+      "pinned_sha": "c77d5e0d62411d17d4cf55d280463eb5b3bec7ba",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "c77d5e0d62411d17d4cf55d280463eb5b3bec7ba",
+      "dirty": false
+    },
+    {
+      "component": "openvino",
+      "path": "C:\\gm\\c6-head-20261019\\openvino",
+      "pinned_sha": "b5bfb14860320ae2a44d0fc55d78caa9a9d789b9",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "b5bfb14860320ae2a44d0fc55d78caa9a9d789b9",
+      "dirty": false
+    },
+    {
+      "component": "minja",
+      "path": "C:\\gm\\qwenmonster\\minja",
+      "pinned_sha": "83eb074e42140b0d1194d1dd61f29c31e4515ee9",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "83eb074e42140b0d1194d1dd61f29c31e4515ee9",
+      "dirty": false
+    },
+    {
+      "component": "ovms",
+      "path": "C:\\git\\qwenmonster-parser",
+      "pinned_sha": "ba6ec792c3121850fea167fa7d7e190b25fcdc76",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "a299bb9f3612e8d7a98da60e2d5ef834ab526660",
+      "dirty": true
+    },
+    {
+      "component": "tokenizers",
+      "path": "C:\\gm\\c6-head-20261019\\tokenizers",
+      "pinned_sha": "d73028e255ddc279483fbc6e8ea90dc802e820f5",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "d73028e255ddc279483fbc6e8ea90dc802e820f5",
+      "dirty": false
+    }
+  ],
+  "acceptance": "SOURCE ONLY - BUILD/UNIT/LIVE NOT ESTABLISHED",
+  "cmake_overrides": {
+    "FETCHCONTENT_SOURCE_DIR_XGRAMMAR": "C:/gm/c6-head-20261019/xgrammar",
+    "FETCHCONTENT_SOURCE_DIR_MINJA": "C:/gm/qwenmonster/minja"
+  }
+}

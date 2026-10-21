@@ -1,0 +1,33 @@
+Actual GTest output; repetitive warnings omitted.
+Full local log: C:\gm\qwenmonster\evidence\qwenmonster_generation_policy_test-verified-full.txt
+SHA256: f9c3bc724d95c0837df96a163690cea80e5248253e7a96b0b3cecf61867335c5
+
+Executing tests from //src:qwenmonster_generation_policy_test
+-----------------------------------------------------------------------------
+Running main() from gmock_main.cc
+[==========] Running 9 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 9 tests from QwenmonsterGenerationPolicy
+[ RUN      ] QwenmonsterGenerationPolicy.RequiredUsesNativeXMLSchemas
+[       OK ] QwenmonsterGenerationPolicy.RequiredUsesNativeXMLSchemas (1 ms)
+[ RUN      ] QwenmonsterGenerationPolicy.NamedRestrictsToOneTool
+[       OK ] QwenmonsterGenerationPolicy.NamedRestrictsToOneTool (0 ms)
+[ RUN      ] QwenmonsterGenerationPolicy.AutoUnconstrainedByDefault
+[       OK ] QwenmonsterGenerationPolicy.AutoUnconstrainedByDefault (0 ms)
+[ RUN      ] QwenmonsterGenerationPolicy.AutoGuidedIsLazyNotForced
+[       OK ] QwenmonsterGenerationPolicy.AutoGuidedIsLazyNotForced (0 ms)
+[ RUN      ] QwenmonsterGenerationPolicy.NoneDoesNotInstallGrammar
+[       OK ] QwenmonsterGenerationPolicy.NoneDoesNotInstallGrammar (0 ms)
+[ RUN      ] QwenmonsterGenerationPolicy.UnknownNamedAndEmptyRequiredFailClosed
+[       OK ] QwenmonsterGenerationPolicy.UnknownNamedAndEmptyRequiredFailClosed (0 ms)
+[ RUN      ] QwenmonsterGenerationPolicy.SchemaAndNameValidation
+[       OK ] QwenmonsterGenerationPolicy.SchemaAndNameValidation (0 ms)
+[ RUN      ] QwenmonsterGenerationPolicy.RejectsResponseFormatConflict
+[       OK ] QwenmonsterGenerationPolicy.RejectsResponseFormatConflict (0 ms)
+[ RUN      ] QwenmonsterGenerationPolicy.ParserFamilyIsolation
+[       OK ] QwenmonsterGenerationPolicy.ParserFamilyIsolation (0 ms)
+[----------] 9 tests from QwenmonsterGenerationPolicy (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 9 tests from 1 test suite ran. (1 ms total)
+[  PASSED  ] 9 tests.

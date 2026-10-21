@@ -1,6 +1,11 @@
 # Build identity audit, 2026-10-21
 
-Status: initial compiler triage in progress; runtime acceptance NOT ESTABLISHED.
+Status: focused build/unit triage completed; runtime acceptance NOT ESTABLISHED.
+All four requested test executables compiled. Final combined test exit 1:
+Qwen69/69, policy9/9 (unchanged cached in final run), generic29/29, Gemma67/70
+with the same initial three failures. Full server and fresh dependency rebuild
+NOT RUN. Exact tested parser commit: `f6f2a296d0574cf611cd2be6e31e3916c5858dbb`.
+See BUILD-FINAL.txt and UNIT-RESULTS.json.
 
 ## Source identity
 
@@ -52,8 +57,10 @@ No existing accepted install or source tree is modified.
 
 Available device: Intel Arc 140V (16GB), driver `32.0.101.9150`.
 No inference device has been selected for this candidate; no candidate model
-has been loaded. VLM_CB/LM_CB, loaded module paths, model/tokenizer/template
-identity, TTFT, throughput and GPU faults are RUNTIME UNVERIFIED.
+has been loaded. VLM_CB/LM_CB, model/tokenizer/template identity, TTFT, throughput and GPU faults
+are RUNTIME UNVERIFIED. The separate synthetic native matcher probe records
+actual loaded GenAI/OpenVINO DLL paths and hashes in GRAMMAR-COMPILE.json;
+tokenizers was NOT_LOADED. This does not establish inference runtime identity.
 Unit tokenizer provenance is separate from live model acceptance.
 
 ## Retained machine evidence

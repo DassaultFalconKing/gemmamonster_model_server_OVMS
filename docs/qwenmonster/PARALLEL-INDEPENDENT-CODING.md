@@ -1,9 +1,15 @@
 # Qwenmonster independent coding track (no GenAI/XGrammar fork dependency)
 
 Branch: `feature/qwenmonster-parser-invariants-20261021` (isolated from original C6 and from main comparative refit).  
-Status: **CODE/STORED FIXTURES ONLY; NOT BUILT; NOT RUNTIME-VERIFIED**.
+Status: **FOCUSED BUILD/UNIT EXECUTED; NOT RUNTIME-VERIFIED**.
 
-## Implemented now
+Current measured checkpoint: STATE.md. Qwen69/69, policy9/9, generic29/29;
+Gemma67/70, same initial failures. The lifecycle reproducer is now active and
+green; no Qwen disabled tests remain. Partition corpus has 14 cases / 2340 runs.
+The source-only plan below is retained as historical context and is superseded
+where it describes unexecuted unit tests or the disabled lifecycle regression.
+
+## Historical source-only entry plan
 
 - `src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp`: exhaustive two-chunk byte split reconstruction for two completed calls; index/ID correctness, delta ordering and call-local arguments; reset after LENGTH.
 - A `DISABLED_QwenmonsterRejectedPrefixMustNotStealNextCall` is a **known RED reproducer**, disabled intentionally because the current implementation may emit a speculative name delta before validating the call, then reuse the old index after rejection. This must not be counted as a green test.
@@ -22,7 +28,7 @@ python3 scripts/qwenmonster/compare_parser_captures.py \
 
 Capture input: one JSON object per line, with `id` matching fixture `id`; include completed `tool_calls` in normalized form or OpenAI `choices[0].message.tool_calls`. Every function has `name` and `arguments` (JSON object or JSON-encoded object string). Optional call `id` and `index` are checked. **The runner compares supplied captures; it does not execute or simulate vLLM, llama.cpp, a model, or OVMS.** Use a real, pinned adapter for each engine.
 
-## Next code tasks, ranked
+## Historical task ranking (current next action is in STATE.md)
 
 1. **P0 / RED contract:** decide speculative SSE name semantics, then repair rejected-prefix identity in `queueFirstDeltaIfNeeded` / `queueFullDeltas`; make the disabled test active. Two options: (a) defer name until completed/validated XML, trading incremental name latency for fail-closed integrity; or (b) permit speculative headers, add per-envelope lifecycle and explicit cancellation semantics, which OpenAI SSE does not natively provide. In absence of an API cancellation mechanism, (a) is safest but affects legacy streaming tests, so treat as deliberate compatibility change, not a casual refactor.
 2. **P0:** run and promote arbitrary-split tests; enumerate multi-chunk partitions around each `<function` / `<parameter` / `</parameter>` boundary.

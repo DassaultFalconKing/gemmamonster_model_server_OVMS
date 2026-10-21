@@ -1,0 +1,24 @@
+Actual final focused build/test command output (tail). Exit 1 is the retained Gemma baseline failure.
+COMMAND: rtk proxy cmd /d /c C:/gm/qwenmonster/tools/bazel-initial.cmd test //src:qwenmonster_output_parser_test //src:qwenmonster_generation_policy_test //src:gemma4_output_parser_test //src:output_parser_core_test --test_output=errors
+RAW_LOG_SHA256: 1b9190664fe806c01901d6b5303083e5a48e6773b9e94bf8d2474b83d9839f1b
+
+[  PASSED  ] 67 tests.
+[  FAILED  ] 3 tests, listed below:
+[  FAILED  ] Gemma4OutputParserTest.ParseReasoningWithDuplicatedEndTagDoesNotEmitInterveningTextTwice
+[  FAILED  ] Gemma4OutputParserTest.ParseToolCallOutputWithNoToolsInTheRequest
+[  FAILED  ] Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingEscapedQuotes
+
+ 3 FAILED TESTS
+================================================================================
+INFO: Found 4 test targets...
+INFO: Elapsed time: 24.874s, Critical Path: 23.82s
+//src:qwenmonster_generation_policy_test                        (cached) PASSED in 0.1s
+//src:output_parser_core_test                                            PASSED in 0.1s
+//src:qwenmonster_output_parser_test                                     PASSED in 0.5s
+//src:gemma4_output_parser_test                                          FAILED in 0.7s
+  C:/gb/qwm/uebyplvr/execroot/ovms/bazel-out/x64_windows-opt/testlogs/src/gemma4_output_parser_test/test.log
+
+Executed 3 out of 4 tests: 3 tests pass and 1 fails locally.
+There were tests whose specified size is too big. Use the --test_verbose_timeout_warnings command line option to see which ones these are.
+INFO: 10 processes: 1 internal, 9 local.
+INFO: Build completed, 1 test FAILED, 10 total actions

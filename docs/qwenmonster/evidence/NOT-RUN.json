@@ -1,0 +1,18 @@
+{
+  "accepted": false,
+  "full_ovms_server_build": "NOT RUN",
+  "fresh_locked_dependency_rebuild": "NOT RUN; Minja production include equivalence established separately",
+  "canonical_live_model_tokenizer_template_hashes": "NOT RUN",
+  "live_unary_sse_tool_choice_matrix": "NOT RUN",
+  "thinking_open_prompt_suffix": "NOT RUN",
+  "tool_result_replay_and_20_agent_loops": "NOT RUN",
+  "concurrent_agent_sessions_1_2_4": "NOT RUN",
+  "vllm_llamacpp_engine_captures": "NOT RUN",
+  "xgrammar_upstream_fix_analysis_backport": "NOT RUN; known pinned behavior reproduced synthetically",
+  "blockers": [
+    "Three unchanged Gemma baseline failures",
+    "Native XML end-marker mask risk",
+    "Native XML zero-parameter unbounded whitespace path",
+    "Reasoning-prefix and actual model/API acceptance unverified"
+  ]
+}
