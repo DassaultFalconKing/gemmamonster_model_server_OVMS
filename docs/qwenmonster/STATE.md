@@ -1,3 +1,18 @@
+# Current implementation checkpoint: isolated #650 candidate matcher
+
+- ACTIVE_STAGE: the XML end-marker lock is compiled into an isolated GenAI candidate. The staged runtime was not replaced. ACCEPTED stays NO.
+- BASE_SHA / REVERT_POINT: `c4ae73f9254eca81a44f22fe8435b940dee87dbc`. CURRENT_HEAD: resolve with `git rev-parse HEAD` after this commit.
+- WORK_BRANCH: `qwm01-request-schema` → `origin/feature/qwenmonster-qwm01-request-schema-20261021`.
+- DEPENDENCY_LOCK: unchanged. Candidate sources, not the public lock: XGrammar `5b0b7084a65a2059b44c03fbc6320ad7fcc41f33` (`fix/qwenmonster-xml-end-marker-lock-20261022`), GenAI `8f305a1c1bc11e348c8ad0cc37269a91ba21cc74` (`codex/qwenmonster-xgrammar-802-20261022`).
+- LAST_GREEN_TESTS: native matcher linked to the candidate XGrammar static library, 43/43 PASS, `SUMMARY failures=0`. #802 empty-object epsilon, declared-required rejection of empty, and the Qwen3-8B unit-tokenizer hard/lazy whitespace mask (425 tokens, 0 allowed) still pass. #650 accepts a real `</parameter>`, `<div>`, `</p>`, and a comparison expression, and rejects `</parameter1>`, `</parameter_function>`, `</parameterX>`, and `</parameter/>`. On the synthetic byte vocabulary, after the prefix `</parameter`, bytes `1`, `X`, and `_` are masked off. The candidate DLL contains `lock_excluded_prefixes`; the staged DLL does not.
+- CURRENT_FAILURE: the #650 mask was not measured on the Qwen3-8B tokenizer. Undeclared-required `{type:object, required:[a]}` still accepts empty XML. Cancel and resource reclamation remain NOT_RUN. The candidate DLL was not loaded for inference.
+- ROOT_CAUSE: n/a for this matcher slice. The string result is the locked TagDispatch prefix, not a parser rejection.
+- NEXT_ACTION: measure the end-marker mask on the unit tokenizer, then a live probe that loads only the candidate DLL. Do not swap the staged runtime or edit the public lock. Keep ACCEPTED NO.
+- EVIDENCE_PATH: XGRAMMAR-650-NOTE.md. The raw checker log stays in the private hub.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: W3 live max_tokens
 
 - ACTIVE_STAGE: Ornith live max_tokens measured on the existing tip binary. ACCEPTED stays NO.
