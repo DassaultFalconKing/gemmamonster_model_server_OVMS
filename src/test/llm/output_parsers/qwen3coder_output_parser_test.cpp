@@ -530,8 +530,7 @@ True
 </parameter>
 </function>
 </tool_call>)";
-    // in this case since we don't have tool in parameter type map we
-    // keep values as is - it won't for non-nested bool, string
+    // Without a matching parameter type, retain the parsed JSON value.
     auto content = input;
     ovms::Qwen3CoderToolParserImpl parser(toolsParametersTypeMap);
     auto callsOpt = parser.parseChunk(content);
@@ -558,18 +557,13 @@ value2
 </parameter>
 </function>
 </tool_call>)";
-    // in this case since we don't have tool in parameter type map we
-    // keep values as is - it won't for non-nested bool, string
+    // Duplicate XML arguments are ambiguous and invalidate the entire call.
     auto content = input;
     ovms::Qwen3CoderToolParserImpl parser(toolsParametersTypeMap);
     auto callsOpt = parser.parseChunk(content);
-    ASSERT_TRUE(callsOpt.has_value());
-    ToolCalls_t& calls = callsOpt.value();
+    EXPECT_FALSE(callsOpt.has_value());
     auto status = parser.removeToolCallsFromContentIfNeeded(content);
     EXPECT_TRUE(status.ok()) << status.string();
-    ASSERT_EQ(calls.size(), 1) << input;
-    EXPECT_EQ(calls[0].name, "string_string_tool");
-    EXPECT_EQ(calls[0].arguments, "{\"arg1\":\"value1\"}");
     EXPECT_EQ(parser.getCurrentState(), ovms::Qwen3CoderToolParserImpl::State::Content) << input;
     EXPECT_EQ(parser.getLastProcessedPosition(), input.find("</tool_call>") + std::string("</tool_call>").size());
     EXPECT_EQ(content, "\n");
@@ -1307,6 +1301,62 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterStreamerPublishesCompletedArgument
     EXPECT_EQ(calls.size(), 2);
     EXPECT_EQ(lastCount, 1);
     EXPECT_FALSE(streamer.hadParserError());
+}
+
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterSchemaValidationBeforePublication) {
+    struct Case { std::string schema; std::string parameters; bool accepted; };
+    const std::vector<Case> cases = {
+        {R"({"type":"object","properties":{"value":{"type":"integer"}},"required":["value"]})", "<parameter=value>42</parameter>", true},
+        {R"({"type":"object","properties":{"value":{"type":"integer"}},"required":["value"]})", "<parameter=value>42.5</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"type":"string","enum":["ok"]}}})", "<parameter=value>bad</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"type":"string","enum":["ok"]}}})", "<parameter=value>ok</parameter>", true},
+        {R"({"type":"object","properties":{"value":{"type":"string"}},"additionalProperties":false})", "<parameter=other>x</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"anyOf":[{"type":"integer"},{"type":"null"}]}}})", "<parameter=value>null</parameter>", true},
+        {R"({"type":"object","properties":{"value":{"anyOf":[{"type":"integer"},{"type":"null"}]}}})", "<parameter=value>bad</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"oneOf":[{"type":"integer"},{"type":"number"}]}}})", "<parameter=value>42</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"type":["string","null"]}}})", "<parameter=value>null</parameter>", true},
+        {R"({"type":"object","properties":{"value":{"type":["string","null"]}}})", "<parameter=value>42</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"type":"object","properties":{"items":{"type":"array","items":{"type":"integer"}}},"required":["items"],"additionalProperties":false}}})", "<parameter=value>{\"items\":[1,2]}</parameter>", true},
+        {R"({"type":"object","properties":{"value":{"type":"object","properties":{"items":{"type":"array","items":{"type":"integer"}}},"required":["items"],"additionalProperties":false}}})", "<parameter=value>{\"items\":[1,\"wrong\"]}</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"type":"string"}},"required":["value"]})", "", false},
+        {R"({"type":"object","properties":{"value":{"type":"string"}}})", "<parameter=value>first</parameter><parameter=value>second</parameter>", false},
+        {R"({"type":"nonsense","properties":{"value":{"type":"string"}}})", "<parameter=value>x</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"type":7}}})", "<parameter=value>x</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"const":"ok"}}})", "<parameter=value>wrong</parameter>", false},
+        {R"({"type":"object","definitions":{"integer":{"type":"integer"}},"properties":{"value":{"$ref":"#/definitions/integer"}}})", "<parameter=value>42</parameter>", true},
+        {R"({"type":"object","definitions":{"integer":{"type":"integer"}},"properties":{"value":{"$ref":"#/definitions/integer"}}})", "<parameter=value>wrong</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"$ref":"https://example.invalid/schema"}}})", "<parameter=value>42</parameter>", false},
+        {R"({"type":"object","$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"value":{}}})", "<parameter=value>42</parameter>", false},
+        {"{", "<parameter=value>x</parameter>", false},
+        {R"({"type":"object","default":{"const":"ok"},"properties":{"value":{"$ref":"#/default"}}})", "<parameter=value>wrong</parameter>", false},
+        {R"({"type":"object","default":{"patternProperties":7}})", "<parameter=value>x</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"type":"string","default":"fallback"}},"required":["value"]})", "", false},
+        {R"({"type":"object","properties":{"value":{"type":"string","default":"fallback"}},"required":["value"]})", "<parameter=value>x</parameter>", true},
+        {R"({"type":"object","properties":{"value":{"enum":[{"patternProperties":7}]}}})", "<parameter=value>{\"patternProperties\":7}</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"type":"string","pattern":"^ok$\u0000never"}}})", "<parameter=value>ok</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"type":"string","pattern":"^ok$"}}})", std::string("<parameter=value>ok") + '\0' + "bad</parameter>", false},
+        {R"({"type":"object","dependencies":{"patternProperties":["x"]}})", "<parameter=value>x</parameter>", false},
+        {R"({"type":"object","properties":{"default":{"type":"integer"}},"required":["default"]})", "<parameter=default>42</parameter>", true},
+        {R"({"type":"object","properties":{"default":{"type":"integer"}},"required":["default"]})", "<parameter=default>bad</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"type":"object","properties":{"x":{"type":"string","default":"fallback"}},"required":["x"]}}})", "<parameter=value>{}</parameter>", false},
+        {R"({"type":"object","definitions":{"foo":{"properties":{"x":{"type":"integer"}}}},"properties":{"value":{"$ref":"#/definitions/foo%2Fproperties"}}})", "<parameter=value>wrong</parameter>", false}};
+    for (const auto& test : cases) {
+        SCOPED_TRACE(test.schema + " " + test.parameters);
+        rapidjson::Document schema;
+        schema.Parse(test.schema.c_str());
+        ToolsSchemas_t schemas;
+        schemas.emplace("tool", ToolSchemaWrapper{&schema, test.schema});
+        Qwen3CoderToolParser parser(*qwen3Tokenizer, schemas);
+        const auto delta = parser.parseChunk("<tool_call><function=tool>" + test.parameters + "</function></tool_call>", {}, ov::genai::GenerationFinishReason::STOP);
+        if (test.accepted) {
+            ASSERT_TRUE(delta.has_value());
+            EXPECT_EQ(std::get<ToolCallDelta>(*delta).name, "tool");
+            ASSERT_TRUE(parser.drainPendingDelta().has_value());
+        } else {
+            EXPECT_FALSE(delta.has_value()) << "Invalid calls must publish no identity";
+            EXPECT_FALSE(parser.drainPendingDelta().has_value());
+        }
+    }
 }
 
 class Qwen3CoderOutputParserParametrizedTest : public Qwen3CoderOutputParserTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, std::string, std::string>> {

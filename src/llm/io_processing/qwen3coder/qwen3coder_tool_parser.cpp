@@ -16,18 +16,70 @@
 
 #include <openvino/genai/tokenizer.hpp>
 #include <algorithm>
+#include <cstring>
 #include <string>
 #include <stack>
 #include <vector>
 
 #include "rapidjson/error/en.h"
+#pragma warning(push)
+// RapidJSON compares child values recursively across allocators. MSVC's C++20
+// rewritten-operator diagnostic flags that intentional structural recursion.
+#pragma warning(disable : 5232 6313)
+#include "rapidjson/schema.h"
+#pragma warning(pop)
 
 #include "src/llm/io_processing/utils.hpp"
 #include "src/logging.hpp"
 #include "src/utils/rapidjson_utils.hpp"
 #include "qwen3coder_tool_parser.hpp"
+#include "draft4_meta_schema.hpp"
 
 namespace ovms {
+namespace {
+bool safeValidationInput(const rapidjson::Value& value, bool compilerInput) {
+    if (value.IsString())
+        return std::memchr(value.GetString(), '\0', value.GetStringLength()) == nullptr;
+    if (value.IsArray()) {
+        for (const auto& item : value.GetArray())
+            if (!safeValidationInput(item, compilerInput)) return false;
+    } else if (value.IsObject()) {
+        for (const auto& member : value.GetObject()) {
+            if (!safeValidationInput(member.name, compilerInput)) return false;
+            // RapidJSON recursively compiles schema-map containers too, and
+            // assumes this member is object-valued even in a dependency map.
+            if (compilerInput && std::strcmp(member.name.GetString(), "patternProperties") == 0 && !member.value.IsObject())
+                return false;
+            if (!safeValidationInput(member.value, compilerInput)) return false;
+        }
+    }
+    return true;
+}
+
+void removeSchemaDefaults(rapidjson::Value& schema) {
+    if (!schema.IsObject()) return;
+    // Defaults are annotations, never a substitute for required values. Only
+    // visit schema-valued locations; a property *named* default must survive.
+    schema.RemoveMember("default");
+    for (const auto* key : {"properties", "patternProperties", "definitions", "dependencies"}) {
+        if (schema.HasMember(key) && schema[key].IsObject())
+            for (auto& member : schema[key].GetObject())
+                removeSchemaDefaults(member.value);
+    }
+    for (const auto* key : {"additionalProperties", "additionalItems", "not"})
+        if (schema.HasMember(key)) removeSchemaDefaults(schema[key]);
+    for (const auto* key : {"items", "allOf", "anyOf", "oneOf"}) {
+        if (!schema.HasMember(key)) continue;
+        auto& child = schema[key];
+        if (child.IsArray()) {
+            for (auto& item : child.GetArray()) removeSchemaDefaults(item);
+        } else {
+            removeSchemaDefaults(child);
+        }
+    }
+}
+}  // namespace
+
 const std::string Qwen3CoderToolParser::TOOL_START_TAG = "<tool_call>";
 const std::string Qwen3CoderToolParser::FUNCTION_NAME_TAG = "<function=";
 const std::string Qwen3CoderToolParser::XML_TAG_END = ">";
@@ -80,6 +132,15 @@ void Qwen3CoderToolParserImpl::addParameterToCurrentFunctionDoc(std::string& par
     auto& currentFunctionArgsDoc = this->currentFunction.argumentsAsDocument;
     auto& allocator = currentFunctionArgsDoc.GetAllocator();
     auto& key = this->currentParameterName;
+    if (key.find('\0') != std::string::npos || parameterValueAsString.find('\0') != std::string::npos) {
+        currentFunction.invalidTypedArgument = true;
+        return;
+    }
+    if (currentFunctionArgsDoc.HasMember(key.c_str())) {
+        // Duplicate XML arguments have no unambiguous executable meaning.
+        currentFunction.invalidTypedArgument = true;
+        return;
+    }
     rapidjson::Value keyVal(key.c_str(), allocator);
     rapidjson::Document temp;
     if (paramIt != this->toolsParametersTypeMap.end()) {
@@ -317,25 +378,61 @@ bool Qwen3CoderToolParser::isRegisteredToolName(const std::string& name) const {
     return toolSchemas.find(name) != toolSchemas.end();
 }
 
-bool Qwen3CoderToolParser::hasRequiredArguments(const ToolCall& toolCall) const {
+bool Qwen3CoderToolParser::hasValidArguments(const ToolCall& toolCall) const {
     const auto it = toolSchemas.find(toolCall.name);
     if (it == toolSchemas.end()) return false;
+    if (it->second.stringRepr.find('\0') != std::string::npos) return false;
     rapidjson::Document schema;
     schema.Parse(it->second.stringRepr.c_str());
     if (schema.HasParseError() || !schema.IsObject()) return false;
     rapidjson::Document args;
     args.Parse(toolCall.arguments.c_str());
     if (args.HasParseError() || !args.IsObject()) return false;
-    if (!schema.HasMember("required")) return true;
-    const auto& required = schema["required"];
-    if (!required.IsArray()) return false;
-    for (const auto& name : required.GetArray()) {
-        if (!name.IsString() || !args.HasMember(name.GetString())) {
-            SPDLOG_WARN("Dropping Qwen call with missing required arguments: {}", toolCall.name);
-            return false;
-        }
-    }
-    return true;
+    if (!safeValidationInput(schema, false) || !safeValidationInput(args, false)) return false;
+    // RapidJSON is the existing Draft 4 engine. Validate the schema as well as
+    // the arguments: ignored/malformed keywords must not weaken a tool contract.
+    static const rapidjson::SchemaDocument metaSchema = []() {
+        rapidjson::Document meta;
+        meta.Parse(QWEN_DRAFT4_META_SCHEMA);
+        auto& allocator = meta.GetAllocator();
+        meta.AddMember("additionalProperties", false, allocator);
+        // Empty required lists are common in native tool schemas, including
+        // legitimate zero-parameter tools; treat them as no required fields.
+        meta["definitions"]["stringArray"]["minItems"].SetInt(0);
+        // Format assertions and newer dialect keywords are not silently ignored.
+        meta["properties"].RemoveMember("format");
+        // This RapidJSON version recursively compiles annotation/enum objects
+        // as schemas too. Only scalar data can safely reach that compiler.
+        rapidjson::Value scalar(rapidjson::kObjectType);
+        rapidjson::Value scalarTypes(rapidjson::kArrayType);
+        for (const auto* type : {"null", "boolean", "number", "string"})
+            scalarTypes.PushBack(rapidjson::Value(type, allocator), allocator);
+        scalar.AddMember("type", scalarTypes, allocator);
+        meta["properties"]["default"].CopyFrom(scalar, allocator);
+        meta["properties"]["enum"].AddMember("items", scalar, allocator);
+        rapidjson::Value ref(rapidjson::kObjectType);
+        ref.AddMember("type", "string", allocator);
+        // Definitions are schema-valued and meta-validated. An arbitrary local
+        // pointer could instead reach unchecked data or a schema-map container.
+        // Restrict identifiers to exclude URI-decoded extra path segments.
+        ref.AddMember("pattern", "^#/definitions/[A-Za-z0-9_.-]+$", allocator);
+        meta["properties"].AddMember("$ref", ref, allocator);
+        rapidjson::Value dialects(rapidjson::kArrayType);
+        dialects.PushBack("http://json-schema.org/draft-04/schema#", allocator);
+        dialects.PushBack("https://json-schema.org/draft-04/schema#", allocator);
+        meta["properties"]["$schema"].AddMember("enum", dialects, allocator);
+        return rapidjson::SchemaDocument(meta);
+    }();
+    rapidjson::SchemaValidator schemaValidator(metaSchema);
+    if (!schema.Accept(schemaValidator))
+        return false;
+    removeSchemaDefaults(schema);
+    if (!safeValidationInput(schema, true)) return false;
+    rapidjson::SchemaDocument compiledSchema(schema);
+    if (!compiledSchema.IsSupportedSpecification() || !compiledSchema.GetError().ObjectEmpty())
+        return false;
+    rapidjson::SchemaValidator argumentsValidator(compiledSchema);
+    return args.Accept(argumentsValidator);
 }
 
 void Qwen3CoderToolParser::queueFullDeltas(const ToolCalls_t& toolCalls) {
@@ -346,8 +443,8 @@ void Qwen3CoderToolParser::queueFullDeltas(const ToolCalls_t& toolCalls) {
             SPDLOG_WARN("Ignoring completed Qwen call to undeclared tool: {}", toolCall.name);
             continue;
         }
-        if (!hasRequiredArguments(toolCall)) {
-            SPDLOG_WARN("Ignoring Qwen tool call with incomplete required arguments: {}", toolCall.name);
+        if (!hasValidArguments(toolCall)) {
+            SPDLOG_WARN("Ignoring Qwen tool call with invalid schema or arguments: {}", toolCall.name);
             continue;
         }
         // OpenAI SSE has no retraction event. Allocate a public identity only

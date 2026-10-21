@@ -173,7 +173,7 @@ public:
 
 private:
     bool isRegisteredToolName(const std::string& name) const;
-    bool hasRequiredArguments(const ToolCall& toolCall) const;
+    bool hasValidArguments(const ToolCall& toolCall) const;
     void queueFullDeltas(const ToolCalls_t& toolCalls);
     std::optional<Delta> takeQueuedDelta();
 };

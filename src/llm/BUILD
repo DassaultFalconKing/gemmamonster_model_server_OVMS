@@ -383,7 +383,8 @@ ovms_cc_library(
 
 ovms_cc_library(
     name = "io_processing_qwen3coder_tool_parser",
-    hdrs = ["io_processing/qwen3coder/qwen3coder_tool_parser.hpp"],
+    hdrs = ["io_processing/qwen3coder/qwen3coder_tool_parser.hpp",
+            "io_processing/qwen3coder/draft4_meta_schema.hpp"],
     srcs = ["io_processing/qwen3coder/qwen3coder_tool_parser.cpp"],
     deps = [
         "@com_github_tencent_rapidjson//:rapidjson",
