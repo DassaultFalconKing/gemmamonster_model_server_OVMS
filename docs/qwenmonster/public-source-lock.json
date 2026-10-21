@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-21",
+  "purpose": "Public source publication of existing custom component commits; not new runtime acceptance.",
+  "cohort": "c6-head-20261019",
+  "components": {
+    "genai": {
+      "repository": "DassaultFalconKing/openvino.genai",
+      "base": "40dad80c46bdeeb543c252eb7c54b3c43a1f92e0",
+      "sha": "2decb9ec4bea827e01db47524352ad72d23b33ab",
+      "branch": "codex/c6-head-20261019-genai",
+      "url": "https://github.com/DassaultFalconKing/openvino.genai/tree/codex/c6-head-20261019-genai"
+    },
+    "xgrammar": {
+      "repository": "DassaultFalconKing/xgrammar",
+      "base": "614ab01d2af3fdfdde73ae3e4171a7f36db45c23",
+      "sha": "c77d5e0d62411d17d4cf55d280463eb5b3bec7ba",
+      "branch": "codex/c6-head-20261019-xgrammar",
+      "url": "https://github.com/DassaultFalconKing/xgrammar/tree/codex/c6-head-20261019-xgrammar"
+    },
+    "openvino": {
+      "repository": "DassaultFalconKing/openvino",
+      "base": "d9f39e43bdf0c58924848b7ff23ae5741b8d778d",
+      "sha": "b5bfb14860320ae2a44d0fc55d78caa9a9d789b9",
+      "branch": "codex/c6-head-20261019-openvino",
+      "url": "https://github.com/DassaultFalconKing/openvino/tree/codex/c6-head-20261019-openvino"
+    },
+    "minja": {
+      "repository": "DassaultFalconKing/minja",
+      "base": "021c2293c187789ef13d56c6cfd89c9b134fd80f",
+      "sha": "83eb074e42140b0d1194d1dd61f29c31e4515ee9",
+      "branch": "codex/c6-head-20261019-minja-locked",
+      "url": "https://github.com/DassaultFalconKing/minja/tree/codex/c6-head-20261019-minja-locked"
+    },
+    "tokenizers": {
+      "repository": "openvinotoolkit/openvino_tokenizers",
+      "sha": "d73028e255ddc279483fbc6e8ea90dc802e820f5",
+      "reason": "No local patches; upstream public commit is sufficient."
+    },
+    "ovms": {
+      "repository": "DassaultFalconKing/gemmamonster_model_server_OVMS",
+      "sha": "ba6ec792c3121850fea167fa7d7e190b25fcdc76",
+      "branch": "c6-head-mainline-20261020"
+    }
+  },
+  "legacy_c6": {
+    "openvino": {
+      "repository": "DassaultFalconKing/openvino",
+      "base": "732b0665f49bddbaf62990ae2940bbf3adf95abd",
+      "sha": "29c068c925db7b4a89adb57a99de766c921f8a12",
+      "branch": "codex/c6-engine-20261018",
+      "url": "https://github.com/DassaultFalconKing/openvino/tree/codex/c6-engine-20261018"
+    },
+    "genai": {
+      "repository": "DassaultFalconKing/openvino.genai",
+      "base": "40dad80c46bdeeb543c252eb7c54b3c43a1f92e0",
+      "sha": "294f698dc8c0832e5c960491a0a9df7bf2c3a694",
+      "branch": "codex/gemmamonster-c6-genai-20261018",
+      "url": "https://github.com/DassaultFalconKing/openvino.genai/tree/codex/gemmamonster-c6-genai-20261018"
+    },
+    "xgrammar": {
+      "repository": "DassaultFalconKing/xgrammar",
+      "base": "7e269d56c74c89de52bc8c31e42191155416371f",
+      "sha": "f228574c0e7592f029407973092261a611f8ff61",
+      "branch": "codex/c6-xgrammar-empty-exclude-20261018",
+      "url": "https://github.com/DassaultFalconKing/xgrammar/tree/codex/c6-xgrammar-empty-exclude-20261018"
+    }
+  },
+  "additional_source": {
+    "minja-after-lock": {
+      "repository": "DassaultFalconKing/minja",
+      "base": "021c2293c187789ef13d56c6cfd89c9b134fd80f",
+      "sha": "1bdb178afd6f527354e17a1db1b3a22b59189f21",
+      "branch": "codex/c6-head-20261019-minja",
+      "url": "https://github.com/DassaultFalconKing/minja/tree/codex/c6-head-20261019-minja"
+    }
+  }
+}
