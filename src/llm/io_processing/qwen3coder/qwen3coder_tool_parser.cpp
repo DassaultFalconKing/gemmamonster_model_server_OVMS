@@ -211,6 +211,34 @@ void Qwen3CoderToolParserImpl::addParameterToCurrentFunctionDoc(std::string& par
 bool Qwen3CoderToolParserImpl::parseUntilStateChange(ToolCalls_t& toolCalls) {
     SPDLOG_TRACE("State: {}", this->currentState);
     auto previousState = this->currentState;
+    if (currentState != State::Content) {
+        const auto find = [&](const std::string& tag) { return streamContent.find(tag, lastProcessedPosition); };
+        size_t expected = std::string::npos;
+        switch (currentState) {
+        case State::InsideToolCall: expected = find(Qwen3CoderToolParser::FUNCTION_NAME_TAG); break;
+        case State::InsideFunctionName:
+        case State::InsideParameterName: expected = find(Qwen3CoderToolParser::XML_TAG_END); break;
+        case State::InsideFunction:
+            expected = std::min(find(Qwen3CoderToolParser::PARAMETER_NAME_TAG), find(Qwen3CoderToolParser::FUNCTION_END_TAG));
+            break;
+        case State::InsideParameter: expected = find(Qwen3CoderToolParser::PARAMETER_END_TAG); break;
+        case State::AfterFunction: expected = find(Qwen3CoderToolParser::TOOL_END_TAG); break;
+        case State::Content: break;
+        }
+        const auto close = find(Qwen3CoderToolParser::TOOL_END_TAG);
+        const auto open = find(Qwen3CoderToolParser::TOOL_START_TAG);
+        // Transport markers are reserved boundaries, including inside malformed
+        // names/values. No state may borrow a later envelope's delimiter.
+        if ((close != std::string::npos && close < expected) ||
+            (open != std::string::npos && open < expected)) {
+            lastProcessedPosition = close < open ? close + Qwen3CoderToolParser::TOOL_END_TAG.size() : open;
+            toolCallPositions.end.push(lastProcessedPosition);
+            currentFunction.clear();
+            currentParameterName.clear();
+            currentState = State::Content;
+            return true;
+        }
+    }
     switch (this->currentState) {
     case State::Content: {
         // normally we expect <tool_call> tag but we observed that sometimes model generates <function=...> directly
@@ -271,20 +299,7 @@ bool Qwen3CoderToolParserImpl::parseUntilStateChange(ToolCalls_t& toolCalls) {
         break;
     }
     case State::InsideParameter: {
-        const auto pos = streamContent.find(Qwen3CoderToolParser::PARAMETER_END_TAG, this->lastProcessedPosition);
-        const auto envelopeEnd = streamContent.find(Qwen3CoderToolParser::TOOL_END_TAG, this->lastProcessedPosition);
-        if (envelopeEnd != std::string::npos && (pos == std::string::npos || envelopeEnd < pos)) {
-            // A closed transport envelope cannot borrow a later call's parameter
-            // terminator. Drop the malformed call and resume after its envelope.
-            this->lastProcessedPosition = envelopeEnd + Qwen3CoderToolParser::TOOL_END_TAG.length();
-            this->toolCallPositions.end.push(this->lastProcessedPosition);
-            this->currentFunction.clear();
-            this->currentParameterName.clear();
-            this->currentState = State::Content;
-            break;
-        }
-        if (pos == std::string::npos)
-            break;
+        DEFINE_TAG_POSITION_AND_BREAK_IF_NOT_FOUND(Qwen3CoderToolParser::PARAMETER_END_TAG);
         std::string parameterValueAsString(streamContent.substr(this->lastProcessedPosition, pos - this->lastProcessedPosition));
         addParameterToCurrentFunctionDoc(parameterValueAsString);
         this->lastProcessedPosition = pos + Qwen3CoderToolParser::PARAMETER_END_TAG.length();

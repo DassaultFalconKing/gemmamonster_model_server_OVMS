@@ -1,4 +1,5 @@
-Actual first failure excerpt; full repeated partition failures retained locally.
+Actual log excerpt; repeated warnings and later failures omitted. Full log: C:/gm/qwenmonster/evidence/MALFORMED-ENVELOPE-RED.txt
+
 WARNING: The following configs were expanded more than once: [short_logs]. For repeatable flags, repeats are counted twice and may lead to unexpected behavior.
 INFO: Invocation ID: 684716e9-7580-4354-93cf-452483905e10
 INFO: Options provided by the client:
@@ -35,52 +36,96 @@ Note: Google Test filter = *QwenmonsterPartitionCorpus*
 [----------] Global test environment set-up.
 [----------] 1 test from Qwen3CoderOutputParserTest
 [ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterPartitionCorpusReconstructsSSEIdentity
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.149] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:333] Ignoring completed Qwen call to undeclared tool: undeclared
-[2026-10-21 03:21:15.150] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1273): error: Expected equality of these values:
+  calls[i].name
+    Which is: "string_tool"
+  test.expected[i].first
+    Which is: "cd"
+Google Test trace:
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1231): <tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call><tool_call><function=cd><parameter=folder>two</parameter></function></tool_call> finish=1 chunks=168
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1278): error: Expected equality of these values:
+  actual
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 10-A0 B6-E7 60-02 03-00 B0-3A 1F-E6 60-02 00-00 B0-3A 1F-E6 60-02 00-00 D0-5B 22-E6 60-02 00-00 D0-5B 22-E6 60-02 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-04 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00>
+  expected
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 58-4F 89-E6 60-02 03-00 B0-33 1F-E6 60-02 00-00 B0-33 1F-E6 60-02 00-00 90-5A 22-E6 60-02 00-00 90-5A 22-E6 60-02 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-04 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00>
+Google Test trace:
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1231): <tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call><tool_call><function=cd><parameter=folder>two</parameter></function></tool_call> finish=1 chunks=168
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1273): error: Expected equality of these values:
+  calls[i].name
+    Which is: "string_tool"
+  test.expected[i].first
+    Which is: "cd"
+Google Test trace:
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1231): <tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call><tool_call><function=cd><parameter=folder>two</parameter></function></tool_call> finish=1 chunks=84
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1278): error: Expected equality of these values:
+  actual
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 10-A0 B6-E7 60-02 03-00 B0-3A 1F-E6 60-02 00-00 B0-3A 1F-E6 60-02 00-00 D0-5B 22-E6 60-02 00-00 D0-5B 22-E6 60-02 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-04 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00>
+  expected
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 58-4F 89-E6 60-02 03-00 B0-33 1F-E6 60-02 00-00 B0-33 1F-E6 60-02 00-00 90-5A 22-E6 60-02 00-00 90-5A 22-E6 60-02 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-04 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00>
+Google Test trace:
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1231): <tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call><tool_call><function=cd><parameter=folder>two</parameter></function></tool_call> finish=1 chunks=84
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1273): error: Expected equality of these values:
+  calls[i].name
+    Which is: "string_tool"
+  test.expected[i].first
+    Which is: "cd"
+Google Test trace:
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1231): <tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call><tool_call><function=cd><parameter=folder>two</parameter></function></tool_call> finish=1 chunks=56
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1278): error: Expected equality of these values:
+  actual
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 10-A0 B6-E7 60-02 03-00 B0-3A 1F-E6 60-02 00-00 B0-3A 1F-E6 60-02 00-00 D0-5B 22-E6 60-02 00-00 D0-5B 22-E6 60-02 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-04 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00>
+  expected
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 58-4F 89-E6 60-02 03-00 B0-33 1F-E6 60-02 00-00 B0-33 1F-E6 60-02 00-00 90-5A 22-E6 60-02 00-00 90-5A 22-E6 60-02 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-04 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00>
+Google Test trace:
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1231): <tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call><tool_call><function=cd><parameter=folder>two</parameter></function></tool_call> finish=1 chunks=56
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1273): error: Expected equality of these values:
+  calls[i].name
+    Which is: "string_tool"
+  test.expected[i].first
+    Which is: "cd"
+Google Test trace:
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1231): <tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call><tool_call><function=cd><parameter=folder>two</parameter></function></tool_call> finish=1 chunks=24
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1278): error: Expected equality of these values:
+  actual
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 10-A0 B6-E7 60-02 03-00 B0-3A 1F-E6 60-02 00-00 B0-3A 1F-E6 60-02 00-00 D0-5B 22-E6 60-02 00-00 D0-5B 22-E6 60-02 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-04 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00>
+  expected
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 58-4F 89-E6 60-02 03-00 B0-33 1F-E6 60-02 00-00 B0-33 1F-E6 60-02 00-00 90-5A 22-E6 60-02 00-00 90-5A 22-E6 60-02 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-04 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00>
+Google Test trace:
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1231): <tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call><tool_call><function=cd><parameter=folder>two</parameter></function></tool_call> finish=1 chunks=24
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1273): error: Expected equality of these values:
+  calls[i].name
+    Which is: "string_tool"
+  test.expected[i].first
+    Which is: "cd"
+Google Test trace:
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1231): <tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call><tool_call><function=cd><parameter=folder>two</parameter></function></tool_call> finish=1 chunks=1
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1278): error: Expected equality of these values:
+  actual
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 10-A0 B6-E7 60-02 03-00 B0-3A 1F-E6 60-02 00-00 B0-3A 1F-E6 60-02 00-00 D0-5B 22-E6 60-02 00-00 D0-5B 22-E6 60-02 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-04 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00>
+  expected
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 58-4F 89-E6 60-02 03-00 B0-33 1F-E6 60-02 00-00 B0-33 1F-E6 60-02 00-00 50-59 22-E6 60-02 00-00 50-59 22-E6 60-02 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-04 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00>
+Google Test trace:
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1231): <tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call><tool_call><function=cd><parameter=folder>two</parameter></function></tool_call> finish=1 chunks=1
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1273): error: Expected equality of these values:
+  calls[i].name
+    Which is: "string_tool"
+  test.expected[i].first
+    Which is: "cd"
+Google Test trace:
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1231): <tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call><tool_call><function=cd><parameter=folder>two</parameter></function></tool_call> finish=1 chunks=2
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1278): error: Expected equality of these values:
+  actual
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 10-A0 B6-E7 60-02 03-00 B0-3A 1F-E6 60-02 00-00 B0-3A 1F-E6 60-02 00-00 20-5B 22-E6 60-02 00-00 20-5B 22-E6 60-02 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-04 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00 00-00>
+  expected
+    Which is: 96-byte object <01-00 00-00 01-00 00-00 5

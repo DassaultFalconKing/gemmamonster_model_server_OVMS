@@ -1185,6 +1185,12 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterPartitionCorpusReconstructsSSEIden
     const std::string invalid = "<tool_call><function=string_int_tool><parameter=arg1>ok</parameter><parameter=arg2>bad</parameter></function></tool_call>";
     const std::string unknown = "<tool_call><function=undeclared></function></tool_call>";
     const std::string malformed = "<tool_call><function=string_tool><parameter=arg1>bad</parameter1></function></tool_call>";
+    const std::string missingFunctionClose = "<tool_call><function=cd><parameter=folder>one</parameter></tool_call>";
+    const std::string optionalWithoutFunctionClose = "<tool_call><function=some_tool></tool_call>";
+    const std::string missingFunctionNameClose = "<tool_call><function=cd</tool_call>";
+    const std::string missingParameterNameClose = "<tool_call><function=cd><parameter=folder</tool_call>";
+    const std::string missingEnvelopeClose = "<tool_call><function=cd><parameter=folder>one</parameter></function>";
+    const std::string unfinishedParameter = "<tool_call><function=string_tool><parameter=arg1>unfinished";
     const std::string partial = "<tool_call><function=cd><parameter=folder>unfinished";
     const std::string recoverable = "<tool_call><function=cd><parameter=folder>two</parameter></function>";
     struct Case {
@@ -1197,6 +1203,13 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterPartitionCorpusReconstructsSSEIden
         {first + second + first, Reason::STOP, {{"string_tool", R"({"arg1":"one"})"}, {"cd", R"({"folder":"two"})"}, {"string_tool", R"({"arg1":"one"})"}}},
         {invalid + unknown + first + first, Reason::STOP, {{"string_tool", R"({"arg1":"one"})"}, {"string_tool", R"({"arg1":"one"})"}}},
         {malformed + second, Reason::STOP, {{"cd", R"({"folder":"two"})"}}},
+        {missingFunctionClose + second, Reason::STOP, {{"cd", R"({"folder":"two"})"}}},
+        {optionalWithoutFunctionClose + second, Reason::STOP, {{"cd", R"({"folder":"two"})"}}},
+        {missingFunctionNameClose + second, Reason::STOP, {{"cd", R"({"folder":"two"})"}}},
+        {missingParameterNameClose + second, Reason::STOP, {{"cd", R"({"folder":"two"})"}}},
+        {"<tool_call></tool_call>" + second, Reason::STOP, {{"cd", R"({"folder":"two"})"}}},
+        {missingEnvelopeClose + second, Reason::STOP, {{"cd", R"({"folder":"two"})"}}},
+        {unfinishedParameter + second, Reason::STOP, {{"cd", R"({"folder":"two"})"}}},
         {first + partial, Reason::STOP, {{"string_tool", R"({"arg1":"one"})"}}},
         {first + partial, Reason::LENGTH, {{"string_tool", R"({"arg1":"one"})"}}},
         {first + recoverable, Reason::STOP, {{"string_tool", R"({"arg1":"one"})"}, {"cd", R"({"folder":"two"})"}}},

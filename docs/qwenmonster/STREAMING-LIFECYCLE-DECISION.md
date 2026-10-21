@@ -28,3 +28,12 @@ branch is added to generic `OutputParser`. Prompt delivery of queued events is
 a separate streamer concern. STOP can recover only a completed `</function>`;
 LENGTH must not manufacture a completion. This decision does not establish full
 JSON Schema validation or correct constrained generation.
+
+The parser now enforces reserved transport boundaries in every active XML state.
+If a closing envelope or a fresh `<tool_call>` occurs before the expected next
+delimiter, the malformed current call is dropped and parsing resumes at the next
+envelope. This prevents missing name/parameter/function closes from consuming a
+later call's fields. A completed inner function followed by a fresh envelope does
+not borrow that envelope's close. Literal reserved outer transport markers inside
+an argument are outside this fail-closed parser profile; ordinary nested XML text
+remains covered. These cases were RED under arbitrary partitions before the guard.

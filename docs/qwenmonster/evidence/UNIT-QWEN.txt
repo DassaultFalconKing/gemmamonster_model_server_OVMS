@@ -1,4 +1,4 @@
-Actual GTest output; repetitive warnings omitted. Full log: C:/gm/qwenmonster/evidence/UNIT-QWEN-schema-full.txt
+Actual GTest output; repetitive warnings omitted. Full log: C:/gm/qwenmonster/evidence/UNIT-QWEN-all-states-full.txt
 
 Executing tests from //src:qwenmonster_output_parser_test
 -----------------------------------------------------------------------------
@@ -7,7 +7,7 @@ Running main() from gmock_main.cc
 [----------] Global test environment set-up.
 [----------] 54 tests from Qwen3CoderOutputParserTest
 [ RUN      ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNewline
-[       OK ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNewline (40 ms)
+[       OK ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNewline (52 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentNoProperBeginTag
 [       OK ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentNoProperBeginTag (2 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.Parse1ToolCallNestedXmlNotFromSchema
@@ -15,11 +15,11 @@ Running main() from gmock_main.cc
 [ RUN      ] Qwen3CoderOutputParserTest.ParseTwoToolCalls1Function1ArgumentTagsNoNewline
 [       OK ] Qwen3CoderOutputParserTest.ParseTwoToolCalls1Function1ArgumentTagsNoNewline (4 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNoNewline
-[       OK ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNoNewline (2 ms)
+[       OK ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNoNewline (3 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentMultilineValue
 [       OK ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentMultilineValue (3 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.ToolCallDroppedWhenStoppedMidParameterValue
-[       OK ] Qwen3CoderOutputParserTest.ToolCallDroppedWhenStoppedMidParameterValue (1 ms)
+[       OK ] Qwen3CoderOutputParserTest.ToolCallDroppedWhenStoppedMidParameterValue (2 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.ToolCallRecoveredWhenStoppedAfterInnerCloseTag
 [       OK ] Qwen3CoderOutputParserTest.ToolCallRecoveredWhenStoppedAfterInnerCloseTag (2 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.ToolCallDroppedWithDanglingParameterName
@@ -99,54 +99,54 @@ Running main() from gmock_main.cc
 [ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterMalformedXMLClosingMarkerNeverExecutable
 [       OK ] Qwen3CoderOutputParserTest.QwenmonsterMalformedXMLClosingMarkerNeverExecutable (0 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterAllSingleByteSplitsPreserveCallIdentity
-[       OK ] Qwen3CoderOutputParserTest.QwenmonsterAllSingleByteSplitsPreserveCallIdentity (5 ms)
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterAllSingleByteSplitsPreserveCallIdentity (6 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterResetClearsOldPartialAndRestartsCallIndex
 [       OK ] Qwen3CoderOutputParserTest.QwenmonsterResetClearsOldPartialAndRestartsCallIndex (0 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterRejectedPrefixMustNotStealNextCall
 [       OK ] Qwen3CoderOutputParserTest.QwenmonsterRejectedPrefixMustNotStealNextCall (0 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterPartitionCorpusReconstructsSSEIdentity
-[       OK ] Qwen3CoderOutputParserTest.QwenmonsterPartitionCorpusReconstructsSSEIdentity (37 ms)
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterPartitionCorpusReconstructsSSEIdentity (68 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterStreamerPublishesCompletedArgumentsBeforeEnd
 [       OK ] Qwen3CoderOutputParserTest.QwenmonsterStreamerPublishesCompletedArgumentsBeforeEnd (2 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterSchemaValidationBeforePublication
-[       OK ] Qwen3CoderOutputParserTest.QwenmonsterSchemaValidationBeforePublication (0 ms)
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterSchemaValidationBeforePublication (1 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.StreamingQuotedFunctionAndParameterNames
 [       OK ] Qwen3CoderOutputParserTest.StreamingQuotedFunctionAndParameterNames (0 ms)
 [ RUN      ] Qwen3CoderOutputParserTest.StreamingSimpleToolCall
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1579] Expected:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1592] Expected:
 {"delta":{"content":"JUST_SOME_STRING_BEFORE_SPECIAL_STARTING_TAG"}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1580] Got:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1593] Got:
 {"delta":{"content":"JUST_SOME_STRING_BEFORE_SPECIAL_STARTING_TAG"}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1579] Expected:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1592] Expected:
 {"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"arg1\":\"value_before_tool_call\"}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1580] Got:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1593] Got:
 {"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"arg1\":\"value_before_tool_call\"}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1579] Expected:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1592] Expected:
 {"delta":{"tool_calls":[{"index":1,"function":{"arguments":"{\"arg1\":\"STRING_VALUE\"}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1580] Got:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1593] Got:
 {"delta":{"tool_calls":[{"index":1,"function":{"arguments":"{\"arg1\":\"STRING_VALUE\"}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1579] Expected:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1592] Expected:
 {"delta":{"tool_calls":[{"index":2,"function":{"arguments":"{\"arg1\":\"\\nANOTHER_STRING_VALUE\",\"arg2\":3141522}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1580] Got:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1593] Got:
 {"delta":{"tool_calls":[{"index":2,"function":{"arguments":"{\"arg1\":\"\\nANOTHER_STRING_VALUE\",\"arg2\":3141522}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1579] Expected:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1592] Expected:
 {"delta":{"tool_calls":[{"index":3,"function":{"arguments":"{\"arg1\":\"value1\"}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1580] Got:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1593] Got:
 {"delta":{"tool_calls":[{"index":3,"function":{"arguments":"{\"arg1\":\"value1\"}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1579] Expected:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1592] Expected:
 {"delta":{"tool_calls":[{"index":4,"function":{"arguments":"{\"folder\":\"ResearchDocs\"}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1580] Got:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1593] Got:
 {"delta":{"tool_calls":[{"index":4,"function":{"arguments":"{\"folder\":\"ResearchDocs\"}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1579] Expected:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1592] Expected:
 {"delta":{"tool_calls":[{"index":5,"function":{"arguments":"{\"arg1\":\"FUNCTION FC_CreateJsonPayload : STRING\\nVAR_INPUT\\n    Value1 : REAL;\\n    Value2 : INT;\\n    Value3 : BOOL;\\n    Value4 : STRING(100);\\nEND_VAR\\nVAR_OUTPUT\\n    JsonPayload : STRING(1000);\\nEND_VAR\\nVAR\\n    TempStr : STRING(100);\\nEND_VAR\\n\\n    JsonPayload := '{';\\n    JsonPayload := JsonPayload + '\\\"value1\\\":' + REAL_TO_STRING(Value1, '', 2) + ',';\\n    JsonPayload := JsonPayload + '\\\"value2\\\":' + INT_TO_STRING(Value2) + ',';\\n    JsonPayload := JsonPayload + '\\\"value3\\\":' + BOOL_TO_STRING(Value3) + ',';\\n    JsonPayload := JsonPayload + '\\\"value4\\\":\\\"' + Value4 + '\\\"';\\n    JsonPayload := JsonPayload + '}';\\n\\nEND_FUNCTION\"}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1580] Got:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1593] Got:
 {"delta":{"tool_calls":[{"index":5,"function":{"arguments":"{\"arg1\":\"FUNCTION FC_CreateJsonPayload : STRING\\nVAR_INPUT\\n    Value1 : REAL;\\n    Value2 : INT;\\n    Value3 : BOOL;\\n    Value4 : STRING(100);\\nEND_VAR\\nVAR_OUTPUT\\n    JsonPayload : STRING(1000);\\nEND_VAR\\nVAR\\n    TempStr : STRING(100);\\nEND_VAR\\n\\n    JsonPayload := '{';\\n    JsonPayload := JsonPayload + '\\\"value1\\\":' + REAL_TO_STRING(Value1, '', 2) + ',';\\n    JsonPayload := JsonPayload + '\\\"value2\\\":' + INT_TO_STRING(Value2) + ',';\\n    JsonPayload := JsonPayload + '\\\"value3\\\":' + BOOL_TO_STRING(Value3) + ',';\\n    JsonPayload := JsonPayload + '\\\"value4\\\":\\\"' + Value4 + '\\\"';\\n    JsonPayload := JsonPayload + '}';\\n\\nEND_FUNCTION\"}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1579] Expected:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1592] Expected:
 {"delta":{"tool_calls":[{"index":6,"function":{"arguments":"{\"arg1\":\"if __name__ == \\\"__main__\\\":\\n    addresses = {}\\n    addresses[\\\"Hodor\\\"] = \\\"\\\"\\\"The door\\\"\\\"\\\"\\n    addresses[\\\"Arya\\\"] = \\\"Winterfell\\\"\\n    for name, address in addresses.items():\\n        print(f'\\\\n\\\\t{name} lives at {address}\\\\n\\\\r')\"}"}}]}}
-[2026-10-21 03:43:43.668] [error] [qwen3coder_output_parser_test.cpp:1580] Got:
+[2026-10-21 03:47:42.364] [error] [qwen3coder_output_parser_test.cpp:1593] Got:
 {"delta":{"tool_calls":[{"index":6,"function":{"arguments":"{\"arg1\":\"if __name__ == \\\"__main__\\\":\\n    addresses = {}\\n    addresses[\\\"Hodor\\\"] = \\\"\\\"\\\"The door\\\"\\\"\\\"\\n    addresses[\\\"Arya\\\"] = \\\"Winterfell\\\"\\n    for name, address in addresses.items():\\n        print(f'\\\\n\\\\t{name} lives at {address}\\\\n\\\\r')\"}"}}]}}
 [       OK ] Qwen3CoderOutputParserTest.StreamingSimpleToolCall (0 ms)
-[----------] 54 tests from Qwen3CoderOutputParserTest (112 ms total)
+[----------] 54 tests from Qwen3CoderOutputParserTest (160 ms total)
 
 [----------] 15 tests from Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest
 [ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool_value1
@@ -182,5 +182,5 @@ Running main() from gmock_main.cc
 [----------] 15 tests from Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest (0 ms total)
 
 [----------] Global test environment tear-down
-[==========] 69 tests from 2 test suites ran. (284 ms total)
+[==========] 69 tests from 2 test suites ran. (355 ms total)
 [  PASSED  ] 69 tests.
