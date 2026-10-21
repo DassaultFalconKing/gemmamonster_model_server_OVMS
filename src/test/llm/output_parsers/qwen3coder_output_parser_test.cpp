@@ -1042,9 +1042,12 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterRequiredSchemaKeysMustBePresent) {
 }
 
 TEST_F(Qwen3CoderOutputParserTest, QwenmonsterZeroArgumentRegisteredToolStillWorks) {
+    const std::string schema = R"({"type":"object","properties":{},"required":[]})";
+    rapidjson::Document schemaDoc;
+    schemaDoc.Parse(schema.c_str());
     ToolsSchemas_t noArgSchemas;
     noArgSchemas.emplace("noarg_tool",
-        ToolSchemaWrapper{nullptr, R"({"type":"object","properties":{},"required":[]})"});
+        ToolSchemaWrapper{&schemaDoc, schema});
     Qwen3CoderToolParser parser(*qwen3Tokenizer, noArgSchemas);
     const auto initial = parser.parseChunk(
         "<tool_call><function=noarg_tool></function></tool_call>",

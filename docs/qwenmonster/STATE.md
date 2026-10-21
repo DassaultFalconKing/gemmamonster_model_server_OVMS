@@ -1,6 +1,27 @@
 # QWENMONSTER checkpoint — comparative refit / model family protocol
 
 Date: 2026-10-21
+
+## Local execution in progress
+
+- ACTIVE_STAGE: first unmodified Bazel compile, four focused targets
+- BASE_SHA: `ba6ec792c3121850fea167fa7d7e190b25fcdc76`
+- WORK_BRANCH: `feature/qwenmonster-parser-invariants-20261021`
+- CURRENT_HEAD: `8cd25d63085637d112f616d62913e345a93d2233` (execution base)
+- DEPENDENCY_LOCK: `public-source-lock.json`, unchanged
+- LAST_GREEN_TESTS: six-component source preflight only
+- CURRENT_FAILURE: existing Minja checkout is after-lock; pinned separate worktree
+  passes source gate. Initial build uses existing installed DLLs for triage only.
+- ROOT_CAUSE: source checkout drift; changed file is a test Jinja fixture;
+  Minja include tree and installed GenAI header match the lock.
+- NEXT_ACTION: retain compiler result, run disabled lifecycle RED explicitly,
+  then fix and rerun focused gates before any live inference.
+- REVERT_POINT: `8cd25d63085637d112f616d62913e345a93d2233`
+- EVIDENCE_PATH: `evidence/EXECUTION-CHECKPOINT.md`, source JSON reports;
+  raw local logs in `C:/gm/qwenmonster/evidence/`
+- ACCEPTED: **NO**
+
+The checkpoint below is the inherited source-only handoff, retained for provenance.
 - ACTIVE_STAGE: **R2 refit candidate + R3 new generation policy candidate; ALL GATES UNVERIFIED**
 - BASE_SHA: `ba6ec792c3121850fea167fa7d7e190b25fcdc76`
 - M1_SOURCE_HEAD: `04eb7415f3ef760dfcd53be5fa4f6b33f51e7b01`

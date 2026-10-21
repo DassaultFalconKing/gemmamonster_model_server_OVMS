@@ -1,0 +1,77 @@
+{
+  "scope": "initial build input audit, not runtime acceptance",
+  "sources": {
+    "genai": "2decb9ec4bea827e01db47524352ad72d23b33ab",
+    "xgrammar": "c77d5e0d62411d17d4cf55d280463eb5b3bec7ba",
+    "openvino": "b5bfb14860320ae2a44d0fc55d78caa9a9d789b9",
+    "minja": "83eb074e42140b0d1194d1dd61f29c31e4515ee9",
+    "tokenizers": "d73028e255ddc279483fbc6e8ea90dc802e820f5"
+  },
+  "installed_header_matches_source": true,
+  "dlls": {
+    "openvino.dll": {
+      "sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f",
+      "size": 16566272
+    },
+    "openvino_auto_batch_plugin.dll": {
+      "sha256": "ec1fb6bd0c2c2db23ab83e527736ec02c231c13c5573794d66367a9e2a455634",
+      "size": 206848
+    },
+    "openvino_auto_plugin.dll": {
+      "sha256": "9b109ef81a6664868fbe54b1b72d496ba43282a6ac7448279fc8ba05f97e71e2",
+      "size": 736768
+    },
+    "openvino_c.dll": {
+      "sha256": "8d52da6538788a0928b72b74fefd73af04ff409387367ed8c33cefea25952663",
+      "size": 230912
+    },
+    "openvino_genai.dll": {
+      "sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da",
+      "size": 8745472
+    },
+    "openvino_hetero_plugin.dll": {
+      "sha256": "207c7708f3fdb24a4b0832e2aa2a34669eba26eab14fcd5efb156b7d9eb29d6c",
+      "size": 506368
+    },
+    "openvino_intel_cpu_plugin.dll": {
+      "sha256": "0cf9706f38ad67535c09842b4678accd207c132364cfe63e5cbb2f2eaa5fda77",
+      "size": 46342656
+    },
+    "openvino_intel_gpu_plugin.dll": {
+      "sha256": "7e94bc2f47e85239e3e0b2dd66a6f0d90db4c1ffa4beaf69a8f9a966a6788daa",
+      "size": 32907776
+    },
+    "openvino_ir_frontend.dll": {
+      "sha256": "f4db5c945ce4bbe055450b31d706dfc530f6fa79e9b8398c6832c2626ae192ef",
+      "size": 489984
+    },
+    "openvino_tokenizers.dll": {
+      "sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66",
+      "size": 3470848
+    }
+  },
+  "genai-runtime": [
+    "CMAKE_BUILD_TYPE:STRING=Release",
+    "CMAKE_CXX_COMPILER:FILEPATH=C:/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+    "FETCHCONTENT_SOURCE_DIR_MINJA:PATH=C:/gm/c6-head-20261019/minja",
+    "FETCHCONTENT_SOURCE_DIR_XGRAMMAR:PATH=C:/gm/c6-head-20261019/xgrammar",
+    "OpenVINO_DIR:UNINITIALIZED=C:/gm/c6-head-20261019/deps/runtime/cmake",
+    "CMAKE_HOME_DIRECTORY:INTERNAL=C:/gm/c6-head-20261019/genai"
+  ],
+  "openvino-runtime": [
+    "CMAKE_BUILD_TYPE:STRING=Release",
+    "CMAKE_CXX_COMPILER:FILEPATH=C:/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+    "OpenVINO_DIR:PATH=C:/gm/c6-head-20261019/build/openvino-runtime",
+    "CMAKE_HOME_DIRECTORY:INTERNAL=C:/gm/c6-head-20261019/openvino"
+  ],
+  "tokenizers": [
+    "CMAKE_BUILD_TYPE:STRING=Release",
+    "CMAKE_CXX_COMPILER:FILEPATH=C:/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+    "OpenVINO_DIR:UNINITIALIZED=C:/gm/c6-head-20261019/deps/runtime/cmake",
+    "CMAKE_HOME_DIRECTORY:INTERNAL=C:/gm/c6-head-20261019/tokenizers"
+  ],
+  "initial_minja_discrepancy": [
+    "tests/fixtures/gemma4-26-heretic-chat_template.jinja"
+  ],
+  "minja_include_tree_matches_locked": true
+}

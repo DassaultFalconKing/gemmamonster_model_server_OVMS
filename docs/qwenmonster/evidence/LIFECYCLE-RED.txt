@@ -1,0 +1,26 @@
+Running main() from gmock_main.cc
+Note: Google Test filter = *RejectedPrefixMustNotStealNextCall
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Qwen3CoderOutputParserTest
+[ RUN      ] Qwen3CoderOutputParserTest.DISABLED_QwenmonsterRejectedPrefixMustNotStealNextCall
+[2026-10-21 05:06:59.515] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1182): error: Expected equality of these values:
+  head->index
+    Which is: 0
+  1
+
+src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp(1183): error: Value of: head->name.has_value()
+  Actual: false
+Expected: true
+
+[  FAILED  ] Qwen3CoderOutputParserTest.DISABLED_QwenmonsterRejectedPrefixMustNotStealNextCall (4 ms)
+[----------] 1 test from Qwen3CoderOutputParserTest (4 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (239 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] Qwen3CoderOutputParserTest.DISABLED_QwenmonsterRejectedPrefixMustNotStealNextCall
+
+ 1 FAILED TEST

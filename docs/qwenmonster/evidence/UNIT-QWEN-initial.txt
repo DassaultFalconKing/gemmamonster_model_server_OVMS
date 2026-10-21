@@ -1,0 +1,189 @@
+Running main() from gmock_main.cc
+[==========] Running 65 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 50 tests from Qwen3CoderOutputParserTest
+[ RUN      ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNewline
+[       OK ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNewline (56 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentNoProperBeginTag
+[       OK ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentNoProperBeginTag (4 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.Parse1ToolCallNestedXmlNotFromSchema
+[       OK ] Qwen3CoderOutputParserTest.Parse1ToolCallNestedXmlNotFromSchema (4 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.ParseTwoToolCalls1Function1ArgumentTagsNoNewline
+[       OK ] Qwen3CoderOutputParserTest.ParseTwoToolCalls1Function1ArgumentTagsNoNewline (4 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNoNewline
+[       OK ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNoNewline (2 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentMultilineValue
+[       OK ] Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentMultilineValue (3 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.ToolCallDroppedWhenStoppedMidParameterValue
+[       OK ] Qwen3CoderOutputParserTest.ToolCallDroppedWhenStoppedMidParameterValue (2 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.ToolCallRecoveredWhenStoppedAfterInnerCloseTag
+[       OK ] Qwen3CoderOutputParserTest.ToolCallRecoveredWhenStoppedAfterInnerCloseTag (2 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.ToolCallDroppedWithDanglingParameterName
+[       OK ] Qwen3CoderOutputParserTest.ToolCallDroppedWithDanglingParameterName (2 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.ToolCallDroppedWhenStoppedBeforeFunctionName
+[       OK ] Qwen3CoderOutputParserTest.ToolCallDroppedWhenStoppedBeforeFunctionName (1 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterLengthDoesNotPublishIncompleteArguments
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterLengthDoesNotPublishIncompleteArguments (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterStopDoesNotPublishOpenParameter
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterStopDoesNotPublishOpenParameter (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryToolCall
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryToolCall (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplUnterminatedToolCallContentCleanedNotError
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplUnterminatedToolCallContentCleanedNotError (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithNoToolCall
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithNoToolCall (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithContent
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithContent (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithThreeParameters
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithThreeParameters (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithEnforcementOfStringParameter
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithEnforcementOfStringParameter (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithNotPresentToolSchema
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithNotPresentToolSchema (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithJsonObjectArgument
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithJsonObjectArgument (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithTwoToolCalls
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithTwoToolCalls (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryToolCallNoMatchingToolParameterTypeMapEntry
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryToolCallNoMatchingToolParameterTypeMapEntry (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryToolCallWithRepeatedArgument
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplUnaryToolCallWithRepeatedArgument (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplQuotedParameterName
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplQuotedParameterName (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplSingleQuotedParameterName
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplSingleQuotedParameterName (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplQuotedFunctionName
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplQuotedFunctionName (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplQuotedNamesKeepStringEnforcement
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplQuotedNamesKeepStringEnforcement (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplQuotedParameterNameKeepsBooleanNormalization
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplQuotedParameterNameKeepsBooleanNormalization (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplMixedQuotingOfParameterNames
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplMixedQuotingOfParameterNames (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplTwoToolCallsWithQuotedNames
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplTwoToolCallsWithQuotedNames (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplParameterNameWithInnerQuoteKept
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplParameterNameWithInnerQuoteKept (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplParameterNameWithUnmatchedQuoteKept
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplParameterNameWithUnmatchedQuoteKept (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithQuotedFunctionName
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithQuotedFunctionName (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithMoreThan1StateChange
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithMoreThan1StateChange (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithNoStateChange
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithNoStateChange (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithPartialToolCall
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithPartialToolCall (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithTwoToolCalls
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithTwoToolCalls (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithToolCallNoArgs
+[       OK ] Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithToolCallNoArgs (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterCompletedCallsInSingleChunk
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterCompletedCallsInSingleChunk (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterMultipleCompletedCallsInSingleChunk
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterMultipleCompletedCallsInSingleChunk (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterCompletedCallFollowedByPartialName
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterCompletedCallFollowedByPartialName (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterUnknownToolNotExecutable
+[2026-10-21 05:07:00.333] [warning] [qwen3coder_tool_parser.cpp:349] Ignoring completed Qwen call to undeclared tool: undeclared_tool
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterUnknownToolNotExecutable (1 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterNonStringArgumentCannotFallbackToString
+[2026-10-21 05:07:00.334] [warning] [qwen3coder_tool_parser.cpp:113] Dropping Qwen tool call with invalid typed argument: function=string_int_tool parameter=arg2
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterNonStringArgumentCannotFallbackToString (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterRequiredSchemaKeysMustBePresent
+[2026-10-21 05:07:00.334] [warning] [qwen3coder_tool_parser.cpp:321] Dropping Qwen call with missing required arguments: string_tool
+[2026-10-21 05:07:00.334] [warning] [qwen3coder_tool_parser.cpp:353] Ignoring Qwen tool call with incomplete required arguments: string_tool
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterRequiredSchemaKeysMustBePresent (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterZeroArgumentRegisteredToolStillWorks
+unknown file: error: SEH exception with code 0xc0000005 thrown in the test body.
+Stack trace:
+
+
+[  FAILED  ] Qwen3CoderOutputParserTest.QwenmonsterZeroArgumentRegisteredToolStillWorks (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterMalformedXMLClosingMarkerNeverExecutable
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterMalformedXMLClosingMarkerNeverExecutable (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterAllSingleByteSplitsPreserveCallIdentity
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterAllSingleByteSplitsPreserveCallIdentity (3 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.QwenmonsterResetClearsOldPartialAndRestartsCallIndex
+[       OK ] Qwen3CoderOutputParserTest.QwenmonsterResetClearsOldPartialAndRestartsCallIndex (0 ms)
+[ DISABLED ] Qwen3CoderOutputParserTest.DISABLED_QwenmonsterRejectedPrefixMustNotStealNextCall
+[ RUN      ] Qwen3CoderOutputParserTest.StreamingQuotedFunctionAndParameterNames
+[       OK ] Qwen3CoderOutputParserTest.StreamingQuotedFunctionAndParameterNames (0 ms)
+[ RUN      ] Qwen3CoderOutputParserTest.StreamingSimpleToolCall
+[2026-10-21 05:07:00.338] [error] [qwen3coder_output_parser_test.cpp:1391] Expected:
+{"delta":{"content":"JUST_SOME_STRING_BEFORE_SPECIAL_STARTING_TAG"}}
+[2026-10-21 05:07:00.338] [error] [qwen3coder_output_parser_test.cpp:1392] Got:
+{"delta":{"content":"JUST_SOME_STRING_BEFORE_SPECIAL_STARTING_TAG"}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1391] Expected:
+{"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"arg1\":\"value_before_tool_call\"}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1392] Got:
+{"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\"arg1\":\"value_before_tool_call\"}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1391] Expected:
+{"delta":{"tool_calls":[{"index":1,"function":{"arguments":"{\"arg1\":\"STRING_VALUE\"}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1392] Got:
+{"delta":{"tool_calls":[{"index":1,"function":{"arguments":"{\"arg1\":\"STRING_VALUE\"}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1391] Expected:
+{"delta":{"tool_calls":[{"index":2,"function":{"arguments":"{\"arg1\":\"\\nANOTHER_STRING_VALUE\",\"arg2\":3141522}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1392] Got:
+{"delta":{"tool_calls":[{"index":2,"function":{"arguments":"{\"arg1\":\"\\nANOTHER_STRING_VALUE\",\"arg2\":3141522}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1391] Expected:
+{"delta":{"tool_calls":[{"index":3,"function":{"arguments":"{\"arg1\":\"value1\"}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1392] Got:
+{"delta":{"tool_calls":[{"index":3,"function":{"arguments":"{\"arg1\":\"value1\"}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1391] Expected:
+{"delta":{"tool_calls":[{"index":4,"function":{"arguments":"{\"folder\":\"ResearchDocs\"}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1392] Got:
+{"delta":{"tool_calls":[{"index":4,"function":{"arguments":"{\"folder\":\"ResearchDocs\"}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1391] Expected:
+{"delta":{"tool_calls":[{"index":5,"function":{"arguments":"{\"arg1\":\"FUNCTION FC_CreateJsonPayload : STRING\\nVAR_INPUT\\n    Value1 : REAL;\\n    Value2 : INT;\\n    Value3 : BOOL;\\n    Value4 : STRING(100);\\nEND_VAR\\nVAR_OUTPUT\\n    JsonPayload : STRING(1000);\\nEND_VAR\\nVAR\\n    TempStr : STRING(100);\\nEND_VAR\\n\\n    JsonPayload := '{';\\n    JsonPayload := JsonPayload + '\\\"value1\\\":' + REAL_TO_STRING(Value1, '', 2) + ',';\\n    JsonPayload := JsonPayload + '\\\"value2\\\":' + INT_TO_STRING(Value2) + ',';\\n    JsonPayload := JsonPayload + '\\\"value3\\\":' + BOOL_TO_STRING(Value3) + ',';\\n    JsonPayload := JsonPayload + '\\\"value4\\\":\\\"' + Value4 + '\\\"';\\n    JsonPayload := JsonPayload + '}';\\n\\nEND_FUNCTION\"}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1392] Got:
+{"delta":{"tool_calls":[{"index":5,"function":{"arguments":"{\"arg1\":\"FUNCTION FC_CreateJsonPayload : STRING\\nVAR_INPUT\\n    Value1 : REAL;\\n    Value2 : INT;\\n    Value3 : BOOL;\\n    Value4 : STRING(100);\\nEND_VAR\\nVAR_OUTPUT\\n    JsonPayload : STRING(1000);\\nEND_VAR\\nVAR\\n    TempStr : STRING(100);\\nEND_VAR\\n\\n    JsonPayload := '{';\\n    JsonPayload := JsonPayload + '\\\"value1\\\":' + REAL_TO_STRING(Value1, '', 2) + ',';\\n    JsonPayload := JsonPayload + '\\\"value2\\\":' + INT_TO_STRING(Value2) + ',';\\n    JsonPayload := JsonPayload + '\\\"value3\\\":' + BOOL_TO_STRING(Value3) + ',';\\n    JsonPayload := JsonPayload + '\\\"value4\\\":\\\"' + Value4 + '\\\"';\\n    JsonPayload := JsonPayload + '}';\\n\\nEND_FUNCTION\"}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1391] Expected:
+{"delta":{"tool_calls":[{"index":6,"function":{"arguments":"{\"arg1\":\"if __name__ == \\\"__main__\\\":\\n    addresses = {}\\n    addresses[\\\"Hodor\\\"] = \\\"\\\"\\\"The door\\\"\\\"\\\"\\n    addresses[\\\"Arya\\\"] = \\\"Winterfell\\\"\\n    for name, address in addresses.items():\\n        print(f'\\\\n\\\\t{name} lives at {address}\\\\n\\\\r')\"}"}}]}}
+[2026-10-21 05:07:00.339] [error] [qwen3coder_output_parser_test.cpp:1392] Got:
+{"delta":{"tool_calls":[{"index":6,"function":{"arguments":"{\"arg1\":\"if __name__ == \\\"__main__\\\":\\n    addresses = {}\\n    addresses[\\\"Hodor\\\"] = \\\"\\\"\\\"The door\\\"\\\"\\\"\\n    addresses[\\\"Arya\\\"] = \\\"Winterfell\\\"\\n    for name, address in addresses.items():\\n        print(f'\\\\n\\\\t{name} lives at {address}\\\\n\\\\r')\"}"}}]}}
+[       OK ] Qwen3CoderOutputParserTest.StreamingSimpleToolCall (0 ms)
+[----------] 50 tests from Qwen3CoderOutputParserTest (94 ms total)
+
+[----------] 15 tests from Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool_value1
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool_value1 (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/int_tool_42
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/int_tool_42 (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/float_tool_52_32
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/float_tool_52_32 (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_true
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_true (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_false
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_false (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_True
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_True (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_False
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_False (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/object_tool___a__1__b____c___asd___
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/object_tool___a__1__b____c___asd___ (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/list_tool__1__2__3_
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/list_tool__1__2__3_ (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/list_tool___a___b___c__
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/list_tool___a___b___c__ (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/object_tool____a__1____b__2__
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/object_tool____a__1____b__2__ (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool_1_10
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool_1_10 (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool_1e3
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool_1e3 (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool__1__2____3_
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool__1__2____3_ (0 ms)
+[ RUN      ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool___a___1____b___2_
+[       OK ] Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool___a___1____b___2_ (0 ms)
+[----------] 15 tests from Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 65 tests from 2 test suites ran. (300 ms total)
+[  PASSED  ] 64 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] Qwen3CoderOutputParserTest.QwenmonsterZeroArgumentRegisteredToolStillWorks
+
+ 1 FAILED TEST
+  YOU HAVE 1 DISABLED TEST
+

@@ -1,0 +1,29 @@
+SOURCE SHA: 8cd25d63085637d112f616d62913e345a93d2233
+COMMAND: rtk proxy cmd /d /c C:/gm/qwenmonster/tools/bazel-initial.cmd test //src:qwenmonster_output_parser_test //src:qwenmonster_generation_policy_test //src:gemma4_output_parser_test //src:output_parser_core_test --test_output=errors
+DEPENDENCY SHAs: see PUBLIC-COHORT-SOURCE-PINNED.json and BUILD-INPUT-AUDIT.json.
+INITIAL RESULT: compilation completed; exit 1 from test failures.
+Raw log retained locally (contains build host paths); this is its actual final output.
+RAW_LOG_SHA256: e7d77934283c34485b0d51328fcd7fcf02c469456a3f843e23b844738778bf1d
+
+[2,751 / 2,758] 3 / 4 tests, 2 failed; Compiling src/llm/io_processing/devstral/generation_config_builder.cpp; 1s local, disk-cache ... (2 actions running)
+[2,751 / 2,758] 3 / 4 tests, 2 failed; Compiling src/llm/io_processing/devstral/generation_config_builder.cpp; 11s local, disk-cache ... (2 actions running)
+[2,752 / 2,758] 3 / 4 tests, 2 failed; Compiling src/llm/io_processing/base_generation_config_builder.cpp; 12s local, disk-cache ... (2 actions running)
+[2,753 / 2,758] 3 / 4 tests, 2 failed; Compiling src/llm/io_processing/hermes3/generation_config_builder.cpp; 6s local, disk-cache ... (2 actions, 1 running)
+[2,753 / 2,758] 3 / 4 tests, 2 failed; Compiling src/llm/io_processing/hermes3/generation_config_builder.cpp; 7s local, disk-cache ... (2 actions running)
+[2,754 / 2,758] 3 / 4 tests, 2 failed; Compiling src/llm/io_processing/phi4/generation_config_builder.cpp; 5s local, disk-cache ... (2 actions, 1 running)
+[2,754 / 2,758] 3 / 4 tests, 2 failed; Compiling src/llm/io_processing/phi4/generation_config_builder.cpp; 7s local, disk-cache ... (2 actions running)
+[2,755 / 2,758] 3 / 4 tests, 2 failed; Compiling src/llm/io_processing/llama3/generation_config_builder.cpp; 6s local, disk-cache
+[2,756 / 2,758] 3 / 4 tests, 2 failed; [Prepa] Linking src/llm/generation_config_builders.lib
+INFO: Found 4 test targets...
+INFO: Elapsed time: 994.795s, Critical Path: 24.08s
+INFO: 2753 processes: 1802 internal, 951 local.
+INFO: Build completed, 2 tests FAILED, 2753 total actions
+//src:output_parser_core_test                                            PASSED in 0.1s
+//src:qwenmonster_generation_policy_test                                 PASSED in 0.1s
+//src:gemma4_output_parser_test                                          FAILED in 0.7s
+  C:/gb/qwm/uebyplvr/execroot/ovms/bazel-out/x64_windows-opt/testlogs/src/gemma4_output_parser_test/test.log
+//src:qwenmonster_output_parser_test                                     FAILED in 0.3s
+  C:/gb/qwm/uebyplvr/execroot/ovms/bazel-out/x64_windows-opt/testlogs/src/qwenmonster_output_parser_test/test.log
+
+Executed 4 out of 4 tests: 2 tests pass and 2 fail locally.
+There were tests whose specified size is too big. Use the --test_verbose_timeout_warnings command line option to see which ones these are.
