@@ -1,3 +1,5 @@
+Current follow-up: full ovms_test and QWM request unit gate are measured in OVMS-TEST-HTTP-RESULTS.md. The historical BoringSSL/HTTP-unit blocker below is superseded. Real HTTP400 transport and live acceptance remain NOT RUN.
+
 # QWM-01 build report — 2026-10-21
 
 **ACCEPTED: NO. RUNTIME UNVERIFIED.**

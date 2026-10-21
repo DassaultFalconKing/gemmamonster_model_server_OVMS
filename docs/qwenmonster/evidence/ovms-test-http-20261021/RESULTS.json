@@ -1,0 +1,351 @@
+{
+  "measured_utc": "2026-10-21T15:48:54.732799+00:00",
+  "tested_product_commit": "e0772d161a81ed3420082af2bf68ab46d342e904",
+  "status": "HTTP REQUEST UNIT GATE PASS; ACCEPTED NO",
+  "build": {
+    "stage": "ovms-test-build-file-symlinks",
+    "started_utc": "2026-10-21T13:42:38.644650+00:00",
+    "status": "PROCESS_FINISHED",
+    "exit_code": 0,
+    "finished_utc": "2026-10-21T15:09:13.975986+00:00"
+  },
+  "source_checks": [
+    {
+      "component": "genai",
+      "pinned_sha": "2decb9ec4bea827e01db47524352ad72d23b33ab",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "2decb9ec4bea827e01db47524352ad72d23b33ab",
+      "dirty": false
+    },
+    {
+      "component": "xgrammar",
+      "pinned_sha": "c77d5e0d62411d17d4cf55d280463eb5b3bec7ba",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "c77d5e0d62411d17d4cf55d280463eb5b3bec7ba",
+      "dirty": false
+    },
+    {
+      "component": "openvino",
+      "pinned_sha": "b5bfb14860320ae2a44d0fc55d78caa9a9d789b9",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "b5bfb14860320ae2a44d0fc55d78caa9a9d789b9",
+      "dirty": false
+    },
+    {
+      "component": "minja",
+      "pinned_sha": "83eb074e42140b0d1194d1dd61f29c31e4515ee9",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "83eb074e42140b0d1194d1dd61f29c31e4515ee9",
+      "dirty": false
+    },
+    {
+      "component": "ovms",
+      "pinned_sha": "ba6ec792c3121850fea167fa7d7e190b25fcdc76",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "e0772d161a81ed3420082af2bf68ab46d342e904",
+      "dirty": true
+    },
+    {
+      "component": "tokenizers",
+      "pinned_sha": "d73028e255ddc279483fbc6e8ea90dc802e820f5",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "d73028e255ddc279483fbc6e8ea90dc802e820f5",
+      "dirty": false
+    }
+  ],
+  "qwm": {
+    "status": "PASS",
+    "run_id": "20261021T154752Z-f8d5a1",
+    "executed_tests": 2,
+    "failures": 0,
+    "failed_tests": [],
+    "xml_sha256": "e9fcbb39d0c5c0cf059e2383e19431c41c25735bfd36de2e7fcd009da8d0ad37",
+    "xml_attributes": {
+      "tests": "2",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "time": "0.812",
+      "timestamp": "2026-10-21T17:47:54.604",
+      "name": "AllTests"
+    },
+    "scope": "Actual compiled full ovms_test filtered checks, no live model/transport acceptance"
+  },
+  "tool_controls": {
+    "status": "PASS",
+    "run_id": "20261021T154802Z-f33742",
+    "executed_tests": 11,
+    "failures": 0,
+    "failed_tests": [],
+    "xml_sha256": "48cbd36041435e9afac00d7848ab8ce172ecbb956e8e561e3bf586948e19a279",
+    "xml_attributes": {
+      "tests": "11",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "time": "0.706",
+      "timestamp": "2026-10-21T17:48:03.163",
+      "name": "AllTests"
+    },
+    "scope": "Actual compiled full ovms_test filtered checks, no live model/transport acceptance"
+  },
+  "parser_controls": {
+    "status": "BASELINE_FAILURES_PRESERVED",
+    "run_id": "20261021T154840Z-d4fda7",
+    "executed_tests": 139,
+    "failures": 3,
+    "failed_tests": [
+      "Gemma4OutputParserTest.ParseReasoningWithDuplicatedEndTagDoesNotEmitInterveningTextTwice",
+      "Gemma4OutputParserTest.ParseToolCallOutputWithNoToolsInTheRequest",
+      "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingEscapedQuotes"
+    ],
+    "xml_sha256": "aa1d6daf8e8995220f2e1a786cff9b7d02b3cdfe049efd8c9f5cc66b21ead2df",
+    "xml_attributes": {
+      "tests": "139",
+      "failures": "3",
+      "disabled": "0",
+      "errors": "0",
+      "time": "1.077",
+      "timestamp": "2026-10-21T17:48:40.928",
+      "name": "AllTests"
+    },
+    "scope": "Actual compiled full ovms_test filtered checks, no live model/transport acceptance"
+  },
+  "loaded_modules": {
+    "python312.dll": {
+      "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120"
+    },
+    "openvino.dll": {
+      "sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f",
+      "matches_staged_core": true
+    },
+    "git2.dll": {
+      "sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8"
+    },
+    "opencv_world4140.dll": {
+      "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46"
+    },
+    "libcurl-x64.dll": {
+      "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334"
+    },
+    "openvino_genai.dll": {
+      "sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da",
+      "matches_staged_core": true
+    },
+    "openvino_tokenizers.dll": {
+      "sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66",
+      "matches_staged_core": true
+    },
+    "openvino_ir_frontend.dll": {
+      "sha256": "f4db5c945ce4bbe055450b31d706dfc530f6fa79e9b8398c6832c2626ae192ef",
+      "matches_staged_core": true
+    },
+    "openvino_intel_cpu_plugin.dll": {
+      "sha256": "0cf9706f38ad67535c09842b4678accd207c132364cfe63e5cbb2f2eaa5fda77",
+      "matches_staged_core": true
+    },
+    "openvino_auto_batch_plugin.dll": {
+      "sha256": "ec1fb6bd0c2c2db23ab83e527736ec02c231c13c5573794d66367a9e2a455634",
+      "matches_staged_core": true
+    }
+  },
+  "auxiliary_dependencies": {
+    "started_utc": "2026-10-21T13:26:42.173557+00:00",
+    "policy": "Restore exact versions selected by checked-out Windows recipe; no core cohort updates.",
+    "boringssl": {
+      "tag": "0.32.1",
+      "sha": "38b03401110f03bde32bc7e86ff4f815238ed2d3",
+      "dirty": false
+    },
+    "curl": {
+      "archive_sha256": "7c8c6b953b4eb2953d2bdc08cca1d5f09a964e9f86c361693559400c9a6d6db0",
+      "version": "8.22.0_2",
+      "dll_sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334",
+      "import_lib_sha256": "a625c9a15507438a18ec83aced74849ab28f809d5464d797ee6a753b07a63f45"
+    },
+    "opencv": {
+      "version": "4.14.0",
+      "url": "https://github.com/opencv/opencv/releases/download/4.14.0/opencv-4.14.0-windows.exe",
+      "archive_sha256": "5f266a8b73bed535962d7e861a6457e32a0dd5f463ad0a7cf8707a135469be63",
+      "verification": "Official package extracted and required headers/import library/DLL verified",
+      "layout_alias": "vc17 junction to official vc16 directory; unchanged binary/import library",
+      "dll_sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46",
+      "import_lib_sha256": "ccbbb6223096a0d4cc2cbc0f12babcf6a5d6ee1a1918a16e5da058c144a0fad9",
+      "matches_historical_release_dll": false
+    },
+    "python3_embed_alias_sha256": "4d6f5f81a4bca11191c4c7c6b43632694d0a4ce74e068619d8fdc161d469859a",
+    "python3_embed_alias_note": "Temporary diagnostic alias removed; private development Python selected; global PATH unchanged."
+  },
+  "python_dev": {
+    "version": "3.12.10",
+    "source_url": "https://api.nuget.org/v3-flatcontainer/python/3.12.10/python.3.12.10.nupkg",
+    "catalog": "https://api.nuget.org/v3/catalog0/data/2025.04.08.14.01.15/python.3.12.10.json",
+    "sha256": "0eb85c2dfccccf1b17352de4c397f69194035b7d37149eacc16f1147d93de3b8",
+    "sha512": "u9pNz2iKlCEbYtUJaKkbOPMF0LjR7NkCafdKhvigpPzrt8oWKgdTpHaR6z3wyWQAm9PYGUxv0Zr66NX9AeHMDw==",
+    "verification": "NuGet catalog SHA512 matches package bytes; required development headers/import library/stdlib present"
+  },
+  "opt_tokenizer": {
+    "repository": "facebook/opt-125m",
+    "revision": "27dcfa74d334bc871f3234de431e71c6eeba5dd6",
+    "scope": "tokenizer-only unit fixture, no inference model or weights",
+    "source_files": {
+      "config.json": "54162c9cd0377110df1859dfabebb106fc0988c8aadb88207ce1ee0d34985df6",
+      "generation_config.json": "d37de99f9835d7a4d0916257f724504d12c4a668f36a50b2d42e09ba4ebd05d5",
+      "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+      "special_tokens_map.json": "0f3cd5f307a2735cfee31ddf33be88655e8be165ee2cdc26ced966f04258adf0",
+      "tokenizer_config.json": "d1e4185b43a0a06421ab7218d5c1a775350bd13024507b34fbed25dcf6c14c6b",
+      "vocab.json": "06b4d46c8e752d410213d9548eb27a54db70fda0319b6271fb8d59dead5e1cab"
+    },
+    "core_version": "2026.5.0-5-591ab0b517a-codex/c6-head-20261019-openvino",
+    "tokenizers_source": "d73028e255ddc279483fbc6e8ea90dc802e820f5",
+    "conversion": "existing pinned OpenVINO Python bindings and tokenizers DLL; transformers4.57.6 numpy2.2.5",
+    "probes": [
+      {
+        "text": "What is the weather like in Paris today?",
+        "token_ids": [
+          2,
+          2264,
+          16,
+          5,
+          1650,
+          101,
+          11,
+          2201,
+          452,
+          116
+        ],
+        "match": true
+      },
+      {
+        "text": "<tool_call>\n<function=weather>",
+        "token_ids": [
+          2,
+          41552,
+          43342,
+          1215,
+          16395,
+          15698,
+          50118,
+          41552,
+          35435,
+          5214,
+          21693,
+          15698
+        ],
+        "match": true
+      },
+      {
+        "text": "Hello, мир!",
+        "token_ids": [
+          2,
+          31414,
+          6,
+          18697,
+          4394,
+          35328,
+          24269,
+          328
+        ],
+        "match": true
+      }
+    ],
+    "generated_files": {
+      "openvino_detokenizer.bin": "50cd9af30112ff045bdd59615c0d9570a0686682d4b92b13792765b85896cfd3",
+      "openvino_detokenizer.xml": "a2a889bb9ff40472a4b2a0f59b918e44f86a16bfa0a4867e1516a7ebc18feb03",
+      "openvino_tokenizer.bin": "7bdde72e3966a74cc9216c98ef607d5dbd6dab57a9e016e33d87fc852c94be46",
+      "openvino_tokenizer.xml": "e97f211b581b0778d31c64a7e62f45144aad38a9c5a5399848ef03169ddf618d"
+    }
+  },
+  "generated_header_red": "C1083 / WinError267: virtual include was a directory junction to a generated file",
+  "generated_header_green": {
+    "header_exists": true,
+    "header_is_file_symlink": true,
+    "header_is_junction": false,
+    "compiled_object_exists": true
+  },
+  "core_cohort_boundary": "Original staged core libraries reused and hashes matched loaded process modules. Published source lock unchanged. XGrammar802 companion not integrated; no core dependency rebuild or live model test.",
+  "http400_transport": "NOT RUN; unit handler InvalidArgument checks do not establish actual HTTP transport mapping",
+  "live": "NOT RUN",
+  "agentic": "NOT RUN",
+  "accepted": false,
+  "raw_logs": {
+    "http-parser-controls-20261021T154810Z-202d7c-list.log": {
+      "sha256": "744f6fb2fe1ff317beaa35703d80f54770a5b54576cf9e7de1f9c496f238dda0",
+      "bytes": 6924
+    },
+    "http-parser-controls-20261021T154840Z-d4fda7-list.log": {
+      "sha256": "8871fa4f8f2e6490b7b1469635489375492039286a051f542814e054911b3f77",
+      "bytes": 9204
+    },
+    "http-parser-controls-20261021T154840Z-d4fda7-run.log": {
+      "sha256": "5319e780a10aa0cd1f02bd212c61dc1e981f8c2a6b41aaa5d33536f0838a167c",
+      "bytes": 11944629
+    },
+    "http-qwm-20261021T154752Z-f8d5a1-list.log": {
+      "sha256": "5a5d5b43f04d8fd7062cf91d02aedc02dbc8ad64de6518a7a1b3ad7bfc986bb1",
+      "bytes": 963
+    },
+    "http-qwm-20261021T154752Z-f8d5a1-run.log": {
+      "sha256": "4cac79705c0014d4c9b69f9f7083f9cca7ac6e90bcbf56cc269bfd66df1352cf",
+      "bytes": 10084
+    },
+    "http-tool-controls-20261021T154802Z-f33742-list.log": {
+      "sha256": "cfa7ed5d6cca26e555c00c5a0ed86c3600a4a742f356338122b340e251faa4ac",
+      "bytes": 1470
+    },
+    "http-tool-controls-20261021T154802Z-f33742-run.log": {
+      "sha256": "64ddbec3d31e2707ff2d51499c2aaa4c86eecebf3780a1c18b4274a9bb58ea5c",
+      "bytes": 29817
+    },
+    "opencv-extract-verified.log": {
+      "sha256": "9336bc7c485a7bb8a69d6b8e9b694b0ff6a92c370d34ef5c344175065746d075",
+      "bytes": 1224
+    },
+    "opencv-extract.log": {
+      "sha256": "b77fa3c1028aa93d2746cd85f7819acef6fef3ef16d306e5389382bab2564925",
+      "bytes": 500
+    },
+    "opt-tokenizer-convert-runtime.log": {
+      "sha256": "09327f46ced6e167972875510a639888eee0a129c2092c4e7c43d918f3a95254",
+      "bytes": 908
+    },
+    "opt-tokenizer-convert-utf8.log": {
+      "sha256": "27eb89eb210a97cf3e4cf0566e4a86e2663aae471929de999729e8e53cef04a4",
+      "bytes": 2421
+    },
+    "opt-tokenizer-convert.log": {
+      "sha256": "49df89eb70db00f88e371c9fcb7b8fddb6bc12e59544eb8480ca2e27065b3219",
+      "bytes": 121
+    },
+    "ovms-test-build-dev-python.log": {
+      "sha256": "52a2819531fddd1fe2abf4ca738b4a812dfedbba2bff7ce01c77a2a6755970d6",
+      "bytes": 40738
+    },
+    "ovms-test-build-file-symlinks.log": {
+      "sha256": "1f59a0fbf1ed9b38720b4d645f2efe60d315e93ff7fde7cb9fc218d24ab83e5c",
+      "bytes": 237887
+    },
+    "ovms-test-build-python312.log": {
+      "sha256": "c3fdeb34992b5622cc1ff0bc91d6af493f6358d09f709724e3601ddef845f94c",
+      "bytes": 7385
+    },
+    "ovms-test-build-restored.log": {
+      "sha256": "69ef4e5c5579ea1a9b82a105ef3a10eaa636d875730fcf2e1fcf80ba3305edee",
+      "bytes": 12042
+    },
+    "protobuf-any-repro.log": {
+      "sha256": "2fbaf5d4c92de65f35f06f799571c174080a21d54d3e05ed3b4a7d39e2446c9b",
+      "bytes": 238
+    },
+    "tokenizer-python-deps.log": {
+      "sha256": "29c5cbeadb232b4f11d7099d5e61d9b61efaa31786f17183bee7041395bb4bc9",
+      "bytes": 5666
+    }
+  }
+}

@@ -1,3 +1,18 @@
+# OVMS test current measured checkpoint
+
+- ACTIVE_STAGE: full target and QWM request unit gate completed; transport/live gates remain open.
+- BASE_SHA / CURRENT_HEAD / REVERT_POINT: `e0772d161a81ed3420082af2bf68ab46d342e904` (tested product code, later documentation-only tip resolved with git rev-parse HEAD).
+- WORK_BRANCH: `qwm01-request-schema`; remote feature/qwenmonster-qwm01-request-schema-20261021.
+- DEPENDENCY_LOCK: unchanged published core lock; auxiliary restoration identities recorded separately.
+- LAST_GREEN_TESTS: full ovms_test build exit0, QWM2/2, related tool controls11/11, Qwen69/69; actual loaded core module hashes match staged inputs.
+- CURRENT_FAILURE: Gemma67/70, same three failures; HTTP400 transport, LIVE, AGENTIC NOT RUN; XML #650 and remaining grammar/profile issues still open.
+- ROOT_CAUSE: absent auxiliary inputs, Python dev/runtime mismatch, and generated-header file junction; repaired without product source changes.
+- NEXT_ACTION: verify real HTTP400 transport separately; complete explicit cohort integration and canonical model/live gates.
+- EVIDENCE_PATH: OVMS-TEST-HTTP-RESULTS.md and evidence/ovms-test-http-20261021/RESULTS.json; raw logs retained privately.
+- ACCEPTED: NO.
+
+Historical snapshots follow and are superseded by the measured checkpoint above.
+
 # QWM-01 current measured checkpoint
 
 - ACTIVE_STAGE: focused unit and native companion builds complete; HTTP build blocked in dependency analysis.
