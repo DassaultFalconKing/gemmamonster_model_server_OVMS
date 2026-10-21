@@ -1,6 +1,6 @@
 # Gemma4 bounded parser repairs
 
-Date: 2026-10-21. Status: preparation / RED; ACCEPTED: NO.
+Date: 2026-10-21. Status: BUILD/UNIT PASS on repair HEAD `6378400a6`; ACCEPTED: NO.
 
 ## Scope and integration
 
@@ -116,9 +116,26 @@ This is a replay of the prior parser executable, not a build of this worktree.
 The initial replay completed and wrote XML, then its shell failed during hash
 reporting; the subsequent read verified fresh XML and binary hash separately.
 
-Required after the active build releases its slot: isolated short output root,
-bounded jobs, build and execute separately, retain fresh GTest XML/logs and exact
-executable/runtime/tokenizer hashes. Run Gemma, generic OutputParser, Qwenmonster
-parser and generation-policy controls. Preserve the three legacy failure names
-and explicitly account for every expectation change. BUILD/UNIT for new source,
-API/LIVE/AGENTIC: NOT RUN at this checkpoint.
+Measured BUILD/UNIT on this worktree (isolated output root `C:/gb/g4b`, jobs=2):
+
+| Suite | Result |
+|---|---|
+| `gemma4_output_parser_test` | **79/79 PASS** |
+| `output_parser_core_test` | **29/29 PASS** |
+| `qwenmonster_output_parser_test` | **69/69 PASS** |
+| `qwenmonster_generation_policy_test` | **9/9 PASS** |
+
+Three legacy Gemma failure names are now PASS after explicit expectation/contract
+fixes (duplicated-end channel, no-tools visibility, native-string fixture):
+
+- `ParseReasoningWithDuplicatedEndTagDoesNotEmitInterveningTextTwice`
+- `ParseToolCallOutputWithNoToolsInTheRequest`
+- `ParseToolCallWithStringArgumentsContainingEscapedQuotes`
+
+Executable SHA256 (`gemma4_output_parser_test.exe`):
+`80625f3047fae6746aa7eb338438f665fcbeddf48479a771ce3c846655b63691`.
+Staged runtime/tokenizer hashes match the C6 cohort used for HTTP gates
+(`openvino`/`genai`/`tokenizers` as in private hub
+`C:/gm/qwenmonster/gemma4-bounded-20261021/results/unit-controls.json`).
+Fresh per-suite GTest XML retained in that hub. API/LIVE/AGENTIC and C6 binary
+comparison: still NOT RUN.
