@@ -1,23 +1,22 @@
-# QWENMONSTER — C6 protocol and agentic reliability
+# QWENMONSTER — C6 protocol, model-family adaptation and agentic reliability
 
-Status: **M1 IMPLEMENTED, NOT VERIFIED** (2026-10-21).
-Base: `c6-head-mainline-20261020` at `ba6ec792c3121850fea167fa7d7e190b25fcdc76`.
-Working branch: `feature/qwenmonster-c6-20261021`. No changes to the base branch.
+**Status: R2/R3 experimental source candidate, NOT ACCEPTED (2026-10-21).**
 
-## Contract
-- Correct native Qwen XML tool calls: `none/auto/required/named` and multi-call.
-- Preserve reasoning -> tool -> result -> continuation without leaking or duplicating deltas.
-- Isolate Qwen parsers and policies from Gemma4, Hermes3 and generic paths.
-- Deterministic protocol correctness must precede behavioral tuning and agent delegation.
-- Accept only with real build + API/SSE + harness evidence. A GitHub commit is not a live pass.
+- Baseline: `c6-head-mainline-20261020` at `ba6ec792c3121850fea167fa7d7e190b25fcdc76`.
+- Completed initial M1 source branch: `feature/qwenmonster-c6-20261021` at `04eb7415` (no BUILD/LIVE PASS).
+- Active comparative refit branch: `feature/qwenmonster-comparative-refit-20261021` (do not deploy over live C6).
 
-## Work stages
-- **R0:** provenance, dependencies, upstream parser archaeology and known-good C6 (open).
-- **R1:** canonical template, token-level equality, history/preserve_thinking (open).
-- **R2/M1:** XML streaming ordering, multi-call, bounded recovery (patches landed; gates pending).
-- **R3/M2:** Qwen generation config builder, lazy `auto`, strict `required/named` (not started).
-- **R4:** reasoning/tool phase ownership and chunk invariance (not started).
-- **R5:** multi-turn, agent delegation, concurrent sessions and context acceptance (not started).
-- **R6:** post-3.6 capability profiles and small upstream PRs (not started).
+## Read before continuing
 
-See `STATE.md` before making changes. Continue only after running focused tests from `ACCEPTANCE.md`.
+1. `STATE.md`: branch, stage, next action, current blockers.
+2. `COMPARATIVE-QWEN-PARSER-VERDICT.md`: pinned vLLM, llama.cpp, XGrammar, GenAI evidence, decision matrix.
+3. `OVMS-MODEL-FAMILY-ADAPTATION-PROTOCOL.md`: reusable MFP-1 stage gates A0–A9 for any new model family.
+4. `GENERATION-POLICY-DESIGN.md`: native Qwen XML builder and unresolved hard-choice/reasoning risks.
+5. `ACCEPTANCE.md`: exact Bazel and runtime gate checklist.
+6. `C6-BASELINE.md`, `PROTOCOL-MATRIX.md`, `ISSUES-AND-RISKS.md`: inherited M1 provenance.
+
+## Boundaries
+
+Canonical template + tokenizer decide the native model protocol. vLLM informs parser-state behavior; llama.cpp informs native generation/grammar; GenAI/XGrammar owns constrained decoding; OVMS retains its OutputParser/Streamer/API boundaries. Do not replace the working Gemma4 stack.
+
+Do not report BUILD or LIVE PASS on the strength of a GitHub commit. Preserve exact tests, logs, native tokens and model/device/version evidence.
