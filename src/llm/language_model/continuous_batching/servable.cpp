@@ -173,6 +173,15 @@ absl::Status ContinuousBatchingServable::prepareCompleteResponse(std::shared_ptr
 
 absl::Status ContinuousBatchingServable::preparePartialResponse(std::shared_ptr<GenAiServableExecutionContext>& executionContext) {
     auto status = GenAiServable::preparePartialResponse(executionContext);
+    if (!status.ok()) {
+        auto cbExecutionContext = std::static_pointer_cast<ContinuousBatchingServableExecutionContext>(executionContext);
+        // The disconnect callback can retain this handle after calculator
+        // teardown, so returning an error alone does not stop generation.
+        if (cbExecutionContext->generationHandle) {
+            cbExecutionContext->generationHandle->stop();
+        }
+        return status;
+    }
     if (status.ok() &&
         !executionContext->sendLoopbackSignal &&
         executionContext->perfMetrics &&

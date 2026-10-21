@@ -92,6 +92,15 @@ absl::Status VisualLanguageModelServable::prepareCompleteResponse(std::shared_pt
 
 absl::Status VisualLanguageModelServable::preparePartialResponse(std::shared_ptr<GenAiServableExecutionContext>& executionContext) {
     auto status = GenAiServable::preparePartialResponse(executionContext);
+    if (!status.ok()) {
+        auto vlmExecutionContext = std::static_pointer_cast<VisualLanguageModelServableExecutionContext>(executionContext);
+        // VLM calls the shared response path directly, so it owns the same
+        // failure cleanup as the language-model CB override.
+        if (vlmExecutionContext->generationHandle) {
+            vlmExecutionContext->generationHandle->stop();
+        }
+        return status;
+    }
     if (status.ok() &&
         !executionContext->sendLoopbackSignal &&
         llm_calculator_logger->should_log(spdlog::level::debug)) {

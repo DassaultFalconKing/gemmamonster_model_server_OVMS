@@ -1,0 +1,542 @@
+{
+  "status": "UNIT_PASS",
+  "accepted": false,
+  "base_sha": "d7e793e",
+  "source_files": [
+    {
+      "path": "src/llm/servable.cpp",
+      "sha256": "322d50f591dcc083e79c3aec31264bc9f05401baadb08c4b5dfe137ba9c4ba4c"
+    },
+    {
+      "path": "src/llm/language_model/continuous_batching/servable.cpp",
+      "sha256": "5dbbfbaa8cb3c00bf47673e1cb4c91aa8350bfaf62a1d965f6166cdcf6cb2043"
+    },
+    {
+      "path": "src/llm/visual_language_model/continuous_batching/servable.cpp",
+      "sha256": "83d09b24f6c1cfd38e55222d03f7e3a7eb5492a5de3f13e712bc4e3588303562"
+    },
+    {
+      "path": "src/test/http_openai_handler_test.cpp",
+      "sha256": "9c9a36463c805adbd667dbebaa816430d303194b08e7600fb7cbd91f8537772f"
+    }
+  ],
+  "runs": [
+    {
+      "status": "PASS",
+      "run_id": "20261021T195552Z-b4c8ae",
+      "executed_tests": 6,
+      "failures": 0,
+      "expected_tests": [
+        "HttpOpenAIHandlerParsingTest.CbParserCallbackCancellationDoesNotCompleteAndFreshRequestWorks",
+        "HttpOpenAIHandlerParsingTest.CbParserChatFailureNoneRejectsLoopback",
+        "HttpOpenAIHandlerParsingTest.CbParserChatFailureStopRejectsCompletion",
+        "HttpOpenAIHandlerParsingTest.CbParserChatHealthyFreshContextCompletes",
+        "HttpOpenAIHandlerParsingTest.CbParserExceptionAtEndRejectsNormalCompletion",
+        "HttpOpenAIHandlerParsingTest.CbParserExceptionRejectsWriteAndTerminalDrain"
+      ],
+      "xml_sha256": "fe6c38fd53d30678cd9f1accadba212aa16a8bdabd17f035b4df872a97d3ed2a",
+      "mode": "cb-parser",
+      "exe_sha256": "27f32660c973a2afa902fe6a9b7af41deb57ea649b740aa4e10480c3b7d190cf",
+      "loaded_modules": [
+        {
+          "basename": "opencv_world4140.dll",
+          "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46"
+        },
+        {
+          "basename": "openvino.dll",
+          "sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f"
+        },
+        {
+          "basename": "openvino_genai.dll",
+          "sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da"
+        },
+        {
+          "basename": "python312.dll",
+          "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120"
+        },
+        {
+          "basename": "libcurl-x64.dll",
+          "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334"
+        },
+        {
+          "basename": "git2.dll",
+          "sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8"
+        },
+        {
+          "basename": "openvino_tokenizers.dll",
+          "sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66"
+        },
+        {
+          "basename": "openvino_ir_frontend.dll",
+          "sha256": "f4db5c945ce4bbe055450b31d706dfc530f6fa79e9b8398c6832c2626ae192ef"
+        },
+        {
+          "basename": "openvino_intel_cpu_plugin.dll",
+          "sha256": "0cf9706f38ad67535c09842b4678accd207c132364cfe63e5cbb2f2eaa5fda77"
+        },
+        {
+          "basename": "openvino_auto_batch_plugin.dll",
+          "sha256": "ec1fb6bd0c2c2db23ab83e527736ec02c231c13c5573794d66367a9e2a455634"
+        }
+      ]
+    },
+    {
+      "status": "PASS",
+      "run_id": "20261021T195555Z-ff6ee3",
+      "executed_tests": 10,
+      "failures": 0,
+      "expected_tests": [
+        "BaseOutputParserTest.wrapDelta",
+        "BaseOutputParserTest.wrapFirstDelta",
+        "HttpOpenAIHandlerParsingTest.legacyServableParserExceptionCancelsGenerationAndReportsFailure",
+        "HttpOpenAIHandlerParsingTest.legacyServablePreparePartialResponseChatCompletionsStreamingHasCorrectUsageChunk",
+        "HttpOpenAIHandlerParsingTest.legacyServablePreparePartialResponseResponsesEndpointHasCorrectUsageInCompletedEvent",
+        "HttpOpenAIHandlerParsingTest.legacyServablePreparePartialResponseResponsesEndpointHasCorrectUsageOnLength",
+        "HttpOpenAIHandlerParsingTest.perfMetricsInContextPreserveDeliveredTokenUsageForBeamSearch",
+        "HttpOpenAIHandlerParsingTest.perfMetricsInContextSetResponsesUnaryUsage",
+        "HttpOpenAIHandlerParsingTest.perfMetricsInContextSetResponsesUsageBeforeFinalStreamingEvent",
+        "HttpOpenAIHandlerParsingTest.vlmLegacyServablePreparePartialResponseResponsesEndpointHasCorrectUsageInCompletedEvent"
+      ],
+      "xml_sha256": "5b645c550d5c6ad6930275d48bb79b46503981d420019bcb4806ac1108fcfc8f",
+      "mode": "common-controls",
+      "exe_sha256": "27f32660c973a2afa902fe6a9b7af41deb57ea649b740aa4e10480c3b7d190cf",
+      "loaded_modules": [
+        {
+          "basename": "opencv_world4140.dll",
+          "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46"
+        },
+        {
+          "basename": "openvino.dll",
+          "sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f"
+        },
+        {
+          "basename": "openvino_genai.dll",
+          "sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da"
+        },
+        {
+          "basename": "python312.dll",
+          "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120"
+        },
+        {
+          "basename": "libcurl-x64.dll",
+          "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334"
+        },
+        {
+          "basename": "git2.dll",
+          "sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8"
+        },
+        {
+          "basename": "openvino_tokenizers.dll",
+          "sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66"
+        },
+        {
+          "basename": "openvino_intel_cpu_plugin.dll",
+          "sha256": "0cf9706f38ad67535c09842b4678accd207c132364cfe63e5cbb2f2eaa5fda77"
+        },
+        {
+          "basename": "openvino_ir_frontend.dll",
+          "sha256": "f4db5c945ce4bbe055450b31d706dfc530f6fa79e9b8398c6832c2626ae192ef"
+        },
+        {
+          "basename": "openvino_auto_batch_plugin.dll",
+          "sha256": "ec1fb6bd0c2c2db23ab83e527736ec02c231c13c5573794d66367a9e2a455634"
+        }
+      ]
+    },
+    {
+      "status": "PASS",
+      "run_id": "20261021T195556Z-908fbd",
+      "executed_tests": 2,
+      "failures": 0,
+      "expected_tests": [
+        "HttpOpenAIHandlerParsingTest.QwenXmlRequestSchemaProfileIntake",
+        "HttpOpenAIHandlerParsingTest.QwenXmlSchemaProfileIsNotAppliedToHermesByAccident"
+      ],
+      "xml_sha256": "5f6a8f9a6ccf50a09e00a1bba4a7c8f6861bfa7244219f8ae8b0144ce84e6871",
+      "mode": "qwm",
+      "exe_sha256": "27f32660c973a2afa902fe6a9b7af41deb57ea649b740aa4e10480c3b7d190cf",
+      "loaded_modules": [
+        {
+          "basename": "opencv_world4140.dll",
+          "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46"
+        },
+        {
+          "basename": "openvino.dll",
+          "sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f"
+        },
+        {
+          "basename": "openvino_genai.dll",
+          "sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da"
+        },
+        {
+          "basename": "python312.dll",
+          "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120"
+        },
+        {
+          "basename": "libcurl-x64.dll",
+          "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334"
+        },
+        {
+          "basename": "git2.dll",
+          "sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8"
+        },
+        {
+          "basename": "openvino_tokenizers.dll",
+          "sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66"
+        },
+        {
+          "basename": "openvino_ir_frontend.dll",
+          "sha256": "f4db5c945ce4bbe055450b31d706dfc530f6fa79e9b8398c6832c2626ae192ef"
+        },
+        {
+          "basename": "openvino_intel_cpu_plugin.dll",
+          "sha256": "0cf9706f38ad67535c09842b4678accd207c132364cfe63e5cbb2f2eaa5fda77"
+        },
+        {
+          "basename": "openvino_auto_batch_plugin.dll",
+          "sha256": "ec1fb6bd0c2c2db23ab83e527736ec02c231c13c5573794d66367a9e2a455634"
+        }
+      ]
+    },
+    {
+      "status": "PASS",
+      "run_id": "20261021T195559Z-8a37bc",
+      "executed_tests": 11,
+      "failures": 0,
+      "expected_tests": [
+        "HttpOpenAIHandlerParsingTest.ParseRequestWithTools_ParsesToolsJsonContainerOnDemand",
+        "HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided1_ChoiceNone",
+        "HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceFirst",
+        "HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceIsANumber",
+        "HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceIsAString",
+        "HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceIsNotOfTypeFunction",
+        "HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceLast",
+        "HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceMiddle",
+        "HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceNotInProvidedList",
+        "HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceObjectMissingFunctionField",
+        "HttpOpenAIHandlerParsingTest.ParseRequestWithTools_Provided3_ChoiceObjectNameIsNotString"
+      ],
+      "xml_sha256": "8b16605c89a24fd510e55760217444fa4875187963736fd11dd0a42645c58901",
+      "mode": "tool-controls",
+      "exe_sha256": "27f32660c973a2afa902fe6a9b7af41deb57ea649b740aa4e10480c3b7d190cf",
+      "loaded_modules": [
+        {
+          "basename": "opencv_world4140.dll",
+          "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46"
+        },
+        {
+          "basename": "openvino.dll",
+          "sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f"
+        },
+        {
+          "basename": "openvino_genai.dll",
+          "sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da"
+        },
+        {
+          "basename": "python312.dll",
+          "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120"
+        },
+        {
+          "basename": "libcurl-x64.dll",
+          "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334"
+        },
+        {
+          "basename": "git2.dll",
+          "sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8"
+        },
+        {
+          "basename": "openvino_tokenizers.dll",
+          "sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66"
+        },
+        {
+          "basename": "openvino_ir_frontend.dll",
+          "sha256": "f4db5c945ce4bbe055450b31d706dfc530f6fa79e9b8398c6832c2626ae192ef"
+        },
+        {
+          "basename": "openvino_intel_cpu_plugin.dll",
+          "sha256": "0cf9706f38ad67535c09842b4678accd207c132364cfe63e5cbb2f2eaa5fda77"
+        },
+        {
+          "basename": "openvino_auto_batch_plugin.dll",
+          "sha256": "ec1fb6bd0c2c2db23ab83e527736ec02c231c13c5573794d66367a9e2a455634"
+        }
+      ]
+    },
+    {
+      "status": "PASS",
+      "run_id": "20261021T195557Z-1b75df",
+      "executed_tests": 148,
+      "failures": 0,
+      "expected_tests": [
+        "Gemma4OutputParserTest.BufferedCallsAreInvariantToDecodedChunkBoundaries",
+        "Gemma4OutputParserTest.ClosedReasoningDoesNotReenterThroughBarePreamble",
+        "Gemma4OutputParserTest.DuplicatedReasoningCloserHasPartitionInvariantChannels",
+        "Gemma4OutputParserTest.HiddenNoToolsMarkerFragmentsSurviveTerminalReasoningDrain",
+        "Gemma4OutputParserTest.HiddenNoToolsMarkersAreInvariantToEverySplitAndFinish",
+        "Gemma4OutputParserTest.HolisticStreaming",
+        "Gemma4OutputParserTest.ImplicitReasoningToolHandoffPreservesAtomicRegistryCalls",
+        "Gemma4OutputParserTest.ImplicitStartStillConsumesGeneratedChannelHeader",
+        "Gemma4OutputParserTest.InitialBareReasoningPreambleSupportsEverySplit",
+        "Gemma4OutputParserTest.NativeStringValuesAndJsonEscapesHaveDistinctSemantics",
+        "Gemma4OutputParserTest.NoToolsHiddenContentTokensPreserveExplicitAndImplicitReasoning",
+        "Gemma4OutputParserTest.NoToolsStreamerHonorsBothContentTokenVisibilityModes",
+        "Gemma4OutputParserTest.OrdinaryContentDoesNotWaitForReasoningPreamble",
+        "Gemma4OutputParserTest.ParseReasoningDoesNotTreatContentNewlineAsHeaderBoundary",
+        "Gemma4OutputParserTest.ParseReasoningWithCorruptedKeyword",
+        "Gemma4OutputParserTest.ParseReasoningWithDegenerateKeyword",
+        "Gemma4OutputParserTest.ParseReasoningWithDuplicatedEndTagDoesNotEmitInterveningTextTwice",
+        "Gemma4OutputParserTest.ParseReasoningWithMissingOpenerTag",
+        "Gemma4OutputParserTest.ParseReasoningWithNoKeywordLineAtAll",
+        "Gemma4OutputParserTest.ParseReasoningWithNoKeywordPreservesMultilineFirstLine",
+        "Gemma4OutputParserTest.ParseReasoningWithOpenerFollowedByNoKeyword",
+        "Gemma4OutputParserTest.ParseReasoningWithOpenerFollowedBySpaceThenKeywordNewline",
+        "Gemma4OutputParserTest.ParseReasoningWithSkippedKeywordLeavesEmptyHeaderLine",
+        "Gemma4OutputParserTest.ParseReasoningWithThoughtKeywordEmbeddedInSentence",
+        "Gemma4OutputParserTest.ParseReasoningWithoutToolCall",
+        "Gemma4OutputParserTest.ParseToolCallArgumentValueContainingBracesAndBrackets",
+        "Gemma4OutputParserTest.ParseToolCallArgumentValueContainingComma",
+        "Gemma4OutputParserTest.ParseToolCallArgumentValueWithUnclosedQuoteAndBraceMidStream",
+        "Gemma4OutputParserTest.ParseToolCallOutputWithContentAndNoToolCalls",
+        "Gemma4OutputParserTest.ParseToolCallOutputWithContentAndSingleToolCall",
+        "Gemma4OutputParserTest.ParseToolCallOutputWithNoToolsInTheRequest",
+        "Gemma4OutputParserTest.ParseToolCallOutputWithSingleToolCall",
+        "Gemma4OutputParserTest.ParseToolCallOutputWithSingleToolCallAndReasoning",
+        "Gemma4OutputParserTest.ParseToolCallOutputWithThreeToolCalls",
+        "Gemma4OutputParserTest.ParseToolCallOutputWithThreeToolCallsWithContentInBetween",
+        "Gemma4OutputParserTest.ParseToolCallWithArgumentMissingEquals",
+        "Gemma4OutputParserTest.ParseToolCallWithArrayArguments",
+        "Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsArguments",
+        "Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsArgumentsStreaming",
+        "Gemma4OutputParserTest.ParseToolCallWithArrayOfObjectsWithMixedValueTypes",
+        "Gemma4OutputParserTest.ParseToolCallWithEmptyArguments",
+        "Gemma4OutputParserTest.ParseToolCallWithEmptyStringArgument",
+        "Gemma4OutputParserTest.ParseToolCallWithListOfStringsAsArgument",
+        "Gemma4OutputParserTest.ParseToolCallWithMissingClosingParenthesis",
+        "Gemma4OutputParserTest.ParseToolCallWithMissingParentheses",
+        "Gemma4OutputParserTest.ParseToolCallWithMultipleUtfChars",
+        "Gemma4OutputParserTest.ParseToolCallWithMultipleUtfCharsStreaming",
+        "Gemma4OutputParserTest.ParseToolCallWithNestedArrayOfArrays",
+        "Gemma4OutputParserTest.ParseToolCallWithNestedArrayOfStringWithMaskedValues",
+        "Gemma4OutputParserTest.ParseToolCallWithObjectArguments",
+        "Gemma4OutputParserTest.ParseToolCallWithParenthesizedSingleQuotedValueContainingBrace",
+        "Gemma4OutputParserTest.ParseToolCallWithPythonCodeAsArgument",
+        "Gemma4OutputParserTest.ParseToolCallWithPythonReprArtifactInValue",
+        "Gemma4OutputParserTest.ParseToolCallWithStringArguments",
+        "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsArrayWithStringsContainingQuotes",
+        "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingApostrophes",
+        "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingBackslashes",
+        "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingBracesAndBrackets",
+        "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingComparison",
+        "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingEscapedQuotes",
+        "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingNestedJSON",
+        "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingSpecialCharacters",
+        "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsObjectWithStringsContainingQuotes",
+        "Gemma4OutputParserTest.ParseToolCallWithStringWithMaskedValues",
+        "Gemma4OutputParserTest.ParseToolCallWithThoughtPreamble",
+        "Gemma4OutputParserTest.ParseToolCallWithUnicodeCharactersInArguments",
+        "Gemma4OutputParserTest.ParseToolCallWithUnwrappedValueLeadingSpace",
+        "Gemma4OutputParserTest.ParseTwoToolCallsAtOnce",
+        "Gemma4OutputParserTest.ParserToolCallWithBooleanArgument",
+        "Gemma4OutputParserTest.StreamerStopDrainsBufferedCalls",
+        "Gemma4OutputParserTest.StreamingContentWithTurnTokenAtTheEndOfGeneration",
+        "Gemma4OutputParserTest.StreamingPublishesFullToolCallAtClosingBrace",
+        "Gemma4OutputParserTest.StreamingWithBiggerChunks",
+        "Gemma4OutputParserTest.StreamingWithMissingEndTagBeforeStop",
+        "Gemma4OutputParserTest.StreamingWithToolCallWithEmptyParams",
+        "Gemma4OutputParserTest.StreamingWithToolResponseTokenAtTheEndOfGeneration",
+        "Gemma4OutputParserTest.StreamingWithWhitespacesBetweenToolCalls",
+        "Gemma4OutputParserTest.ToolCallsWithoutToolsInTheRequestStreaming",
+        "Gemma4OutputParserTest.UnavailableToolsAndNonGemmaReasoningRemainNonExecutable",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_False",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_True",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_false",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/bool_tool_true",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/float_tool_52_32",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/int_tool_42",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/list_tool__1__2__3_",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/list_tool___a___b___c__",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/object_tool____a__1____b__2__",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/object_tool___a__1__b____c___asd___",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool_1_10",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool_1e3",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool__1__2____3_",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool___a___1____b___2_",
+        "Qwen3CoderOutputParserParametrizedTestInstance/Qwen3CoderOutputParserParametrizedTest.TestJustParserImplWithVariousArgumentTypes/string_tool_value1",
+        "Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentMultilineValue",
+        "Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentNoProperBeginTag",
+        "Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNewline",
+        "Qwen3CoderOutputParserTest.Parse1ToolCall1Function1ArgumentTagsNoNewline",
+        "Qwen3CoderOutputParserTest.Parse1ToolCallNestedXmlNotFromSchema",
+        "Qwen3CoderOutputParserTest.ParseTwoToolCalls1Function1ArgumentTagsNoNewline",
+        "Qwen3CoderOutputParserTest.QwenmonsterAllSingleByteSplitsPreserveCallIdentity",
+        "Qwen3CoderOutputParserTest.QwenmonsterCompletedCallFollowedByPartialName",
+        "Qwen3CoderOutputParserTest.QwenmonsterCompletedCallsInSingleChunk",
+        "Qwen3CoderOutputParserTest.QwenmonsterLengthDoesNotPublishIncompleteArguments",
+        "Qwen3CoderOutputParserTest.QwenmonsterMalformedXMLClosingMarkerNeverExecutable",
+        "Qwen3CoderOutputParserTest.QwenmonsterMultipleCompletedCallsInSingleChunk",
+        "Qwen3CoderOutputParserTest.QwenmonsterNonStringArgumentCannotFallbackToString",
+        "Qwen3CoderOutputParserTest.QwenmonsterPartitionCorpusReconstructsSSEIdentity",
+        "Qwen3CoderOutputParserTest.QwenmonsterRejectedPrefixMustNotStealNextCall",
+        "Qwen3CoderOutputParserTest.QwenmonsterRequiredSchemaKeysMustBePresent",
+        "Qwen3CoderOutputParserTest.QwenmonsterResetClearsOldPartialAndRestartsCallIndex",
+        "Qwen3CoderOutputParserTest.QwenmonsterSchemaValidationBeforePublication",
+        "Qwen3CoderOutputParserTest.QwenmonsterStopDoesNotPublishOpenParameter",
+        "Qwen3CoderOutputParserTest.QwenmonsterStreamerPublishesCompletedArgumentsBeforeEnd",
+        "Qwen3CoderOutputParserTest.QwenmonsterUnknownToolNotExecutable",
+        "Qwen3CoderOutputParserTest.QwenmonsterZeroArgumentRegisteredToolStillWorks",
+        "Qwen3CoderOutputParserTest.StreamingQuotedFunctionAndParameterNames",
+        "Qwen3CoderOutputParserTest.StreamingSimpleToolCall",
+        "Qwen3CoderOutputParserTest.TestJustParserImplMixedQuotingOfParameterNames",
+        "Qwen3CoderOutputParserTest.TestJustParserImplParameterNameWithInnerQuoteKept",
+        "Qwen3CoderOutputParserTest.TestJustParserImplParameterNameWithUnmatchedQuoteKept",
+        "Qwen3CoderOutputParserTest.TestJustParserImplQuotedFunctionName",
+        "Qwen3CoderOutputParserTest.TestJustParserImplQuotedNamesKeepStringEnforcement",
+        "Qwen3CoderOutputParserTest.TestJustParserImplQuotedParameterName",
+        "Qwen3CoderOutputParserTest.TestJustParserImplQuotedParameterNameKeepsBooleanNormalization",
+        "Qwen3CoderOutputParserTest.TestJustParserImplSingleQuotedParameterName",
+        "Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithMoreThan1StateChange",
+        "Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithNoStateChange",
+        "Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithPartialToolCall",
+        "Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithQuotedFunctionName",
+        "Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithToolCallNoArgs",
+        "Qwen3CoderOutputParserTest.TestJustParserImplStreamStepWithTwoToolCalls",
+        "Qwen3CoderOutputParserTest.TestJustParserImplTwoToolCallsWithQuotedNames",
+        "Qwen3CoderOutputParserTest.TestJustParserImplUnaryToolCall",
+        "Qwen3CoderOutputParserTest.TestJustParserImplUnaryToolCallNoMatchingToolParameterTypeMapEntry",
+        "Qwen3CoderOutputParserTest.TestJustParserImplUnaryToolCallWithRepeatedArgument",
+        "Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithContent",
+        "Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithEnforcementOfStringParameter",
+        "Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithJsonObjectArgument",
+        "Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithNoToolCall",
+        "Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithNotPresentToolSchema",
+        "Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithThreeParameters",
+        "Qwen3CoderOutputParserTest.TestJustParserImplUnaryWithTwoToolCalls",
+        "Qwen3CoderOutputParserTest.TestJustParserImplUnterminatedToolCallContentCleanedNotError",
+        "Qwen3CoderOutputParserTest.ToolCallDroppedWhenStoppedBeforeFunctionName",
+        "Qwen3CoderOutputParserTest.ToolCallDroppedWhenStoppedMidParameterValue",
+        "Qwen3CoderOutputParserTest.ToolCallDroppedWithDanglingParameterName",
+        "Qwen3CoderOutputParserTest.ToolCallRecoveredWhenStoppedAfterInnerCloseTag"
+      ],
+      "xml_sha256": "cd9737c4d30194e1e8c8d4e24e68a94e32e04af5d2041d76044ebc1a884cd3cd",
+      "mode": "parser-controls",
+      "exe_sha256": "27f32660c973a2afa902fe6a9b7af41deb57ea649b740aa4e10480c3b7d190cf",
+      "loaded_modules": [
+        {
+          "basename": "opencv_world4140.dll",
+          "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46"
+        },
+        {
+          "basename": "openvino.dll",
+          "sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f"
+        },
+        {
+          "basename": "openvino_genai.dll",
+          "sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da"
+        },
+        {
+          "basename": "python312.dll",
+          "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120"
+        },
+        {
+          "basename": "libcurl-x64.dll",
+          "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334"
+        },
+        {
+          "basename": "git2.dll",
+          "sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8"
+        },
+        {
+          "basename": "openvino_tokenizers.dll",
+          "sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66"
+        },
+        {
+          "basename": "openvino_ir_frontend.dll",
+          "sha256": "f4db5c945ce4bbe055450b31d706dfc530f6fa79e9b8398c6832c2626ae192ef"
+        },
+        {
+          "basename": "openvino_intel_cpu_plugin.dll",
+          "sha256": "0cf9706f38ad67535c09842b4678accd207c132364cfe63e5cbb2f2eaa5fda77"
+        },
+        {
+          "basename": "openvino_auto_batch_plugin.dll",
+          "sha256": "ec1fb6bd0c2c2db23ab83e527736ec02c231c13c5573794d66367a9e2a455634"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Actual GenerationHandle stop/resource reclamation NOT RUN",
+    "No live model, HTTP transport, disconnect, or release acceptance on patched binary",
+    "STOP/LENGTH parser contract remains separate",
+    "Published dependency lock unchanged"
+  ],
+  "server_status": "Verified owned idle OVMS process stopped; not restarted",
+  "red": {
+    "executed_tests": 2,
+    "failed_tests": 2,
+    "xml_sha256": "ef269c28e5e7fa9f995e7e3dafb3dc39da3a0f9f93c14427b637a9aaa1a28013",
+    "result": "Parser error flag true, status OK, terminal success serialized"
+  },
+  "green_executable": {
+    "basename": "ovms_test.exe",
+    "sha256": "27f32660c973a2afa902fe6a9b7af41deb57ea649b740aa4e10480c3b7d190cf"
+  },
+  "total_native_passed": 177,
+  "review": {
+    "status": "NO_REMAINING_ACTIONABLE_FINDINGS",
+    "report_sha256": "1d8979084ea85b2eaea0a39328b1719c81f91c831b6e33ed94cf21d7eec2e6ec",
+    "addressed": [
+      "VLM owner cleanup",
+      "Proof of end-only parser failure"
+    ],
+    "unverified": "Actual generation handle stop with live retained callback"
+  },
+  "external_tests": {
+    "provider_session_id": "ses_ea001ea50ffeAEpHqBaJPAOpu0",
+    "model": "opencode/glm-5.3-flash-free",
+    "scope": "Three Chat Completions tests; reviewed and adapted test names; independent native GREEN required",
+    "report_sha256": "9c98170793fc4b83ec218f049a09a1ac27e756a36d9e4781d9aeccf8169cb7de"
+  },
+  "product_executable": {
+    "basename": "ovms.exe",
+    "sha256": "3f4316ebc3c843c75215d120a2a542c5df685c1f2d4c3b12d9d1ccca67a3f527",
+    "live": "NOT RUN"
+  },
+  "builds": [
+    {
+      "stage": "cb-parser-red-build",
+      "started_utc": "2026-10-21T19:47:23.453003+00:00",
+      "finished_utc": "2026-10-21T19:49:05.195492+00:00",
+      "exit_code": 0,
+      "status": "PROCESS_FINISHED"
+    },
+    {
+      "stage": "cb-parser-green-build",
+      "started_utc": "2026-10-21T19:49:49.503796+00:00",
+      "finished_utc": "2026-10-21T19:51:24.379151+00:00",
+      "exit_code": 0,
+      "status": "PROCESS_FINISHED"
+    },
+    {
+      "stage": "cb-parser-review-build",
+      "started_utc": "2026-10-21T19:51:55.040029+00:00",
+      "finished_utc": "2026-10-21T19:52:50.260779+00:00",
+      "exit_code": 0,
+      "status": "PROCESS_FINISHED"
+    },
+    {
+      "stage": "cb-parser-product-build",
+      "started_utc": "2026-10-21T19:53:42.572202+00:00",
+      "finished_utc": "2026-10-21T19:53:55.751839+00:00",
+      "exit_code": 0,
+      "status": "PROCESS_FINISHED"
+    },
+    {
+      "stage": "cb-parser-external-tests-build",
+      "started_utc": "2026-10-21T19:54:43.978336+00:00",
+      "finished_utc": "2026-10-21T19:55:36.312918+00:00",
+      "exit_code": 0,
+      "status": "PROCESS_FINISHED"
+    }
+  ]
+}

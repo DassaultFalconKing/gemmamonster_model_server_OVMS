@@ -1,3 +1,18 @@
+# Current implementation checkpoint: CB parser failure containment
+
+- ACTIVE_STAGE: implemented and reviewed; product/full diagnostic builds and 177 selected native tests PASS.
+- BASE_SHA / REVERT_POINT: d7e793e; CURRENT_HEAD: resolve after commit.
+- WORK_BRANCH: qwm01-request-schema.
+- DEPENDENCY_LOCK: unchanged; accepted C6 untouched; owned idle server stopped with verified identity and remains stopped.
+- LAST_GREEN_TESTS: 6 new native tests, 10 common/legacy, 2 QWM, 11 tool controls, 148 Qwen/Gemma; 28 offline Python tests. R1 native matrix: 24 PASS, 4 known OPEN, 0 unexpected; companion checks PASS.
+- CURRENT_FAILURE: original CB failure reproduced by 2/2 RED tests, now GREEN. Four inherited grammar defects remain OPEN; patched live runtime NOT RUN.
+- ROOT_CAUSE: shared response path ignored streamer CANCEL/parser error and serialized successful completion; LM/VLM owners now stop failed handles.
+- NEXT_ACTION: measure actual handle cancellation/resource reclamation and STOP/LENGTH lifecycle; isolate candidate GenAI/XGrammar cohort rebuild.
+- EVIDENCE_PATH: CB-PARSER-FAILURE.md; evidence/cb-parser-failure-20261021/RESULTS.json; R1-NATIVE-20261021.md.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: passive resource observer
 
 - ACTIVE_STAGE: resource collector implemented; 10 focused tests, 28 combined regressions and 3 passive idle samples completed.

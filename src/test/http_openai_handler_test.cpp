@@ -5570,6 +5570,100 @@ TEST_F(HttpOpenAIHandlerParsingTest, legacyServableParserExceptionCancelsGenerat
         absl::InvalidArgumentError("Request processing failed, check its correctness."));
 }
 
+TEST_F(HttpOpenAIHandlerParsingTest, CbParserExceptionRejectsWriteAndTerminalDrain) {
+    for (const auto reason : {ov::genai::GenerationFinishReason::NONE, ov::genai::GenerationFinishReason::STOP}) {
+        SCOPED_TRACE(static_cast<int>(reason));
+        auto ctx = makeMetricsBackedResponsesContext(tokenizer);
+        ASSERT_NE(ctx, nullptr);
+        ovms::ToolsSchemas_t tools{};
+        auto parser = std::make_shared<ovms::OutputParser>(*tokenizer, "mistral", "", tools);
+        auto streamer = std::make_shared<ovms::OVMSTextStreamer>(*tokenizer, parser, true,
+            [context = ctx.get()](ovms::Delta delta, bool last) {
+                context->deltaChannel.push(std::move(delta), last);
+                return ov::genai::StreamingStatus::RUNNING;
+            }, ov::AnyMap{});
+        // Same real parser failure as the legacy regression, with enough tail
+        // to force the offending arguments out of the tokenizer delay buffer.
+        const auto ids = tokenizer->encode("[{\"arguments\": {\"x\": 1}, \"name\": \"foo\"}] padding padding padding", ov::genai::add_special_tokens(false)).input_ids;
+        ctx->generationOutputs[0].generated_ids.assign(ids.data<int64_t>(), ids.data<int64_t>() + ids.get_size());
+        ctx->generationOutputs[0].finish_reason = reason;
+        ctx->textStreamer = streamer;
+        ctx->sendLoopbackSignal = true;
+        std::shared_ptr<ovms::GenAiServableExecutionContext> base = ctx;
+        ovms::LegacyServable servable;
+        const auto status = servable.GenAiServable::preparePartialResponse(base);
+        ASSERT_TRUE(streamer->hadParserError());
+        EXPECT_EQ(status, absl::InvalidArgumentError("Request processing failed, check its correctness."));
+        EXPECT_TRUE(ctx->response.empty()) << ctx->response;
+        EXPECT_FALSE(ctx->sendLoopbackSignal);
+        EXPECT_TRUE(ctx->deltaChannel.drain().empty());
+    }
+}
+
+TEST_F(HttpOpenAIHandlerParsingTest, CbParserExceptionAtEndRejectsNormalCompletion) {
+    auto ctx = makeMetricsBackedResponsesContext(tokenizer);
+    ASSERT_NE(ctx, nullptr);
+    ovms::ToolsSchemas_t tools{};
+    auto parser = std::make_shared<ovms::OutputParser>(*tokenizer, "mistral", "", tools);
+    auto streamer = std::make_shared<ovms::OVMSTextStreamer>(*tokenizer, parser, true,
+        [context = ctx.get()](ovms::Delta delta, bool last) {
+            context->deltaChannel.push(std::move(delta), last);
+            return ov::genai::StreamingStatus::RUNNING;
+        }, ov::AnyMap{});
+    const auto ids = tokenizer->encode("[{\"arguments\":", ov::genai::add_special_tokens(false)).input_ids;
+    std::vector<int64_t> tokens(ids.data<int64_t>(), ids.data<int64_t>() + ids.get_size());
+    ASSERT_FALSE(tokens.empty());
+    // Prove the complete input is still harmless while delayed. Only end()
+    // in the actual response path below can expose the offending delimiter.
+    ASSERT_EQ(streamer->write(tokens), ov::genai::StreamingStatus::RUNNING);
+    ASSERT_FALSE(streamer->hadParserError());
+    ctx->textStreamer = streamer;
+    ctx->generationOutputs[0].generated_ids.clear();
+    ctx->sendLoopbackSignal = true;
+    std::shared_ptr<ovms::GenAiServableExecutionContext> base = ctx;
+    ovms::LegacyServable servable;
+    const auto status = servable.GenAiServable::preparePartialResponse(base);
+    ASSERT_TRUE(streamer->hadParserError());
+    EXPECT_EQ(status, absl::InvalidArgumentError("Request processing failed, check its correctness."));
+    EXPECT_TRUE(ctx->response.empty()) << ctx->response;
+    EXPECT_FALSE(ctx->sendLoopbackSignal);
+    EXPECT_TRUE(ctx->deltaChannel.drain().empty());
+}
+
+TEST_F(HttpOpenAIHandlerParsingTest, CbParserCallbackCancellationDoesNotCompleteAndFreshRequestWorks) {
+    class CancellingStreamer : public ov::genai::TextStreamer {
+    public:
+        bool ended = false;
+        explicit CancellingStreamer(const ov::genai::Tokenizer& tokenizer) :
+            ov::genai::TextStreamer(tokenizer, [](std::string) { return ov::genai::StreamingStatus::RUNNING; }) {}
+        ov::genai::StreamingStatus write(const std::vector<int64_t>&) override {
+            return ov::genai::StreamingStatus::CANCEL;
+        }
+        void end() override { ended = true; }
+    };
+    auto ctx = makeMetricsBackedResponsesContext(tokenizer);
+    ASSERT_NE(ctx, nullptr);
+    auto streamer = std::make_shared<CancellingStreamer>(*tokenizer);
+    ctx->textStreamer = streamer;
+    ctx->sendLoopbackSignal = true;
+    ctx->deltaChannel.push(ovms::ContentDelta{"must not escape"});
+    std::shared_ptr<ovms::GenAiServableExecutionContext> base = ctx;
+    ovms::LegacyServable servable;
+    EXPECT_EQ(servable.GenAiServable::preparePartialResponse(base), absl::CancelledError());
+    EXPECT_FALSE(streamer->ended);
+    EXPECT_FALSE(ctx->sendLoopbackSignal);
+    EXPECT_TRUE(ctx->response.empty());
+    EXPECT_TRUE(ctx->deltaChannel.drain().empty());
+
+    auto fresh = makeMetricsBackedResponsesContext(tokenizer);
+    ASSERT_NE(fresh, nullptr);
+    base = fresh;
+    ASSERT_EQ(servable.GenAiServable::preparePartialResponse(base), absl::OkStatus());
+    EXPECT_NE(fresh->response.find("\"type\":\"response.completed\""), std::string::npos);
+    EXPECT_NE(fresh->response.find("[DONE]"), std::string::npos);
+    EXPECT_FALSE(fresh->sendLoopbackSignal);
+}
+
 TEST_F(HttpOpenAIHandlerParsingTest, vlmLegacyServablePreparePartialResponseResponsesEndpointHasCorrectUsageInCompletedEvent) {
     auto ctx = std::make_shared<ovms::VisualLanguageModelLegacyServableExecutionContext>();
 
@@ -5941,4 +6035,125 @@ TEST_F(HttpOpenAIHandlerParsingTest, ParsingModalitiesWorksForResponsesEndpoint)
     EXPECT_TRUE(apiHandler->getRequest().textOutputRequested);
     EXPECT_EQ(apiHandler->getRequest().audioVoice, "f245");
     EXPECT_EQ(apiHandler->getRequest().audioFormat, ovms::OpenAIRequest::AudioFormat::PCM16);
+}
+
+// Builds a plain base execution context for one streaming iteration. The streamer
+// callback pushes into ctx->deltaChannel exactly like GenAiServable::parseRequest
+// wires it in production (servable.cpp). Returns nullptr if the request cannot be parsed.
+static std::shared_ptr<ovms::GenAiServableExecutionContext> makeBaseStreamingContext(
+    const std::shared_ptr<ov::genai::Tokenizer>& tok,
+    const std::shared_ptr<ovms::OutputParser>& outputParser,
+    const std::vector<int64_t>& generatedIds,
+    ov::genai::GenerationFinishReason finishReason,
+    std::shared_ptr<ovms::OVMSTextStreamer>& streamerOut) {
+    auto ctx = std::make_shared<ovms::GenAiServableExecutionContext>();
+    ctx->payload.client = std::make_shared<NeverDisconnectedClient>();
+    ctx->payload.parsedJson = std::make_shared<rapidjson::Document>();
+    ctx->payload.parsedJson->Parse(R"({"model":"llama","stream":true,"messages":[{"role":"user","content":"hi"}]})");
+    ctx->endpoint = ovms::Endpoint::CHAT_COMPLETIONS;
+
+    auto apiHandler = std::make_shared<ovms::OpenAIChatCompletionsHandler>(
+        *ctx->payload.parsedJson, ovms::Endpoint::CHAT_COMPLETIONS,
+        std::chrono::system_clock::now(), *tok);
+    uint32_t maxTokensLimit = 100;
+    if (!apiHandler->parseRequest(maxTokensLimit, 0, std::nullopt).ok()) {
+        return nullptr;
+    }
+    ctx->apiHandler = apiHandler;
+
+    auto callback = [&channel = ctx->deltaChannel](ovms::Delta delta, bool isLast) -> ov::genai::StreamingStatus {
+        channel.push(std::move(delta), isLast);
+        return ov::genai::StreamingStatus::RUNNING;
+    };
+    streamerOut = std::make_shared<ovms::OVMSTextStreamer>(*tok, outputParser, /*tools_available=*/true, callback, ov::AnyMap{});
+    ctx->textStreamer = streamerOut;
+
+    ctx->generationOutputs.resize(1);
+    ctx->generationOutputs[0].generated_ids = generatedIds;
+    ctx->generationOutputs[0].finish_reason = finishReason;
+    return ctx;
+}
+
+static std::vector<int64_t> encodeMalformedMistralToolCall(const std::shared_ptr<ov::genai::Tokenizer>& tok) {
+    // Same real malformed Mistral input as legacyServableParserExceptionCancelsGenerationAndReportsFailure:
+    // "arguments" appears before "name" - MistralToolParser::parseChunk throws for this shape.
+    const std::string malformedToolCall = "[{\"arguments\": {\"x\": 1}, \"name\": \"foo\"}]";
+    auto inputIds = tok->encode(malformedToolCall, ov::genai::add_special_tokens(false)).input_ids;
+    return std::vector<int64_t>(inputIds.data<int64_t>(), inputIds.data<int64_t>() + inputIds.get_size());
+}
+
+TEST_F(HttpOpenAIHandlerParsingTest, CbParserChatFailureNoneRejectsLoopback) {
+    auto tokens = encodeMalformedMistralToolCall(tokenizer);
+    ASSERT_FALSE(tokens.empty());
+
+    ovms::ToolsSchemas_t emptyToolsSchema{};
+    auto outputParser = std::make_shared<ovms::OutputParser>(*tokenizer, "mistral", "", emptyToolsSchema);
+    std::shared_ptr<ovms::OVMSTextStreamer> streamer;
+    auto ctx = makeBaseStreamingContext(tokenizer, outputParser, tokens,
+        ov::genai::GenerationFinishReason::NONE, streamer);
+    ASSERT_NE(ctx, nullptr);
+    std::shared_ptr<ovms::GenAiServableExecutionContext> ctxBase = ctx;
+
+    ovms::LegacyServable servable;
+    absl::Status status = absl::OkStatus();
+    ASSERT_NO_THROW(status = servable.GenAiServable::preparePartialResponse(ctxBase));
+
+    // The parser failure must surface as a request error, not a swallowed CANCEL.
+    EXPECT_EQ(status.code(), absl::StatusCode::kInvalidArgument) << status;
+    // No loopback: the calculator must not keep the generation loop alive.
+    EXPECT_FALSE(ctxBase->sendLoopbackSignal);
+    // No normal completion marker.
+    EXPECT_EQ(ctxBase->response.find("[DONE]"), std::string::npos) << ctxBase->response;
+    // Pending deltas (including the streamer's failure FinishDelta) must be cleared.
+    EXPECT_TRUE(ctx->deltaChannel.drain().empty());
+    // The failure really came from the output parser.
+    EXPECT_TRUE(streamer->hadParserError());
+}
+
+TEST_F(HttpOpenAIHandlerParsingTest, CbParserChatFailureStopRejectsCompletion) {
+    auto tokens = encodeMalformedMistralToolCall(tokenizer);
+    ASSERT_FALSE(tokens.empty());
+
+    ovms::ToolsSchemas_t emptyToolsSchema{};
+    auto outputParser = std::make_shared<ovms::OutputParser>(*tokenizer, "mistral", "", emptyToolsSchema);
+    std::shared_ptr<ovms::OVMSTextStreamer> streamer;
+    auto ctx = makeBaseStreamingContext(tokenizer, outputParser, tokens,
+        ov::genai::GenerationFinishReason::STOP, streamer);
+    ASSERT_NE(ctx, nullptr);
+    std::shared_ptr<ovms::GenAiServableExecutionContext> ctxBase = ctx;
+
+    ovms::LegacyServable servable;
+    absl::Status status = absl::OkStatus();
+    ASSERT_NO_THROW(status = servable.GenAiServable::preparePartialResponse(ctxBase));
+
+    EXPECT_EQ(status.code(), absl::StatusCode::kInvalidArgument) << status;
+    EXPECT_FALSE(ctxBase->sendLoopbackSignal);
+    // No normal completion: neither a finish chunk nor [DONE].
+    EXPECT_EQ(ctxBase->response.find("\"finish_reason\":\"stop\""), std::string::npos) << ctxBase->response;
+    EXPECT_EQ(ctxBase->response.find("[DONE]"), std::string::npos) << ctxBase->response;
+    EXPECT_TRUE(ctx->deltaChannel.drain().empty());
+    EXPECT_TRUE(streamer->hadParserError());
+}
+
+// Control: a healthy fresh context on the same base path must complete normally.
+TEST_F(HttpOpenAIHandlerParsingTest, CbParserChatHealthyFreshContextCompletes) {
+    auto inputIds = tokenizer->encode("Hello world", ov::genai::add_special_tokens(false)).input_ids;
+    std::vector<int64_t> tokens(inputIds.data<int64_t>(), inputIds.data<int64_t>() + inputIds.get_size());
+    ASSERT_FALSE(tokens.empty());
+
+    std::shared_ptr<ovms::OVMSTextStreamer> streamer;
+    auto ctx = makeBaseStreamingContext(tokenizer, /*outputParser=*/nullptr, tokens,
+        ov::genai::GenerationFinishReason::STOP, streamer);
+    ASSERT_NE(ctx, nullptr);
+    std::shared_ptr<ovms::GenAiServableExecutionContext> ctxBase = ctx;
+
+    ovms::LegacyServable servable;
+    absl::Status status = absl::OkStatus();
+    ASSERT_NO_THROW(status = servable.GenAiServable::preparePartialResponse(ctxBase));
+
+    EXPECT_EQ(status, absl::OkStatus()) << status;
+    EXPECT_FALSE(ctxBase->sendLoopbackSignal);
+    EXPECT_NE(ctxBase->response.find("[DONE]"), std::string::npos) << ctxBase->response;
+    EXPECT_TRUE(ctx->deltaChannel.drain().empty());
+    EXPECT_FALSE(streamer->hadParserError());
 }

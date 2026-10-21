@@ -1,3 +1,5 @@
+> Native implementation checkpoint: R1 configure/build and 28-row matrix executed (24 PASS, 4 known OPEN, 0 unexpected); original checks PASS in hard/lazy modes. CB parser failure reproduced with native RED, patched at shared serializer and LM/VLM handle owners. Final test integration results are recorded in CB-PARSER-FAILURE.md. Runtime handle stop/resource reclamation and new dependency cohort remain NOT RUN.
+
 > Resource tooling checkpoint: passive collector and 10 tests implemented; 28 combined tests and 3 idle samples PASS. Before/during/after load characterization is not closed by idle results. See RESOURCE-PROBE.md.
 
 > Implementation checkpoint: R1 result/cleanup hardening implemented with 18/18 offline tests; executing-source hashes and absolute external paths bound to a new sealed preparation. Native R1 execution remains NOT RUN. Concrete legacy success gating traced statically; parser/CB terminal and cancellation changes still require actual RED. See R1-RUNNER-HARDENING.md.
