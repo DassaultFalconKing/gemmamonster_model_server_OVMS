@@ -1,3 +1,5 @@
+> Current checkpoint (2026-10-21): full OVMS product/diagnostic builds and request/parser gates are measured; 20/20 controlled continuations and 17/17 negative HTTP400 cases PASS. ACCEPTED remains NO. See STATUS-20261021.md, FOLLOWUP-20261021.md and NEXT-STEPS-20261021.md. The opening measurements below describe the historical first iteration; the numbered acceptance criteria remain applicable. Fresh candidate-cohort rebuild/masks, actual backend termination, 100 required-city and 1/2/4 workloads are not closed by these results.
+
 # Qwenmonster M1/refit + M2 candidate acceptance
 
 Status: **NOT ACCEPTED**. First focused iteration measured on 2026-10-21;

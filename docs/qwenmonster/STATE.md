@@ -1,13 +1,13 @@
-# Current follow-up:  tool continuations and HTTP400 measured
+# Current follow-up: tool continuations and HTTP400 measured
 
-- ACTIVE_STAGE:  20 controlled tool-result continuations and 17 negative HTTP400 transport cases completed.
+- ACTIVE_STAGE: 20 controlled tool-result continuations and 17 negative HTTP400 transport cases completed.
 - BASE_SHA / TESTED_SOURCE / REVERT_POINT: `5c777c174a80f0d72175985d963c8831da522761`; CURRENT_HEAD: resolve git HEAD after this evidence-only change.
 - WORK_BRANCH: `qwm01-request-schema`; remote feature/qwenmonster-qwm01-request-schema-20261021.
 - DEPENDENCY_LOCK: unchanged; candidate #802 not in installed GenAI/runtime.
-- LAST_GREEN_TESTS:  20/20 continuations (10 unary + 10 SSE); 17/17 real HTTP400 + diagnostic matches.
+- LAST_GREEN_TESTS: 20/20 continuations (10 unary + 10 SSE); 17/17 real HTTP400 + diagnostic matches.
 - CURRENT_FAILURE: #650/inherited required gap OPEN; positive-after-error, Hermes, 100-city, 1/2/4 workloads NOT RUN. Wrapper exit1/Python exit not captured; semantic artifacts independently verified.
 - ROOT_CAUSE: runtime grammar/cohort work remains separate; low available RAM deferred extra generation/build.
-- NEXT_ACTION: resource-separated R1 matrix execution and explicit isolated cohort; complete remaining canonical/runtime acceptance.
+- NEXT_ACTION: resource/run receipts and positive-after-errors; trace actual STOP/LENGTH/CANCEL; run R1 matrix and separate #650 controls, then isolated cohort and runtime acceptance. See NEXT-STEPS-20261021.md.
 - EVIDENCE_PATH: FOLLOWUP-20261021.md; evidence/followup-20261021/RESULTS.json; raw logs private.
 - ACCEPTED: NO.
 
