@@ -1,6 +1,6 @@
 # XGrammar #650 end-marker note (source port measured, gate OPEN)
 
-Status: **SOURCE PORT COMPILED. STRING AND SYNTHETIC-MASK CHECKS PASS. ACTUAL-TOKENIZER MASK AND LIVE NOT RUN. LOCK UNCHANGED. ACCEPTED: NO.**  
+Status: **QWEN TOKENIZER DIVERGENCE MASK PASS. LIVE CANDIDATE LOAD NOT RUN. LOCK UNCHANGED. ACCEPTED: NO.**  
 Recorded: 2026-10-22  
 Upstream: [#650](https://github.com/mlc-ai/xgrammar/issues/650), proposed fix [PR #651](https://github.com/mlc-ai/xgrammar/pull/651) (unmerged; the fork carries an equivalent on its own Aho-Corasick builder).
 
@@ -25,6 +25,7 @@ The native matcher linked to that candidate static library reported 43/43 PASS a
 - well-formed `</parameter>`, HTML `<div>`, shorter `</p>`, and a comparison expression are accepted
 - `</parameter1>`, `</parameter_function>`, `</parameterX>`, and `</parameter/>` are rejected
 - on a synthetic byte vocabulary, after the consumed prefix `</parameter`, bytes `1`, `X`, and `_` are masked off
+- on the Qwen3-8B unit tokenizer the same strings diverge at token 9: `1`, `X`, `_function` and `/>` are masked off, and `>` is allowed
 - the previous #802 epsilon, declared-required, and Qwen3-8B unit-tokenizer whitespace results still pass (425 whitespace tokens, 0 allowed, hard and lazy)
 
 Undeclared-required `{type:object, required:[a]}` still accepts empty XML. That residual is unchanged.
@@ -32,7 +33,7 @@ Undeclared-required `{type:object, required:[a]}` still accepts empty XML. That 
 ## What would close this gate
 
 1. Compatible #651 (or equivalent) backport on a dedicated XGrammar branch. **Done** at `5b0b708`.
-2. RED→GREEN mask evidence on the actual Qwen tokenizer: at every prefix of `</parameter>`, invalid continuations (notably `1` → `</parameter1>`) are disallowed. **Not measured.** The passing mask above is the synthetic byte vocabulary.
+2. RED→GREEN mask evidence on the actual Qwen tokenizer at the token where `</parameter>` and `</parameter1>` diverge. **Done** on the Qwen3-8B unit tokenizer, vocab 151669. The common prefix is 9 tokens. Token 16 (`1`), token 55 (`X`), token 9174 (`_function`) and token 9685 (`/>`) are masked off. Token 29 (`>`) is allowed, the good sequence completes, and each bad sequence is rejected. Masks at the shorter character prefixes inside `</parameter` were not enumerated; the lock applies at the penultimate prefix, which is this divergence.
 3. Separate parser fixtures remain required but are insufficient alone (`MALFORMED-ENVELOPE-RED.txt` / partition corpus).
 4. A live probe that loads the candidate DLL, not the staged runtime.
 

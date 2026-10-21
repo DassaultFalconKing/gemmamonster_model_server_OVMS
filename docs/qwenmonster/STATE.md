@@ -1,3 +1,18 @@
+# Current implementation checkpoint: Qwen tokenizer end-marker mask
+
+- ACTIVE_STAGE: the #650 divergence mask is measured on the Qwen3-8B unit tokenizer against the candidate XGrammar library. The staged runtime was not replaced. ACCEPTED stays NO.
+- BASE_SHA / REVERT_POINT: `7e462812d8eaab195140575d982b802b9c24ceed`. CURRENT_HEAD: resolve with `git rev-parse HEAD` after this commit.
+- WORK_BRANCH: `qwm01-request-schema` → `origin/feature/qwenmonster-qwm01-request-schema-20261021`.
+- DEPENDENCY_LOCK: unchanged. Candidate sources remain XGrammar `5b0b7084a65a2059b44c03fbc6320ad7fcc41f33` and GenAI `8f305a1c1bc11e348c8ad0cc37269a91ba21cc74`.
+- LAST_GREEN_TESTS: native matcher 71/71 PASS, `SUMMARY failures=0`. On vocab 151669 / eos 151645, the good and bad strings diverge at token 9. The bad next tokens are rejected and the good next token is allowed: id 16 byte `31` (`1`), id 55 byte `58` (`X`), id 9174 bytes `5f 66 75 6e 63 74 69 6f 6e` (`_function`), id 9685 bytes `2f 3e` (`/>`), good id 29 byte `3e` (`>`). The good token sequence completes. The bad sequences are rejected. Hard/lazy whitespace remains 425 tokens, 0 allowed.
+- CURRENT_FAILURE: the candidate DLL has not been loaded by a live server. Cancel and resource reclamation remain NOT_RUN. Undeclared-required empty XML still accepts empty.
+- ROOT_CAUSE: n/a. The rejected ids are the tokenizer pieces that continue a started `</parameter`.
+- NEXT_ACTION: one live unary/SSE on the candidate DLL only, then the cancel measurement. Do not swap the staged runtime or edit the public lock. Keep ACCEPTED NO.
+- EVIDENCE_PATH: XGRAMMAR-650-NOTE.md. The raw checker log stays in the private hub.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: isolated #650 candidate matcher
 
 - ACTIVE_STAGE: the XML end-marker lock is compiled into an isolated GenAI candidate. The staged runtime was not replaced. ACCEPTED stays NO.
