@@ -231,37 +231,25 @@ std::optional<ToolCalls_t> Qwen3CoderToolParserImpl::parseChunk(const std::strin
 }
 
 std::optional<ToolCalls_t> Qwen3CoderToolParserImpl::finalizeOnGenerationEnd() {
-    if (this->currentState == State::Content ||
-        this->currentState == State::InsideToolCall ||
-        this->currentState == State::InsideFunctionName) {
-        // No usable function name was ever captured -- nothing to recover. Still clear the
-        // dangling partial state so it doesn't look like a call is still in flight.
+    // The closing </function> is the only reliable evidence that the model has
+    // finished all argument values.  STOP alone does not establish the boundary:
+    // an open <parameter> may still contain a truncated path, command or JSON.
+    if (currentState != State::AfterFunction) {
         resetParsingState();
         return std::nullopt;
     }
-    if (this->currentState == State::InsideParameterName) {
-        // Drop the incomplete parameter name; close the function with whatever was captured before it.
-        this->currentState = State::InsideFunction;
+    // The complete function and its parameters are already parsed; only the
+    // outer transport envelope is missing.  Recover exactly that closing tag.
+    streamContent += Qwen3CoderToolParser::TOOL_END_TAG;
+    ToolCalls_t recovered;
+    while (parseUntilStateChange(recovered)) {
     }
-    if (this->currentState == State::InsideParameter) {
-        this->streamContent += Qwen3CoderToolParser::PARAMETER_END_TAG;
-    }
-    if (this->currentState == State::InsideParameter || this->currentState == State::InsideFunction) {
-        this->streamContent += Qwen3CoderToolParser::FUNCTION_END_TAG;
-    }
-    this->streamContent += Qwen3CoderToolParser::TOOL_END_TAG;
-
-    ToolCalls_t toolCalls;
-    while (parseUntilStateChange(toolCalls)) {
-    }
-    // Generation has ended: nothing more will ever be parsed from streamContent, so leave the
-    // parser in the same clean state a normal completion would (toolCallPositions is kept --
-    // removeToolCallsFromContentIfNeeded() still needs it afterward).
+    // Keep toolCallPositions for unary cleanup, as on the normal completion path.
     resetParsingState();
-    if (!toolCalls.empty()) {
-        return std::move(toolCalls);
+    if (recovered.empty()) {
+        return std::nullopt;
     }
-    return std::nullopt;
+    return recovered;
 }
 
 Qwen3CoderToolParser::Qwen3CoderToolParser(ov::genai::Tokenizer& tokenizer, const ToolsSchemas_t& toolSchemas,

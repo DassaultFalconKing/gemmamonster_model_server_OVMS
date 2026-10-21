@@ -87,10 +87,9 @@ C->ITC->IFN->IF->IPN->IP->AF->C
      * that were not returned before
      */
     std::optional<ToolCalls_t> parseChunk(const std::string& chunk);
-    // Called once generation has stopped and parseChunk() produced nothing new: synthesizes
-    // the closing tags still missing for whatever tool call is in flight (using only data
-    // already captured) so it can be recovered instead of silently dropped. An incomplete
-    // name/attribute can't be recovered and returns nullopt.
+    // Called only at natural STOP: recovers a complete </function> that is missing only
+    // its outer </tool_call>. Open parameter values, partial names, or missing
+    // </function> are deliberately not executable and are dropped.
     std::optional<ToolCalls_t> finalizeOnGenerationEnd();
     std::optional<std::string> getCurrentFunctionName() const;
     Status removeToolCallsFromContentIfNeeded(std::string& outContent);
