@@ -1,3 +1,18 @@
+# Current implementation checkpoint: Cursor takeover after Codex handoff
+
+- ACTIVE_STAGE: fetched origin; merged canonical MASTER-PLAN/PLAN-MAP onto tip with local R1 native + CB parser-failure commits; pushed `b2e2daae3`.
+- BASE_SHA / REVERT_POINT: `d7e793ed3` (R1 native) / CB fix `15076a147`; CURRENT_HEAD: resolve with `git rev-parse HEAD`.
+- WORK_BRANCH: `qwm01-request-schema` → `origin/feature/qwenmonster-qwm01-request-schema-20261021`.
+- DEPENDENCY_LOCK: unchanged. #802 candidate still proposal-only.
+- LAST_GREEN_TESTS: as prior tip — R1 native 24 PASS + 4 OPEN; CB parser-failure 6/6 + 171 controls; Ornith live smoke historically PASS (server now down).
+- CURRENT_FAILURE: W3 LENGTH/CANCEL/disconnect backend lifecycle still NOT measured as a dedicated gate; Ornith process gone; OpenCode idle (last `cb-parser-red`).
+- ROOT_CAUSE: n/a for takeover. Codex left tip ahead of origin with R1/CB; origin had master-plan only — now merged.
+- NEXT_ACTION: MASTER W3 — actual LENGTH/CANCEL/disconnect through streamer/API (proposal A in NEXT-STEPS); then W4 #650 / W5 candidate cohort. Keep ACCEPTED NO.
+- EVIDENCE_PATH: MASTER-PLAN.md, PLAN-MAP.md, CB-PARSER-FAILURE.md, R1-NATIVE-20261021.md; private followup hub.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: CB parser failure containment
 
 - ACTIVE_STAGE: implemented and reviewed; product/full diagnostic builds and 177 selected native tests PASS.
