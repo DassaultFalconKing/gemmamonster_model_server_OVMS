@@ -4,18 +4,21 @@ Date: 2026-10-21
 
 ## Local execution in progress
 
-- ACTIVE_STAGE: first unmodified Bazel compile, four focused targets
+- ACTIVE_STAGE: P0 lifecycle GREEN; partition corpus GREEN; prompt streamer drain under test
 - BASE_SHA: `ba6ec792c3121850fea167fa7d7e190b25fcdc76`
 - WORK_BRANCH: `feature/qwenmonster-parser-invariants-20261021`
-- CURRENT_HEAD: `8cd25d63085637d112f616d62913e345a93d2233` (execution base)
+- CURRENT_HEAD: `ca78a4d` (committed lifecycle fix; current worktree adds partition/drain tests)
 - DEPENDENCY_LOCK: `public-source-lock.json`, unchanged
-- LAST_GREEN_TESTS: six-component source preflight only
-- CURRENT_FAILURE: existing Minja checkout is after-lock; pinned separate worktree
-  passes source gate. Initial build uses existing installed DLLs for triage only.
-- ROOT_CAUSE: source checkout drift; changed file is a test Jinja fixture;
-  Minja include tree and installed GenAI header match the lock.
-- NEXT_ACTION: retain compiler result, run disabled lifecycle RED explicitly,
-  then fix and rerun focused gates before any live inference.
+- LAST_GREEN_TESTS: Qwen 66/66 after lifecycle fix; policy 9/9, generic 29/29;
+  native existing matcher 31/31; six-component source preflight
+- CURRENT_FAILURE: initial Gemma 67/70 (three retained pre-existing failures);
+  streamer publishes arguments only at final flush (RED retained, patch under test);
+  full schema and live acceptance remain open.
+- ROOT_CAUSE: unmatched speculative identity could steal a subsequent call;
+  fixed by validated-only publication. Streamer drained only on final flush.
+  Existing installed dependency cohort has Minja fixture-only checkout drift.
+- NEXT_ACTION: rerun four targets after prompt drain, retain exact baseline
+  comparison, extend malformed-envelope controls and record native XML probes.
 - REVERT_POINT: `8cd25d63085637d112f616d62913e345a93d2233`
 - EVIDENCE_PATH: `evidence/EXECUTION-CHECKPOINT.md`, source JSON reports;
   raw local logs in `C:/gm/qwenmonster/evidence/`

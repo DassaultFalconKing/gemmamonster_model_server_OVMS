@@ -1185,6 +1185,128 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterRejectedPrefixMustNotStealNextCall
     EXPECT_EQ(std::get<ToolCallDelta>(*acceptedBody).arguments, R"({"folder":"target"})");
 }
 
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterPartitionCorpusReconstructsSSEIdentity) {
+    const std::string first = "<tool_call><function=string_tool><parameter=arg1>one</parameter></function></tool_call>";
+    const std::string second = "<tool_call><function=cd><parameter=folder>two</parameter></function></tool_call>";
+    const std::string invalid = "<tool_call><function=string_int_tool><parameter=arg1>ok</parameter><parameter=arg2>bad</parameter></function></tool_call>";
+    const std::string unknown = "<tool_call><function=undeclared></function></tool_call>";
+    const std::string partial = "<tool_call><function=cd><parameter=folder>unfinished";
+    const std::string recoverable = "<tool_call><function=cd><parameter=folder>two</parameter></function>";
+    struct Case {
+        std::string wire;
+        ov::genai::GenerationFinishReason finish;
+        std::vector<std::pair<std::string, std::string>> expected;
+    };
+    using Reason = ov::genai::GenerationFinishReason;
+    const std::vector<Case> cases = {
+        {first + second + first, Reason::STOP, {{"string_tool", R"({"arg1":"one"})"}, {"cd", R"({"folder":"two"})"}, {"string_tool", R"({"arg1":"one"})"}}},
+        {invalid + unknown + first + first, Reason::STOP, {{"string_tool", R"({"arg1":"one"})"}, {"string_tool", R"({"arg1":"one"})"}}},
+        {first + partial, Reason::STOP, {{"string_tool", R"({"arg1":"one"})"}}},
+        {first + partial, Reason::LENGTH, {{"string_tool", R"({"arg1":"one"})"}}},
+        {first + recoverable, Reason::STOP, {{"string_tool", R"({"arg1":"one"})"}, {"cd", R"({"folder":"two"})"}}},
+        {first + recoverable, Reason::LENGTH, {{"string_tool", R"({"arg1":"one"})"}}}};
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    for (const auto& test : cases) {
+        std::vector<std::vector<size_t>> partitions;
+        for (const size_t width : {size_t{1}, size_t{2}, size_t{3}, size_t{7}, test.wire.size()}) {
+            std::vector<size_t> ends;
+            for (size_t end = width; end < test.wire.size(); end += width)
+                ends.push_back(end);
+            ends.push_back(test.wire.size());
+            partitions.push_back(std::move(ends));
+        }
+        // Every possible single split, including each side of every XML delimiter.
+        for (size_t split = 1; split < test.wire.size(); ++split)
+            partitions.push_back({split, test.wire.size()});
+        // Simultaneously split before and after each delimiter character.
+        std::vector<size_t> boundaries;
+        for (size_t i = 1; i < test.wire.size(); ++i)
+            if (test.wire[i] == '<' || test.wire[i] == '>' || test.wire[i - 1] == '<' || test.wire[i - 1] == '>')
+                boundaries.push_back(i);
+        boundaries.push_back(test.wire.size());
+        partitions.push_back(std::move(boundaries));
+        for (const auto& ends : partitions) {
+            SCOPED_TRACE(test.wire + " finish=" + std::to_string(static_cast<int>(test.finish)) + " chunks=" + std::to_string(ends.size()));
+            parser.resetState();
+            std::vector<ToolCall> calls;
+            std::unordered_set<std::string> ids;
+            size_t completed = 0;
+            auto capture = [&](const Delta& delta) {
+                // Reconstruct the actual OpenAI wire fields, not internal ToolCall objects.
+                auto event = ovms::test::deltaToDocument(delta);
+                const auto& wire = event["delta"]["tool_calls"][0];
+                const auto index = wire["index"].GetInt();
+                ASSERT_GE(index, 0);
+                const auto& function = wire["function"];
+                if (function.HasMember("name")) {
+                    ASSERT_EQ(index, calls.size());
+                    ASSERT_EQ(completed, calls.size()) << "Finish arguments before the next identity";
+                    ASSERT_TRUE(wire.HasMember("id"));
+                    const std::string id = wire["id"].GetString();
+                    EXPECT_FALSE(id.empty());
+                    EXPECT_TRUE(ids.insert(id).second);
+                    calls.push_back({id, function["name"].GetString(), ""});
+                } else {
+                    ASSERT_LT(index, calls.size());
+                    EXPECT_FALSE(wire.HasMember("id"));
+                    calls[index].arguments += function["arguments"].GetString();
+                    ++completed;
+                }
+            };
+            size_t begin = 0;
+            for (const size_t end : ends) {
+                if (auto delta = parser.parseChunk(test.wire.substr(begin, end - begin), {}, Reason::NONE))
+                    capture(*delta);
+                while (auto delta = parser.drainPendingDelta())
+                    capture(*delta);
+                begin = end;
+            }
+            if (auto delta = parser.parseChunk("", {}, test.finish))
+                capture(*delta);
+            while (auto delta = parser.drainPendingDelta())
+                capture(*delta);
+            ASSERT_EQ(calls.size(), test.expected.size());
+            EXPECT_EQ(completed, calls.size());
+            for (size_t i = 0; i < calls.size(); ++i) {
+                EXPECT_EQ(calls[i].name, test.expected[i].first);
+                rapidjson::Document actual, expected;
+                actual.Parse(calls[i].arguments.c_str());
+                expected.Parse(test.expected[i].second.c_str());
+                ASSERT_FALSE(actual.HasParseError());
+                EXPECT_EQ(actual, expected);
+            }
+        }
+    }
+}
+
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterStreamerPublishesCompletedArgumentsBeforeEnd) {
+    std::vector<ToolCallDelta> calls;
+    int lastCount = 0;
+    auto parser = std::shared_ptr<OutputParser>(outputParser.get(), [](OutputParser*) {});
+    OVMSTextStreamer streamer(*qwen3Tokenizer, parser, true,
+        [&](Delta delta, bool last) {
+            EXPECT_EQ(lastCount, 0);
+            if (auto* call = std::get_if<ToolCallDelta>(&delta))
+                calls.push_back(*call);
+            lastCount += last ? 1 : 0;
+            return ov::genai::StreamingStatus::RUNNING;
+        }, {{ov::genai::skip_special_tokens.name(), false}});
+    const auto tokens = qwen3Tokenizer->encode(
+        "<tool_call><function=cd><parameter=folder>two</parameter></function></tool_call>\n",
+        ov::genai::add_special_tokens(false)).input_ids;
+    for (size_t i = 0; i < tokens.get_size(); ++i)
+        ASSERT_EQ(streamer.write(tokens.data<int64_t>()[i]), ov::genai::StreamingStatus::RUNNING);
+    ASSERT_EQ(calls.size(), 2) << "A validated call must reach the consumer before end()";
+    EXPECT_EQ(calls[0].name, "cd");
+    EXPECT_EQ(calls[0].index, calls[1].index);
+    EXPECT_EQ(calls[1].arguments, R"({"folder":"two"})");
+    EXPECT_EQ(lastCount, 0);
+    streamer.end();
+    EXPECT_EQ(calls.size(), 2);
+    EXPECT_EQ(lastCount, 1);
+    EXPECT_FALSE(streamer.hadParserError());
+}
+
 class Qwen3CoderOutputParserParametrizedTest : public Qwen3CoderOutputParserTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, std::string, std::string>> {
 };
 

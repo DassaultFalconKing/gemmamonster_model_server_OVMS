@@ -302,9 +302,11 @@ ov::genai::StreamingStatus OVMSTextStreamer::flush_chunk(
     }
 
     const bool isLast = (finish_reason != ov::genai::GenerationFinishReason::NONE);
-    if (isLast && m_output_parser) {
+    if (m_output_parser) {
         // One-delta lookahead keeps exactly one completion callback, without
-        // replaying STOP. Only opt-in parsers drain; nullopt terminates the loop.
+        // replaying STOP. Drain on every flush so a completed tool's arguments
+        // are delivered with its header, even while generation continues.
+        // Only opt-in parsers drain; nullopt terminates the loop.
         for (;;) {
             std::optional<Delta> next;
             try {
