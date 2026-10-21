@@ -1,0 +1,89 @@
+{
+  "observed_utc": "2026-10-21T19:25:42.149631+00:00",
+  "base_sha": "8ad9410de45a2f16e8fe7bc9e560f0c11387d7aa",
+  "accepted": false,
+  "scope": "Runner correctness and provenance only; no OVMS backend or installed-cohort change",
+  "tests": {
+    "final_count": 18,
+    "final_exit": 0,
+    "baseline_red_count": 12,
+    "baseline_red_failures": 9,
+    "red_categories": [
+      "row substitution",
+      "missing/duplicate/inconsistent SUMMARY",
+      "row semantic mismatch",
+      "wrong schema-error phase",
+      "unbounded/escaping cleanup"
+    ],
+    "additional_red_green": [
+      "executing runner identity",
+      "duplicate lazy mode",
+      "substring-only original summary",
+      "initial manifest drift",
+      "parent exited before PID cleanup",
+      "CWD-relative external provenance"
+    ],
+    "subprocesses": "Owned process handles mocked; no real compiler/model/taskkill executed"
+  },
+  "native_matrix_contract_rows": 28,
+  "original_preparation_manifest_sha256": "9f2637bb82bc60af132fac297a73ad94a4633ef5ad37a9dd5d043c804d6b3c74",
+  "new_preparation_manifest_sha256": "e89891275884ab9f73ff800de36f5257a8b82c2dfb83923922fa804f40c8134b",
+  "new_preparation_preflight": "PASS; compiler/native execution NOT RUN",
+  "code_sha256": {
+    "scripts/qwenmonster/r1_gate.py": "0b5a06ba791f4b22c2ecda1965389e584379b997ae7a9bf79aef77d0bca5bb6f",
+    "scripts/qwenmonster/r1_runner.py": "dfa01d704f68b232898db645d40413b21f9eed514ec7c239cdae017fc605d342",
+    "scripts/qwenmonster/tests/test_r1_runner.py": "5cc6db11113f323f73fd659a3485aa925eeeac4259daa3a531a8a60997253f9e"
+  },
+  "logs_sha256": {
+    "FINAL-GREEN.json": "3ba584337a31875b587fbcb50f0a8c3e93c64dc37c278e50e672675a6356d91d",
+    "FINAL-GREEN.log": "e08917c721d437ea47fd298c249737e1b439c11db6a9acf83e3fa73511e92092",
+    "GREEN-18.json": "76facdd23af125836139b1aa3a346f13f15f89a0a8cc9990ad2491c90ba8b58d",
+    "GREEN-18.log": "010ecd92642cc75db238c545793cbc64f55edea8cf88f33cc5156fde5a6c59f5",
+    "GREEN-2.json": "dc1fb55d6183e3515afe4c31bb836934a58691fa4d813317eb5f0e77017a7e44",
+    "GREEN-2.log": "8250dc8e116a9ea24146fbdb873e21783d6068be831c29cc7214aa59b850757e",
+    "GREEN-3.json": "71c6c57b2c7121b0f6644b4a06b00c668b321a9121c48b06cbd61f60d112bb9d",
+    "GREEN-3.log": "616ac9c791e487ea182c0a670863924931892c2cea266aba0f3507a9d06858a9",
+    "GREEN-IDENTITY.json": "f771b268f73270d1807277504713adbba92acc989363a99152f772c2d95da887",
+    "GREEN-IDENTITY.log": "af8356fe9da6c70128706bc17a9087d4e1677b76d9e9748f96389802f609797e",
+    "GREEN-PUBLIC-ADAPTER.json": "a0299cbc784fcb160b9fb8b850957d3d7da0ad9baa68a254c3ad487dfb3066a9",
+    "GREEN-PUBLIC-ADAPTER.log": "003e36af06c489a0204a1d674aaa2932cd868912e721f0eb0dca62b61be62b67",
+    "GREEN-REVIEW-FINDINGS.json": "72e5e086225785908b3a7d4e80c24229f53a8a0b8fba80260b31715a57dae8c0",
+    "GREEN-REVIEW-FINDINGS.log": "f1a979e64fe9c338e2ce1276ae8fbcfd42e256e66bce5e8e2bbf59f12f3335e7",
+    "GREEN.json": "931fd28a73a4072205b7ea43b9898fe10236cdebc9d430f74bfda0d4e1c8ca1f",
+    "GREEN.log": "a2d6efccda941c6b7c37fbfbb6151830a44e6859281dfc7b6693a67b0909753c",
+    "RED-EXECUTING-IDENTITY.json": "a4db56cb3617a7803eee59a47e4efb611e6e5d605a0976ef8ff71269dc8aeac3",
+    "RED-EXECUTING-IDENTITY.log": "214ed83b977d472d57a25defb2614572358eda630e2aec912e0385d50c7f657b",
+    "RED-RELATIVE-INPUT.json": "529120480d4eb1c1ec9d911073eac1c3e393c74f390bdaf2a8ab53ac25003c25",
+    "RED-RELATIVE-INPUT.log": "d5ccb2383a7bb1c3a658fdaa1b1e9caede81af2fad86a8e5b5c16f97e26c1a5b",
+    "RED-REVIEW-FINDINGS.json": "4fa8de3517fef39e71ccd45236f4c174cff4a4a27bf0fab0d2cd9c6362437504",
+    "RED-REVIEW-FINDINGS.log": "7b848c32b4c2c5735baaaf70e39ea6e745106c2cc3f58579aa57da743841e89e",
+    "RED.json": "cea0b94e92e804fb7cbbc0398c77de4b45d8f4c0fe5b7e213d0c72356f78f37a",
+    "RED.log": "cf74930ee0b9c7152d8904a338db14e0b573ec50fd7ffd564fc2e3c05c61f0c0"
+  },
+  "external_review": {
+    "reviewed_snapshot_tests": 12,
+    "final_tests_after_local_corrections": 18,
+    "resolved": "F1 parent-exit guard; F2 exact original summary/lazy modes; F3 absolute external paths; F6 retain initial manifest hash",
+    "limitations": "Malformed manifest structure may still fail closed with traceback. Real Windows tree cleanup and native matcher NOT RUN. Windows environment handling unchanged.",
+    "report_sha256": "ec4687bfb4382684e1a8948d92d0743ef50983e9914f716c2b7276e63aa086ab"
+  },
+  "terminal_trace": {
+    "status": "STATIC ONLY",
+    "legacy_success_gate": "Confirmed before final serialization",
+    "CB_parser_error_and_terminal_semantics": "Runtime RED still required; no product safety/containment acceptance claimed",
+    "report_sha256": "72e5cdac1e81cf0e5a81da67804ec5283871199a615538b84b90a90b0c7a114b"
+  },
+  "unchanged": [
+    "accepted C6 install",
+    "published dependency lock",
+    "running OVMS process"
+  ],
+  "not_run": [
+    "native R1 configure/build/matcher",
+    "real process-tree cleanup",
+    "new live inference",
+    "100 required-city",
+    "1/2/4 sessions",
+    "candidate cohort integration"
+  ]
+}

@@ -1,3 +1,18 @@
+# Current implementation checkpoint: R1 runner hardening
+
+- ACTIVE_STAGE: first implementation unit complete: versioned runner/gate and18 offline regressions.
+- BASE_SHA / REVERT_POINT: 8ad9410de45a2f16e8fe7bc9e560f0c11387d7aa; CURRENT_HEAD: resolve after commit.
+- WORK_BRANCH: qwm01-request-schema.
+- DEPENDENCY_LOCK: unchanged; accepted C6 install and running OVMS unchanged.
+- LAST_GREEN_TESTS:18/18 offline runner tests; sealed preparation preflight; exact28-row native-source contract checked statically.
+- CURRENT_FAILURE: native build/matcher and actual backend cancellation/terminal RED NOT RUN; four inherited grammar defects remain OPEN.
+- ROOT_CAUSE: count-only result selection, loose companion success matching, unbounded cleanup and incomplete execution identity checks in old runner.
+- NEXT_ACTION: resource-separated R1 native execution; reproduce actual parser/CB terminal and cancellation behavior before product changes.
+- EVIDENCE_PATH: R1-RUNNER-HARDENING.md; evidence/r1-runner-hardening-20261021/RESULTS.json; raw logs private.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current external-agent checkpoint
 
 - ACTIVE_STAGE: existing runtime reuse verified; bounded negative/positive/continuation PASS; two external static reviews checked.
