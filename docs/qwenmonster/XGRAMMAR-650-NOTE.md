@@ -1,6 +1,8 @@
 # XGrammar #650 end-marker note (source port measured, gate OPEN)
 
-Status: **QWEN TOKENIZER MASK PASS. CANDIDATE DLL LIVE UNARY/SSE PASS. CANCEL NOT PROVEN. LOCK UNCHANGED. ACCEPTED: NO.**  
+Status: **CANDIDATE DLL INSTALLED OVER THE STAGED RUNTIME AND THE SERVER-ADJACENT COPY. LOCK UNCHANGED. ACCEPTED: NO.**
+
+Installed SHA-256 `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`. Previous SHA-256 `7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da`, retained privately. Tokenizers were not replaced. Live runs of this installed copy are delegated and not yet reviewed.  
 Recorded: 2026-10-22  
 Upstream: [#650](https://github.com/mlc-ai/xgrammar/issues/650), proposed fix [PR #651](https://github.com/mlc-ai/xgrammar/pull/651) (unmerged; the fork carries an equivalent on its own Aho-Corasick builder).
 

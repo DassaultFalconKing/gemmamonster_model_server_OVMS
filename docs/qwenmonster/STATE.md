@@ -1,3 +1,18 @@
+# Current implementation checkpoint: candidate GenAI DLL installed
+
+- ACTIVE_STAGE: the isolated candidate replaced both the staged runtime GenAI DLL and the copy beside the server executable. Originals were kept privately. ACCEPTED stays NO.
+- BASE_SHA / REVERT_POINT: `7858ea024ce75d96142d7dbee71ae1103f695902`. CURRENT_HEAD: resolve with `git rev-parse HEAD` after this commit.
+- WORK_BRANCH: `qwm01-request-schema` → `origin/feature/qwenmonster-qwm01-request-schema-20261021`.
+- DEPENDENCY_LOCK: unchanged. Installed DLL SHA-256 `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d` (9031680 bytes), built from XGrammar `5b0b7084a65a2059b44c03fbc6320ad7fcc41f33` and GenAI `8f305a1c1bc11e348c8ad0cc37269a91ba21cc74`. Previous DLL SHA-256 `7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da` (8745472 bytes).
+- LAST_GREEN_TESTS: the earlier side-by-side live unary/SSE still stands for that process. These installed files have not been retested yet.
+- CURRENT_FAILURE: cancel is unproven. Undeclared-required empty XML remains. The installed copy's own live runs are delegated and not reviewed.
+- ROOT_CAUSE: n/a. Windows loads `openvino_genai.dll` from the executable directory before PATH, so both that copy and the staged runtime copy were replaced.
+- NEXT_ACTION: review the delegated load, length, disconnect, and one required-city runs. Do not edit the public lock. Keep ACCEPTED NO.
+- EVIDENCE_PATH: XGRAMMAR-650-NOTE.md. Paths of the backups stay in the private hub.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: candidate DLL live unary and SSE
 
 - ACTIVE_STAGE: Ornith answered unary and SSE through the isolated candidate GenAI DLL. The staged runtime file was not replaced. ACCEPTED stays NO.
