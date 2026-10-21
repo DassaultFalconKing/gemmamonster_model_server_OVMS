@@ -1,0 +1,258 @@
+{
+  "timestamp_utc": "2026-10-21T13:19:55.691482+00:00",
+  "ovms_code_sha": "7037ee528d62981dafc93c9d5507addceb8f3341",
+  "xgrammar_candidate_sha": "3303659ec09c62c1d024a7d4eed1b0bc18b30cc3",
+  "accepted": false,
+  "source_checks": [
+    {
+      "component": "genai",
+      "pinned_sha": "2decb9ec4bea827e01db47524352ad72d23b33ab",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "2decb9ec4bea827e01db47524352ad72d23b33ab",
+      "dirty": false
+    },
+    {
+      "component": "xgrammar",
+      "pinned_sha": "c77d5e0d62411d17d4cf55d280463eb5b3bec7ba",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "c77d5e0d62411d17d4cf55d280463eb5b3bec7ba",
+      "dirty": false
+    },
+    {
+      "component": "openvino",
+      "pinned_sha": "b5bfb14860320ae2a44d0fc55d78caa9a9d789b9",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "b5bfb14860320ae2a44d0fc55d78caa9a9d789b9",
+      "dirty": false
+    },
+    {
+      "component": "minja",
+      "pinned_sha": "83eb074e42140b0d1194d1dd61f29c31e4515ee9",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "83eb074e42140b0d1194d1dd61f29c31e4515ee9",
+      "dirty": false
+    },
+    {
+      "component": "ovms",
+      "pinned_sha": "ba6ec792c3121850fea167fa7d7e190b25fcdc76",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "7037ee528d62981dafc93c9d5507addceb8f3341",
+      "dirty": true
+    },
+    {
+      "component": "tokenizers",
+      "pinned_sha": "d73028e255ddc279483fbc6e8ea90dc802e820f5",
+      "status": "SOURCE PASS",
+      "issues": [],
+      "actual_sha": "d73028e255ddc279483fbc6e8ea90dc802e820f5",
+      "dirty": false
+    }
+  ],
+  "units": {
+    "qwenmonster_output_parser_test": {
+      "tests": "69",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "time": "0.377",
+      "timestamp": "2026-10-21T13:09:52.996",
+      "name": "AllTests",
+      "failed_tests": []
+    },
+    "qwenmonster_generation_policy_test": {
+      "tests": "9",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "time": "0.002",
+      "timestamp": "2026-10-21T13:09:54.231",
+      "name": "AllTests",
+      "failed_tests": []
+    },
+    "output_parser_core_test": {
+      "tests": "29",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "time": "0.004",
+      "timestamp": "2026-10-21T13:09:49.022",
+      "name": "AllTests",
+      "failed_tests": []
+    },
+    "gemma4_output_parser_test": {
+      "tests": "70",
+      "failures": "3",
+      "disabled": "0",
+      "errors": "0",
+      "time": "0.643",
+      "timestamp": "2026-10-21T13:09:47.663",
+      "name": "AllTests",
+      "failed_tests": [
+        "ParseReasoningWithDuplicatedEndTagDoesNotEmitInterveningTextTwice",
+        "ParseToolCallOutputWithNoToolsInTheRequest",
+        "ParseToolCallWithStringArgumentsContainingEscapedQuotes"
+      ]
+    }
+  },
+  "compiler_profile": "Windows x64, MSVC 14.44.35207; Bazel 7.4.1 win_mp_on_py_off jobs2; native Release C++17 Ninja jobs2",
+  "qwm_controls": "All four executables compiled and executed; Bazel exit3 from same three baseline Gemma failures.",
+  "http_intake": {
+    "status": "BUILD FAILED; HTTP UNIT NOT RUN",
+    "boundary": "Bazel dependency analysis",
+    "reason": "Required configured boringssl directory is absent; no replacement dependency supplied.",
+    "initial_launcher_error": "Legacy CMD argument collector split nested equals in test_arg; retained Bazel37. Separate build command then exposed real missing dependency."
+  },
+  "native_802": {
+    "status": "PASS",
+    "checks": 29,
+    "failures": 0,
+    "baseline_checks_failed": 14,
+    "genai_control_tests": {
+      "tests": "31",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "time": "0.014",
+      "timestamp": "2026-10-21T15:15:35.402",
+      "name": "AllTests"
+    },
+    "actual_tokenizer": "Qwen3-8B unit fixture, pinned tokenizer-only assets; not Qwen3.6 model acceptance",
+    "actual_vocab": 151669,
+    "eos": 151645,
+    "whitespace_tokens": 425,
+    "baseline_allowed_whitespace_tokens": 422,
+    "candidate_allowed_whitespace_tokens": 0,
+    "hard_and_lazy_verified": true,
+    "synthetic_baseline_spaces": 1024,
+    "synthetic_candidate_spaces": 0,
+    "immediate_close": true,
+    "python_tests": "NOT RUN: Python environment lacks torch, tvm_ffi, xgrammar bindings. Native equivalents exercised."
+  },
+  "residuals": [
+    "XML #650 malformed close still accepted as an incomplete prefix in both libraries.",
+    "Undeclared required key schema {type:object,required:[a]} accepts empty native XML in BOTH libraries under strict conversion. Inherited matcher/schema gap, not fixed or introduced by #802; parser argument validation still rejects missing required values.",
+    "HTTP intake and HTTP400 mapping remain unexecuted. Full OVMS server not built/launched.",
+    "Fresh full GenAI/OpenVINO dependency cohort rebuild, target Qwen3.6 prompt/model, live unary/SSE, tool loops and concurrency NOT RUN."
+  ],
+  "cohort_boundary": "Source lock unchanged. OVMS unit tests reused original staged DLLs (known Minja fixture-only drift, production headers equivalent). Candidate static XGrammar is linked only into native validation executables; original GenAI DLL was not rebuilt with candidate.",
+  "raw_log_inventory": {
+    "qwm-controls.log": {
+      "sha256": "b26a6286e39cf5d5019d06ed8f53a6f8c27ed4785a2e0c42635e0a4eae7a6eed",
+      "bytes": 32424
+    },
+    "qwm-http-build.log": {
+      "sha256": "53ffd1db223a1fcb71168f68c4a52a0fd8933cd7bbbe3f1c12b71086f4c908f0",
+      "bytes": 6154
+    },
+    "qwm-http.log": {
+      "sha256": "8ef3fdd9289502c489eaa2d83ca7f101cf912d715e4825d82da5fb4b4c5de899",
+      "bytes": 9649
+    },
+    "xgrammar-802-build-retry.log": {
+      "sha256": "b0a89bc25ab49a7caf457404dacede56b8961c2cba5fcc35d036bec30b5da6d0",
+      "bytes": 7857
+    },
+    "xgrammar-802-build.log": {
+      "sha256": "773059f5efcbeb3880ee2ce76a5a99406143c052f85980bba6fc7cc46d5c77f9",
+      "bytes": 11243585
+    },
+    "xgrammar-802-genai-controls.log": {
+      "sha256": "968d960d2d1ee6b2d09d22858dbf7d3b2d5ae26ac7da663d5c22d1ba2b29cc22",
+      "bytes": 5917
+    },
+    "xgrammar-802-native-checks.log": {
+      "sha256": "c507743352b9e93533c5cd622f853ccdd1da08a0315a8e3bb36b0f88ca85c529",
+      "bytes": 1642
+    },
+    "xgrammar-802-probe-build.log": {
+      "sha256": "5763b14610001aa7d767e6e49858679cde4fabcdddfeaf7148ce575b34ea0409",
+      "bytes": 595
+    },
+    "xgrammar-802-transport.log": {
+      "sha256": "46950a63c75ed3a5a08416e1d700eee3162e83c2ec0cde5e95e22d6ebf26de8e",
+      "bytes": 28006
+    },
+    "xgrammar-baseline-build.log": {
+      "sha256": "2872a093f9df08865b4e10e908ff12b1caa1c98338ccbbeba5a54be8b68069b6",
+      "bytes": 995
+    },
+    "xgrammar-baseline-native-checks.log": {
+      "sha256": "acb2d3c0efb9ffd03e7af64fca4713c872a248c3e754f27a7a377fe5eeae180d",
+      "bytes": 34747
+    },
+    "xgrammar-baseline-transport.log": {
+      "sha256": "e22d52fadd5d894e95e53e634bc6e495eebfd51f925050ac62c907b6b7a9200c",
+      "bytes": 28032
+    }
+  },
+  "build_artifacts": {
+    "candidate_xgrammar.lib": {
+      "sha256": "152e746899a1dc8f8573a90c6fb745018c1804fd0a5aab2086bb5312fc183106",
+      "bytes": 61452770
+    },
+    "baseline_xgrammar.lib": {
+      "sha256": "5dc46b8edba43596f470b9e1b7880d83630c382e3ec7253af2420be3bc052ad2",
+      "bytes": 61452000
+    },
+    "candidate_native_checks.exe": {
+      "sha256": "cdfe2e675b3f786db8cdde75baf6c29c1f85d99e542240f88ee312354e0ae0f7",
+      "bytes": 1692160
+    },
+    "baseline_native_checks.exe": {
+      "sha256": "f8a5e79ed751f4d0395a428c55f6fe43b7f600206d6f209e2dac2264dda8cf7c",
+      "bytes": 1692160
+    },
+    "candidate_genai_controls.exe": {
+      "sha256": "0b22069ef0d197c0110f26d637668c5fb7ffbbdfcf3ab8107293ae2f2f909936",
+      "bytes": 2224128
+    },
+    "checks.cpp": {
+      "sha256": "5d97029dd3ae7bf72dcfa782bc7622da0c702023c25310dc2b3e769ef470e544",
+      "bytes": 6257
+    },
+    "native-CMakeLists.txt": {
+      "sha256": "200b2e64bfe2fc6ccd42f4301ceb1180427c0559354ca11684b2073a88d1637a",
+      "bytes": 2057
+    },
+    "openvino_genai.dll": {
+      "sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da",
+      "bytes": 8745472,
+      "loaded_from": "existing staged runtime (exact local module paths retained privately)"
+    },
+    "openvino.dll": {
+      "sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f",
+      "bytes": 16566272,
+      "loaded_from": "existing staged runtime (exact local module paths retained privately)"
+    },
+    "openvino_tokenizers.dll": {
+      "sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66",
+      "bytes": 3470848,
+      "loaded_from": "existing staged runtime (exact local module paths retained privately)"
+    }
+  },
+  "tokenizer_sha256": {
+    "chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+    "config.json": "ea744cdd40567da2635a279fcf95d542c2759a4e47a7b6b79fd52d1f11594f83",
+    "generation_config.json": "64d86df2173901c58389974bde21f7d2ab9eb7d79f35a337753329d39cf265c0",
+    "openvino_detokenizer.bin": "d73093f72c80ebcaffb76a192727170ecd3c6a06c4df52df0e76b3f70ad9d7f7",
+    "openvino_detokenizer.xml": "13247d687ad651e0d21285719896f24dcac206e1259863ad6eee493dc5217e90",
+    "openvino_tokenizer.bin": "63c613e041e2d7f84f7376d6b628b72c8af29259b4d1b27540035f0d9ef034b3",
+    "openvino_tokenizer.xml": "cee34515686c4c8c44c1276c8279273c457cae68497a9f2a5bca531e1ff7296c",
+    "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0"
+  },
+  "external_review": {
+    "backend": "OpenCode 1.19.3",
+    "model": "opencode/glm-5.3-flash-free",
+    "preflight_session": "ses_ea16e51abffeU3ZGB45ANrgTqI",
+    "review_session": "ses_ea16cf38effeRp504I2eyFKZAl",
+    "scope": "Read-only sanitized public-source snapshots; no builds or source writes",
+    "reviewed": true
+  }
+}

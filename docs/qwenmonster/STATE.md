@@ -1,3 +1,18 @@
+# QWM-01 current measured checkpoint
+
+- ACTIVE_STAGE: focused unit and native companion builds complete; HTTP build blocked in dependency analysis.
+- BASE_SHA / CURRENT_HEAD / REVERT_POINT: `7037ee528d62981dafc93c9d5507addceb8f3341` (exact tested product code; later evidence-only tip is resolved with git rev-parse HEAD).
+- WORK_BRANCH: `qwm01-request-schema`; remote `feature/qwenmonster-qwm01-request-schema-20261021`.
+- DEPENDENCY_LOCK: unchanged public-source-lock.json. Candidate XGrammar `3303659ec09c62c1d024a7d4eed1b0bc18b30cc3` is separate, not deployed.
+- LAST_GREEN_TESTS: source6/6; Qwen69/69, policy9/9, generic29/29; native #802 assertions29/29 and GenAI controls31/31. Unit tokenizer hard/lazy whitespace masks: 422 allowed before, 0 after.
+- CURRENT_FAILURE: Gemma67/70 same baseline failures; ovms_test dependency analysis cannot find configured BoringSSL. HTTP intake and HTTP400 NOT RUN. XML #650 and inherited undeclared-required conversion gap remain open.
+- ROOT_CAUSE: environment dependency absence blocks HTTP compile/link; native #802 epsilon change removes the zero-argument whitespace path. See QWM01-BUILD-REPORT.md.
+- NEXT_ACTION: restore exact full-server Windows dependencies; build/run Qwen HTTP tests, then integrate proposed explicit cohort and complete target model/live gates.
+- EVIDENCE_PATH: evidence/qwm01-build-20261021/RESULTS.json and QWM01-BUILD-REPORT.md; raw machine logs retained privately.
+- ACCEPTED: NO; RUNTIME UNVERIFIED.
+
+The sections below are historical checkpoints, superseded by this measured entry.
+
 # QWENMONSTER local execution checkpoint
 
 Date: 2026-10-21. ACCEPTED: **NO**.

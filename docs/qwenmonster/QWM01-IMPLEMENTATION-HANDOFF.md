@@ -1,6 +1,14 @@
 # QWM-01 implementation and XGrammar #802 companion candidate
 
-Status **SOURCE PATCHED / UNCOMPILED / UNIT NOT RUN / LIVE NOT RUN**.
+Current measured status: see QWM01-BUILD-REPORT.md. Focused parser/policy/generic
+units pass; three baseline Gemma failures remain. HTTP full-target dependency
+analysis is blocked by absent configured BoringSSL, so HTTP tests are NOT RUN.
+Separate #802 native build/checks and candidate GenAI controls pass; no new
+runtime cohort is deployed. LIVE NOT RUN, ACCEPTED NO.
+
+The original source-only implementation handoff below is retained for history;
+its unexecuted unit/native labels are superseded only by the exact measured
+scopes in QWM01-BUILD-REPORT.md.
 Implementation worktree: `feature/qwenmonster-qwm01-request-schema-20261021`, branched from `8aba34ad4e422d470d91afdf88aa3dd9696cb143`.
 Original known-good C6 and published `public-source-lock.json` unchanged.
 

@@ -1,0 +1,14 @@
+Exact result lines selected; full log hash is in RESULTS.json. Machine paths and verbose grammar/mask trace omitted.
+
+MODE zero=0 lazy=0
+RESULT drift=0 accepted=1 completed=1
+RESULT drift=1 accepted=1 completed=0
+MODE zero=0 lazy=1
+RESULT drift=0 accepted=1 completed=1
+RESULT drift=1 accepted=1 completed=0
+MODE zero=1 lazy=0
+RESULT drift=0 accepted=1 completed=1
+ZERO_SPACES 1024 CLOSABLE 1
+MODE zero=1 lazy=1
+RESULT drift=0 accepted=1 completed=1
+ZERO_SPACES 1024 CLOSABLE 1

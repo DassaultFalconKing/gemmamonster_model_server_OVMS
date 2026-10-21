@@ -1,0 +1,36 @@
+Exact result lines selected; full log hash is in RESULTS.json. Machine paths and verbose grammar/mask trace omitted.
+
+CHECK empty_0_epsilon PASS
+CHECK empty_0_reject_whitespace_len1 PASS
+CHECK empty_0_reject_whitespace_len1 PASS
+CHECK empty_0_reject_whitespace_len1 PASS
+CHECK empty_0_reject_whitespace_len16 PASS
+CHECK empty_1_epsilon PASS
+CHECK empty_1_reject_whitespace_len1 PASS
+CHECK empty_1_reject_whitespace_len1 PASS
+CHECK empty_1_reject_whitespace_len1 PASS
+CHECK empty_1_reject_whitespace_len16 PASS
+CHECK empty_2_epsilon PASS
+CHECK empty_2_reject_whitespace_len1 PASS
+CHECK empty_2_reject_whitespace_len1 PASS
+CHECK empty_2_reject_whitespace_len1 PASS
+CHECK empty_2_reject_whitespace_len16 PASS
+CHECK open_object_keeps_parameter PASS
+CHECK open_object_keeps_parameter PASS
+CHECK nested_empty_keeps_braces PASS
+CHECK plain_json_empty PASS
+CHECK plain_json_spaced_empty PASS
+CHECK plain_json_reject_epsilon PASS
+CHECK required_declared_parameter PASS
+CHECK required_declared_reject_empty PASS
+OBSERVATION undeclared_required_accepts_empty=1
+TOKENIZER vocab=151669 eos=151645
+CHECK actual_prefix PASS
+ACTUAL_MASK lazy=0 whitespace_tokens=425 allowed=0
+CHECK actual_no_whitespace_tokens PASS
+CHECK actual_immediate_close PASS
+CHECK actual_prefix PASS
+ACTUAL_MASK lazy=1 whitespace_tokens=425 allowed=0
+CHECK actual_no_whitespace_tokens PASS
+CHECK actual_immediate_close PASS
+SUMMARY failures=0
