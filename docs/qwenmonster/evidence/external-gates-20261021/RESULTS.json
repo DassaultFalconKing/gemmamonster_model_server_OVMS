@@ -1,0 +1,117 @@
+{
+  "observed_utc": "2026-10-21T19:02:04.732016+00:00",
+  "accepted": false,
+  "product_code_changed": false,
+  "runtime_restarted": false,
+  "dependency_lock_changed": false,
+  "documentation_snapshot_sha": "346b333ea8cd3c1ed8ca5f1ff4d802a473162327",
+  "running_executable_sha256": "C28D0D9DDEC50A22FD79855B360BC5F059A3F81939A68B2DFAB85521B4474933",
+  "model": "ornith-35b-ov",
+  "device": "GPU",
+  "offload_ratio": 20,
+  "loaded_core_modules": [
+    {
+      "name": "openvino_genai.dll",
+      "sha256": "7892465A3BCA67E103E26B198F47FB1D5C0A98FC2CC7CB4616BA0E8D5AD054DA"
+    },
+    {
+      "name": "openvino.dll",
+      "sha256": "13A3C5A91BD6AA45D29271E08613056F09F0F7DD067250C2BAC6B02C96597C8F"
+    },
+    {
+      "name": "openvino_tokenizers.dll",
+      "sha256": "A7B4A454CCF9E242938E79038EC80B5BA8F07F1ED488138497E17C96F52B7F66"
+    },
+    {
+      "name": "openvino_auto_plugin.dll",
+      "sha256": "9B109EF81A6664868FBE54B1B72D496BA43282A6AC7448279FC8BA05F97E71E2"
+    },
+    {
+      "name": "openvino_auto_batch_plugin.dll",
+      "sha256": "EC1FB6BD0C2C2DB23AB83E527736EC02C231C13C5573794D66367A9E2A455634"
+    },
+    {
+      "name": "openvino_intel_cpu_plugin.dll",
+      "sha256": "0CF9706F38AD67535C09842B4678ACCD207C132364CFE63E5CBB2F2EAA5FDA77"
+    },
+    {
+      "name": "openvino_intel_gpu_plugin.dll",
+      "sha256": "7E94BC2F47E85239E3E0B2DD66A6F0D90DB4C1FFA4BEAF69A8F9A966A6788DAA"
+    },
+    {
+      "name": "openvino_hetero_plugin.dll",
+      "sha256": "207C7708F3FDB24A4B0832E2AA2A34669EBA26EAB14FCD5EFB156B7D9EB29D6C"
+    },
+    {
+      "name": "openvino_tokenizers.dll",
+      "sha256": "A7B4A454CCF9E242938E79038EC80B5BA8F07F1ED488138497E17C96F52B7F66"
+    },
+    {
+      "name": "openvino_ir_frontend.dll",
+      "sha256": "F4DB5C945CE4BBE055450B31D706DFC530F6FA79E9B8398C6832C2626AE192EF"
+    }
+  ],
+  "runtime_gate": {
+    "status": "PASS",
+    "stages": [
+      {
+        "id": "negative",
+        "pass": true
+      },
+      {
+        "id": "positive-after-error",
+        "pass": true
+      },
+      {
+        "id": "continuation",
+        "pass": true
+      }
+    ],
+    "external_shell_exit": 0,
+    "initial_memory": {
+      "utc": "2026-10-21T18:57:12.465798+00:00",
+      "pid": 18804,
+      "birth_unix": 1792602855.8682482,
+      "available_ram_mib": 4776.36,
+      "rss_mib": 7078.95,
+      "private_mib": 16399.58
+    },
+    "final_memory": {
+      "utc": "2026-10-21T18:57:38.601425+00:00",
+      "pid": 18804,
+      "birth_unix": 1792602855.8682482,
+      "available_ram_mib": 514.35,
+      "rss_mib": 12778.86,
+      "private_mib": 16450.51
+    },
+    "post_idle_memory": {
+      "utc": "2026-10-21T18:58:59.186985+00:00",
+      "available_ram_mib": 2075.81,
+      "rss_mib": 12765.13,
+      "private_mib": 16436.7,
+      "additional_inference": "PROHIBITED until resource review",
+      "server_restart": false
+    },
+    "evidence_sha256": "f8ca5b8b4b68b531234104e95f7e174ceaabf7e0ef1828b0be2853a6bc9f2721",
+    "probe_sha256": "132cfae87c9dadab13864c5f9485f4cf2bc5c0a926f7ad32956fd429ed06dd30"
+  },
+  "static_reviews": {
+    "finish_reason": "Visible CB/API paths use the real generation finish reason; streamer STOP alone does not prove a wrong client finish_reason. Parser and unsupplied legacy/executor behavior remain separate.",
+    "r1_runner": "Exact selected row-name set and bounded timeout cleanup need hardening; source/paths/runtime absent only from limited review snapshot are not proven actual-package blockers.",
+    "runtime_tests": "NOT RUN by static reviewers"
+  },
+  "evidence_hashes": {
+    "runtime-gate": {
+      "report_sha256": "8535bd9fa80364cbb007fc3bba5f82b7f826c26091a2e0d1ca69e4177f9253bd",
+      "provider_output_sha256": "861c20262052d986df242f696f0a01b4f1b6a5a81b00b09b39e2c51d519eba76"
+    },
+    "finish-trace": {
+      "report_sha256": "e7236b0176b9c9add154d7d984e384a73af8e716c66441a014e70a46e76ccae1",
+      "provider_output_sha256": "0a74b0a2b29a552e061b74bf8619201cb1c5f23538ab45309cde51db9d99718f"
+    },
+    "r1-matrix-review": {
+      "report_sha256": "052e6392161129a1aa26c13f4262879602b2b27e50a94c7e16ecae134b96fadc",
+      "provider_output_sha256": "1866943f7c2fba74204c982e2c8b48f4cb1c739e62e50da5a9a2e602afcf3b19"
+    }
+  }
+}

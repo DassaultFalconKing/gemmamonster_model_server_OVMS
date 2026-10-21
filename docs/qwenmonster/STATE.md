@@ -1,3 +1,18 @@
+# Current external-agent checkpoint
+
+- ACTIVE_STAGE: existing runtime reuse verified; bounded negative/positive/continuation PASS; two external static reviews checked.
+- BASE_SHA / CURRENT_DOCUMENTATION_SNAPSHOT / REVERT_POINT: 346b333ea8cd3c1ed8ca5f1ff4d802a473162327; CURRENT_HEAD: resolve after this evidence-only update.
+- WORK_BRANCH: qwm01-request-schema.
+- DEPENDENCY_LOCK: unchanged; running executable unchanged; #802 still not integrated.
+- LAST_GREEN_TESTS: external shell exit0; HTTP400 then valid named Paris tool call then nonce-bearing continuation. Prior20/20 and17/17 scopes retained.
+- CURRENT_FAILURE: no measured API gate failure; available RAM reached514MiB during probe; reason unknown. Native R1, Hermes, LENGTH/cancel,100-city,1/2/4 remain NOT RUN.
+- ROOT_CAUSE: memory pressure not attributed. Streamer STOP is distinct from actual API finish reason in visible CB path.
+- NEXT_ACTION: resource characterization; complete parser/legacy trace; harden R1 exact rows and bounded cleanup before resource-separated native build.
+- EVIDENCE_PATH: EXTERNAL-GATES-20261021.md; evidence/external-gates-20261021/RESULTS.json; raw logs private.
+- ACCEPTED: NO.
+
+Historical checkpoints below keep their measured scopes.
+
 # Current follow-up: tool continuations and HTTP400 measured
 
 - ACTIVE_STAGE: 20 controlled tool-result continuations and 17 negative HTTP400 transport cases completed.

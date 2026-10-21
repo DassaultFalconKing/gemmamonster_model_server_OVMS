@@ -1,3 +1,5 @@
+> External checkpoint: existing-server negative -> positive -> receipt continuation PASS with captured shell exit0. See EXTERNAL-GATES-20261021.md. Low available RAM now precedes stress/build work. Static review confirms visible API paths retain the actual finish reason; proposal A remains a parser/legacy investigation, not an established API mapping defect. R1 native execution remains NOT RUN; harden exact-row and timeout checks first.
+
 # OVMS / Qwenmonster: measured status and proposed next work
 
 Updated 2026-10-21. **ACCEPTED: NO.**
