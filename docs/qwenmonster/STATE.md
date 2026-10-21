@@ -1,14 +1,14 @@
 # OVMS test current measured checkpoint
 
-- ACTIVE_STAGE: Gemma bounded repairs merged; full ovms_test and QWM request-unit gates re-verified all green.
-- BASE_SHA: `e0772d161a81ed3420082af2bf68ab46d342e904`. CURRENT_HEAD / REVERT_POINT: `ac2d190d565b693c5ca0e67ddae904a4d10d5342`.
+- ACTIVE_STAGE: XGrammar #802 R1 residual closed on companion branch; cohort proposal written; live acceptance prep next.
+- BASE_SHA: `e0772d161a81ed3420082af2bf68ab46d342e904`. CURRENT_HEAD / REVERT_POINT: resolve with `git rev-parse HEAD` (post-merge HTTP tip `872fb800f` plus this docs checkpoint).
 - WORK_BRANCH: `qwm01-request-schema`; remote feature/qwenmonster-qwm01-request-schema-20261021.
-- DEPENDENCY_LOCK: unchanged published core lock; auxiliary restoration identities recorded separately.
-- LAST_GREEN_TESTS: full ovms_test build exit0, QWM2/2, tool controls11/11, parser controls148/148 including three legacy Gemma names PASS; core DLL hashes match staged inputs.
-- CURRENT_FAILURE: HTTP400 transport, LIVE, AGENTIC NOT RUN; XML #650 and remaining grammar/profile issues still open; XGrammar #802 candidate not locked.
-- ROOT_CAUSE: environment blockers repaired earlier; historical Gemma unit fails closed by bounded parser repairs on this tip.
-- NEXT_ACTION: optional XGrammar cohort revision; then live model/tokenizer pin and agent loops. MoE/OTD remains a later isolated track.
-- EVIDENCE_PATH: OVMS-TEST-HTTP-RESULTS.md and evidence/ovms-test-http-20261021/RESULTS.json; raw logs retained privately.
+- DEPENDENCY_LOCK: unchanged published core lock (`c77d5e0d…` XGrammar). Candidate tip `b288dca18ee25d2f35197fb3971334ca049c8554` on `fix/qwenmonster-xml-empty-object-20261021` — proposal only, not locked.
+- LAST_GREEN_TESTS: full ovms_test build exit0, QWM2/2, tool controls11/11, parser controls148/148; native #802 R1 checks SUMMARY failures=0 (emptySchemas + tokenizer masks); staged GenAI DLL still without candidate.
+- CURRENT_FAILURE: HTTP400 transport, LIVE, AGENTIC NOT RUN; XML #650 OPEN; inherited undeclared-required empty XML acceptance remains OBSERVATION-only residual.
+- ROOT_CAUSE: #802 whitespace loop closed in candidate; live/runtime cohort rebuild and #650 mask repair not yet executed. See XGRAMMAR-802-COHORT-PROPOSAL.md and XGRAMMAR-650-NOTE.md.
+- NEXT_ACTION: pin canonical target model/tokenizer, build or locate OVMS server against current tip, run unary/SSE live gates; defer MoE/OTD; do not revise lock until runtime integration.
+- EVIDENCE_PATH: OVMS-TEST-HTTP-RESULTS.md; evidence/ovms-test-http-20261021/RESULTS.json; private hub logs xgrammar-802-native-checks-r1.log.
 - ACCEPTED: NO.
 
 Historical snapshots follow and are superseded by the measured checkpoint above.

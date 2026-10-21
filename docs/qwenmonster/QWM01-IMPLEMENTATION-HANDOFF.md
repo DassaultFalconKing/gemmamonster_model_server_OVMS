@@ -1,6 +1,6 @@
-Current follow-up: post-merge ovms_test and QWM request-unit gates are measured in OVMS-TEST-HTTP-RESULTS.md (Gemma legacy unit fails closed). Real HTTP400 transport and live acceptance remain NOT RUN.
+Current follow-up: XGrammar #802 candidate tip `b288dca…` (R1) measured native-green; cohort proposal and #650 note published; `public-source-lock.json` unchanged. Real HTTP400 transport and live acceptance remain NOT RUN.
 
-Current follow-up: full ovms_test and QWM request unit gate are measured in OVMS-TEST-HTTP-RESULTS.md. The historical BoringSSL/HTTP-unit blocker below is superseded. Real HTTP400 transport and live acceptance remain NOT RUN.
+Current follow-up: post-merge ovms_test and QWM request-unit gates are measured in OVMS-TEST-HTTP-RESULTS.md (Gemma legacy unit fails closed). Historical BoringSSL/HTTP-unit blocker superseded.
 
 # QWM-01 implementation and XGrammar #802 companion candidate
 
