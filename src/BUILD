@@ -3027,6 +3027,30 @@ cc_test(
     linkstatic = 1,
 )
 
+# Qwenmonster isolated parser gate. The same source remains in the existing
+# test_llm_output_parser_tests glob, so no coverage is removed from the full suite.
+cc_test(
+    name = "qwenmonster_output_parser_test",
+    srcs = [
+        "test/llm/output_parsers/qwen3coder_output_parser_test.cpp",
+        "test/llm/output_parsers/output_parser_test_utils.hpp",
+    ],
+    deps = [
+        "@com_google_googletest//:gtest_main",
+        "@com_github_tencent_rapidjson//:rapidjson",
+        "//third_party:openvino",
+        "//third_party:genai",
+        ":test_platform_utils",
+        "//src/llm:text_streamer",
+        "//src/llm:output_parsers",
+        "//src/llm:io_processing_delta",
+        "//src/llm:openai_delta_serializer",
+    ],
+    copts = COPTS_TESTS,
+    local_defines = COMMON_LOCAL_DEFINES,
+    linkstatic = 1,
+)
+
 cc_test(
     name = "output_parser_core_test",
     srcs = [
