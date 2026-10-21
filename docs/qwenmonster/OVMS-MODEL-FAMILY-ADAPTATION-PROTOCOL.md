@@ -5,7 +5,8 @@ Scope: onboarding a model family to OVMS **without** confusing template, parser,
 
 ## A0. Identity and isolation (must precede patches)
 
-- Pin `BASE_SHA`, tree SHA, exact model checkpoint, official tokenizer revision, official chat-template hash, OVMS/GenAI/XGrammar versions, runtime DLLs/compiler/Bazel, OS/device/hardware and launch profile.
+- Pin `BASE_SHA`, tree SHA, exact model checkpoint, official tokenizer revision, official chat-template hash, **public commit SHA for each transitive patched companion source** (GenAI, XGrammar, OpenVINO, Minja, Tokenizers), runtime DLLs/compiler/Bazel, OS/device/hardware and launch profile.
+- Store a checked-in machine-readable cross-repository source lock and an offline verifier. **Verify semantic carry-forward after a divergent branch forward-port**, rather than conflating latest commit date with patch coverage.
 - Record whether `VLM_CB` or `LM_CB` actually works. Build-success is not device/runtime acceptance.
 - Freeze current known-good, use fresh worktree + feature branch, never refactor the working family incidentally.
 - Keep C5, C5fixed and C6 **different identities**. A known-good snapshot is not automatically an ancestor or equivalent to a new release.

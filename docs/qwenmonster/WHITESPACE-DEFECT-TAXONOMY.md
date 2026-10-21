@@ -24,15 +24,15 @@ Reported by the local C6 operator:
 - XGrammar empty `ExcludeToken()` repair: local commit `f228574c0e7592f029407973092261a611f8ff61`; local report `C:/gm/c6/evidence/xgrammar-empty-exclude-findings.md`.
 - Token bridge matcher checks: local `C:/gm/c6/evidence/genai-token-bridge-report.md`.
 
-**Verification level:** two OVMS commits and the C5 verdict were verified through GitHub. The GenAI/XGrammar local commit IDs above were NOT resolvable under the public upstream repositories as checked; the local evidence files were not fetched from this GitHub session. Do not claim their exact diff or runtime validation based solely on those paths. Audit them on the build host and record `git show` + library hash.
+**Verification level:** two OVMS commits and the C5 verdict were verified through GitHub. The local GenAI/XGrammar commit IDs above were not resolvable under their *upstream* repositories at the earlier check; the XGrammar commit `f228574c...` is now public in `DassaultFalconKing/xgrammar`'s legacy branch, while the locked new public forks and SHA inventory have been verified. The local evidence files themselves were not fetched from this GitHub session. Do not claim their exact diff or runtime validation based solely on those paths. Audit them on the build host and record `git show` + library hash.
 
 ## 3. API compatibility trap
 
 - Local C6 `src/llm/io_processing/gemma4/generation_config_builder.hpp` line 66 calls `JSONSchema(toolSchemaWrapper.stringRepr, 2)`.
-- The pinned public GenAI snapshot `openvinotoolkit/openvino.genai@6a35b97bbab88120930a87d81c2ecccd12fc0ba9` C++ header instead declares `JSONSchema(const std::string& schema)` with no whitespace parameter.
+- The earlier upstream GenAI snapshot `openvinotoolkit/openvino.genai@6a35b97bbab88120930a87d81c2ecccd12fc0ba9` declares only `JSONSchema(const std::string& schema)`, **but the newly published locked patched fork `DassaultFalconKing/openvino.genai@2decb9ec4bea827e01db47524352ad72d23b33ab` explicitly declares `JSONSchema(const std::string& schema, std::optional<int> whitespace_bound = std::nullopt)` and serializes `max_whitespace_cnt`. The patched source compatibility is now verified**.
 - In that same public GenAI header, `QwenXMLParametersFormat(const std::string&)` serializes to `{"type":"qwen_xml_parameter","json_schema":...}` and **does not supply an equivalent `max_whitespace_cnt` argument**.
 
-Conclusion: G-JWS's two-argument constructor depends on pinned local GenAI patches. **Neither G-JWS's schema bound nor ExcludeToken hardening establishes that Q-END/Q-ZERO are fixed.** A local backport of PR #651 and a selected #803/#837 equivalent must be separately justified and tested for the actual XGrammar pin, not blanket-cherry-picked blindly.
+Conclusion: G-JWS's two-argument constructor depends on the now-public pinned GenAI fork. The locked XGrammar source also carries the empty `ExcludeToken()` semantics. **Neither G-JWS's JSON schema bound nor ExcludeToken hardening establishes that Q-END/Q-ZERO are fixed.** A local backport of PR #651 and a selected #803/#837 equivalent must be separately justified and tested for the actual XGrammar pin, not blanket-cherry-picked blindly.
 
 ## 4. Orthogonal acceptance and failure attribution
 
@@ -49,7 +49,7 @@ Capture decoder token IDs, grammar mask/allowed tokens, complete native output, 
 ## 5. Engineering direction
 
 1. **Do not modify Gemma known-good** or rewrite the historical G-EA verdict to justify new behavior.
-2. Pin exact C6 local GenAI and XGrammar source/header/library identities and matcher evidence.
+2. Use the public source lock and offline preflight (`PUBLIC-COHORT-INTEGRATION.md`); independently pin actual compiled GenAI/XGrammar library identities, matcher and GPU evidence.
 3. Run T-Q-ZERO and T-Q-END against the current deployed XGrammar first; save RED if reproduced.
 4. Evaluate PR #651 and the overlapping alternative PRs #803/#837 against that pin. Select minimal semantic backport after differential tests; do not stack both zero-arg proposals without reviewing their overlap.
 5. Keep Qwen parser safety checks for required schema fields, unknown names and malformed XML separate from generator grammar fixes.
@@ -62,3 +62,9 @@ Capture decoder token IDs, grammar mask/allowed tokens, complete native output, 
 - [C6 whitespace port](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/commit/08e9e8e9ed921c4ad4e12cc1a6b6821edac7a5cb)
 - [XGrammar #650](https://github.com/mlc-ai/xgrammar/issues/650), [PR #651](https://github.com/mlc-ai/xgrammar/pull/651)
 - [XGrammar #802](https://github.com/mlc-ai/xgrammar/issues/802), [PR #803](https://github.com/mlc-ai/xgrammar/pull/803), [PR #837](https://github.com/mlc-ai/xgrammar/pull/837)
+
+## Update: public fork publication (2026-10-21)
+- Source lock: `docs/qwenmonster/public-source-lock.json`, GitHub publication manifest in `DassaultFalconKing/openvino.genai` branch `docs/public-cohort-20261021`.
+- Source-level availability **verified** for GenAI `2decb9ec...`, XGrammar `c77d5e0d...`, OpenVINO `b5bfb148...`, Minja `83eb074e...`.
+- The actual patched GenAI `JSONSchema(schema, whitespace_bound)` is now **publicly confirmed**; the previous "unverifiable local patch" caveat applies only to actual local binary/runtime evidence, not available source.
+- The XGrammar locked source includes empty `ExcludeToken()` support. The XML end-marker (#650/#651) and zero-parameter XML loop (#802/#803/#837) remain separate issues; no asserted fix.

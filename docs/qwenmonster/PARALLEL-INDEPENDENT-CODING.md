@@ -37,3 +37,7 @@ Capture input: one JSON object per line, with `id` matching fixture `id`; includ
 `RED-EXPECTED`: disabled reproducer, not executed.  
 `STATIC`: new C++ tests and Python comparator committed.  
 `BUILD/UNIT/LIVE`: **none** as of creation.  
+
+## Public source publication unblocks a source-level gate
+
+Canonical public cohort now available: `docs/qwenmonster/public-source-lock.json`, `PUBLIC-COHORT-INTEGRATION.md`. Verify `2decb9ec` GenAI + `c77d5e0d` XGrammar + `b5bfb148` OpenVINO + `83eb074e` Minja before targeted compile. GenAI `JSONSchema(schema,2)` and XGrammar empty `ExcludeToken()` semantics have public source references; neither proves XML #650/#802 resolved.

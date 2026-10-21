@@ -20,3 +20,9 @@ Do not silently downgrade failures to `auto` or mislabel source checks as LIVE P
 - **Binary/header skew:** upstream GenAI header `6a35b97...` has only `JSONSchema(schema)`, whereas Gemma C6 code uses `JSONSchema(schema, 2)`. Exact local patched GenAI/XGrammar artifacts not yet retrieved. Compile/pin required.
 
 Details and test IDs: `WHITESPACE-DEFECT-TAXONOMY.md`.
+
+## Public dependency cohort (2026-10-21)
+- New reproducible source identities: `docs/qwenmonster/public-source-lock.json`; setup `PUBLIC-COHORT-INTEGRATION.md`.
+- Resolved at **source level**: Gemma `JSONSchema(schema, 2)` public GenAI API; empty `ExcludeToken()` support in published XGrammar C6 locked source.
+- Still blocked: loaded library ABI and actual matcher/model tests; canonical Qwen schema grammar for XGrammar XML #650/#802; prompt-tail reasoning.
+- Historical legacy→locked branches are DIVERGED. Do semantic carry-forward verification rather than assuming the new ref contains every prior change. Run offline source preflight against clean checkouts first.

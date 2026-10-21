@@ -13,6 +13,8 @@ bazel test //src:qwenmonster_output_parser_test \
   --test_output=errors
 ```
 
+Before build, pin checkouts per `docs/qwenmonster/public-source-lock.json` and run `python scripts/qwenmonster/verify_public_cohort.py --genai <path> --xgrammar <path> --openvino <path> --minja <path> --json-report <evidence.json>`; pass explicit `FETCHCONTENT_SOURCE_DIR_XGRAMMAR` / `FETCHCONTENT_SOURCE_DIR_MINJA` at GenAI CMake configure. This is a **SOURCE ONLY** gate.
+
 After build, inspect `GenerationConfig::structured_output_config` and validate its grammar with **the exact running tokenizer and actual GenAI/XGrammar**. A constructor-only test does not prove the grammar is accepted by XGrammar.
 
 ## Blockers to reproduce explicitly
