@@ -1069,6 +1069,125 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterMalformedXMLClosingMarkerNeverExec
     EXPECT_FALSE(parser.drainPendingDelta().has_value());
 }
 
+// Qwenmonster independent workstream: the parser must reconstruct the same calls
+// regardless of arbitrary boundaries introduced by token decoding / streaming.
+// These tests are source-only additions; compile and execution are still pending.
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterAllSingleByteSplitsPreserveCallIdentity) {
+    const std::string wire =
+        "<tool_call><function=string_tool><parameter=arg1>one</parameter></function></tool_call>"
+        "<tool_call><function=cd><parameter=folder>two</parameter></function></tool_call>";
+    for (size_t split = 1; split < wire.size(); ++split) {
+        SCOPED_TRACE(split);
+        Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+        std::vector<ToolCallDelta> deltas;
+        const auto append = [&](const std::optional<Delta>& candidate) {
+            if (!candidate) return;
+            const auto* tool = std::get_if<ToolCallDelta>(&*candidate);
+            EXPECT_NE(tool, nullptr);
+            if (tool) deltas.push_back(*tool);
+        };
+        const auto feed = [&](const std::string& part) {
+            append(parser.parseChunk(part, {}, ov::genai::GenerationFinishReason::NONE));
+            size_t drained = 0;
+            while (auto delta = parser.drainPendingDelta()) {
+                append(delta);
+                ++drained;
+                if (drained > 8) {
+                    ADD_FAILURE() << "Unbounded queued deltas";
+                    break;
+                }
+            }
+        };
+        feed(wire.substr(0, split));
+        feed(wire.substr(split));
+        ASSERT_EQ(deltas.size(), 4u);
+        EXPECT_EQ(deltas[0].index, 0);
+        EXPECT_EQ(deltas[1].index, 0);
+        EXPECT_EQ(deltas[2].index, 1);
+        EXPECT_EQ(deltas[3].index, 1);
+        ASSERT_TRUE(deltas[0].name.has_value());
+        ASSERT_TRUE(deltas[2].name.has_value());
+        ASSERT_TRUE(deltas[0].id.has_value());
+        ASSERT_TRUE(deltas[2].id.has_value());
+        EXPECT_EQ(*deltas[0].name, "string_tool");
+        EXPECT_EQ(*deltas[2].name, "cd");
+        EXPECT_FALSE(deltas[1].name.has_value());
+        EXPECT_FALSE(deltas[3].name.has_value());
+        EXPECT_FALSE(deltas[1].id.has_value());
+        EXPECT_FALSE(deltas[3].id.has_value());
+        EXPECT_NE(*deltas[0].id, *deltas[2].id);
+        EXPECT_EQ(deltas[1].arguments, R"({"arg1":"one"})");
+        EXPECT_EQ(deltas[3].arguments, R"({"folder":"two"})");
+    }
+}
+
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterResetClearsOldPartialAndRestartsCallIndex) {
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    const auto partial = parser.parseChunk(
+        "<tool_call><function=string_tool><parameter=arg1>unterminated",
+        {}, ov::genai::GenerationFinishReason::LENGTH);
+    // A speculative name may have streamed; it is not a completed executable call.
+    if (partial) {
+        ASSERT_TRUE(std::holds_alternative<ToolCallDelta>(*partial));
+        EXPECT_TRUE(std::get<ToolCallDelta>(*partial).arguments.empty());
+    }
+    while (parser.drainPendingDelta()) {
+    }
+    parser.resetState();
+    const auto start = parser.parseChunk(
+        "<tool_call><function=cd><parameter=folder>fresh</parameter></function></tool_call>",
+        {}, ov::genai::GenerationFinishReason::NONE);
+    ASSERT_TRUE(start.has_value());
+    const auto* head = std::get_if<ToolCallDelta>(&*start);
+    ASSERT_NE(head, nullptr);
+    EXPECT_EQ(head->index, 0);
+    ASSERT_TRUE(head->name.has_value());
+    EXPECT_EQ(*head->name, "cd");
+    const auto args = parser.drainPendingDelta();
+    ASSERT_TRUE(args.has_value());
+    const auto* tail = std::get_if<ToolCallDelta>(&*args);
+    ASSERT_NE(tail, nullptr);
+    EXPECT_EQ(tail->index, 0);
+    EXPECT_EQ(tail->arguments, R"({"folder":"fresh"})");
+    EXPECT_FALSE(parser.drainPendingDelta().has_value());
+}
+
+// RED reproducer retained but disabled so the existing test target cannot be
+// falsely described as green. A speculative name delta from an invalid call
+// currently leaves returnedFirstDeltas unmatched; a later valid call can reuse
+// that call index while streaming arguments under the wrong function name.
+// Fix requires a documented choice about orphan-name SSE semantics and cannot
+// safely be inferred from the availability of XGrammar patches.
+TEST_F(Qwen3CoderOutputParserTest, DISABLED_QwenmonsterRejectedPrefixMustNotStealNextCall) {
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    const auto rejectedHead = parser.parseChunk(
+        "<tool_call><function=string_int_tool>",
+        {}, ov::genai::GenerationFinishReason::NONE);
+    ASSERT_TRUE(rejectedHead.has_value());
+    const auto rejectedBody = parser.parseChunk(
+        "<parameter=arg1>ok</parameter><parameter=arg2>invalid-number</parameter>"
+        "</function></tool_call>",
+        {}, ov::genai::GenerationFinishReason::NONE);
+    EXPECT_FALSE(rejectedBody.has_value());
+    EXPECT_FALSE(parser.drainPendingDelta().has_value());
+
+    const auto acceptedHead = parser.parseChunk(
+        "<tool_call><function=cd><parameter=folder>target</parameter></function></tool_call>",
+        {}, ov::genai::GenerationFinishReason::NONE);
+    ASSERT_TRUE(acceptedHead.has_value());
+    const auto* head = std::get_if<ToolCallDelta>(&*acceptedHead);
+    ASSERT_NE(head, nullptr);
+    // Index 0 belonged to the invalid speculative prefix. The new valid call
+    // must get its own index and name, never continue under string_int_tool.
+    EXPECT_EQ(head->index, 1);
+    ASSERT_TRUE(head->name.has_value());
+    EXPECT_EQ(*head->name, "cd");
+    const auto acceptedBody = parser.drainPendingDelta();
+    ASSERT_TRUE(acceptedBody.has_value());
+    EXPECT_EQ(std::get<ToolCallDelta>(*acceptedBody).index, 1);
+    EXPECT_EQ(std::get<ToolCallDelta>(*acceptedBody).arguments, R"({"folder":"target"})");
+}
+
 class Qwen3CoderOutputParserParametrizedTest : public Qwen3CoderOutputParserTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, std::string, std::string>> {
 };
 
