@@ -1,0 +1,88 @@
+{
+  "status": "OPEN_EXPECTED_FAILURES",
+  "accepted": false,
+  "candidate_sha": "b288dca18ee25d2f35197fb3971334ca049c8554",
+  "manifest_sha256": "a29b1e94eaca49db02e77163c9bdf08f119874e5fc287928d349aa040c77c6da",
+  "observed_final_manifest_sha256": "a29b1e94eaca49db02e77163c9bdf08f119874e5fc287928d349aa040c77c6da",
+  "runtime_integrated": false,
+  "limitation": "Unit tokenizer matcher evidence only; #650 and canonical model mask/live acceptance remain separate",
+  "base_sha": "4c313ceb736e43a60094991b0c8a56eae0c83f91",
+  "stages": [
+    {
+      "stage": "configure",
+      "exit_code": 0,
+      "gate_status": "PASS",
+      "started_utc": "2026-10-21T19:45:00.933491+00:00",
+      "finished_utc": "2026-10-21T19:45:03.474122+00:00",
+      "elapsed_seconds": 2.54,
+      "log_sha256": "7b93e31ed2457a93e15b1bfdeab8a9ed506bb870ffb65db2c975b32687653c10",
+      "log_bytes": 712
+    },
+    {
+      "stage": "build",
+      "exit_code": 0,
+      "gate_status": "PASS",
+      "started_utc": "2026-10-21T19:45:03.483156+00:00",
+      "finished_utc": "2026-10-21T19:45:54.141442+00:00",
+      "elapsed_seconds": 50.657,
+      "log_sha256": "a3742ba2e9e15806621528eb4c668448a83421ac03d21db7495804431951aebb",
+      "log_bytes": 11909987
+    },
+    {
+      "stage": "matrix",
+      "exit_code": 2,
+      "gate_status": "OPEN",
+      "started_utc": "2026-10-21T19:45:54.179882+00:00",
+      "finished_utc": "2026-10-21T19:45:59.122605+00:00",
+      "elapsed_seconds": 4.942,
+      "log_sha256": "a6b92aacaa483d1206dba3eba21192a0e91b74fa028d6adfee86934ec14df63a",
+      "log_bytes": 4344
+    },
+    {
+      "stage": "original",
+      "exit_code": 0,
+      "gate_status": "PASS",
+      "started_utc": "2026-10-21T19:45:59.131754+00:00",
+      "finished_utc": "2026-10-21T19:45:59.966242+00:00",
+      "elapsed_seconds": 0.834,
+      "log_sha256": "f5132f888f9fb460d0d9ecfe52ecc5daf638fe118cb6b0bff7ee70c393b93bfc",
+      "log_bytes": 1797
+    }
+  ],
+  "matrix": {
+    "rows": 28,
+    "passed": 24,
+    "open": 4,
+    "unexpected": 0
+  },
+  "native_sources": [
+    {
+      "path": "scripts/qwenmonster/native/CMakeLists.txt",
+      "sha256": "1caa7e523617c99723b692cf92662403a23694a7dd9016f44170e229ef093cae"
+    },
+    {
+      "path": "scripts/qwenmonster/native/matrix.cpp",
+      "sha256": "ba0c46db7933e90cec84632e845ef43c7af901058a96d898bd5ac77ef70207b9"
+    },
+    {
+      "path": "scripts/qwenmonster/native/original-checks.cpp",
+      "sha256": "375d92778240ebb26fdab406b3552dc2ea64612c1b57a8ed4405b1d1fc0fba11"
+    }
+  ],
+  "original_checks": {
+    "failures": 0,
+    "whitespace_tokens_per_mode": 425,
+    "whitespace_allowed_per_mode": 0,
+    "modes": [
+      "hard",
+      "lazy"
+    ],
+    "tokenizer_scope": "sealed tokenizer-only fixture; not canonical model inference"
+  },
+  "prior_attempt": {
+    "status": "BUILD_FAILED",
+    "compiler_diagnostic": "MSVC C2668: const char* ambiguous between string and picojson value overloads",
+    "correction": "explicit std::string(row.schema); same rows and expectations",
+    "manifest_sha256": "e89891275884ab9f73ff800de36f5257a8b82c2dfb83923922fa804f40c8134b"
+  }
+}
