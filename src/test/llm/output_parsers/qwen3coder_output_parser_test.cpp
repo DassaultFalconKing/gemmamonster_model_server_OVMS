@@ -204,15 +204,12 @@ value1line2
 // (max_tokens truncation, or the model just omits them). Regression tests for
 // Qwen3CoderToolParserImpl::finalizeOnGenerationEnd().
 // =============================================================================
-TEST_F(Qwen3CoderOutputParserTest, ToolCallRecoveredWhenStoppedMidParameterValue) {
-    std::string input = "<tool_call>\n<function=string_tool>\n<parameter=arg1>val";
+TEST_F(Qwen3CoderOutputParserTest, ToolCallDroppedWhenStoppedMidParameterValue) {
+    // STOP is not evidence that an open parameter value ended.
+    const std::string input = "<tool_call>\\n<function=string_tool>\\n<parameter=arg1>val";
     auto [generatedTensor, generatedTokens, parsedOutput] = generateParsedOutput(input);
-
-    ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
-    EXPECT_EQ(parsedOutput.toolCalls[0].name, "string_tool");
-    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, R"({"arg1":"val"})");
+    EXPECT_TRUE(parsedOutput.toolCalls.empty());
 }
-
 TEST_F(Qwen3CoderOutputParserTest, ToolCallRecoveredWhenStoppedAfterInnerCloseTag) {
     // "</function>" seen but not the outer "</tool_call>".
     std::string input = "<tool_call>\n<function=string_tool>\n<parameter=arg1>value1</parameter>\n</function>\n";
@@ -223,23 +220,44 @@ TEST_F(Qwen3CoderOutputParserTest, ToolCallRecoveredWhenStoppedAfterInnerCloseTa
     EXPECT_EQ(parsedOutput.toolCalls[0].arguments, R"({"arg1":"value1"})");
 }
 
-TEST_F(Qwen3CoderOutputParserTest, ToolCallRecoveredWithoutDanglingParameterName) {
-    // Stops mid parameter NAME -- that one incomplete parameter can't be recovered, but the
-    // function name was already known, so the call itself is still recovered without it.
-    std::string input = "<tool_call>\n<function=string_tool>\n<parameter=ar";
+TEST_F(Qwen3CoderOutputParserTest, ToolCallDroppedWithDanglingParameterName) {
+    const std::string input = "<tool_call>\\n<function=string_tool>\\n<parameter=ar";
     auto [generatedTensor, generatedTokens, parsedOutput] = generateParsedOutput(input);
-
-    ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
-    EXPECT_EQ(parsedOutput.toolCalls[0].name, "string_tool");
-    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, "{}");
+    EXPECT_TRUE(parsedOutput.toolCalls.empty());
 }
-
 TEST_F(Qwen3CoderOutputParserTest, ToolCallDroppedWhenStoppedBeforeFunctionName) {
     // Stops before the function name even closes -- no usable data was ever captured.
     std::string input = "<tool_call>\n<function=string_to";
     auto [generatedTensor, generatedTokens, parsedOutput] = generateParsedOutput(input);
 
     EXPECT_TRUE(parsedOutput.toolCalls.empty());
+}
+
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterLengthDoesNotPublishIncompleteArguments) {
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    const auto first = parser.parseChunk(
+        "<tool_call><function=string_tool><parameter=arg1>partial",
+        {}, ov::genai::GenerationFinishReason::LENGTH);
+    // A name/id prefix is not executable without an arguments delta.
+    if (first) {
+        const auto* start = std::get_if<ToolCallDelta>(&*first);
+        ASSERT_NE(start, nullptr);
+        EXPECT_TRUE(start->arguments.empty());
+    }
+    EXPECT_FALSE(parser.drainPendingDelta().has_value());
+}
+
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterStopDoesNotPublishOpenParameter) {
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    const auto first = parser.parseChunk(
+        "<tool_call><function=string_tool><parameter=arg1>partial",
+        {}, ov::genai::GenerationFinishReason::STOP);
+    if (first) {
+        const auto* start = std::get_if<ToolCallDelta>(&*first);
+        ASSERT_NE(start, nullptr);
+        EXPECT_TRUE(start->arguments.empty());
+    }
+    EXPECT_FALSE(parser.drainPendingDelta().has_value());
 }
 
 TEST_F(Qwen3CoderOutputParserTest, TestJustParserImplUnaryToolCall) {
