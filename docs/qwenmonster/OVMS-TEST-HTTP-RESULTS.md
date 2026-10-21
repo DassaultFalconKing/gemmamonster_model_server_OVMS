@@ -1,9 +1,8 @@
-# Full ovms_test / QWM HTTP gate — 2026-10-21
+# Full ovms_test / QWM HTTP gate — 2026-10-21 (post Gemma bounded merge)
 
 **QWM request unit gate: PASS. ACCEPTED: NO.**
 
-Tested product commit `e0772d161a81ed3420082af2bf68ab46d342e904`;
-all subsequent repository changes in this execution are workflow/evidence docs.
+Tested product commit `ac2d190d565b693c5ca0e67ddae904a4d10d5342` (QWM-01 tip with `repair/gemma4-bounded-20261021` merged).
 The exact core source lock is unchanged and all six source checks pass.
 
 | Gate | Result |
@@ -11,17 +10,17 @@ The exact core source lock is unchanged and all six source checks pass.
 | Full `//src:ovms_test` build | PASS, exit0 |
 | QWM-01 request schema profile + Hermes isolation | 2/2 PASS; the intake test covers 12 table cases |
 | Related tool-request controls | 11/11 PASS |
-| Qwen parser in full executable | 69/69 PASS |
-| Gemma parser in full executable | 67/70, exactly the three previously retained failures |
+| Qwen + Gemma parsers in full executable | 148/148 PASS (Gemma 79, other 69) |
+| Three legacy Gemma failure names | all PASS after bounded repairs |
 | Actual loaded core DLL identities | GenAI/OpenVINO/Tokenizers hashes match staged inputs |
 | HTTP400 transport / live model / agent loops | NOT RUN |
 
 Each run first verified its exact enabled GTest listing, then executed the same
 filter and checked a new XML file's timestamp, names, counts and statuses plus
-process exit code. Zero-test or excess-test selection is a failure. The parser
-control invocation exited1 for the retained Gemma failures; it is not all-green.
-Raw XML/logs and exact local command lines are retained privately, with hashes
-in `evidence/ovms-test-http-20261021/RESULTS.json`.
+process exit code. Zero-test or excess-test selection is a failure. Parser
+controls are all-green after the bounded repairs. Raw XML/logs and exact local
+command lines are retained privately, with hashes in
+`evidence/ovms-test-http-20261021/RESULTS.json`.
 
 ## Root causes and smallest environment repairs
 
@@ -45,8 +44,11 @@ in `evidence/ovms-test-http-20261021/RESULTS.json`.
    Three token-ID probes (including Unicode) match the reference tokenizer.
    No inference model weights were downloaded or executed.
 
-No product C++ or dependency source patch was needed. Accepted C6 source/install
-and published core lock remain intact. No candidate #802 library was deployed.
+Environment repairs needed no product C++ change. The subsequent Gemma bounded
+parser repairs (content visibility, bare preamble, native-string fixtures) are
+now on this tip and close the three historical unit failures. Accepted C6
+source/install and published core lock remain intact. No candidate #802 library
+was deployed.
 
 ## Workflow rules
 

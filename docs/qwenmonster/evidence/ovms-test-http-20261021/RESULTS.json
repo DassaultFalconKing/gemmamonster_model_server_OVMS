@@ -1,13 +1,13 @@
 {
-  "measured_utc": "2026-10-21T15:48:54.732799+00:00",
-  "tested_product_commit": "e0772d161a81ed3420082af2bf68ab46d342e904",
-  "status": "HTTP REQUEST UNIT GATE PASS; ACCEPTED NO",
+  "measured_utc": "2026-10-21T16:54:15.151364+00:00",
+  "tested_product_commit": "ac2d190d565b693c5ca0e67ddae904a4d10d5342",
+  "status": "HTTP REQUEST UNIT GATE PASS AFTER GEMMA BOUNDED MERGE; ACCEPTED NO",
   "build": {
-    "stage": "ovms-test-build-file-symlinks",
-    "started_utc": "2026-10-21T13:42:38.644650+00:00",
+    "stage": "ovms-test-build-post-merge",
+    "started_utc": "2026-10-21T16:42:30.971472+00:00",
     "status": "PROCESS_FINISHED",
     "exit_code": 0,
-    "finished_utc": "2026-10-21T15:09:13.975986+00:00"
+    "finished_utc": "2026-10-21T16:53:47.374708+00:00"
   },
   "source_checks": [
     {
@@ -61,82 +61,85 @@
   ],
   "qwm": {
     "status": "PASS",
-    "run_id": "20261021T154752Z-f8d5a1",
+    "run_id": "20261021T165359Z-35a26a",
     "executed_tests": 2,
     "failures": 0,
     "failed_tests": [],
-    "xml_sha256": "e9fcbb39d0c5c0cf059e2383e19431c41c25735bfd36de2e7fcd009da8d0ad37",
+    "legacy_failure_names": {},
+    "xml_sha256": "52d26b71ccbf93a10ef5c6c24afeff757b7474a096b3f905027cb601d22d7a3c",
     "xml_attributes": {
       "tests": "2",
       "failures": "0",
       "disabled": "0",
       "errors": "0",
-      "time": "0.812",
-      "timestamp": "2026-10-21T17:47:54.604",
+      "time": "0.143",
+      "timestamp": "2026-10-21T18:54:02.918",
       "name": "AllTests"
     },
     "scope": "Actual compiled full ovms_test filtered checks, no live model/transport acceptance"
   },
   "tool_controls": {
     "status": "PASS",
-    "run_id": "20261021T154802Z-f33742",
+    "run_id": "20261021T165403Z-0e51a4",
     "executed_tests": 11,
     "failures": 0,
     "failed_tests": [],
-    "xml_sha256": "48cbd36041435e9afac00d7848ab8ce172ecbb956e8e561e3bf586948e19a279",
+    "legacy_failure_names": {},
+    "xml_sha256": "d23d0445ced562d22312c8616d6bfd66001dd58b4e22a9ee023824556bb32812",
     "xml_attributes": {
       "tests": "11",
       "failures": "0",
       "disabled": "0",
       "errors": "0",
-      "time": "0.706",
-      "timestamp": "2026-10-21T17:48:03.163",
+      "time": "0.66",
+      "timestamp": "2026-10-21T18:54:03.484",
       "name": "AllTests"
     },
     "scope": "Actual compiled full ovms_test filtered checks, no live model/transport acceptance"
   },
   "parser_controls": {
-    "status": "BASELINE_FAILURES_PRESERVED",
-    "run_id": "20261021T154840Z-d4fda7",
-    "executed_tests": 139,
-    "failures": 3,
-    "failed_tests": [
-      "Gemma4OutputParserTest.ParseReasoningWithDuplicatedEndTagDoesNotEmitInterveningTextTwice",
-      "Gemma4OutputParserTest.ParseToolCallOutputWithNoToolsInTheRequest",
-      "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingEscapedQuotes"
-    ],
-    "xml_sha256": "aa1d6daf8e8995220f2e1a786cff9b7d02b3cdfe049efd8c9f5cc66b21ead2df",
+    "status": "PASS",
+    "run_id": "20261021T165404Z-186c4a",
+    "executed_tests": 148,
+    "failures": 0,
+    "failed_tests": [],
+    "legacy_failure_names": {
+      "Gemma4OutputParserTest.ParseReasoningWithDuplicatedEndTagDoesNotEmitInterveningTextTwice": "PASS",
+      "Gemma4OutputParserTest.ParseToolCallOutputWithNoToolsInTheRequest": "PASS",
+      "Gemma4OutputParserTest.ParseToolCallWithStringArgumentsContainingEscapedQuotes": "PASS"
+    },
+    "xml_sha256": "435d522c99784fcd9e9f049449d0118e650fe81747b68f3312142ba1a6b15601",
     "xml_attributes": {
-      "tests": "139",
-      "failures": "3",
+      "tests": "148",
+      "failures": "0",
       "disabled": "0",
       "errors": "0",
-      "time": "1.077",
-      "timestamp": "2026-10-21T17:48:40.928",
+      "time": "1.086",
+      "timestamp": "2026-10-21T18:54:04.553",
       "name": "AllTests"
     },
     "scope": "Actual compiled full ovms_test filtered checks, no live model/transport acceptance"
   },
   "loaded_modules": {
-    "python312.dll": {
-      "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120"
-    },
     "openvino.dll": {
       "sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f",
       "matches_staged_core": true
     },
-    "git2.dll": {
-      "sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8"
-    },
     "opencv_world4140.dll": {
       "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46"
-    },
-    "libcurl-x64.dll": {
-      "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334"
     },
     "openvino_genai.dll": {
       "sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da",
       "matches_staged_core": true
+    },
+    "libcurl-x64.dll": {
+      "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334"
+    },
+    "git2.dll": {
+      "sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8"
+    },
+    "python312.dll": {
+      "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120"
     },
     "openvino_tokenizers.dll": {
       "sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66",
@@ -287,6 +290,14 @@
       "sha256": "5319e780a10aa0cd1f02bd212c61dc1e981f8c2a6b41aaa5d33536f0838a167c",
       "bytes": 11944629
     },
+    "http-parser-controls-20261021T165404Z-186c4a-list.log": {
+      "sha256": "af3037e2f5426ea28970056cf22a2272838cbbc72c0d32717a5ab5fb0edbb388",
+      "bytes": 9711
+    },
+    "http-parser-controls-20261021T165404Z-186c4a-run.log": {
+      "sha256": "7a05db1386f3bcd9ef701019e0c6b5cb2964a8a80318b5af965c640ef102bac5",
+      "bytes": 12165260
+    },
     "http-qwm-20261021T154752Z-f8d5a1-list.log": {
       "sha256": "5a5d5b43f04d8fd7062cf91d02aedc02dbc8ad64de6518a7a1b3ad7bfc986bb1",
       "bytes": 963
@@ -295,12 +306,28 @@
       "sha256": "4cac79705c0014d4c9b69f9f7083f9cca7ac6e90bcbf56cc269bfd66df1352cf",
       "bytes": 10084
     },
+    "http-qwm-20261021T165359Z-35a26a-list.log": {
+      "sha256": "5a5d5b43f04d8fd7062cf91d02aedc02dbc8ad64de6518a7a1b3ad7bfc986bb1",
+      "bytes": 963
+    },
+    "http-qwm-20261021T165359Z-35a26a-run.log": {
+      "sha256": "5f5c929553ef5f37d6f643147491ae99b81cee1f143772837b5923924a1ea749",
+      "bytes": 10083
+    },
     "http-tool-controls-20261021T154802Z-f33742-list.log": {
       "sha256": "cfa7ed5d6cca26e555c00c5a0ed86c3600a4a742f356338122b340e251faa4ac",
       "bytes": 1470
     },
     "http-tool-controls-20261021T154802Z-f33742-run.log": {
       "sha256": "64ddbec3d31e2707ff2d51499c2aaa4c86eecebf3780a1c18b4274a9bb58ea5c",
+      "bytes": 29817
+    },
+    "http-tool-controls-20261021T165403Z-0e51a4-list.log": {
+      "sha256": "cfa7ed5d6cca26e555c00c5a0ed86c3600a4a742f356338122b340e251faa4ac",
+      "bytes": 1470
+    },
+    "http-tool-controls-20261021T165403Z-0e51a4-run.log": {
+      "sha256": "aa4d9d77ef6e4e8cd8058dac20490c60a1f4b8a1d0b5b0d4e2c1a17f48cc55d3",
       "bytes": 29817
     },
     "opencv-extract-verified.log": {
@@ -330,6 +357,10 @@
     "ovms-test-build-file-symlinks.log": {
       "sha256": "1f59a0fbf1ed9b38720b4d645f2efe60d315e93ff7fde7cb9fc218d24ab83e5c",
       "bytes": 237887
+    },
+    "ovms-test-build-post-merge.log": {
+      "sha256": "ede119764ec25dc566562468c22e5eeb8e35dc1c54b17108160d950d07091443",
+      "bytes": 20006
     },
     "ovms-test-build-python312.log": {
       "sha256": "c3fdeb34992b5622cc1ff0bc91d6af493f6358d09f709724e3601ddef845f94c",

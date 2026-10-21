@@ -1,3 +1,18 @@
+# OVMS test current measured checkpoint
+
+- ACTIVE_STAGE: Gemma bounded repairs merged; full ovms_test and QWM request-unit gates re-verified all green.
+- BASE_SHA: `e0772d161a81ed3420082af2bf68ab46d342e904`. CURRENT_HEAD / REVERT_POINT: `ac2d190d565b693c5ca0e67ddae904a4d10d5342`.
+- WORK_BRANCH: `qwm01-request-schema`; remote feature/qwenmonster-qwm01-request-schema-20261021.
+- DEPENDENCY_LOCK: unchanged published core lock; auxiliary restoration identities recorded separately.
+- LAST_GREEN_TESTS: full ovms_test build exit0, QWM2/2, tool controls11/11, parser controls148/148 including three legacy Gemma names PASS; core DLL hashes match staged inputs.
+- CURRENT_FAILURE: HTTP400 transport, LIVE, AGENTIC NOT RUN; XML #650 and remaining grammar/profile issues still open; XGrammar #802 candidate not locked.
+- ROOT_CAUSE: environment blockers repaired earlier; historical Gemma unit fails closed by bounded parser repairs on this tip.
+- NEXT_ACTION: optional XGrammar cohort revision; then live model/tokenizer pin and agent loops. MoE/OTD remains a later isolated track.
+- EVIDENCE_PATH: OVMS-TEST-HTTP-RESULTS.md and evidence/ovms-test-http-20261021/RESULTS.json; raw logs retained privately.
+- ACCEPTED: NO.
+
+Historical snapshots follow and are superseded by the measured checkpoint above.
+
 # OVMS tip: Gemma bounded repairs merged, rebuild in progress
 
 - ACTIVE_STAGE: repair/gemma4-bounded merged into qwm01 tip; focused units and ovms_test rebuild pending.
