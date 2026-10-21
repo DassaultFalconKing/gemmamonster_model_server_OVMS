@@ -1,3 +1,18 @@
+# Current implementation checkpoint: candidate DLL live unary and SSE
+
+- ACTIVE_STAGE: Ornith answered unary and SSE through the isolated candidate GenAI DLL. The staged runtime file was not replaced. ACCEPTED stays NO.
+- BASE_SHA / REVERT_POINT: `e5491389d8f95f921991d4c8c5970ace326b9437`. CURRENT_HEAD: resolve with `git rev-parse HEAD` after this commit.
+- WORK_BRANCH: `qwm01-request-schema` → `origin/feature/qwenmonster-qwm01-request-schema-20261021`.
+- DEPENDENCY_LOCK: unchanged.
+- LAST_GREEN_TESTS: process module list showed the candidate `openvino_genai.dll`, not the staged copy. Unary `max_tokens=16` returned `finish_reason=length` and 16 completion tokens. SSE ended with `length` and `[DONE]`. After a client socket close, a follow-up unary returned `finish_reason=stop` and content `OK`. The executor log returned to 0 requests. Server stopped afterwards.
+- CURRENT_FAILURE: client close still does not prove generation-handle cancel or resource reclamation. Undeclared-required empty XML remains. 100/100 required, named, and autonomous loops are not this run.
+- ROOT_CAUSE: n/a for the live slice. Windows loads a DLL beside `ovms.exe` before `PATH`, so the first start loaded the copy next to the Bazel output. The measured process was started from a copy of the executable placed beside the candidate DLL.
+- NEXT_ACTION: cancel/resource measurement, then the acceptance workloads that are still open. Do not edit the public lock. Keep ACCEPTED NO.
+- EVIDENCE_PATH: XGRAMMAR-650-NOTE.md. Raw JSON stays in the private hub.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: Qwen tokenizer end-marker mask
 
 - ACTIVE_STAGE: the #650 divergence mask is measured on the Qwen3-8B unit tokenizer against the candidate XGrammar library. The staged runtime was not replaced. ACCEPTED stays NO.

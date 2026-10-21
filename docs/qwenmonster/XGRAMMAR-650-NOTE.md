@@ -1,6 +1,6 @@
 # XGrammar #650 end-marker note (source port measured, gate OPEN)
 
-Status: **QWEN TOKENIZER DIVERGENCE MASK PASS. LIVE CANDIDATE LOAD NOT RUN. LOCK UNCHANGED. ACCEPTED: NO.**  
+Status: **QWEN TOKENIZER MASK PASS. CANDIDATE DLL LIVE UNARY/SSE PASS. CANCEL NOT PROVEN. LOCK UNCHANGED. ACCEPTED: NO.**  
 Recorded: 2026-10-22  
 Upstream: [#650](https://github.com/mlc-ai/xgrammar/issues/650), proposed fix [PR #651](https://github.com/mlc-ai/xgrammar/pull/651) (unmerged; the fork carries an equivalent on its own Aho-Corasick builder).
 
@@ -35,7 +35,7 @@ Undeclared-required `{type:object, required:[a]}` still accepts empty XML. That 
 1. Compatible #651 (or equivalent) backport on a dedicated XGrammar branch. **Done** at `5b0b708`.
 2. RED→GREEN mask evidence on the actual Qwen tokenizer at the token where `</parameter>` and `</parameter1>` diverge. **Done** on the Qwen3-8B unit tokenizer, vocab 151669. The common prefix is 9 tokens. Token 16 (`1`), token 55 (`X`), token 9174 (`_function`) and token 9685 (`/>`) are masked off. Token 29 (`>`) is allowed, the good sequence completes, and each bad sequence is rejected. Masks at the shorter character prefixes inside `</parameter` were not enumerated; the lock applies at the penultimate prefix, which is this divergence.
 3. Separate parser fixtures remain required but are insufficient alone (`MALFORMED-ENVELOPE-RED.txt` / partition corpus).
-4. A live probe that loads the candidate DLL, not the staged runtime.
+4. A live probe that loads the candidate DLL, not the staged runtime. **Done** for unary and SSE `max_tokens=16` (`length`, 16 completion tokens) and a follow-up `stop` / `OK` after client close. The process module list matched the candidate DLL. Cancel and resource reclamation remain unproven. The server was stopped.
 
 ## Explicit non-actions
 
