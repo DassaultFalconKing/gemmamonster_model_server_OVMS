@@ -1,3 +1,18 @@
+# Current implementation checkpoint: W3 live max_tokens
+
+- ACTIVE_STAGE: Ornith live max_tokens measured on the existing tip binary. ACCEPTED stays NO.
+- BASE_SHA / REVERT_POINT: `5f4453a41b598b3cd2143a9c07177e0ccfe9bb81`. CURRENT_HEAD: resolve with `git rev-parse HEAD` after this commit.
+- WORK_BRANCH: `qwm01-request-schema` → `origin/feature/qwenmonster-qwm01-request-schema-20261021`.
+- DEPENDENCY_LOCK: unchanged. C6 and staged GenAI DLL untouched.
+- LAST_GREEN_TESTS: live unary and SSE `max_tokens=16` both returned `finish_reason=length` (completion_tokens 16 on unary). A following unary after client socket close returned `finish_reason=stop` and content `OK`.
+- CURRENT_FAILURE: client disconnect did not prove generation-handle cancel or resource reclamation. W4 #650 still OPEN; no local XGrammar checkout.
+- ROOT_CAUSE: n/a for the length slice. Backend finish reason reached the HTTP chunk on a real model, matching the unit.
+- NEXT_ACTION: separate XGrammar fork for #650. Do not treat this live slice as cancel proof. Keep ACCEPTED NO.
+- EVIDENCE_PATH: W3-LENGTH-CANCEL.md. Raw JSON stays in the private hub.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: W3 chat LENGTH unit measured
 
 - ACTIVE_STAGE: focused chat-stream LENGTH unit PASS on the existing GenAI response path. No product C++ change.
