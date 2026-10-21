@@ -32,6 +32,7 @@
 #include "../../logging.hpp"
 #include "../../profiler.hpp"
 #include "../io_processing/generation_config_builder.hpp"
+#include "../io_processing/qwen3coder/tool_schema_profile.hpp"
 #pragma warning(push)
 #pragma warning(disable : 6001 4324 6385 6386)
 #include "absl/strings/str_cat.h"
@@ -385,6 +386,8 @@ absl::Status normalizeToolCallArgumentsForTemplate(ov::genai::ChatHistory& chatH
 
 absl::Status OpenAIApiHandler::parseTools() {
     const bool gemmaPolicy = toolParserName == "gemma4";
+    const bool qwenXmlPolicy = toolParserName == "qwen3coder";
+    const bool strictToolPolicy = gemmaPolicy || qwenXmlPolicy;
     auto parallelToolCallsIt = doc.FindMember("parallel_tool_calls");
     if (parallelToolCallsIt != doc.MemberEnd() && !parallelToolCallsIt->value.IsNull()) {
         if (!parallelToolCallsIt->value.IsBool())
@@ -409,7 +412,7 @@ absl::Status OpenAIApiHandler::parseTools() {
                 if (nameIt != toolChoiceFunctionIt->value.GetObject().MemberEnd() && nameIt->value.IsString()) {
                     toolChoice = nameIt->value.GetString();
                     namedToolChoice = true;
-                    if (auto status = validateHttpToolName(toolChoice); gemmaPolicy && !status.ok())
+                    if (auto status = validateHttpToolName(toolChoice); strictToolPolicy && !status.ok())
                         return status;
                 } else {
                     return absl::InvalidArgumentError("tool_choice.function.name is not a valid string");
@@ -423,7 +426,7 @@ absl::Status OpenAIApiHandler::parseTools() {
                     }
                     toolChoice = nameIt->value.GetString();
                     namedToolChoice = true;
-                    if (auto status = validateHttpToolName(toolChoice); gemmaPolicy && !status.ok())
+                    if (auto status = validateHttpToolName(toolChoice); strictToolPolicy && !status.ok())
                         return status;
                 } else {
                     return absl::InvalidArgumentError("tool_choice.function is not a valid JSON object");
@@ -459,7 +462,7 @@ absl::Status OpenAIApiHandler::parseTools() {
                     return absl::InvalidArgumentError("Function object does not contain a valid name field");
                 }
                 functionName = nameIt->value.GetString();
-                if (auto status = validateHttpToolName(functionName); gemmaPolicy && !status.ok())
+                if (auto status = validateHttpToolName(functionName); strictToolPolicy && !status.ok())
                     return status;
                 auto parametersIt = functionObj.GetObject().FindMember("parameters");
                 if (parametersIt != functionObj.GetObject().MemberEnd()) {
@@ -482,7 +485,7 @@ absl::Status OpenAIApiHandler::parseTools() {
                     return absl::InvalidArgumentError("Function object does not contain a valid name field");
                 }
                 functionName = nameIt->value.GetString();
-                if (auto status = validateHttpToolName(functionName); gemmaPolicy && !status.ok())
+                if (auto status = validateHttpToolName(functionName); strictToolPolicy && !status.ok())
                     return status;
 
                 auto parametersIt = obj.FindMember("parameters");
@@ -501,13 +504,17 @@ absl::Status OpenAIApiHandler::parseTools() {
                 continue;
             }
 
+            if (qwenXmlPolicy && parametersValue == nullptr)
+                return absl::InvalidArgumentError(
+                    "Qwen XML function requires an explicit parameters object schema");
+
             i++;
             // If we keep the tool, add tool name and schema to the request
             if (parametersValue != nullptr) {
                 if (!parametersValue->IsObject()) {
                     return absl::InvalidArgumentError("Function parameters are not a valid JSON object");
                 }
-                if (gemmaPolicy && !requiresObjectRoot(*parametersValue)) {
+                if (strictToolPolicy && !requiresObjectRoot(*parametersValue)) {
                     return absl::InvalidArgumentError(
                         "Function parameters schema must require an unambiguous object root");
                 }
@@ -517,8 +524,11 @@ absl::Status OpenAIApiHandler::parseTools() {
                 rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
                 parametersValue->Accept(writer);
                 std::string parametersStr = buffer.GetString();
+                if (qwenXmlPolicy && !isSupportedQwenXmlToolSchema(parametersStr))
+                    return absl::InvalidArgumentError(
+                        "Qwen XML tool parameters use an unsupported restricted Draft 4 schema");
                 auto existing = request.toolNameSchemaMap.find(functionName);
-                if (gemmaPolicy && existing != request.toolNameSchemaMap.end()) {
+                if (strictToolPolicy && existing != request.toolNameSchemaMap.end()) {
                     const bool sameSchema =
                         existing->second.rapidjsonRepr != nullptr &&
                         *existing->second.rapidjsonRepr == *parametersValue;
@@ -535,9 +545,9 @@ absl::Status OpenAIApiHandler::parseTools() {
     }
 
     const bool hardToolChoice = toolChoice == "required" || namedToolChoice;
-    if (gemmaPolicy && hardToolChoice && request.toolNameSchemaMap.empty())
+    if (strictToolPolicy && hardToolChoice && request.toolNameSchemaMap.empty())
         return absl::InvalidArgumentError("Hard tool_choice requires a matching tool with a usable parameters schema");
-    if ((!gemmaPolicy || !hardToolChoice) && request.toolNameSchemaMap.empty())
+    if ((!strictToolPolicy || !hardToolChoice) && request.toolNameSchemaMap.empty())
         toolChoice = "none";
 
     request.toolChoice = toolChoice;

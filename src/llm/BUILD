@@ -109,6 +109,7 @@ ovms_cc_library(
         ":openai_request",
         ":output_parsers",
         ":generation_config_builders",
+        ":io_processing_qwen3coder_tool_schema_profile",
         "//third_party:genai",],
     visibility = ["//visibility:public"],
 )
@@ -382,9 +383,20 @@ ovms_cc_library(
 )
 
 ovms_cc_library(
-    name = "io_processing_qwen3coder_tool_parser",
-    hdrs = ["io_processing/qwen3coder/qwen3coder_tool_parser.hpp",
+    name = "io_processing_qwen3coder_tool_schema_profile",
+    hdrs = ["io_processing/qwen3coder/tool_schema_profile.hpp",
             "io_processing/qwen3coder/draft4_meta_schema.hpp"],
+    srcs = ["io_processing/qwen3coder/tool_schema_profile.cpp"],
+    deps = [
+        "@com_github_tencent_rapidjson//:rapidjson",
+        "//src/port:rapidjson_document",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+ovms_cc_library(
+    name = "io_processing_qwen3coder_tool_parser",
+    hdrs = ["io_processing/qwen3coder/qwen3coder_tool_parser.hpp"],
     srcs = ["io_processing/qwen3coder/qwen3coder_tool_parser.cpp"],
     deps = [
         "@com_github_tencent_rapidjson//:rapidjson",
@@ -394,6 +406,7 @@ ovms_cc_library(
         ":io_processing_utils",
         ":io_processing_base_output_parser",
         ":apis_tool_schema_wrapper",
+        ":io_processing_qwen3coder_tool_schema_profile",
         "//third_party:genai",
     ],
     visibility = ["//visibility:public"],
