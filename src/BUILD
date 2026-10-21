@@ -3051,6 +3051,20 @@ cc_test(
     linkstatic = 1,
 )
 
+# Qwenmonster R3: standalone native Qwen XML policy contract.
+cc_test(
+    name = "qwenmonster_generation_policy_test",
+    srcs = ["test/llm/qwenmonster_generation_policy_test.cpp"],
+    deps = [
+        "@com_google_googletest//:gtest_main",
+        "//src/llm:generation_config_builders",
+        "//third_party:genai",
+    ],
+    copts = COPTS_TESTS,
+    local_defines = COMMON_LOCAL_DEFINES,
+    linkstatic = 1,
+)
+
 cc_test(
     name = "output_parser_core_test",
     srcs = [
