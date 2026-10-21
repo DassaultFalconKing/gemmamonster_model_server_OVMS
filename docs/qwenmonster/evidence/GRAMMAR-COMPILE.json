@@ -1,0 +1,37 @@
+{
+  "scope": "synthetic ASCII tokenizer (128 one-byte tokens); no inference model or live API",
+  "genai_source": "2decb9ec4bea827e01db47524352ad72d23b33ab",
+  "xgrammar_source": "c77d5e0d62411d17d4cf55d280463eb5b3bec7ba",
+  "xgrammar_library_sha256": "5dc46b8edba43596f470b9e1b7880d83630c382e3ec7253af2420be3bc052ad2",
+  "probe_sha256": "0128cac6a5d1818242d250efcb2ece1669762e33abb1dea80cffb07a76d0e567",
+  "raw_log_sha256": "e22d52fadd5d894e95e53e634bc6e495eebfd51f925050ac62c907b6b7a9200c",
+  "raw_log_local_path": "C:\\gm\\qwenmonster\\evidence\\NATIVE-XML-MATCHER.txt",
+  "results": [
+    "LOADED_MODULE openvino_genai.dll C:\\gm\\c6-head-20261019\\deps\\runtime\\bin\\intel64\\Release\\openvino_genai.dll",
+    "LOADED_MODULE openvino.dll C:\\gm\\c6-head-20261019\\deps\\runtime\\bin\\intel64\\Release\\openvino.dll",
+    "NOT_LOADED openvino_tokenizers.dll",
+    "MODE zero=0 lazy=0",
+    "RESULT drift=0 accepted=1 completed=1",
+    "RESULT drift=1 accepted=1 completed=0",
+    "MODE zero=0 lazy=1",
+    "RESULT drift=0 accepted=1 completed=1",
+    "RESULT drift=1 accepted=1 completed=0",
+    "MODE zero=1 lazy=0",
+    "RESULT drift=0 accepted=1 completed=1",
+    "ZERO_SPACES 1024 CLOSABLE 1",
+    "MODE zero=1 lazy=1",
+    "RESULT drift=0 accepted=1 completed=1",
+    "ZERO_SPACES 1024 CLOSABLE 1"
+  ],
+  "loaded_dll_sha256": {
+    "openvino.dll": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f",
+    "openvino_genai.dll": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da"
+  },
+  "verdict": "Single-tool hard/lazy valid examples compile and complete; end-marker drift and unbounded zero-parameter whitespace remain OPEN. No dependency patch.",
+  "limitations": [
+    "No production tokenizer masks",
+    "No full OVMS executable build for this candidate",
+    "No inference or live unary/SSE/tool loops",
+    "Existing matcher library reused, no dependency rebuild"
+  ]
+}
