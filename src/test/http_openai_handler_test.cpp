@@ -5664,6 +5664,52 @@ TEST_F(HttpOpenAIHandlerParsingTest, CbParserCallbackCancellationDoesNotComplete
     EXPECT_FALSE(fresh->sendLoopbackSignal);
 }
 
+// W3: end() always feeds STOP into the parser for cleanup, but the HTTP finish
+// reason must remain the backend GenerationFinishReason (LENGTH here).
+static std::shared_ptr<ovms::LegacyServableExecutionContext> makeMetricsBackedChatContext(
+    const std::shared_ptr<ov::genai::Tokenizer>& tok,
+    ov::genai::GenerationFinishReason finishReason) {
+    auto ctx = std::make_shared<ovms::LegacyServableExecutionContext>();
+    ctx->payload.client = std::make_shared<NeverDisconnectedClient>();
+    ctx->payload.parsedJson = std::make_shared<rapidjson::Document>();
+    ctx->payload.parsedJson->Parse(R"({"model":"llama","messages":[{"role":"user","content":"hi"}],"stream":true})");
+    ctx->endpoint = ovms::Endpoint::CHAT_COMPLETIONS;
+    auto apiHandler = std::make_shared<ovms::OpenAIChatCompletionsHandler>(
+        *ctx->payload.parsedJson, ovms::Endpoint::CHAT_COMPLETIONS,
+        std::chrono::system_clock::now(), *tok);
+    std::optional<uint32_t> maxTokensLimit;
+    const absl::Status parseStatus = apiHandler->parseRequest(maxTokensLimit, 0, std::nullopt);
+    EXPECT_TRUE(parseStatus.ok()) << parseStatus;
+    if (!parseStatus.ok()) {
+        return nullptr;
+    }
+    ctx->apiHandler = apiHandler;
+    ctx->success = true;
+    ctx->readySignal.set_value();
+    ctx->deltaChannel.signalComplete();
+    ctx->generationOutputs.resize(1);
+    ctx->generationOutputs[0].finish_reason = finishReason;
+    ctx->perfMetrics = std::make_unique<ov::genai::PerfMetrics>();
+    ctx->perfMetrics->num_input_tokens = 4;
+    ctx->perfMetrics->num_generated_tokens = 2;
+    ctx->textStreamer = std::make_shared<ov::genai::TextStreamer>(
+        *tok, [](std::string) { return ov::genai::StreamingStatus::RUNNING; });
+    return ctx;
+}
+
+TEST_F(HttpOpenAIHandlerParsingTest, CbChatStreamingPreservesBackendLengthFinishReason) {
+    auto ctx = makeMetricsBackedChatContext(tokenizer, ov::genai::GenerationFinishReason::LENGTH);
+    ASSERT_NE(ctx, nullptr);
+    std::shared_ptr<ovms::GenAiServableExecutionContext> base = ctx;
+    ovms::LegacyServable servable;
+    ASSERT_EQ(servable.GenAiServable::preparePartialResponse(base), absl::OkStatus());
+    const std::string& response = ctx->response;
+    EXPECT_NE(response.find("\"finish_reason\":\"length\""), std::string::npos) << response;
+    EXPECT_EQ(response.find("\"finish_reason\":\"stop\""), std::string::npos) << response;
+    EXPECT_NE(response.find("[DONE]"), std::string::npos) << response;
+    EXPECT_FALSE(ctx->sendLoopbackSignal);
+}
+
 TEST_F(HttpOpenAIHandlerParsingTest, vlmLegacyServablePreparePartialResponseResponsesEndpointHasCorrectUsageInCompletedEvent) {
     auto ctx = std::make_shared<ovms::VisualLanguageModelLegacyServableExecutionContext>();
 

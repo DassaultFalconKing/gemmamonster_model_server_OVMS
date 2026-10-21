@@ -1,3 +1,17 @@
+# Current implementation checkpoint: W3 chat LENGTH unit measured
+
+- ACTIVE_STAGE: focused chat streaming control proves backend LENGTH survives GenAiServable path; ACCEPTED NO.
+- BASE_SHA / REVERT_POINT: `0c4f015b6`; CURRENT_HEAD: resolve after this commit.
+- WORK_BRANCH: `qwm01-request-schema`.
+- DEPENDENCY_LOCK: unchanged.
+- LAST_GREEN_TESTS: `CbChatStreamingPreservesBackendLengthFinishReason` 1/1 PASS via direct ovms_test.exe (Bazel CMD filter launch was false FAIL).
+- CURRENT_FAILURE: live max_tokens / disconnect / after-cancel still NOT RUN; W4/W5 open.
+- ROOT_CAUSE: n/a for this slice; parser STOP flush in `end()` is intentional and separate from HTTP finish_reason.
+- NEXT_ACTION: live W3 slice on Ornith or start W4 #650; keep ACCEPTED NO.
+- EVIDENCE_PATH: W3-LENGTH-CANCEL.md; private w3-length-gtest.xml / w3-length-direct.log.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
 # Current implementation checkpoint: Cursor takeover after Codex handoff
 
 - ACTIVE_STAGE: fetched origin; merged canonical MASTER-PLAN/PLAN-MAP onto tip with local R1 native + CB parser-failure commits; pushed `b2e2daae3`.
@@ -224,3 +238,4 @@ does not establish live, model, dependency or release acceptance.
   `docs/qwenmonster/QWM01-IMPLEMENTATION-HANDOFF.md`.
 - EVIDENCE_PATH: current source commits; no new runtime logs.
 - ACCEPTED: NO.
+
