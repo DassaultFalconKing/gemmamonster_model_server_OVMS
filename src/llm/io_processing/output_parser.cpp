@@ -121,8 +121,26 @@ const std::string& OutputParser::StreamOutputCache::getBuffer() const {
     return buffer;
 }
 
-std::optional<Delta> OutputParser::parseContentChunk(ProcessingPhase newPhase) {
-    auto result = contentParser->parseChunk(streamOutputCache.getBuffer(), {}, ov::genai::GenerationFinishReason::NONE);
+std::optional<Delta> OutputParser::parseContentChunk(ov::genai::GenerationFinishReason finishReason, ProcessingPhase newPhase) {
+    if (terminalContentFinish != ov::genai::GenerationFinishReason::NONE)
+        finishReason = terminalContentFinish;
+    std::optional<std::string> filteredContent;
+    if (!contentSpecialTokensVisible && !toolsEnabledForChunk && !contentTokensToHide.empty()) {
+        filteredContent = streamOutputCache.getBuffer();
+        auto& content = *filteredContent;
+        for (const auto& tag : contentTokensToHide) {
+            size_t pos = 0;
+            while ((pos = content.find(tag, pos)) != std::string::npos)
+                content.erase(pos, tag.size());
+        }
+        if (finishReason == ov::genai::GenerationFinishReason::NONE) {
+            for (const auto& tag : contentTokensToHide) {
+                if (stringsOverlap(content, tag))
+                    return std::nullopt;  // retain original bytes until a split marker completes
+            }
+        }
+    }
+    auto result = contentParser->parseChunk(filteredContent ? *filteredContent : streamOutputCache.getBuffer(), {}, finishReason);
     if (!result.has_value())
         return std::nullopt;  // hold — keep buffer
     streamOutputCache.clear();
@@ -187,6 +205,7 @@ std::optional<Delta> OutputParser::parseReasoningChunk(const std::vector<int64_t
             streamOutputCache.clear();
             streamOutputCache.add(buffer.substr(toolStart->position));
             processingPhase = UNKNOWN;
+            gemma4ReasoningClosed = true;
             pendingGemma4ToolHandoff = true;
             if (delta)
                 return delta;
@@ -204,6 +223,7 @@ std::optional<Delta> OutputParser::parseReasoningChunk(const std::vector<int64_t
     const auto reasoningEndMatch = findEarliestTag(buffer, endTags);
     if (reasoningEndMatch.has_value()) {
         remainder = buffer.substr(reasoningEndMatch->position + reasoningEndMatch->length);
+        gemma4ReasoningClosed = true;
     }
     std::optional<Delta> result;
     try {
@@ -287,6 +307,8 @@ OutputParser::OutputParser(ov::genai::Tokenizer& tokenizer, const std::string to
         contentParser = std::make_unique<DefaultContentParser>(tokenizer);
 
     gemma4ToolHandoff = toolParserName == "gemma4" && reasoningParserName == "gemma4";
+    if (toolParserName == "gemma4")
+        contentTokensToHide = {"<|tool_call>", "<tool_call|>", "<|\"|>"};
     defaultDecodingWithSpecialTokens = gemma4ToolHandoff ||
                                        (toolParser && toolParser->getParsingConfig().defaultDecodingWithSpecialTokens) ||
                                        (reasoningParser && reasoningParser->getParsingConfig().defaultDecodingWithSpecialTokens);
@@ -322,6 +344,8 @@ void OutputParser::resetStreamingState() {
     streamOutputCache.clear();
     pendingGemma4ToolHandoff = false;
     gemma4LogicalBoundary = true;
+    gemma4ReasoningClosed = false;
+    terminalContentFinish = ov::genai::GenerationFinishReason::NONE;
     if (toolParser)
         toolParser->resetState();
     if (reasoningParser)
@@ -424,6 +448,8 @@ std::optional<Delta> OutputParser::drainPendingDelta() {
 std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, const std::vector<int64_t>& tokens, const bool toolsAvailable, ov::genai::GenerationFinishReason finishReason) {
     toolsEnabledForChunk = toolsAvailable;
     pendingGemma4ToolHandoff = false;
+    if (finishReason != ov::genai::GenerationFinishReason::NONE)
+        terminalContentFinish = finishReason;
     /*
     Using appropriate parser based on the current processing phase
     Call to this method should return either result from parserContentChunk, parseToolCallChunk, parseReasoningChunk when we can determine the phase
@@ -504,12 +530,31 @@ std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, 
             TagLookupStatus reasoningStartTagStatus = streamOutputCache.lookupTags(reasoningParser->getParsingConfig().startTags);
             if (reasoningStartTagStatus == TagLookupStatus::NOT_FOUND) {
                 // If reasoning start tag is not found, check if any of the special start tags are found
-                reasoningStartTagStatus = streamOutputCache.lookupTags(reasoningParser->getParsingConfig().preambleStartTags);
+                if (!gemma4ToolHandoff) {
+                    reasoningStartTagStatus = streamOutputCache.lookupTags(reasoningParser->getParsingConfig().preambleStartTags);
+                } else if (!gemma4ReasoningClosed) {
+                    // A bare Gemma channel header is valid only at the initial
+                    // buffer start. A suffix 't' in ordinary content is not a
+                    // new header, and a closer never opens another reasoning phase.
+                    const auto& buffer = streamOutputCache.getBuffer();
+                    for (const auto& tag : reasoningParser->getParsingConfig().preambleStartTags) {
+                        const auto length = std::min(buffer.size(), tag.size());
+                        if (length != 0 && buffer.compare(0, length, tag, 0, length) == 0) {
+                            reasoningStartTagStatus = length == tag.size() ? FOUND_COMPLETE : FOUND_INCOMPLETE;
+                            if (reasoningStartTagStatus == FOUND_COMPLETE)
+                                break;
+                        }
+                    }
+                }
             }
             if (reasoningStartTagStatus == TagLookupStatus::FOUND_COMPLETE) {
                 TagLookupStatus endTagStatus = streamOutputCache.lookupTags(reasoningParser->getParsingConfig().endTags);
                 if (endTagStatus == TagLookupStatus::FOUND_COMPLETE)
                     return parseReasoningChunk(tokens, finishReason, UNKNOWN);
+                // Apply the same partial-closer hold as the REASONING phase:
+                // otherwise the first flush can publish half a closer as body.
+                if (endTagStatus == TagLookupStatus::FOUND_INCOMPLETE && finishReason == ov::genai::GenerationFinishReason::NONE)
+                    return std::nullopt;
                 return parseReasoningChunk(tokens, finishReason);
             }  // else startTagStatus is FOUND_INCOMPLETE or NOT_FOUND, we continue processing, so potential tool parser start tag is not missed
             anyStartTagStatus = reasoningStartTagStatus;
@@ -530,9 +575,9 @@ std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, 
             }
         }
 
-        if ((!reasoningParserExistsAndSupportsStreaming && !applyToolParser) || finishReason != ov::genai::GenerationFinishReason::NONE || anyStartTagStatus == TagLookupStatus::NOT_FOUND) {
+        if ((!reasoningParserExistsAndSupportsStreaming && !applyToolParser) || terminalContentFinish != ov::genai::GenerationFinishReason::NONE || anyStartTagStatus == TagLookupStatus::NOT_FOUND) {
             // If no special parsers are available, generation has finished or we have no start tags we just return content chunks and switch to CONTENT phase.
-            return parseContentChunk();
+            return parseContentChunk(finishReason);
         }
         // If we are here, it means we have incomplete start tag for either reasoning or tool parser, so we wait for more chunks
         return std::nullopt;
@@ -558,9 +603,9 @@ std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, 
             } else if (toolStartTagStatus == TagLookupStatus::FOUND_INCOMPLETE && finishReason == ov::genai::GenerationFinishReason::NONE) {
                 return std::nullopt;  // Wait for more chunks to determine if end tag is complete
             }
-            return parseContentChunk();
+            return parseContentChunk(finishReason);
         }
-        return parseContentChunk();
+        return parseContentChunk(finishReason);
     } else if (processingPhase == TOOL_CALLS_PROCESSING_TOOL) {
         // Active tool call: accumulate until the end tag, then transition to WAITING_FOR_TOOL
         // to determine whether another tool call or a content turn follows.
@@ -581,10 +626,10 @@ std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, 
         if (!contentTurnStartTags.empty()) {
             TagLookupStatus contentTurnStatus = streamOutputCache.lookupTags(contentTurnStartTags);
             if (contentTurnStatus == TagLookupStatus::FOUND_COMPLETE) {
-                return parseContentChunk();
+                return parseContentChunk(finishReason);
             }
             if (finishReason != ov::genai::GenerationFinishReason::NONE) {
-                return parseContentChunk();
+                return parseContentChunk(finishReason);
             }
             return std::nullopt;
         }

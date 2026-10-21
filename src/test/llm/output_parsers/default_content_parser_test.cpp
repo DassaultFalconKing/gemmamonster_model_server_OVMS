@@ -116,6 +116,17 @@ TEST_F(DefaultContentParserTest, SingleCharOverlap_Hold) {
     EXPECT_EQ(parseContent(parser, "text<"), std::nullopt);
 }
 
+TEST_F(DefaultContentParserTest, TerminalPartialTagIsLiteralContent) {
+    DefaultContentParser parser(*tokenizer, {"<|eot|>"});
+    for (const auto finish : {ov::genai::GenerationFinishReason::STOP, ov::genai::GenerationFinishReason::LENGTH}) {
+        const auto result = parser.parseChunk("text<|eot", {}, finish);
+        ASSERT_TRUE(result.has_value());
+        const auto* text = std::get_if<ContentDelta>(&*result);
+        ASSERT_NE(text, nullptr);
+        EXPECT_EQ(text->text, "text<|eot");
+    }
+}
+
 // ── Multiple erase tags ────────────────────────────────────────────────────
 
 TEST_F(DefaultContentParserTest, MultipleTags_AllErased) {

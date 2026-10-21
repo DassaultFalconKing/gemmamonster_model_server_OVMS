@@ -61,6 +61,8 @@ OVMSTextStreamer::OVMSTextStreamer(
         } catch (...) {
         }
     }
+    if (m_output_parser)
+        m_output_parser->setContentSpecialTokensVisible(m_user_wants_special);
     // Sync m_additional_detokenization_params with the parser's initial phase requirements.
     apply_decode_params(m_output_parser
                             ? m_output_parser->needSpecialTokensForCurrentDecode(m_user_wants_special)

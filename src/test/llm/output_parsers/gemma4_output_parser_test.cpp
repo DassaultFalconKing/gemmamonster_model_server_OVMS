@@ -306,11 +306,71 @@ TEST_F(Gemma4OutputParserTest, ParseReasoningWithDuplicatedEndTagDoesNotEmitInte
     auto doc1 = outputParserWithRegularToolParsing->parseChunk(chunk, {}, true, ov::genai::GenerationFinishReason::NONE);
     assertChunkEqual(doc1, R"({"delta":{"reasoning_content":"Some reasoning"}})", chunk);
 
+    // First closer ended reasoning. A repeated closer cannot retract content
+    // already sent in another chunk or implicitly open a private channel.
     auto doc2 = outputParserWithRegularToolParsing->parseChunk("", {}, true, ov::genai::GenerationFinishReason::NONE);
-    assertChunkEqual(doc2, R"({"delta":{"reasoning_content":"Oops"}})", "");
+    assertChunkEqual(doc2, R"({"delta":{"content":"OopsFinal content"}})", "");
 
     auto doc3 = outputParserWithRegularToolParsing->parseChunk("", {}, true, ov::genai::GenerationFinishReason::STOP);
-    assertChunkEqual(doc3, R"({"delta":{"content":"Final content"}})", "");
+    assertChunkEqual(doc3, std::nullopt, "");
+}
+
+// Bare preambles belong only to the initial header. A trailing 't' in ordinary
+// content must not hold the delta while waiting for a possible "thought\n".
+TEST_F(Gemma4OutputParserTest, OrdinaryContentDoesNotWaitForReasoningPreamble) {
+    auto delta = outputParserWithRegularToolParsing->parseChunk("content", {}, true, ov::genai::GenerationFinishReason::NONE);
+    assertChunkEqual(delta, R"({"delta":{"content":"content"}})", "content");
+}
+
+TEST_F(Gemma4OutputParserTest, InitialBareReasoningPreambleSupportsEverySplit) {
+    const std::string header = "thought\n";
+    for (size_t split = 1; split < header.size(); ++split) {
+        SCOPED_TRACE(split);
+        outputParserWithRegularToolParsing->resetStreamingState();
+        EXPECT_FALSE(outputParserWithRegularToolParsing->parseChunk(header.substr(0, split), {}, true, ov::genai::GenerationFinishReason::NONE));
+        EXPECT_FALSE(outputParserWithRegularToolParsing->parseChunk(header.substr(split), {}, true, ov::genai::GenerationFinishReason::NONE));
+        auto delta = outputParserWithRegularToolParsing->parseChunk("private<channel|>", {}, true, ov::genai::GenerationFinishReason::NONE);
+        assertChunkEqual(delta, R"({"delta":{"reasoning_content":"private"}})", "private<channel|>");
+        delta = outputParserWithRegularToolParsing->parseChunk("content", {}, true, ov::genai::GenerationFinishReason::NONE);
+        assertChunkEqual(delta, R"({"delta":{"content":"content"}})", "content");
+    }
+}
+
+TEST_F(Gemma4OutputParserTest, ClosedReasoningDoesNotReenterThroughBarePreamble) {
+    auto delta = outputParserWithRegularToolParsing->parseChunk("<|channel>thought\nprivate<channel|>", {}, true, ov::genai::GenerationFinishReason::NONE);
+    assertChunkEqual(delta, R"({"delta":{"reasoning_content":"private"}})", "initial reasoning");
+    delta = outputParserWithRegularToolParsing->parseChunk("thought\npublic content", {}, true, ov::genai::GenerationFinishReason::NONE);
+    assertChunkEqual(delta, R"({"delta":{"content":"thought\npublic content"}})", "post-close text");
+}
+
+TEST_F(Gemma4OutputParserTest, DuplicatedReasoningCloserHasPartitionInvariantChannels) {
+    const std::string input = "<|channel>thought\nprivate<channel|>Oops<channel|>Final content";
+    for (size_t split = 1; split < input.size(); ++split) {
+        SCOPED_TRACE(split);
+        outputParserWithRegularToolParsing->resetStreamingState();
+        std::string content;
+        std::string reasoning;
+        const auto collect = [&](const std::optional<Delta>& delta) {
+            if (!delta)
+                return;
+            if (const auto* text = std::get_if<ContentDelta>(&*delta))
+                content += text->text;
+            else if (const auto* text = std::get_if<ReasoningDelta>(&*delta))
+                reasoning += text->text;
+            else
+                ADD_FAILURE() << "Unexpected executable delta";
+        };
+        for (const auto& chunk : {input.substr(0, split), input.substr(split)}) {
+            collect(outputParserWithRegularToolParsing->parseChunk(chunk, {}, true, ov::genai::GenerationFinishReason::NONE));
+            while (auto delta = outputParserWithRegularToolParsing->drainPendingDelta())
+                collect(delta);
+        }
+        collect(outputParserWithRegularToolParsing->parseChunk("", {}, true, ov::genai::GenerationFinishReason::STOP));
+        while (auto delta = outputParserWithRegularToolParsing->drainPendingDelta())
+            collect(delta);
+        EXPECT_EQ(reasoning, "private");
+        EXPECT_EQ(content, "OopsFinal content");
+    }
 }
 
 TEST_F(Gemma4OutputParserTest, ParseReasoningWithOpenerFollowedBySpaceThenKeywordNewline) {
@@ -373,6 +433,89 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallOutputWithNoToolsInTheRequest) {
         EXPECT_EQ(parsedOutput.reasoning, "");
 
         ASSERT_EQ(parsedOutput.toolCalls.size(), 0);
+    }
+}
+
+TEST_F(Gemma4OutputParserTest, NoToolsStreamerHonorsBothContentTokenVisibilityModes) {
+    const std::string input = R"(<|tool_call>call:example_tool{arg1:<|"|>value1<|"|>,arg2:42}<tool_call|>)";
+    auto tensor = gemma4Tokenizer->encode(input, ov::genai::add_special_tokens(false)).input_ids;
+    const std::vector<int64_t> tokens(tensor.data<int64_t>(), tensor.data<int64_t>() + tensor.get_size());
+    // Reusing one parser also checks that the previous stream's mode does not leak.
+    for (const bool keep : {false, true, false}) {
+        SCOPED_TRACE(keep);
+        const auto parsed = ovms::test::parseWithStreamer(*gemma4Tokenizer, *outputParserWithRegularToolParsing, tokens, false, keep);
+        EXPECT_EQ(parsed.content, keep ? input : "call:example_tool{arg1:value1,arg2:42}");
+        EXPECT_TRUE(parsed.reasoning.empty());
+        EXPECT_TRUE(parsed.toolCalls.empty());
+    }
+}
+
+TEST_F(Gemma4OutputParserTest, NoToolsHiddenContentTokensPreserveExplicitAndImplicitReasoning) {
+    for (const bool implicit : {false, true}) {
+        SCOPED_TRACE(implicit);
+        OutputParser parser(*gemma4Tokenizer, "gemma4", "gemma4", EMPTY_TOOLS_SCHEMA);
+        if (implicit)
+            parser.detectAndSetImplicitReasoningStart("<|turn>model\n<|channel>thought\n");
+        const std::string input = std::string(implicit ? "" : "<|channel>thought\n") +
+                                  "private<channel|><|tool_call>call:example_tool{arg:<|\"|>value<|\"|>}<tool_call|>";
+        auto tensor = gemma4Tokenizer->encode(input, ov::genai::add_special_tokens(false)).input_ids;
+        const std::vector<int64_t> tokens(tensor.data<int64_t>(), tensor.data<int64_t>() + tensor.get_size());
+        const auto parsed = ovms::test::parseWithStreamer(*gemma4Tokenizer, parser, tokens, false, false);
+        EXPECT_EQ(parsed.reasoning, "private");
+        EXPECT_EQ(parsed.content, "call:example_tool{arg:value}");
+        EXPECT_TRUE(parsed.toolCalls.empty());
+    }
+}
+
+TEST_F(Gemma4OutputParserTest, HiddenNoToolsMarkersAreInvariantToEverySplitAndFinish) {
+    const std::string input = R"(before<|tool_call>call:example_tool{arg:<|"|>value<|"|>}<tool_call|>after)";
+    for (const auto finish : {ov::genai::GenerationFinishReason::STOP, ov::genai::GenerationFinishReason::LENGTH}) {
+        for (size_t split = 1; split < input.size(); ++split) {
+            SCOPED_TRACE(split);
+            outputParserWithRegularToolParsing->resetStreamingState();
+            outputParserWithRegularToolParsing->setContentSpecialTokensVisible(false);
+            std::string content;
+            const auto collect = [&](const std::optional<Delta>& delta) {
+                if (!delta)
+                    return;
+                const auto* text = std::get_if<ContentDelta>(&*delta);
+                ASSERT_NE(text, nullptr);
+                content += text->text;
+            };
+            for (const auto& chunk : {input.substr(0, split), input.substr(split)}) {
+                collect(outputParserWithRegularToolParsing->parseChunk(chunk, {}, false, ov::genai::GenerationFinishReason::NONE));
+                while (auto delta = outputParserWithRegularToolParsing->drainPendingDelta())
+                    collect(delta);
+            }
+            collect(outputParserWithRegularToolParsing->parseChunk("", {}, false, finish));
+            while (auto delta = outputParserWithRegularToolParsing->drainPendingDelta())
+                collect(delta);
+            EXPECT_EQ(content, "beforecall:example_tool{arg:value}after");
+        }
+    }
+}
+
+TEST_F(Gemma4OutputParserTest, HiddenNoToolsMarkerFragmentsSurviveTerminalReasoningDrain) {
+    for (const auto finish : {ov::genai::GenerationFinishReason::STOP, ov::genai::GenerationFinishReason::LENGTH}) {
+        for (const std::string marker : {"<|tool_call>", "<tool_call|>", "<|\"|>"}) {
+            for (size_t length = 1; length < marker.size(); ++length) {
+                const std::string suffix = "literal " + marker.substr(0, length);
+                SCOPED_TRACE(suffix);
+                outputParserWithRegularToolParsing->resetStreamingState();
+                outputParserWithRegularToolParsing->setContentSpecialTokensVisible(false);
+                const auto first = outputParserWithRegularToolParsing->parseChunk(
+                    "<|channel>thought\nprivate<channel|>" + suffix, {}, false, finish);
+                assertChunkEqual(first, R"({"delta":{"reasoning_content":"private"}})", "terminal envelope");
+                std::string content;
+                while (auto delta = outputParserWithRegularToolParsing->drainPendingDelta()) {
+                    const auto* text = std::get_if<ContentDelta>(&*delta);
+                    ASSERT_NE(text, nullptr);
+                    content += text->text;
+                }
+                EXPECT_EQ(content, suffix);
+                EXPECT_FALSE(outputParserWithRegularToolParsing->drainPendingDelta());
+            }
+        }
     }
 }
 
@@ -1234,7 +1377,48 @@ TEST_F(Gemma4OutputParserTest, ParseToolCallWithStringArgumentsContainingEscaped
     EXPECT_EQ(parsedOutput.content, "");
     ASSERT_EQ(parsedOutput.toolCalls.size(), 1);
     EXPECT_EQ(parsedOutput.toolCalls[0].name, "execute");
-    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, R"x({"code":"print(\"hello world\")","verbose":true})x");
+    // Native delimiters carry raw bytes. Unlike a JSON string, \" here
+    // denotes two bytes; preserve the backslash before serializing to JSON.
+    EXPECT_EQ(parsedOutput.toolCalls[0].arguments, R"x({"code":"print(\\\"hello world\\\")","verbose":true})x");
+    rapidjson::Document args;
+    ASSERT_FALSE(args.Parse(parsedOutput.toolCalls[0].arguments.c_str()).HasParseError());
+    ASSERT_TRUE(args["code"].IsString());
+    EXPECT_EQ(std::string(args["code"].GetString(), args["code"].GetStringLength()), R"(print(\"hello world\"))");
+}
+
+// These are semantic goldens: JSON representation may contain extra slashes,
+// but decoding it must reproduce the native-delimited bytes exactly. Ordinary
+// JSON strings, in contrast, interpret their JSON escapes.
+TEST_F(Gemma4OutputParserTest, NativeStringValuesAndJsonEscapesHaveDistinctSemantics) {
+    const std::vector<std::pair<std::string, std::string>> cases{
+        {R"(code:<|"|>print("hello world")<|"|>)", R"(print("hello world"))"},
+        {R"(code:<|"|>print(\"hello world\")<|"|>)", R"(print(\"hello world\"))"},
+        {R"(code:<|"|>C:\Users\test\file.txt<|"|>)", R"(C:\Users\test\file.txt)"},
+        {R"(code:<|"|>literal\ntext<|"|>)", R"(literal\ntext)"},
+        {"code:<|\"|>line1\nline2<|\"|>", "line1\nline2"},
+        {R"x(code:"print(\"hello world\")")x", R"(print("hello world"))"},
+        {R"(code:"line1\nline2")", "line1\nline2"},
+    };
+    for (const bool registered : {false, true}) {
+        ToolsSchemas_t registry;
+        if (registered)
+            registry.emplace("execute", ToolSchemaWrapper{nullptr, R"({"type":"object","properties":{"code":{"type":"string"}}})"});
+        OutputParser parser(*gemma4Tokenizer, "gemma4", "gemma4", registry);
+        for (const auto& [body, expected] : cases) {
+            SCOPED_TRACE(body + (registered ? " registered" : " legacy"));
+            const std::string input = "<|tool_call>call:execute{" + body + "}<tool_call|>";
+            auto tensor = gemma4Tokenizer->encode(input, ov::genai::add_special_tokens(false)).input_ids;
+            const std::vector<int64_t> tokens(tensor.data<int64_t>(), tensor.data<int64_t>() + tensor.get_size());
+            const auto parsed = ovms::test::parseWithStreamer(*gemma4Tokenizer, parser, tokens, true);
+            ASSERT_EQ(parsed.toolCalls.size(), 1);
+            EXPECT_EQ(parsed.toolCalls[0].name, "execute");
+            rapidjson::Document args;
+            ASSERT_FALSE(args.Parse(parsed.toolCalls[0].arguments.c_str()).HasParseError());
+            ASSERT_TRUE(args.HasMember("code"));
+            ASSERT_TRUE(args["code"].IsString());
+            EXPECT_EQ(std::string(args["code"].GetString(), args["code"].GetStringLength()), expected);
+        }
+    }
 }
 
 TEST_F(Gemma4OutputParserTest, ParseToolCallWithStringArgumentsContainingApostrophes) {

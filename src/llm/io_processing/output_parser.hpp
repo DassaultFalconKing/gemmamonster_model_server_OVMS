@@ -96,6 +96,12 @@ private:
     bool pendingGemma4ToolHandoff = false;
     bool toolsEnabledForChunk = false;
     bool gemma4LogicalBoundary = true;
+    bool gemma4ReasoningClosed = false;
+    bool contentSpecialTokensVisible = true;
+    std::vector<std::string> contentTokensToHide;
+    // Content can trail a closed phase in the final flush. Remember completion
+    // for those drains without notifying a tool/reasoning parser twice.
+    ov::genai::GenerationFinishReason terminalContentFinish = ov::genai::GenerationFinishReason::NONE;
 
     // Baseline decode mode for content/unknown phases — true when the model/output format
     // needs special tokens visible before any parser-owned phase becomes active.
@@ -104,8 +110,8 @@ private:
 
     // Parsing methods below read chunks from streamOutputCache hence no string argument is needed
 
-    // Regular content parsing method does not require finishReason as content is always parsed
-    std::optional<Delta> parseContentChunk(ProcessingPhase newPhase = CONTENT);
+    // Finish releases a partial optional content marker that cannot complete.
+    std::optional<Delta> parseContentChunk(ov::genai::GenerationFinishReason finishReason, ProcessingPhase newPhase = CONTENT);
 
     std::optional<Delta> parseToolCallChunk(const std::vector<int64_t>& tokens, ov::genai::GenerationFinishReason finishReason, ProcessingPhase newPhase = TOOL_CALLS_PROCESSING_TOOL);
     std::optional<Delta> parseReasoningChunk(const std::vector<int64_t>& tokens, ov::genai::GenerationFinishReason finishReason, ProcessingPhase newPhase = REASONING);
@@ -165,6 +171,10 @@ public:
     // Reasoning/tool phases are driven solely by the active parser's needsSpecialTokens flag;
     // user preference does not override parser correctness requirements in those phases.
     bool needSpecialTokensForCurrentDecode(bool userWantsSpecialTokens = false) const;
+
+    // Internal structural decoding is independent of what the caller wants to
+    // see in content. Direct decoded-text callers retain their input by default.
+    void setContentSpecialTokensVisible(bool visible) { contentSpecialTokensVisible = visible; }
 
     // If `tokenId` is a phase-start token, returns the corresponding tag string
     // (taken directly from resolvedStartTokenToTag — no tokenizer decode needed).
