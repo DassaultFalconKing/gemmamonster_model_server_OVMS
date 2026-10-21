@@ -44,8 +44,10 @@ bool safeValidationInput(const rapidjson::Value& value, bool compilerInput) {
         for (const auto& item : value.GetArray())
             if (!safeValidationInput(item, compilerInput)) return false;
     } else if (value.IsObject()) {
+        std::unordered_set<std::string> names;
         for (const auto& member : value.GetObject()) {
             if (!safeValidationInput(member.name, compilerInput)) return false;
+            if (!names.emplace(member.name.GetString(), member.name.GetStringLength()).second) return false;
             // RapidJSON recursively compiles schema-map containers too, and
             // assumes this member is object-valued even in a dependency map.
             if (compilerInput && std::strcmp(member.name.GetString(), "patternProperties") == 0 && !member.value.IsObject())
@@ -60,7 +62,7 @@ void removeSchemaDefaults(rapidjson::Value& schema) {
     if (!schema.IsObject()) return;
     // Defaults are annotations, never a substitute for required values. Only
     // visit schema-valued locations; a property *named* default must survive.
-    schema.RemoveMember("default");
+    while (schema.HasMember("default")) schema.RemoveMember("default");
     for (const auto* key : {"properties", "patternProperties", "definitions", "dependencies"}) {
         if (schema.HasMember(key) && schema[key].IsObject())
             for (auto& member : schema[key].GetObject())

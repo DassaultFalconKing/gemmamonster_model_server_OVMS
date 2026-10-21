@@ -32,6 +32,9 @@ This is a restricted supported profile, not all JSON Schema dialects:
 - Embedded NUL in schemas, names or argument strings is rejected, preventing
   C-string truncation in this engine's regex paths. Raw NUL in native parameter
   text is also rejected before JSON normalization.
+- Duplicate JSON object names in schemas or typed arguments are rejected before
+  validation. Duplicate defaults cannot survive annotation removal or weaken a
+  required-field check.
 - A preflight rejects non-object `patternProperties` anywhere in compiler input,
   including an otherwise valid property-dependency map with that member name.
   RapidJSON's recursive schema-map compilation assumes an object there.
@@ -39,7 +42,7 @@ This is a restricted supported profile, not all JSON Schema dialects:
   required fields, including legitimate zero-parameter tools. The meta-schema's
   stringArray minimum is explicitly relaxed to zero for this profile.
 
-The active table-driven regression exercises 34 valid/invalid schemas and native
+The active table-driven regression exercises 36 valid/invalid schemas and native
 XML payloads. It covers enums, integer versus number, nested arrays/objects,
 nullable unions, anyOf, overlapping oneOf, extra properties, missing required
 fields, duplicate XML names, malformed schemas, local and remote references,

@@ -1215,6 +1215,7 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterPartitionCorpusReconstructsSSEIden
         {first + recoverable, Reason::STOP, {{"string_tool", R"({"arg1":"one"})"}, {"cd", R"({"folder":"two"})"}}},
         {first + recoverable, Reason::LENGTH, {{"string_tool", R"({"arg1":"one"})"}}}};
     Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    size_t partitionRuns = 0;
     for (const auto& test : cases) {
         std::vector<std::vector<size_t>> partitions;
         for (const size_t width : {size_t{1}, size_t{2}, size_t{3}, size_t{7}, test.wire.size()}) {
@@ -1235,6 +1236,7 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterPartitionCorpusReconstructsSSEIden
         boundaries.push_back(test.wire.size());
         partitions.push_back(std::move(boundaries));
         for (const auto& ends : partitions) {
+            ++partitionRuns;
             SCOPED_TRACE(test.wire + " finish=" + std::to_string(static_cast<int>(test.finish)) + " chunks=" + std::to_string(ends.size()));
             parser.resetState();
             std::vector<ToolCall> calls;
@@ -1286,6 +1288,8 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterPartitionCorpusReconstructsSSEIden
             }
         }
     }
+    RecordProperty("partition_cases", static_cast<int>(cases.size()));
+    RecordProperty("partition_runs", static_cast<int>(partitionRuns));
 }
 
 TEST_F(Qwen3CoderOutputParserTest, QwenmonsterStreamerPublishesCompletedArgumentsBeforeEnd) {
@@ -1352,7 +1356,9 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterSchemaValidationBeforePublication)
         {R"({"type":"object","properties":{"default":{"type":"integer"}},"required":["default"]})", "<parameter=default>42</parameter>", true},
         {R"({"type":"object","properties":{"default":{"type":"integer"}},"required":["default"]})", "<parameter=default>bad</parameter>", false},
         {R"({"type":"object","properties":{"value":{"type":"object","properties":{"x":{"type":"string","default":"fallback"}},"required":["x"]}}})", "<parameter=value>{}</parameter>", false},
-        {R"({"type":"object","definitions":{"foo":{"properties":{"x":{"type":"integer"}}}},"properties":{"value":{"$ref":"#/definitions/foo%2Fproperties"}}})", "<parameter=value>wrong</parameter>", false}};
+        {R"({"type":"object","definitions":{"foo":{"properties":{"x":{"type":"integer"}}}},"properties":{"value":{"$ref":"#/definitions/foo%2Fproperties"}}})", "<parameter=value>wrong</parameter>", false},
+        {R"({"type":"object","properties":{"value":{"type":"string","default":"a","default":"b"}},"required":["value"]})", "", false},
+        {R"({"type":"object","properties":{"value":{"type":"object","properties":{"x":{"type":"integer"}}}}})", "<parameter=value>{\"x\":1,\"x\":2}</parameter>", false}};
     for (const auto& test : cases) {
         SCOPED_TRACE(test.schema + " " + test.parameters);
         rapidjson::Document schema;
