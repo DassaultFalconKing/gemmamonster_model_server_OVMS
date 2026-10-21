@@ -48,3 +48,28 @@ does not establish live, model, dependency or release acceptance.
 - `evidence/NOT-RUN.json`: all unexecuted acceptance gates.
 - `evidence/*RED*.txt`: retained actual failing regressions, not inferred failures.
 - `evidence/EXECUTION-CHECKPOINT.md`: historical entry checkpoint; superseded by this file.
+
+## QWM-01 HTTP-intake follow-on (2026-10-21)
+
+- WORK_BRANCH: `feature/qwenmonster-qwm01-request-schema-20261021` (isolated follow-on, original Qwenmonster branch unchanged).
+- BASE_SHA / REVERT_POINT: `8aba34ad4e422d470d91afdf88aa3dd9696cb143`.
+- QWM01_PATCH_SHA: `e0c6966c9f03eec8236548e8bcf5fd164141395b`;
+  tests `f6489410...`, code `df01cfec...`, RapidJSON include `e0c6966c...`.
+- ACTIVE_STAGE: SOURCE PATCHED, BUILD/UNIT/HTTP/LIVE NOT RUN for follow-on.
+- LAST_GREEN_TESTS: prior branch Qwen69/69, policy9/9, generic29/29;
+  *none have been rerun against this change*. Gemma historical 67/70.
+- CURRENT_FAILURE: unknown until real compiler/HTTP unit execution;
+  XGrammar #650 and #802 masks still fail on published lock.
+- ROOT_CAUSE: request intake had Gemma-only strict checks, while Qwen
+  runtime used a separate restricted Draft4 schema compiler. The code now
+  shares that parser profile with the HTTP layer.
+- DEPENDENCY_LOCK: unchanged `docs/qwenmonster/public-source-lock.json`.
+- COMPANION_XGRAMMAR_CANDIDATE: isolated branch
+  `DassaultFalconKing/xgrammar:fix/qwenmonster-xml-empty-object-20261021`
+  at `3303659ec09c62c1d024a7d4eed1b0bc18b30cc3`. NOT LOCKED OR BUILT.
+- NEXT_ACTION: compile new Bazel schema-profile library and execute Qwen
+  HTTP RED/GREEN, parser/generic/Gemma negative controls; separately compile
+  #802 candidate and run real matcher masks. See
+  `docs/qwenmonster/QWM01-IMPLEMENTATION-HANDOFF.md`.
+- EVIDENCE_PATH: current source commits; no new runtime logs.
+- ACCEPTED: NO.
