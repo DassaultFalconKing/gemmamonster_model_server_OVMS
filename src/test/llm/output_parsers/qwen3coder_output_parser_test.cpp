@@ -990,18 +990,18 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterCompletedCallFollowedByPartialName
     ASSERT_TRUE(first.has_value());
     auto arguments = parser.drainPendingDelta();
     ASSERT_TRUE(arguments.has_value());
-    auto nextStart = parser.drainPendingDelta();
-    ASSERT_TRUE(nextStart.has_value());
-    ASSERT_TRUE(std::holds_alternative<ToolCallDelta>(*nextStart));
-    EXPECT_EQ(std::get<ToolCallDelta>(*nextStart).index, 1);
-    EXPECT_EQ(*std::get<ToolCallDelta>(*nextStart).name, "cd");
+    // An incomplete second call has no public identity yet.
     EXPECT_FALSE(parser.drainPendingDelta().has_value());
     auto last = parser.parseChunk("<parameter=folder>two</parameter></function></tool_call>",
         {}, ov::genai::GenerationFinishReason::NONE);
     ASSERT_TRUE(last.has_value());
     EXPECT_EQ(std::get<ToolCallDelta>(*last).index, 1);
-    EXPECT_FALSE(std::get<ToolCallDelta>(*last).name.has_value());
-    EXPECT_EQ(std::get<ToolCallDelta>(*last).arguments, R"({"folder":"two"})");
+    EXPECT_EQ(std::get<ToolCallDelta>(*last).name, "cd");
+    const auto body = parser.drainPendingDelta();
+    ASSERT_TRUE(body.has_value());
+    EXPECT_EQ(std::get<ToolCallDelta>(*body).index, 1);
+    EXPECT_EQ(std::get<ToolCallDelta>(*body).arguments, R"({"folder":"two"})");
+    EXPECT_FALSE(parser.drainPendingDelta().has_value());
 }
 
 TEST_F(Qwen3CoderOutputParserTest, QwenmonsterUnknownToolNotExecutable) {
@@ -1155,18 +1155,14 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterResetClearsOldPartialAndRestartsCa
     EXPECT_FALSE(parser.drainPendingDelta().has_value());
 }
 
-// RED reproducer retained but disabled so the existing test target cannot be
-// falsely described as green. A speculative name delta from an invalid call
-// currently leaves returnedFirstDeltas unmatched; a later valid call can reuse
-// that call index while streaming arguments under the wrong function name.
-// Fix requires a documented choice about orphan-name SSE semantics and cannot
-// safely be inferred from the availability of XGrammar patches.
-TEST_F(Qwen3CoderOutputParserTest, DISABLED_QwenmonsterRejectedPrefixMustNotStealNextCall) {
+// OpenAI SSE cannot retract an orphan name. Publish identity only after the
+// complete call passes validation; rejected prefixes consume no public index.
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterRejectedPrefixMustNotStealNextCall) {
     Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
     const auto rejectedHead = parser.parseChunk(
         "<tool_call><function=string_int_tool>",
         {}, ov::genai::GenerationFinishReason::NONE);
-    ASSERT_TRUE(rejectedHead.has_value());
+    EXPECT_FALSE(rejectedHead.has_value());
     const auto rejectedBody = parser.parseChunk(
         "<parameter=arg1>ok</parameter><parameter=arg2>invalid-number</parameter>"
         "</function></tool_call>",
@@ -1180,14 +1176,12 @@ TEST_F(Qwen3CoderOutputParserTest, DISABLED_QwenmonsterRejectedPrefixMustNotStea
     ASSERT_TRUE(acceptedHead.has_value());
     const auto* head = std::get_if<ToolCallDelta>(&*acceptedHead);
     ASSERT_NE(head, nullptr);
-    // Index 0 belonged to the invalid speculative prefix. The new valid call
-    // must get its own index and name, never continue under string_int_tool.
-    EXPECT_EQ(head->index, 1);
+    EXPECT_EQ(head->index, 0);
     ASSERT_TRUE(head->name.has_value());
     EXPECT_EQ(*head->name, "cd");
     const auto acceptedBody = parser.drainPendingDelta();
     ASSERT_TRUE(acceptedBody.has_value());
-    EXPECT_EQ(std::get<ToolCallDelta>(*acceptedBody).index, 1);
+    EXPECT_EQ(std::get<ToolCallDelta>(*acceptedBody).index, 0);
     EXPECT_EQ(std::get<ToolCallDelta>(*acceptedBody).arguments, R"({"folder":"target"})");
 }
 
@@ -1256,11 +1250,13 @@ TEST_F(Qwen3CoderOutputParserTest, StreamingQuotedFunctionAndParameterNames) {
     // End-to-end streaming counterpart of the parser-level quoted-attribute tests: the quotes
     // must not leak into the first delta (function name) nor into the argument keys.
     auto nameDelta = outputParser->parseChunk(R"(<tool_call><function="string_tool"><parameter="arg1">)", {}, true, ov::genai::GenerationFinishReason::NONE);
+    EXPECT_FALSE(nameDelta.has_value());
+    nameDelta = outputParser->parseChunk("value1</parameter></function></tool_call>", {}, true, ov::genai::GenerationFinishReason::NONE);
     ASSERT_TRUE(nameDelta.has_value());
     const std::string nameJson = ovms::test::deltaToJson(*nameDelta);
     EXPECT_NE(nameJson.find(R"("name":"string_tool")"), std::string::npos) << nameJson;
 
-    auto argumentsDelta = outputParser->parseChunk("value1</parameter></function></tool_call>", {}, true, ov::genai::GenerationFinishReason::NONE);
+    auto argumentsDelta = outputParser->drainPendingDelta();
     ASSERT_TRUE(argumentsDelta.has_value());
     const std::string argumentsJson = ovms::test::deltaToJson(*argumentsDelta);
     EXPECT_NE(argumentsJson.find(R"("arguments":"{\"arg1\":\"value1\"}")"), std::string::npos) << argumentsJson;
@@ -1361,9 +1357,24 @@ if __name__ == "__main__":
         print(f'\n\t{name} lives at {address}\n\r')
 </parameter></function></tool_call>)",
             ov::genai::GenerationFinishReason::NONE, R"({"delta":{"tool_calls":[{"index":6,"function":{"arguments":"{\"arg1\":\"if __name__ == \\\"__main__\\\":\\n    addresses = {}\\n    addresses[\\\"Hodor\\\"] = \\\"\\\"\\\"The door\\\"\\\"\\\"\\n    addresses[\\\"Arya\\\"] = \\\"Winterfell\\\"\\n    for name, address in addresses.items():\\n        print(f'\\\\n\\\\t{name} lives at {address}\\\\n\\\\r')\"}"}}]}})"}};
+    // Chunk boundaries must not dictate publication timing. Preserve the full
+    // legacy payload corpus and compare its ordered events after validation.
+    std::vector<ovms::Delta> events;
+    std::vector<std::string> expectedEvents;
     for (const auto& [chunk, finishReason, expectedDelta] : chunkToDeltaVec) {
+        if (expectedDelta)
+            expectedEvents.push_back(*expectedDelta);
+        if (auto event = outputParser->parseChunk(chunk, {}, true, finishReason))
+            events.push_back(std::move(*event));
+        while (auto event = outputParser->drainPendingDelta())
+            events.push_back(std::move(*event));
+    }
+    ASSERT_EQ(events.size(), expectedEvents.size());
+    for (size_t eventIndex = 0; eventIndex < events.size(); ++eventIndex) {
+        const std::string chunk = "event " + std::to_string(eventIndex);
+        const std::optional<std::string> expectedDelta = expectedEvents[eventIndex];
         i++;
-        std::optional<ovms::Delta> doc = outputParser->parseChunk(chunk, {}, true, ov::genai::GenerationFinishReason::NONE);
+        std::optional<ovms::Delta> doc = events[eventIndex];
         if (!expectedDelta.has_value() && !doc.has_value()) {
             continue;  // Both are nullopt, OK
         }

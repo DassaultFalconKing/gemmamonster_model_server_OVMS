@@ -325,22 +325,6 @@ bool Qwen3CoderToolParser::hasRequiredArguments(const ToolCall& toolCall) const 
     return true;
 }
 
-void Qwen3CoderToolParser::queueFirstDeltaIfNeeded(const std::string& toolCallName) {
-    if (!isRegisteredToolName(toolCallName)) {
-        SPDLOG_WARN("Qwen tool call references an unknown name: {}", toolCallName);
-        return;
-    }
-    // A call owns exactly one (index, id) pair.  The initial delta must precede its
-    // arguments even if the entire XML envelope arrived in a single decoder chunk.
-    if (returnedFirstDeltas.size() != returnedCompleteDeltas.size()) {
-        return;
-    }
-    const int index = ++toolCallIndex;
-    returnedFirstDeltas.insert(index);
-    SPDLOG_DEBUG("First Qwen delta: name={} index={}", toolCallName, index);
-    pendingDeltas.emplace_back(ToolCallDelta{index, generateRandomId(), toolCallName, ""});
-}
-
 void Qwen3CoderToolParser::queueFullDeltas(const ToolCalls_t& toolCalls) {
     // The low-level parser may complete more than one envelope at once.
     // Queue name/id and full arguments separately for each in original order.
@@ -353,9 +337,13 @@ void Qwen3CoderToolParser::queueFullDeltas(const ToolCalls_t& toolCalls) {
             SPDLOG_WARN("Ignoring Qwen tool call with incomplete required arguments: {}", toolCall.name);
             continue;
         }
-        queueFirstDeltaIfNeeded(toolCall.name);
-        const int index = toolCallIndex;
-        returnedCompleteDeltas.insert(index);
+        // OpenAI SSE has no retraction event. Allocate a public identity only
+        // after validation, then queue its header and arguments atomically.
+        const int index = ++toolCallIndex;
+        std::string id = toolCall.id;
+        while (!publishedCallIds.insert(id).second)
+            id = generateRandomId();
+        pendingDeltas.emplace_back(ToolCallDelta{index, std::move(id), toolCall.name, ""});
         SPDLOG_DEBUG("Complete Qwen delta: index={} arguments={}", index, toolCall.arguments);
         pendingDeltas.emplace_back(ToolCallDelta{index, std::nullopt, std::nullopt, toolCall.arguments});
     }
@@ -390,11 +378,6 @@ std::optional<Delta> Qwen3CoderToolParser::parseChunk(const std::string& newChun
         }
     }
 
-    // A chunk can end with the name of the next, still incomplete, tool call.
-    // Preserve its position after all completed calls from that same chunk.
-    if (auto name = streamParser.getCurrentFunctionName()) {
-        queueFirstDeltaIfNeeded(*name);
-    }
     return takeQueuedDelta();
 }
 Qwen3CoderToolParserImpl::Qwen3CoderToolParserImpl(const ToolsParameterTypeMap_t& toolsParametersTypeMap) :

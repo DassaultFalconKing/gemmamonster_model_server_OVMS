@@ -156,8 +156,7 @@ private:
     Qwen3CoderToolParserImpl streamParser;
     int toolCallIndex{-1};
     std::deque<Delta> pendingDeltas;
-    std::set<int> returnedFirstDeltas;
-    std::set<int> returnedCompleteDeltas;
+    std::unordered_set<std::string> publishedCallIds;
 
 public:
     Qwen3CoderToolParser() = delete;
@@ -167,8 +166,7 @@ public:
         streamParser.reset();
         toolCallIndex = -1;
         pendingDeltas.clear();
-        returnedFirstDeltas.clear();
-        returnedCompleteDeltas.clear();
+        publishedCallIds.clear();
     }
     std::optional<Delta> parseChunk(const std::string& chunk, const std::vector<int64_t>& tokens, ov::genai::GenerationFinishReason finishReason) override;
     std::optional<Delta> drainPendingDelta() override;
@@ -176,7 +174,6 @@ public:
 private:
     bool isRegisteredToolName(const std::string& name) const;
     bool hasRequiredArguments(const ToolCall& toolCall) const;
-    void queueFirstDeltaIfNeeded(const std::string& currentFunctionName);
     void queueFullDeltas(const ToolCalls_t& toolCalls);
     std::optional<Delta> takeQueuedDelta();
 };
