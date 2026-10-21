@@ -1,6 +1,6 @@
-Current follow-up: XGrammar #802 candidate tip `b288dca…` (R1) measured native-green; cohort proposal and #650 note published; `public-source-lock.json` unchanged. Real HTTP400 transport and live acceptance remain NOT RUN.
+Current follow-up: Ornith live unary/SSE/tool smoke PASS on tip ovms (ACCEPTED still NO). #802 candidate `b288dca…` proposal-only; lock unchanged. HTTP400 transport, agent loops, #650, and Qwen3.8 remain open.
 
-Current follow-up: post-merge ovms_test and QWM request-unit gates are measured in OVMS-TEST-HTTP-RESULTS.md (Gemma legacy unit fails closed). Historical BoringSSL/HTTP-unit blocker superseded.
+Current follow-up: post-merge ovms_test and QWM request-unit gates PASS (Gemma legacy unit fails closed). See STATUS-20261021.md.
 
 # QWM-01 implementation and XGrammar #802 companion candidate
 

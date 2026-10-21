@@ -1,14 +1,14 @@
 # OVMS test current measured checkpoint
 
-- ACTIVE_STAGE: Ornith live tool smoke PASS (zero-arg / required city / tool_choice none); multi-round agent still NOT RUN.
+- ACTIVE_STAGE: end-of-day status published; Ornith live unary/SSE/tool smoke PASS; agent/HTTP400 still open.
 - BASE_SHA: `e0772d161a81ed3420082af2bf68ab46d342e904`. CURRENT_HEAD / REVERT_POINT: resolve with `git rev-parse HEAD`.
 - WORK_BRANCH: `qwm01-request-schema`; remote feature/qwenmonster-qwm01-request-schema-20261021.
-- DEPENDENCY_LOCK: unchanged. XGrammar #802 candidate `b288dca…` proposal-only, not in staged GenAI DLL.
-- LAST_GREEN_TESTS: tip `//src:ovms`; LIVE-UNARY `OK.`; LIVE-SSE `Hi`; LIVE-TOOL-ZERO-ARG ping `{}`; LIVE-TOOL-REQUIRED-CITY `Paris`; LIVE-TOOL-CHOICE-NONE `NOCALL`.
-- CURRENT_FAILURE: agent loops / HTTP400 transport NOT RUN; XML #650 OPEN; #802 not locked into runtime. Zero-arg live pass does not prove #802 DLL presence.
-- ROOT_CAUSE: n/a for smoke; acceptance incomplete. Pin `C:/llm/models/ornith-35b-ov`. Qwen3.8 later.
-- NEXT_ACTION: multi-round tool-result loops; HTTP400 transport; optional Qwen3.8; keep ACCEPTED NO.
-- EVIDENCE_PATH: private hub `C:/gm/qwenmonster/live-ornith-20261021/results/LIVE-TOOL-GATES.json`; XGRAMMAR-802-COHORT-PROPOSAL.md / XGRAMMAR-650-NOTE.md.
+- DEPENDENCY_LOCK: unchanged. XGrammar #802 candidate `b288dca18ee25d2f35197fb3971334ca049c8554` proposal-only.
+- LAST_GREEN_TESTS: tip `//src:ovms`; LIVE-UNARY `OK.`; LIVE-SSE `Hi`; LIVE-TOOL-ZERO-ARG; LIVE-TOOL-REQUIRED-CITY; LIVE-TOOL-CHOICE-NONE.
+- CURRENT_FAILURE: agent loops / HTTP400 transport NOT RUN; XML #650 OPEN; #802 not in staged GenAI DLL.
+- ROOT_CAUSE: n/a for smoke; acceptance incomplete. Pin `C:/llm/models/ornith-35b-ov`. Qwen3.8 deferred.
+- NEXT_ACTION: agent loops; HTTP400; optional Qwen3.8; explicit lock only after runtime cohort. Keep ACCEPTED NO.
+- EVIDENCE_PATH: STATUS-20261021.md; private hub `C:/gm/qwenmonster/live-ornith-20261021`.
 - ACCEPTED: NO.
 
 Historical snapshots follow and are superseded by the measured checkpoint above.
