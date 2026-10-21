@@ -45,10 +45,11 @@ python scripts/qwenmonster/verify_public_cohort.py `
   --openvino C:/gm/c6/openvino `
   --minja C:/gm/c6/minja `
   --ovms C:/gm/c6/ovms `
+  --tokenizers C:/gm/c6/openvino_tokenizers `
   --json-report C:/gm/c6/evidence/qwenmonster-public-cohort-source.json
 ```
 
-Run this only against checkouts at the pinned commits; if local repository layout differs, adjust source path arguments. The script checks Git identities plus selected semantic source signatures and emits the two required `FETCHCONTENT_SOURCE_DIR_XGRAMMAR` / `FETCHCONTENT_SOURCE_DIR_MINJA` CMake override flags. It does not checkout, build or invoke CMake. Supply `--tokenizers` to check Tokenizers too. Add `--strict-clean` when working trees must be clean.
+Run this only against checkouts at the pinned commits; if local repository layout differs, adjust source path arguments. The script checks Git identities plus selected semantic source signatures and emits the two required `FETCHCONTENT_SOURCE_DIR_XGRAMMAR` / `FETCHCONTENT_SOURCE_DIR_MINJA` CMake override flags. It does not checkout, build or invoke CMake. Supply `--tokenizers` to complete verification of all six pinned sources. **Without it the script exits 2 / PARTIAL, not PASS**, although it still reports the checks it could perform. Add `--strict-clean` when working trees must be clean.
 
 **Do not use only the GenAI source headers against a different binary.** Match the entire installed GenAI/OpenVINO/XGrammar/Minja cohort. GenAI CMake defaults can fetch upstream bases unless override paths are supplied explicitly. These are not complete build commands.
 

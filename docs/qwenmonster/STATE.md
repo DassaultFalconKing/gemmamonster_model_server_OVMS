@@ -4,9 +4,12 @@ Date: 2026-10-21
 - ACTIVE_STAGE: **R2 refit candidate + R3 new generation policy candidate; ALL GATES UNVERIFIED**
 - BASE_SHA: `ba6ec792c3121850fea167fa7d7e190b25fcdc76`
 - M1_SOURCE_HEAD: `04eb7415f3ef760dfcd53be5fa4f6b33f51e7b01`
-- WORK_BRANCH: `feature/qwenmonster-comparative-refit-20261021`
-- LAST_CODE_SHA: `333a9893bbd0e4d06cd57c52e93141ddbc4ff7e7` (before this docs-only update)
-- CURRENT_HEAD: resolve current tip of WORK_BRANCH (docs commit is newer than LAST_CODE_SHA)
+- WORK_BRANCH: `feature/qwenmonster-parser-invariants-20261021` (active independent tests + source cohort)
+- PARENT_REFIT_BRANCH: `feature/qwenmonster-comparative-refit-20261021` (unmodified from this integration)
+- LAST_PARSER_CODE_SHA: `333a9893bbd0e4d06cd57c52e93141ddbc4ff7e7`
+- NEW_TESTS_SHA: `662037d5ed51f8855a3b371e8c8f7d26c018dede` (parser invariant tests)
+- PRE-FLIGHT_SOURCE_CODE_SHA: `5f8f90d69ef034b9c68ad43a97744f56947bea51` (offline checker tightened to require all six components for full PASS)
+- CURRENT_HEAD: resolve current tip of WORK_BRANCH; do not substitute review branch or local C6 checkout HEAD
 - LAST_GREEN_TESTS: **none**; remote code and documentation commits are not build/run evidence
 - CURRENT_FAILURE: canonical **public source** GenAI/XGrammar/OpenVINO/Minja/Tokenizers cohort now pinned; **actual build-machine checkout, loaded binaries, compilation and runtime still NOT verified**; canonical template/generation suffix oracle and required/open-think compatibility unresolved
 - NEXT_ACTION: run `scripts/qwenmonster/verify_public_cohort.py` against locked component checkouts (see PUBLIC-COHORT-INTEGRATION.md), then build focused Bazel gates and run four separate whitespace/empty-args controls (especially still-open XML #650/#802); only then Qwen unary/SSE and agentic
