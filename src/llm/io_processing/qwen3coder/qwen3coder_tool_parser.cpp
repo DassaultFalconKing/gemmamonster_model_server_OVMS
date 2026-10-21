@@ -304,6 +304,27 @@ bool Qwen3CoderToolParser::isRegisteredToolName(const std::string& name) const {
     return toolSchemas.find(name) != toolSchemas.end();
 }
 
+bool Qwen3CoderToolParser::hasRequiredArguments(const ToolCall& toolCall) const {
+    const auto it = toolSchemas.find(toolCall.name);
+    if (it == toolSchemas.end()) return false;
+    rapidjson::Document schema;
+    schema.Parse(it->second.stringRepr.c_str());
+    if (schema.HasParseError() || !schema.IsObject()) return false;
+    rapidjson::Document args;
+    args.Parse(toolCall.arguments.c_str());
+    if (args.HasParseError() || !args.IsObject()) return false;
+    if (!schema.HasMember("required")) return true;
+    const auto& required = schema["required"];
+    if (!required.IsArray()) return false;
+    for (const auto& name : required.GetArray()) {
+        if (!name.IsString() || !args.HasMember(name.GetString())) {
+            SPDLOG_WARN("Dropping Qwen call with missing required arguments: {}", toolCall.name);
+            return false;
+        }
+    }
+    return true;
+}
+
 void Qwen3CoderToolParser::queueFirstDeltaIfNeeded(const std::string& toolCallName) {
     if (!isRegisteredToolName(toolCallName)) {
         SPDLOG_WARN("Qwen tool call references an unknown name: {}", toolCallName);
@@ -326,6 +347,10 @@ void Qwen3CoderToolParser::queueFullDeltas(const ToolCalls_t& toolCalls) {
     for (const auto& toolCall : toolCalls) {
         if (!isRegisteredToolName(toolCall.name)) {
             SPDLOG_WARN("Ignoring completed Qwen call to undeclared tool: {}", toolCall.name);
+            continue;
+        }
+        if (!hasRequiredArguments(toolCall)) {
+            SPDLOG_WARN("Ignoring Qwen tool call with incomplete required arguments: {}", toolCall.name);
             continue;
         }
         queueFirstDeltaIfNeeded(toolCall.name);

@@ -1031,6 +1031,44 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterNonStringArgumentCannotFallbackToS
     EXPECT_FALSE(parser.drainPendingDelta().has_value());
 }
 
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterRequiredSchemaKeysMustBePresent) {
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    const auto output = parser.parseChunk(
+        "<tool_call><function=string_tool></function></tool_call>",
+        {}, ov::genai::GenerationFinishReason::NONE);
+    // No executable arguments are emitted when required 'arg1' is absent.
+    EXPECT_FALSE(output.has_value());
+    EXPECT_FALSE(parser.drainPendingDelta().has_value());
+}
+
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterZeroArgumentRegisteredToolStillWorks) {
+    ToolsSchemas_t noArgSchemas;
+    noArgSchemas.emplace("noarg_tool",
+        ToolSchemaWrapper{nullptr, R"({"type":"object","properties":{},"required":[]})"});
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, noArgSchemas);
+    const auto initial = parser.parseChunk(
+        "<tool_call><function=noarg_tool></function></tool_call>",
+        {}, ov::genai::GenerationFinishReason::NONE);
+    ASSERT_TRUE(initial.has_value());
+    ASSERT_TRUE(std::holds_alternative<ToolCallDelta>(*initial));
+    EXPECT_EQ(*std::get<ToolCallDelta>(*initial).name, "noarg_tool");
+    const auto args = parser.drainPendingDelta();
+    ASSERT_TRUE(args.has_value());
+    EXPECT_EQ(std::get<ToolCallDelta>(*args).arguments, "{}");
+}
+
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterMalformedXMLClosingMarkerNeverExecutable) {
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    const auto initial = parser.parseChunk(
+        "<tool_call><function=string_tool><parameter=arg1>abc</parameter1>",
+        {}, ov::genai::GenerationFinishReason::STOP);
+    if (initial) {
+        const auto& delta = std::get<ToolCallDelta>(*initial);
+        EXPECT_TRUE(delta.arguments.empty());
+    }
+    EXPECT_FALSE(parser.drainPendingDelta().has_value());
+}
+
 class Qwen3CoderOutputParserParametrizedTest : public Qwen3CoderOutputParserTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, std::string, std::string>> {
 };
 
