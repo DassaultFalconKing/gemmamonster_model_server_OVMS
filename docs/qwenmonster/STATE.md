@@ -1,9 +1,9 @@
 # OVMS tip: Gemma bounded repairs merged, rebuild in progress
 
 - ACTIVE_STAGE: repair/gemma4-bounded merged into qwm01 tip; focused units and ovms_test rebuild pending.
-- BASE_SHA / REVERT_POINT: \0772d161a81ed3420082af2bf68ab46d342e904\.
-- WORK_BRANCH: \qwm01-request-schema\ / remote \eature/qwenmonster-qwm01-request-schema-20261021\.
-- CURRENT_HEAD: resolve with \git rev-parse HEAD\ (merge Ŵd3e2a6\).
+- BASE_SHA / REVERT_POINT: `e0772d161a81ed3420082af2bf68ab46d342e904`.
+- WORK_BRANCH: `qwm01-request-schema` / remote `feature/qwenmonster-qwm01-request-schema-20261021`.
+- CURRENT_HEAD: resolve with `git rev-parse HEAD` (merge `564d3e2a6`, docs checkpoint on tip).
 - DEPENDENCY_LOCK: unchanged published core lock.
 - LAST_GREEN_TESTS: prior HTTP request-unit on pre-merge tip; repair-branch units Gemma79/79, core29/29, Qwen69/69, policy9/9.
 - CURRENT_FAILURE: unknown until post-merge rebuild; previous tip retained three Gemma baseline fails in full ovms_test.
