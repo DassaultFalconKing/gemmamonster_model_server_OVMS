@@ -12,8 +12,9 @@
 2. `COMPARATIVE-QWEN-PARSER-VERDICT.md`: pinned vLLM, llama.cpp, XGrammar, GenAI evidence, decision matrix.
 3. `OVMS-MODEL-FAMILY-ADAPTATION-PROTOCOL.md`: reusable MFP-1 stage gates A0–A9 for any new model family.
 4. `GENERATION-POLICY-DESIGN.md`: native Qwen XML builder and unresolved hard-choice/reasoning risks.
-5. `ACCEPTANCE.md`: exact Bazel and runtime gate checklist.
-6. `C6-BASELINE.md`, `PROTOCOL-MATRIX.md`, `ISSUES-AND-RISKS.md`: inherited M1 provenance.
+5. `WHITESPACE-DEFECT-TAXONOMY.md`: Gemma JSON whitespace vs historical unexpected empty arguments vs two distinct XGrammar XML bugs; dependency API compatibility.
+6. `ACCEPTANCE.md`: exact Bazel and runtime gate checklist.
+7. `C6-BASELINE.md`, `PROTOCOL-MATRIX.md`, `ISSUES-AND-RISKS.md`: inherited M1 provenance.
 
 ## Boundaries
 

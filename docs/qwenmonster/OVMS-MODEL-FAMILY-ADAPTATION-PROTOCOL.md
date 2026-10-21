@@ -25,6 +25,7 @@ Scope: onboarding a model family to OVMS **without** confusing template, parser,
 - For every mechanism record pinned upstream source, commit/PR, exact known fail/success, our corresponding code/test and **KEEP/REFINE/PORT SEMANTICS/TOLERANCE ONLY/DROP/UNKNOWN**.
 - Peer server behavior is not authority to redefine canonical model protocol. Import **semantics**, not unrelated frameworks.
 - Always include at least one adversarial test from a known upstream incident.
+- Separate **reproduced failures**, **historically not reproduced anomalies**, **legitimate empty-schema behavior**, and **open upstream grammar bugs**. Never promote a control result from one layer as repair evidence for another.
 
 ## A3. OVMS architecture contract
 
@@ -63,6 +64,8 @@ Build a new family-specific builder only when its native wire differs. Explicit 
 
 - Check model and tokenizer actual token IDs for native markers (some are plain multi-token strings).
 - Check GenAI/XGrammar version, structural-tag grammar compilation and runtime masks; raw serializer shape is not proof of successful compilation.
+- Pin local patched dependency commits and loaded binaries as well as upstream versions. A local API extension (e.g. Gemma `JSONSchema(schema, 2)`) may not exist in upstream headers; building against mixed revisions is not acceptable.
+- Diagnose whitespace faults by grammar location: bounded JSON object whitespace vs XML string-end marker prefix exclusion vs zero-parameter XML self-loop. Do not indiscriminately reuse one fix across formats.
 - Record `VLM_CB/LM_CB` lane and GPU device, TTFT/TG, memory, faults and executor quarantine.
 - Keep parser syntax and inference/kernel errors separate. Do not misdiagnose `CL_OUT_OF_RESOURCES` as grammar fault.
 

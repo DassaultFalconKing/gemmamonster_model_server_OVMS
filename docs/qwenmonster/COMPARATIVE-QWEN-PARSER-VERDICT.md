@@ -62,7 +62,7 @@ Transfer: grammar constraints and collision-resistant trigger selection. Do **no
 
 ### OVMS (KEEP / REFINE)
 
-M1 added ordered delta queue and STOP recovery limited to a completed `</function>`. This refit additionally rejects unknown tool execution and invalid typed argument coercion at the XML parser. Its current type map is shallow; `anyOf`, `oneOf`, null unions, enum constraints, required-field validation and additionalProperties still need a schema-validation gate. Do not mark them solved by shallow type checks.
+M1 added ordered delta queue and STOP recovery limited to a completed `</function>`. This refit additionally rejects unknown tool execution and invalid typed argument coercion at the XML parser. Its current type map is shallow; the refit now checks presence of required fields but does not fully validate `anyOf`, `oneOf`, null unions, enums, value-type matches across unions, or `additionalProperties`. Full JSON Schema validation remains an acceptance gate. Do not mark them solved by shallow type checks.
 
 ### New Qwen builder (CANDIDATE, NOT GREEN)
 
@@ -73,14 +73,16 @@ M1 added ordered delta queue and STOP recovery limited to a completed `</functio
 - llama.cpp #26530 (2026-08-03): on long tool-rich prompts, `auto` may never emit XML trigger even when grammar is correct; `required` can still work. Separate model decision from parser loss.
 - llama.cpp #26987 (2026-08-12): bare XML trigger deviation defeats lazy grammar; bounded recovery only.
 - llama.cpp #29319 (2026-09-23): false positive detection from template similarity can select wrong protocol; capability fixtures over model-name heuristics.
-- XGrammar #650 / PR #651: `</parameter` can drift to `</parameter1>`. As checked 2026-10-21 both issue and PR remain open/unmerged. Parser tolerance cannot fix grammar runaway.
-- XGrammar #802: zero-argument XML tool schema can produce a whitespace-only looping grammar; checked open 2026-10-21.
+- XGrammar #650 / PR #651: `</parameter` can drift to `</parameter1>`. As checked 2026-10-21 both issue and PR remain open/unmerged. Parser tolerance cannot fix grammar runaway. Gemma's `JSONSchema(..., 2)` does not address this prefix-exclusion defect.
+- XGrammar #802: genuinely parameter-less XML tool schemas can produce a whitespace-only looping grammar. Issue #802 and both fix proposals PR #803 / #837 are open/unmerged as checked 2026-10-21. This is **not** the Gemma `empty-args` anomaly from C5.
 - SGLang #27336: `required` XML end-marker drift observed for Qwen3.6; independent confirmation of grammar risk.
 
 ## 5. Version/gate caveats
 
 - OpenVINO GenAI **documented upstream header** supports `QwenXMLParametersFormat`; the exact C6 build-machine header/binary/XGrammar pin has not yet been identified. **Do not merge until versioned compile & structural-tag validation succeed**.
 - M1 test and code patches are committed but not built/benchmarked on live OVMS. The new policy is therefore experimental.
+- Gemma C5 `JSONSchema(..., 2)` and local GenAI/XGrammar whitespace patches are evidence for the **JSON grammar path**, not the Qwen `qwen_xml_parameter` path. The upstream GenAI API snapshot used for this dossier offers a one-parameter `JSONSchema` constructor; pin the local patched GenAI fork/build before relying on the two-parameter overload.
+- Historical C5 verdict `24847c96805b28e4625fd85dbf98bece20ed2d3e`: whitespace **CONFIRMED FIXED**, unexpected empty args **NOT REPRODUCED** (267 later filled canonical calls). The latter does not cover parameterless tools.
 - For every discrepancy: `native output → vLLM semantic output → llama.cpp semantic output → OVMS events → OpenAI API`. Compare normalized tools `name + typed JSON + call order` and compare reasoning text separately. IDs may differ but must be unique/stable per call.
 - Never reclassify a model's *decision not to delegate* as a parser defect unless the native output contained a valid executable call that OVMS lost.
 
@@ -95,3 +97,7 @@ M1 added ordered delta queue and STOP recovery limited to a completed `</functio
 ## 7. Promotion verdict
 
 **KEEP OVMS-native boundaries; REFINE Qwen XML parser and add a distinct Qwen native generation builder.** C6 and Gemma4 stay pinned. Promotion blocked pending compiler, XGrammar compatibility, canonical template, reasoning, streaming and full agent-harness evidence.
+
+## 8. Required defect provenance separation
+
+The extended matrix in `WHITESPACE-DEFECT-TAXONOMY.md` distinguishes (a) **known-good Gemma JSON whitespace**, (b) **historical non-reproduced unexpected empty arguments**, (c) **XML excluded end-marker prefix drift**, and (d) **XML grammar looping for legitimately empty parameter lists**. These have different triggers, layers and remedies. A fix or successful test in one row cannot promote the others. 

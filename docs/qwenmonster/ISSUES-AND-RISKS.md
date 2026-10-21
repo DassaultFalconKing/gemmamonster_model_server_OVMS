@@ -10,3 +10,13 @@
 8. **P2: model/harness behavior.** Delegation propensity must be measured separately from API/parser delivery. Do not optimize prompting before protocol correctness.
 
 Do not silently downgrade failures to `auto` or mislabel source checks as LIVE PASS.
+
+## Whitespace defect separation (2026-10-21)
+
+- **Gemma JSON whitespace:** CONFIRMED FIXED in C5 historical verdict `24847c968`; `JSONSchema(..., 2)` in current Gemma C6. Keep patched GenAI/XGrammar provenance attached to the accepted Gemma build. This is **not** a Qwen XML fix.
+- **Unexpected Gemma empty args with required fields:** NOT REPRODUCED in `24847c968`, 267 later canonical filled calls. Not a valid argument for changing Qwen zero-argument behavior.
+- **XGrammar XML end-marker drift:** issue #650, PR #651 open/unmerged (2026-10-21). Validate string parameter values and grammar prefixes; a C++ parser rejection is a safety mitigation, not constrained-decoding repair.
+- **XGrammar genuinely empty XML parameter grammar:** issue #802, PRs #803 and #837 open/unmerged (2026-10-21). Schema declaring no properties is valid; it must terminate rather than self-loop whitespace. Parsing a completed XML empty call is only half the test.
+- **Binary/header skew:** upstream GenAI header `6a35b97...` has only `JSONSchema(schema)`, whereas Gemma C6 code uses `JSONSchema(schema, 2)`. Exact local patched GenAI/XGrammar artifacts not yet retrieved. Compile/pin required.
+
+Details and test IDs: `WHITESPACE-DEFECT-TAXONOMY.md`.
