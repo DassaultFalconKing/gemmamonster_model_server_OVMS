@@ -5,6 +5,8 @@ engineering workflow policy, **not** evidence that the current candidate is
 accepted. Preserve the accepted Gemma4 baseline and the published C6 dependency
 source lock. Project-specific technical contracts live under `docs/qwenmonster/`.
 
+Qwenmonster: read `docs/qwenmonster/MASTER-PLAN.md`, `docs/qwenmonster/PLAN-MAP.md`, and the latest TOP `STATE.md` checkpoint before any substantial change. The user-approved R0-R6 program owns scope; older statuses never override measured evidence.
+
 ## 1. Identity before edits
 
 - Record repository, working branch, exact base/HEAD/tree SHA, clean/dirty status,

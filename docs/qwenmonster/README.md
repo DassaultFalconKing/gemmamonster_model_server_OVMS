@@ -1,3 +1,5 @@
+> **Актуальная точка входа:** [MASTER-PLAN.md](MASTER-PLAN.md) (программа R0–R6 и W1–W7), [PLAN-MAP.md](PLAN-MAP.md) (карта документов), верх [STATE.md](STATE.md) (фактическое состояние). Последующие исторические фразы NOT RUN имеют только свой исходный момент. **ACCEPTED: NO.**
+
 # QWENMONSTER — C6 protocol, model-family adaptation and agentic reliability
 
 **Status: R2/R3 experimental source candidate, NOT ACCEPTED (2026-10-21).**
