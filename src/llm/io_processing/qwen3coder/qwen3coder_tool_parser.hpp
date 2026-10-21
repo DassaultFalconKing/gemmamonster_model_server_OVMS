@@ -15,6 +15,7 @@
 //*****************************************************************************
 #pragma once
 
+#include <deque>
 #include <map>
 #include <optional>
 #include <set>
@@ -153,7 +154,7 @@ private:
     // for streaming parsing we need to keep parser as a member
     Qwen3CoderToolParserImpl streamParser;
     int toolCallIndex{-1};
-    ToolCalls_t currentToolCalls;
+    std::deque<Delta> pendingDeltas;
     std::set<int> returnedFirstDeltas;
     std::set<int> returnedCompleteDeltas;
 
@@ -164,14 +165,17 @@ public:
     void resetState() override {
         streamParser.reset();
         toolCallIndex = -1;
+        pendingDeltas.clear();
         returnedFirstDeltas.clear();
         returnedCompleteDeltas.clear();
     }
     std::optional<Delta> parseChunk(const std::string& chunk, const std::vector<int64_t>& tokens, ov::genai::GenerationFinishReason finishReason) override;
+    std::optional<Delta> drainPendingDelta() override;
 
 private:
-    std::optional<Delta> sendFirstDeltaIfNeeded(const std::string& currentFunctionName);
-    std::optional<Delta> sendFullDelta(const ToolCalls_t& toolCalls);
+    void queueFirstDeltaIfNeeded(const std::string& currentFunctionName);
+    void queueFullDeltas(const ToolCalls_t& toolCalls);
+    std::optional<Delta> takeQueuedDelta();
 };
 }  // namespace ovms
 template <>

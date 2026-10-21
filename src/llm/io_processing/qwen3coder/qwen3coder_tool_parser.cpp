@@ -284,56 +284,65 @@ std::optional<std::string> Qwen3CoderToolParserImpl::getCurrentFunctionName() co
     }
     return this->currentFunction.name;
 }
-std::optional<Delta> Qwen3CoderToolParser::sendFullDelta(const ToolCalls_t& toolCalls) {
-    if (toolCalls.size() != 1) {
-        SPDLOG_ERROR("For streaming we expected one tool call, got: {}", toolCalls.size());
-        throw std::runtime_error("For streaming we expected one tool call");
+void Qwen3CoderToolParser::queueFirstDeltaIfNeeded(const std::string& toolCallName) {
+    // A call owns exactly one (index, id) pair.  The initial delta must precede its
+    // arguments even if the entire XML envelope arrived in a single decoder chunk.
+    if (returnedFirstDeltas.size() != returnedCompleteDeltas.size()) {
+        return;
     }
-    auto& toolCall = toolCalls[0];
-    this->returnedCompleteDeltas.insert(this->toolCallIndex);
-    SPDLOG_TRACE("Tool call arguments string: {}", toolCall.arguments);
-    SPDLOG_DEBUG("Full delta: index={} arguments={}", this->toolCallIndex, toolCall.arguments);
-    return ToolCallDelta{this->toolCallIndex, std::nullopt, std::nullopt, toolCall.arguments};
+    const int index = ++toolCallIndex;
+    returnedFirstDeltas.insert(index);
+    SPDLOG_DEBUG("First Qwen delta: name={} index={}", toolCallName, index);
+    pendingDeltas.emplace_back(ToolCallDelta{index, generateRandomId(), toolCallName, ""});
 }
 
-std::optional<Delta> Qwen3CoderToolParser::sendFirstDeltaIfNeeded(const std::string& toolCallName) {
-    if (this->returnedFirstDeltas.size() == (this->returnedCompleteDeltas.size() + 1)) {
-        SPDLOG_TRACE("Skipping first delta, already sent for current function, returnedFirstDeltas.size(): {} returnedCompleteDeltas.size(): {}", returnedFirstDeltas.size(), returnedCompleteDeltas.size());
+void Qwen3CoderToolParser::queueFullDeltas(const ToolCalls_t& toolCalls) {
+    // The low-level parser may complete more than one envelope at once.
+    // Queue name/id and full arguments separately for each in original order.
+    for (const auto& toolCall : toolCalls) {
+        queueFirstDeltaIfNeeded(toolCall.name);
+        const int index = toolCallIndex;
+        returnedCompleteDeltas.insert(index);
+        SPDLOG_DEBUG("Complete Qwen delta: index={} arguments={}", index, toolCall.arguments);
+        pendingDeltas.emplace_back(ToolCallDelta{index, std::nullopt, std::nullopt, toolCall.arguments});
+    }
+}
+
+std::optional<Delta> Qwen3CoderToolParser::takeQueuedDelta() {
+    if (pendingDeltas.empty()) {
         return std::nullopt;
     }
-    int toolCallId = ++this->toolCallIndex;
-    this->returnedFirstDeltas.insert(toolCallId);
-    SPDLOG_DEBUG("First delta: name={} index={}", toolCallName, toolCallId);
-    return ToolCallDelta{toolCallId, generateRandomId(), toolCallName, ""};
+    Delta result = std::move(pendingDeltas.front());
+    pendingDeltas.pop_front();
+    return result;
+}
+
+std::optional<Delta> Qwen3CoderToolParser::drainPendingDelta() {
+    return takeQueuedDelta();
 }
 
 std::optional<Delta> Qwen3CoderToolParser::parseChunk(const std::string& newChunk, const std::vector<int64_t>& /*tokens*/, ov::genai::GenerationFinishReason finishReason) {
-    // streamParser will return optional toolCalls when a tool call is completed
-    // if toolCalls is returned, we need to wrap it in the required JSON structure and return it
-    // if toolCalls is not returned, but we are insideFunction state, we need to return the first delta with function name once
-    // otherwise nullopt
     SPDLOG_DEBUG("Chunk: '{}', finishReason: {}", newChunk, static_cast<int>(finishReason));
-    if (newChunk.empty() && finishReason == ov::genai::GenerationFinishReason::NONE) {
-        return std::nullopt;
-    }
-    std::optional<ToolCalls_t> toolCallsOpt;
     if (!newChunk.empty()) {
-        toolCallsOpt = this->streamParser.parseChunk(newChunk);
+        if (auto completed = streamParser.parseChunk(newChunk)) {
+            queueFullDeltas(*completed);
+        }
     }
 
-    // If no complete tool calls were returned yet and generation has ended, finalize the current
-    // tool call in progress to recover any remaining data (for example if arguments were not closed properly).
-    if (!toolCallsOpt.has_value() && finishReason != ov::genai::GenerationFinishReason::NONE) {
-        toolCallsOpt = this->streamParser.finalizeOnGenerationEnd();
+    // Only natural STOP may justify bounded recovery; LENGTH, cancellation and other
+    // finish reasons must never turn an incomplete argument into an executable call.
+    if (finishReason == ov::genai::GenerationFinishReason::STOP) {
+        if (auto recovered = streamParser.finalizeOnGenerationEnd()) {
+            queueFullDeltas(*recovered);
+        }
     }
-    if (toolCallsOpt.has_value()) {
-        return this->sendFullDelta(toolCallsOpt.value());
+
+    // A chunk can end with the name of the next, still incomplete, tool call.
+    // Preserve its position after all completed calls from that same chunk.
+    if (auto name = streamParser.getCurrentFunctionName()) {
+        queueFirstDeltaIfNeeded(*name);
     }
-    auto functionNameOpt = this->streamParser.getCurrentFunctionName();
-    if (functionNameOpt.has_value()) {
-        return this->sendFirstDeltaIfNeeded(functionNameOpt.value());
-    }
-    return std::nullopt;
+    return takeQueuedDelta();
 }
 Qwen3CoderToolParserImpl::Qwen3CoderToolParserImpl(const ToolsParameterTypeMap_t& toolsParametersTypeMap) :
     toolsParametersTypeMap(toolsParametersTypeMap) {}
