@@ -21,6 +21,8 @@
 #include <stack>
 #include <vector>
 
+#include "rapidjson/error/en.h"
+
 #include "src/llm/io_processing/utils.hpp"
 #include "src/logging.hpp"
 #include "src/utils/rapidjson_utils.hpp"
