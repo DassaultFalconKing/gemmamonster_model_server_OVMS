@@ -1,7 +1,7 @@
-# W3 — LENGTH / CANCEL lifecycle (in progress)
+# W3 — LENGTH / CANCEL lifecycle (unit measured)
 
-Status: **PARTIAL MEASUREMENT. ACCEPTED: NO.**  
-Master-plan card: W3. Tip after Cursor takeover includes this note.
+Status: **CHAT STREAM UNIT PASS. LIVE NOT RUN. ACCEPTED: NO.**  
+Master-plan card: W3.
 
 ## Source contract (already in tree)
 
@@ -16,10 +16,14 @@ Master-plan card: W3. Tip after Cursor takeover includes this note.
 - Responses path already had
   `legacyServablePreparePartialResponseResponsesEndpointHasCorrectUsageOnLength`
   (`response.incomplete` for LENGTH).
-- New focused chat-stream control:
-  `CbChatStreamingPreservesBackendLengthFinishReason` — expects
-  `"finish_reason":"length"` and no `"stop"` on the shared GenAI response path
-  when the backend reports LENGTH (despite parser STOP flush).
+- `CbChatStreamingPreservesBackendLengthFinishReason` **PASS** (1/1, 74 ms)
+  when `ovms_test.exe` is launched with the active OpenVINO runtime on `PATH`.
+  The serialized SSE chunk was `"finish_reason":"length"` followed by `[DONE]`.
+  The assertion also rejects `"finish_reason":"stop"`.
+- `bazel test //src:ovms_test` with the repo `test:windows` path
+  `C:/opt/openvino/runtime/...` exited `-1073741515` (`STATUS_DLL_NOT_FOUND`)
+  in 2s and produced no gtest body. That is a harness DLL lookup miss on this
+  machine, not evidence that the API dropped LENGTH.
 - **Direct** `ovms_test.exe` run: **1/1 PASSED** (2026-10-21). Private XML
   `w3-length-gtest.xml`. A Bazel `--test_arg=--gtest_filter=...` launch via
   legacy CMD failed exit3 with empty test log (filter arg split on `=`); that is

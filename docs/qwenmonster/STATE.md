@@ -1,17 +1,18 @@
 # Current implementation checkpoint: W3 chat LENGTH unit measured
 
-- ACTIVE_STAGE: focused chat streaming control proves backend LENGTH survives GenAiServable path; ACCEPTED NO.
-- BASE_SHA / REVERT_POINT: `0c4f015b6`; CURRENT_HEAD: resolve after this commit.
-- WORK_BRANCH: `qwm01-request-schema`.
-- DEPENDENCY_LOCK: unchanged.
-- LAST_GREEN_TESTS: `CbChatStreamingPreservesBackendLengthFinishReason` 1/1 PASS via direct ovms_test.exe (Bazel CMD filter launch was false FAIL).
-- CURRENT_FAILURE: live max_tokens / disconnect / after-cancel still NOT RUN; W4/W5 open.
-- ROOT_CAUSE: n/a for this slice; parser STOP flush in `end()` is intentional and separate from HTTP finish_reason.
-- NEXT_ACTION: live W3 slice on Ornith or start W4 #650; keep ACCEPTED NO.
-- EVIDENCE_PATH: W3-LENGTH-CANCEL.md; private w3-length-gtest.xml / w3-length-direct.log.
+- ACTIVE_STAGE: focused chat-stream LENGTH unit PASS on the existing GenAI response path. No product C++ change.
+- BASE_SHA / REVERT_POINT: `3c5c84a241b1dd11dfc4618c7a7ffa9f27fa6f30`. CURRENT_HEAD: resolve with `git rev-parse HEAD` after this commit.
+- WORK_BRANCH: `qwm01-request-schema` → `origin/feature/qwenmonster-qwm01-request-schema-20261021`.
+- DEPENDENCY_LOCK: unchanged. #802 candidate still proposal-only. C6 and staged GenAI DLL untouched.
+- LAST_GREEN_TESTS: `HttpOpenAIHandlerParsingTest.CbChatStreamingPreservesBackendLengthFinishReason` 1/1 PASS in 74 ms via direct `ovms_test.exe` with the active runtime on PATH. Final SSE chunk carried `"finish_reason":"length"` and `[DONE]`.
+- CURRENT_FAILURE: `bazel test` under `test:windows` PATH `C:/opt/openvino/runtime/...` exited `-1073741515` (DLL not found) before gtest. Live Ornith max_tokens, disconnect, and after-cancel healthy request still NOT RUN.
+- ROOT_CAUSE: streamer `end()` still feeds STOP into the parser; HTTP serialization kept the backend LENGTH. The bazel miss is the checked-in Windows test PATH, not a finish-reason regression.
+- NEXT_ACTION: live max_tokens / client disconnect / healthy follow-up on the existing Ornith profile. Then W4 #650 on a separate XGrammar fork. Keep ACCEPTED NO.
+- EVIDENCE_PATH: W3-LENGTH-CANCEL.md. Raw gtest log stays in the private hub.
 - ACCEPTED: NO.
 
 Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: Cursor takeover after Codex handoff
 
 - ACTIVE_STAGE: fetched origin; merged canonical MASTER-PLAN/PLAN-MAP onto tip with local R1 native + CB parser-failure commits; pushed `b2e2daae3`.
