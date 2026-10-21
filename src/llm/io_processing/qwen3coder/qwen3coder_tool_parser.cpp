@@ -89,6 +89,32 @@ void Qwen3CoderToolParserImpl::addParameterToCurrentFunctionDoc(std::string& par
         }
     }
     temp.Parse(parameterValueAsString.c_str());
+    // Known non-string JSON types must never silently degrade to strings: an
+    // integer argument containing a half-written number is not an executable call.
+    ParameterType expectedType = ParameterType::UNKNOWN;
+    if (paramIt != this->toolsParametersTypeMap.end()) {
+        const auto p = paramIt->second.find(currentParameterName);
+        if (p != paramIt->second.end()) {
+            expectedType = p->second;
+        }
+    }
+    const bool typedValue = expectedType == ParameterType::NUMBER ||
+                            expectedType == ParameterType::BOOLEAN ||
+                            expectedType == ParameterType::ARRAY ||
+                            expectedType == ParameterType::OBJECT;
+    if (typedValue) {
+        const bool matches = !temp.HasParseError() &&
+            ((expectedType == ParameterType::NUMBER && temp.IsNumber()) ||
+             (expectedType == ParameterType::BOOLEAN && temp.IsBool()) ||
+             (expectedType == ParameterType::ARRAY && temp.IsArray()) ||
+             (expectedType == ParameterType::OBJECT && temp.IsObject()));
+        if (!matches) {
+            SPDLOG_WARN("Dropping Qwen tool call with invalid typed argument: function={} parameter={}",
+                currentFunction.name, currentParameterName);
+            currentFunction.invalidTypedArgument = true;
+            return;
+        }
+    }
     if (temp.HasParseError()) {
         rapidjson::ParseErrorCode errorCode = temp.GetParseError();
         size_t errorOffset = temp.GetErrorOffset();
@@ -202,9 +228,11 @@ bool Qwen3CoderToolParserImpl::parseUntilStateChange(ToolCalls_t& toolCalls) {
             this->currentFunction.argumentsAsDocument.Accept(writer);
             argumentsAsString = buffer.GetString();
         }
-        ToolCall toolCall{generateRandomId(), this->currentFunction.name, argumentsAsString};
-        SPDLOG_TRACE("Adding tool call: id={}, name={}, params={}", toolCall.id, toolCall.name, toolCall.arguments);
-        toolCalls.emplace_back(std::move(toolCall));
+        if (!this->currentFunction.invalidTypedArgument) {
+            ToolCall toolCall{generateRandomId(), this->currentFunction.name, argumentsAsString};
+            SPDLOG_TRACE("Adding tool call: id={}, name={}, params={}", toolCall.id, toolCall.name, toolCall.arguments);
+            toolCalls.emplace_back(std::move(toolCall));
+        }
         this->currentFunction.clear();
         this->toolCallPositions.end.push(this->lastProcessedPosition);
         break;
@@ -272,7 +300,15 @@ std::optional<std::string> Qwen3CoderToolParserImpl::getCurrentFunctionName() co
     }
     return this->currentFunction.name;
 }
+bool Qwen3CoderToolParser::isRegisteredToolName(const std::string& name) const {
+    return toolSchemas.find(name) != toolSchemas.end();
+}
+
 void Qwen3CoderToolParser::queueFirstDeltaIfNeeded(const std::string& toolCallName) {
+    if (!isRegisteredToolName(toolCallName)) {
+        SPDLOG_WARN("Qwen tool call references an unknown name: {}", toolCallName);
+        return;
+    }
     // A call owns exactly one (index, id) pair.  The initial delta must precede its
     // arguments even if the entire XML envelope arrived in a single decoder chunk.
     if (returnedFirstDeltas.size() != returnedCompleteDeltas.size()) {
@@ -288,6 +324,10 @@ void Qwen3CoderToolParser::queueFullDeltas(const ToolCalls_t& toolCalls) {
     // The low-level parser may complete more than one envelope at once.
     // Queue name/id and full arguments separately for each in original order.
     for (const auto& toolCall : toolCalls) {
+        if (!isRegisteredToolName(toolCall.name)) {
+            SPDLOG_WARN("Ignoring completed Qwen call to undeclared tool: {}", toolCall.name);
+            continue;
+        }
         queueFirstDeltaIfNeeded(toolCall.name);
         const int index = toolCallIndex;
         returnedCompleteDeltas.insert(index);

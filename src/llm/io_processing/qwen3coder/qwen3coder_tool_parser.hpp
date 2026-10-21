@@ -39,8 +39,10 @@ namespace ovms {
 using ParametersValues_t = std::map<std::string, std::string>;
 struct Functool {
     std::string name;
+    bool invalidTypedArgument = false;
     void clear() {
         name.clear();
+        invalidTypedArgument = false;
         argumentsAsDocument.SetObject();
     }
     rapidjson::Document argumentsAsDocument;
@@ -172,6 +174,7 @@ public:
     std::optional<Delta> drainPendingDelta() override;
 
 private:
+    bool isRegisteredToolName(const std::string& name) const;
     void queueFirstDeltaIfNeeded(const std::string& currentFunctionName);
     void queueFullDeltas(const ToolCalls_t& toolCalls);
     std::optional<Delta> takeQueuedDelta();

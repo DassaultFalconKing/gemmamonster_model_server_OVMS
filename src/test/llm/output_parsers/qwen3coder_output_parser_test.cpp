@@ -1004,6 +1004,33 @@ TEST_F(Qwen3CoderOutputParserTest, QwenmonsterCompletedCallFollowedByPartialName
     EXPECT_EQ(std::get<ToolCallDelta>(*last).arguments, R"({"folder":"two"})");
 }
 
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterUnknownToolNotExecutable) {
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    const auto output = parser.parseChunk(
+        "<tool_call><function=undeclared_tool><parameter=key>1</parameter></function></tool_call>",
+        {}, ov::genai::GenerationFinishReason::NONE);
+    EXPECT_FALSE(output.has_value());
+    EXPECT_FALSE(parser.drainPendingDelta().has_value());
+}
+
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterNonStringArgumentCannotFallbackToString) {
+    // The fixture schema declares 'arg2' as integer, hence a textual fragment
+    // that is not a JSON number cannot be exposed as executable arguments.
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    const auto output = parser.parseChunk(
+        "<tool_call><function=string_int_tool>"
+        "<parameter=arg1>ok</parameter><parameter=arg2>oops</parameter>"
+        "</function></tool_call>",
+        {}, ov::genai::GenerationFinishReason::NONE);
+    // An initial name may be visible, but there must be no completed arguments.
+    if (output.has_value()) {
+        const auto* delta = std::get_if<ToolCallDelta>(&*output);
+        ASSERT_NE(delta, nullptr);
+        EXPECT_TRUE(delta->arguments.empty());
+    }
+    EXPECT_FALSE(parser.drainPendingDelta().has_value());
+}
+
 class Qwen3CoderOutputParserParametrizedTest : public Qwen3CoderOutputParserTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, std::string, std::string>> {
 };
 
