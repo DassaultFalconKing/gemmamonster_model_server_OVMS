@@ -148,7 +148,13 @@ def main():
     if args.json_report:
         args.json_report.parent.mkdir(parents=True, exist_ok=True)
         args.json_report.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    return 1 if any(c["status"] == "FAIL" for c in checks) else 0
+    if any(c["status"] == "FAIL" for c in checks):
+        return 1
+    if any(c["status"] == "NOT CHECKED" for c in checks):
+        print("PARTIAL: all provided checkouts passed, but the full source cohort is NOT checked.")
+        return 2
+    print("SOURCE COHORT VERIFIED. Build, matcher, GPU and API still untested.")
+    return 0
 
 
 if __name__ == "__main__":
