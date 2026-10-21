@@ -903,6 +903,89 @@ TEST_F(Qwen3CoderOutputParserTest, TestJustParserImplStreamStepWithToolCallNoArg
     EXPECT_EQ(parser.getLastProcessedPosition(), input.find("</tool_call>") + std::string("</tool_call>").size());
 }
 
+// Qwenmonster M1: a completed envelope must always emit name/id before arguments,
+// even when both markers arrive in a single decode chunk.
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterCompletedCallsInSingleChunk) {
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    const auto first = parser.parseChunk(
+        "<tool_call><function=string_tool><parameter=arg1>value</parameter></function></tool_call>",
+        {}, ov::genai::GenerationFinishReason::NONE);
+    ASSERT_TRUE(first.has_value());
+    const auto* start = std::get_if<ToolCallDelta>(&*first);
+    ASSERT_NE(start, nullptr);
+    EXPECT_EQ(start->index, 0);
+    ASSERT_TRUE(start->name.has_value());
+    EXPECT_EQ(*start->name, "string_tool");
+    ASSERT_TRUE(start->id.has_value());
+    EXPECT_FALSE(start->id->empty());
+    EXPECT_TRUE(start->arguments.empty());
+
+    auto second = parser.drainPendingDelta();
+    ASSERT_TRUE(second.has_value());
+    const auto* args = std::get_if<ToolCallDelta>(&*second);
+    ASSERT_NE(args, nullptr);
+    EXPECT_EQ(args->index, 0);
+    EXPECT_FALSE(args->name.has_value());
+    EXPECT_FALSE(args->id.has_value());
+    EXPECT_EQ(args->arguments, R"({"arg1":"value"})");
+    EXPECT_FALSE(parser.drainPendingDelta().has_value());
+}
+
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterMultipleCompletedCallsInSingleChunk) {
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    const auto first = parser.parseChunk(
+        "<tool_call><function=string_tool><parameter=arg1>one</parameter></function></tool_call>"
+        "<tool_call><function=cd><parameter=folder>two</parameter></function></tool_call>",
+        {}, ov::genai::GenerationFinishReason::NONE);
+    ASSERT_TRUE(first.has_value());
+    std::vector<ToolCallDelta> deltas;
+    if (auto* d = std::get_if<ToolCallDelta>(&*first)) deltas.push_back(*d);
+    while (auto next = parser.drainPendingDelta()) {
+        auto* d = std::get_if<ToolCallDelta>(&*next);
+        ASSERT_NE(d, nullptr);
+        deltas.push_back(*d);
+        ASSERT_LE(deltas.size(), 4u);
+    }
+    ASSERT_EQ(deltas.size(), 4u);
+    EXPECT_EQ(deltas[0].index, 0);
+    EXPECT_EQ(deltas[1].index, 0);
+    EXPECT_EQ(deltas[2].index, 1);
+    EXPECT_EQ(deltas[3].index, 1);
+    ASSERT_TRUE(deltas[0].name.has_value());
+    ASSERT_TRUE(deltas[2].name.has_value());
+    EXPECT_EQ(*deltas[0].name, "string_tool");
+    EXPECT_EQ(*deltas[2].name, "cd");
+    ASSERT_TRUE(deltas[0].id.has_value());
+    ASSERT_TRUE(deltas[2].id.has_value());
+    EXPECT_NE(*deltas[0].id, *deltas[2].id);
+    EXPECT_FALSE(deltas[1].name.has_value());
+    EXPECT_FALSE(deltas[3].name.has_value());
+    EXPECT_EQ(deltas[1].arguments, R"({"arg1":"one"})");
+    EXPECT_EQ(deltas[3].arguments, R"({"folder":"two"})");
+}
+
+TEST_F(Qwen3CoderOutputParserTest, QwenmonsterCompletedCallFollowedByPartialName) {
+    Qwen3CoderToolParser parser(*qwen3Tokenizer, toolsSchemas);
+    const auto first = parser.parseChunk(
+        "<tool_call><function=string_tool><parameter=arg1>one</parameter></function></tool_call>"
+        "<tool_call><function=cd>", {}, ov::genai::GenerationFinishReason::NONE);
+    ASSERT_TRUE(first.has_value());
+    auto arguments = parser.drainPendingDelta();
+    ASSERT_TRUE(arguments.has_value());
+    auto nextStart = parser.drainPendingDelta();
+    ASSERT_TRUE(nextStart.has_value());
+    ASSERT_TRUE(std::holds_alternative<ToolCallDelta>(*nextStart));
+    EXPECT_EQ(std::get<ToolCallDelta>(*nextStart).index, 1);
+    EXPECT_EQ(*std::get<ToolCallDelta>(*nextStart).name, "cd");
+    EXPECT_FALSE(parser.drainPendingDelta().has_value());
+    auto last = parser.parseChunk("<parameter=folder>two</parameter></function></tool_call>",
+        {}, ov::genai::GenerationFinishReason::NONE);
+    ASSERT_TRUE(last.has_value());
+    EXPECT_EQ(std::get<ToolCallDelta>(*last).index, 1);
+    EXPECT_FALSE(std::get<ToolCallDelta>(*last).name.has_value());
+    EXPECT_EQ(std::get<ToolCallDelta>(*last).arguments, R"({"folder":"two"})");
+}
+
 class Qwen3CoderOutputParserParametrizedTest : public Qwen3CoderOutputParserTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, std::string, std::string>> {
 };
 
