@@ -125,13 +125,21 @@ absl::Status ContinuousBatchingServable::readCompleteExecutionResults(std::share
     }
 
     cbExecutionContext->generationOutputs = cbExecutionContext->generationHandle->read_all();
-    if (cbExecutionContext->generationHandle->get_status() == ov::genai::GenerationStatus::STOP) {
+    const auto status = cbExecutionContext->generationHandle->get_status();
+    if (cbExecutionContext->payload.client->isDisconnected() ||
+        status == ov::genai::GenerationStatus::STOP ||
+        status == ov::genai::GenerationStatus::CANCEL) {
         return absl::CancelledError();
     }
     if (cbExecutionContext->generationOutputs.size() == 0) {
         cbExecutionContext->generationOutputs = {prepareEmptyStopReasonOutput()};
     }
-    executionContext->perfMetrics = std::make_unique<ov::genai::PerfMetrics>(cbExecutionContext->generationHandle->get_perf_metrics());
+    // Metrics are committed only when generation finishes. Stop and cancel
+    // close the stream without them, and reading them asserts.
+    if (status == ov::genai::GenerationStatus::FINISHED ||
+        status == ov::genai::GenerationStatus::IGNORED) {
+        executionContext->perfMetrics = std::make_unique<ov::genai::PerfMetrics>(cbExecutionContext->generationHandle->get_perf_metrics());
+    }
     return absl::OkStatus();
 }
 
@@ -150,13 +158,23 @@ absl::Status ContinuousBatchingServable::readPartialExecutionResults(std::shared
         // Subsequent iteration
         OVMS_PROFILE_SCOPE("Generation of subsequent streaming response");
         ov::genai::GenerationOutputs generationOutputs = cbExecutionContext->generationHandle->read();
+        const auto status = cbExecutionContext->generationHandle->get_status();
+        // read() returns an empty map once stop/cancel has closed the stream.
+        // That is not a finished generation and it has no perf metrics.
+        if (cbExecutionContext->payload.client->isDisconnected() ||
+            status == ov::genai::GenerationStatus::STOP ||
+            status == ov::genai::GenerationStatus::CANCEL) {
+            return absl::CancelledError();
+        }
         RET_CHECK(generationOutputs.size() <= 1);  // TODO: Support multiple generations
         if (generationOutputs.size() == 0) {
             cbExecutionContext->generationOutputs = {prepareEmptyStopReasonOutput()};
         } else {
             cbExecutionContext->generationOutputs = {generationOutputs.begin()->second};
         }
-        if (cbExecutionContext->generationOutputs[0].finish_reason != ov::genai::GenerationFinishReason::NONE) {
+        if (cbExecutionContext->generationOutputs[0].finish_reason != ov::genai::GenerationFinishReason::NONE &&
+            (status == ov::genai::GenerationStatus::FINISHED ||
+             status == ov::genai::GenerationStatus::IGNORED)) {
             executionContext->perfMetrics = std::make_unique<ov::genai::PerfMetrics>(cbExecutionContext->generationHandle->get_perf_metrics());
         }
     }
