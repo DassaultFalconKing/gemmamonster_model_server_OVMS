@@ -8,7 +8,7 @@
 |---|---|---|
 | [MASTER-PLAN.md](MASTER-PLAN.md) | Какие цели R0–R6 и активные W1–W7? | Единственный актуальный рабочий план |
 | [HANDOFF-DRAFTERS-20261022.md](HANDOFF-DRAFTERS-20261022.md) | Current drafter status and all-agent resume contract | Operator compute pause; long-context matrix NOT RUN |
-| [HANDOFF-MOE-OTD-PACK-20261022.md](HANDOFF-MOE-OTD-PACK-20261022.md) | MoE offload-to-disk packs and how they bind to drafter measurements | Packed ratio-75 bench recorded; unpacked and ratio-40 NOT RUN |
+| [HANDOFF-MOE-OTD-PACK-20261022.md](HANDOFF-MOE-OTD-PACK-20261022.md) | MoE offload-to-disk packs and how they bind to drafter measurements | Packed/unpacked ratio-75 and ratio-40 pair measured; MTP K3 and test gates NOT RUN |
 | [AGENTS.md](../../AGENTS.md) | Как осуществлять изменения, RED/GREEN, шесть полей и privacy? | Обязательная инженерная политика |
 | [ACCEPTANCE.md](ACCEPTANCE.md) | Какой gate необходимо пройти для PASS? | Нормативные acceptance критерии |
 | [STATE.md](STATE.md) | Какой фактический HEAD, результат и NEXT_ACTION? | **Читать самый верхний checkpoint** |
@@ -34,7 +34,7 @@
 
 R0 → R1 official template/token IDs → R4 reasoning handoff → R5 real autonomous loops. Параллельно R2 parser + R3 policy/grammar; R3 требует отдельной проверки #802 candidate installed DLL и фикса #650. Стресс R5 зависит от W1 resource accounting. R6 возможен после принятия Qwen3.6.
 
-**Текущая очередь MASTER W1–W7:** W3 cancel/resource измерен и остаётся NOT_PROVEN: private bytes не вернулись, система получила память только после выхода процесса; disconnect падает на `generation_stream.hpp:136`. W4: исходный порт и маска tokenizer сделаны, живая проба `</parameter1>` не запускалась. W5: кандидатная DLL установлена явным решением, lock не менялся. W2 native matrix 24 PASS / 4 OPEN; Jinja history открыта. W6 и W7 позже.
+**Текущая очередь MASTER W1–W7:** W3 cancel/resource измерен и остаётся NOT_PROVEN: private bytes не вернулись, система получила память только после выхода процесса; disconnect падает на `generation_stream.hpp:136`. W4: исходный порт и маска tokenizer сделаны, живая проба `</parameter1>` не запускалась. W5: кандидатная DLL установлена явным решением, lock не менялся. W2 native matrix 24 PASS / 4 OPEN; Jinja history открыта. W7 MoE OTD: packed/unpacked ряды ratio 75 и 40 измерены, остались MTP K3 и тестовые фильтры. W6 позже.
 
 ## 4. Документальный timeline: почему старые NOT RUN не главные
 

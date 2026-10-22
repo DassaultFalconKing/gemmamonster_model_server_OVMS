@@ -1,3 +1,17 @@
+# Current checkpoint: packed/unpacked OTD rows measured, then stop
+
+- ACTIVE_STAGE: unpacked OFFLOAD_RATIO=75 and the OFFLOAD_RATIO=40 packed/unpacked pair measured with the same binaries and token budget as the recorded packed row. MTP K3 and the open test gates NOT RUN. ACCEPTED: NO.
+- BASE_SHA / REVERT_POINT: `9d648aecd` before this stop note. WORK_BRANCH: `integration/qwm01-otd-pack-20261022`.
+- DEPENDENCY_LOCK: unchanged. Measured OVMS SHA-256 `1175bd25d6faf90e41c6591e23507cf6117895351462ff3b5648c8a6df08a760`. Measured GPU plugin SHA-256 `1093b69f6314898238ffec06fb46631759526e89c90e3e3fd2fd29c122e8058e`, cohort branch `47921924`. GenAI DLL unchanged `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`.
+- LAST_GREEN_TESTS: unpacked r75 repeats TTFT 5.23/5.23/5.23 s, decode 5.32/5.31/5.35 tok/s (packed r75: 4.43/4.18/4.20 s, 5.75/5.94/5.97 tok/s). Packed r40 repeats TTFT 1.32/1.09/1.06 s, decode 6.95/7.33/7.39 tok/s. Unpacked r40 repeats TTFT 1.98/1.45/1.26 s, decode 6.95/7.13/7.08 tok/s. All rows 55 prompt/384 completion, finish_reason=length. Trace counters per row in the handoff; packed gives 1 disk read per miss and zero transform, unpacked about 9 reads per miss.
+- CURRENT_FAILURE: MTP K3, `ovms_test` filter `*oeExpertsPack*`, GPU unit tests `moe_otd_*`/`moe_offload_*` NOT RUN. The process-exit `[OTD_PERF]` stderr summary was not captured in any row; counters come from offline trace summaries. The packed-r40 full-process trace includes one extra completed warmup and one cancelled partial from a failed first bench attempt; recorded counters use the measured-window filter.
+- ROOT_CAUSE: n/a. Termination path does not run the atexit summary; three of four traces end mid-record.
+- NEXT_ACTION: stop. Do not start another model until the operator asks. Remaining pack gates: MTP K3 with packs and the two test filters.
+- EVIDENCE_PATH: [HANDOFF-MOE-OTD-PACK-20261022.md](HANDOFF-MOE-OTD-PACK-20261022.md). Raw logs stay private.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current checkpoint: packed MoE OTD bench recorded, then stop
 
 - ACTIVE_STAGE: one packed serve at OFFLOAD_RATIO=75 measured with packs built at OFFLOAD_RATIO=40. Unpacked comparison, OFFLOAD_RATIO=40 serving and MTP K3 NOT RUN. ACCEPTED: NO.
