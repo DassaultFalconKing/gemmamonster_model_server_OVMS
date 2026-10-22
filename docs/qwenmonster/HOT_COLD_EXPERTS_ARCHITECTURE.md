@@ -1,5 +1,7 @@
 # Горячие и холодные эксперты для Gemma 4, Qwen3.6 и Qwen3.8 на Arc 140V: архитектура кэша и план реализации в OVMS/OpenVINO
 
+> **UMA update (22.10.2026):** [ADR-UMA-01 — физическая LPDDR, zero-copy hypotheses и WDDM/USM gates](ADR-UMA-ARC140V-MEMORY-MODEL-20261022.md). К осям residency/precision hotness добавлена независимая ось **memory-access policy**. Shared physical DRAM на Arc 140V **не гарантирует** CPU/GPU cache coherence, zero-copy или то, что `27.5 GiB GPU memory` является firmware-reserved физической областью. До Windows `UMA-00/01` доказательств обязательный путь — existing verified-read/staging/copy, без замены serving runtime. [Локальный Windows handoff](HANDOFF-UMA-00-WINDOWS-20261022.md).
+
 ## Резюме
 
 Главный вывод исследования: **для GEMMAMONSTER правильнее моделировать не просто “горячие/холодные слои”, а две независимые оси**:
