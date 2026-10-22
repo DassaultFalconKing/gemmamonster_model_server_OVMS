@@ -17,6 +17,7 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <filesystem>
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -70,7 +71,11 @@
 #include "python/python_runtime_loader.hpp"
 #endif
 #include "mediapipe_runtime_api.hpp"
+#include "model.hpp"
+#include "modelinstance.hpp"
+#include "src/servable_management/modelmanager.hpp"
 #include "src/servable_management/servablemanagermodule.hpp"
+#include "src/utils/env_guard.hpp"
 #include "shutdown_state.hpp"
 #include "servables_config_manager_module/servablesconfigmanagermodule.hpp"
 #include "stringutils.hpp"
@@ -395,6 +400,69 @@ std::unique_ptr<Module> Server::createModule(const std::string& name) {
         }                                                                                             \
     }
 
+// Read by the GPU plugin config on every compile_model, so they must be set before servables load.
+static constexpr const char* MOE_EXPERTS_PACK_MODE_ENV = "OV_GPU_MOE_OTD_PACK_MODE";
+static constexpr const char* MOE_EXPERTS_PACK_DIR_ENV = "OV_GPU_MOE_OTD_PACK_DIR";
+static constexpr const char* MOE_EXPERTS_PACK_EXTENSION = ".pack";
+
+static Status configureMoeExpertsPack(const ServerSettingsImpl& settings) {
+    if (settings.moeExpertsPackDir.empty()) {
+        return StatusCode::OK;
+    }
+    std::error_code ec;
+    const auto dir = std::filesystem::absolute(settings.moeExpertsPackDir, ec).lexically_normal();
+    if (ec) {
+        return Status(StatusCode::PATH_INVALID, "Invalid --moe_experts_pack_dir: " + settings.moeExpertsPackDir);
+    }
+    if (settings.buildMoeExpertsPack) {
+        std::filesystem::create_directories(dir, ec);
+        if (ec) {
+            return Status(StatusCode::PATH_INVALID, "Cannot create --moe_experts_pack_dir " + dir.string() + ": " + ec.message());
+        }
+    } else if (!std::filesystem::is_directory(dir, ec)) {
+        return Status(StatusCode::PATH_INVALID, "--moe_experts_pack_dir " + dir.string() + " does not exist; build packs first with --build_moe_experts_pack");
+    }
+    const char* mode = settings.buildMoeExpertsPack ? "build" : "require";
+    SetEnvironmentVar(MOE_EXPERTS_PACK_DIR_ENV, dir.string());
+    SetEnvironmentVar(MOE_EXPERTS_PACK_MODE_ENV, mode);
+    SPDLOG_INFO("MoE experts pack mode: {}, directory: {}", mode, dir.string());
+    return StatusCode::OK;
+}
+
+static Status checkMoeExpertsPackBuild(ModelManager& manager, const std::string& packDir) {
+    std::vector<std::string> failed;
+    for (const auto& [name, model] : manager.getModels()) {
+        auto instance = model->getDefaultModelInstance();
+        if (!instance || !instance->getStatus().appearsAvailable()) {
+            failed.push_back(name);
+        }
+    }
+#if (MEDIAPIPE_DISABLE == 0)
+    const auto& factory = manager.getMediapipeFactory();
+    for (const auto& name : factory.getMediapipePipelinesNames()) {
+        if (!factory.isDefinitionAvailable(name)) {
+            failed.push_back(name);
+        }
+    }
+#endif
+    if (!failed.empty()) {
+        return Status(StatusCode::INTERNAL_ERROR, "MoE experts pack build failed; servables not loaded: " + joins(failed, ", "));
+    }
+    size_t packCount = 0;
+    std::error_code ec;
+    for (const auto& entry : std::filesystem::directory_iterator(std::filesystem::absolute(packDir), ec)) {
+        if (entry.is_regular_file() && entry.path().extension() == MOE_EXPERTS_PACK_EXTENSION) {
+            ++packCount;
+        }
+    }
+    if (ec || packCount == 0) {
+        return Status(StatusCode::INTERNAL_ERROR, "MoE experts pack build produced no packs in " + packDir + "; no GPU MoE layer with offload-to-disk (OFFLOAD_RATIO) was compiled");
+    }
+    SPDLOG_INFO("MoE experts pack build finished: {} pack files in {}", packCount, packDir);
+    std::cout << "MoE experts packs ready: " << packCount << " files in " << packDir << std::endl;
+    return StatusCode::OK;
+}
+
 Status Server::startModules(ovms::Config& config) {
     // The order of starting modules is slightly different from inserting modules
     // due to dependency of modules on each other during runtime
@@ -474,12 +542,15 @@ Status Server::startModules(ovms::Config& config) {
     INSERT_MODULE(SERVABLE_MANAGER_MODULE_NAME, it);
     INSERT_MODULE(CAPI_MODULE_NAME, it);
     START_MODULE(it);
-    INSERT_MODULE(GRPC_SERVER_MODULE_NAME, it);
-    START_MODULE(it);
-    // if we ever decide not to start GRPC module then we need to implement HTTP responses without using grpc implementations
-    if (config.restPort() != 0) {
-        INSERT_MODULE(HTTP_SERVER_MODULE_NAME, it);
+    const bool buildMoeExpertsPack = config.getServerSettings().buildMoeExpertsPack;
+    if (!buildMoeExpertsPack) {
+        INSERT_MODULE(GRPC_SERVER_MODULE_NAME, it);
         START_MODULE(it);
+        // if we ever decide not to start GRPC module then we need to implement HTTP responses without using grpc implementations
+        if (config.restPort() != 0) {
+            INSERT_MODULE(HTTP_SERVER_MODULE_NAME, it);
+            START_MODULE(it);
+        }
     }
     if (config.getServerSettings().serverMode == HF_PULL_AND_START_MODE) {
         INSERT_MODULE(HF_MODEL_PULL_MODULE_NAME, it);
@@ -503,8 +574,20 @@ Status Server::startModules(ovms::Config& config) {
         config.setInMemoryGraphPbtxt(std::move(pbtxt));
         SPDLOG_INFO("Graph config created in memory from model_path: {}", config.modelPath());
     }
+    status = configureMoeExpertsPack(config.getServerSettings());
+    if (!status.ok()) {
+        SPDLOG_ERROR("{}", status.string());
+        return status;
+    }
     GET_MODULE(SERVABLE_MANAGER_MODULE_NAME, it);
     START_MODULE(it);
+    if (buildMoeExpertsPack) {
+        auto& servableManager = dynamic_cast<const ServableManagerModule*>(it->second.get())->getServableManager();
+        status = checkMoeExpertsPackBuild(servableManager, config.getServerSettings().moeExpertsPackDir);
+        if (!status.ok()) {
+            SPDLOG_ERROR("{}", status.string());
+        }
+    }
     return status;
 }
 
@@ -606,7 +689,7 @@ int Server::startServerFromSettings(ServerSettingsImpl& serverSettings, ModelsSe
         if (!ret.ok()) {
             return statusToExitCode(ret);
         }
-        while (!getShutdownStatus() &&
+        while (!getShutdownStatus() && !serverSettings.buildMoeExpertsPack &&
                (serverSettings.serverMode == HF_PULL_AND_START_MODE || serverSettings.serverMode == SERVING_MODELS_MODE || serverSettings.serverMode == IN_MEMORY_GRAPH_MODE)) {
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }

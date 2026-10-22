@@ -854,6 +854,7 @@ ovms_cc_library(
             "modelchangesubscription",
             "//src/servable_management:modelmanager",
             "//src/servable_management:servablemanagermodule",
+            "//src/utils:env_guard",
             "//src/filesystem:libovmslocalfilesystem", # indirectly & directly through factory
             "libovmslogging",
             "//src/metrics:libovmsmetrics",
