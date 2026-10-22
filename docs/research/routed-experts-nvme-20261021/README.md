@@ -57,3 +57,18 @@ Available draft candidates are now identified, not hypothetical: [Unsloth Qwen3.
 - [Original root flowchart v1](../../../architecture_flowchart_graph.mermaid) remains unchanged for provenance.
 
 **Evidence boundary:** v2 synthesizes the research already published in this branch through commit `d2954601`. The newly requested Deep Research hot/cold architecture synthesis was started but its final report was not available as an export at publication time; do not attribute v2 text to that unreceived report. Future research arrivals should be added as dated supplements, not overwrite the manual original or stable C6.
+
+## Coding/inference model execution ledger (2026-10-22)
+
+[11 — A0–A8 model assignment, target-model acceptance and UMA ledger](11-MODEL-EXECUTION-LEDGER-20261022.md) records which Cursor models perform each stage, the justification for Opus 5.5 escalation, the Gemma4/Qwen3.6/Ornith/Qwen3.8 test roles, speculative modes, physical 32-GiB memory accounting and STOP/PASS gates. This is a **docs-only plan**; see the separate [frozen QWM01/OTD checkpoint](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/blob/4215aa39da160eb742ecd7f0fa2ace5c90d64efa/docs/qwenmonster/CHECKPOINT-OTD-PACK-QWM01-20261022.md) for measured implementation evidence. No new GPU jobs are authorized by the ledger.
+
+## Independent multi-provider coordination (2026-10-22)
+
+- [12 — Review of the incoming P0–P6 Deep Research execution plan](12-COORDINATOR-REVIEW-20261022.md): verified mismatches against existing packed OTD/trace/LRU, new hot/cold research and open gates.
+- [13 — Ready-to-paste heterogeneous coordinator prompt](13-HETEROGENEOUS-COORDINATOR-PROMPT-20261022.md): explicit provider/model registry, fresh isolated agents (no parent-model/context inheritance), source locks, task packets, independent cross-family reviews, correct DAG and hardware pause.
+
+These two artifacts replace the Anthropic-only execution assignment in [11](11-MODEL-EXECUTION-LEDGER-20261022.md) without changing the target-model, MTP or U4 UMA ledgers. Documents only, no runtime source, C6, dependency locks, GPU jobs or automatically accepted release.
+
+## Cloud code authoring and local engineering handoff (2026-10-22)
+
+- [14 — CLOUD GPT CODEGEN MISSION](14-CLOUD-GPT-CODEGEN-MISSION-20261022.md): copy/paste mission for a **separate cloud GPT coding session**. It writes isolated Draft PRs in the OpenVINO GPU fork for existing pack require-mode integrity, safe pack publication and trustworthy trace/offline accounting; emits concrete local PC handoffs. No cloud GPU acceptance is claimed. Coordinator owns the future A5 scheduler decision, and the operator compute pause remains active.
