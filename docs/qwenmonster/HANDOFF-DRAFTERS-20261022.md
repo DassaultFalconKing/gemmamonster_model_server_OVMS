@@ -30,7 +30,7 @@ Original C6, published dependency lock, staged runtime and original target model
 | z-lab DFlash | Metadata only, revision `f181eece646affea2c38b2765f1aaa01a9734ccd`; NOT RUN. |
 | Agentic acceptance with drafters | NOT RUN. Short protocol smoke does not establish useful autonomous work or 20 successful tool-result continuations. |
 
-Matched smoke settings: GPU, OFFLOAD_RATIO=40, cache_interval_multiplier=256, prefix caching disabled, max_num_seqs=1, max_num_batched_tokens=32768. OFFLOAD_RATIO=40 means every drafter row includes MoE offload-to-disk miss cost; the linked pack track is [HANDOFF-MOE-OTD-PACK-20261022.md](HANDOFF-MOE-OTD-PACK-20261022.md). Rows measured without packs must stay labelled as unpacked. No persistent service was left running by the finite benchmarks; normal phase shutdown must not be reported as a crash.
+Matched smoke settings: GPU, OFFLOAD_RATIO=40, cache_interval_multiplier=256, prefix caching disabled, max_num_seqs=1, max_num_batched_tokens=32768. OFFLOAD_RATIO=40 means every drafter row includes MoE offload-to-disk miss cost; the linked pack track is [HANDOFF-MOE-OTD-PACK-20261022.md](HANDOFF-MOE-OTD-PACK-20261022.md). That handoff has one packed bench at OFFLOAD_RATIO=75. It does not replace any drafter row. Rows measured without packs must stay labelled as unpacked. No persistent service was left running by the finite benchmarks; normal phase shutdown must not be reported as a crash.
 
 ## Resume contract, after operator releases compute
 

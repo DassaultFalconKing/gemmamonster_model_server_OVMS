@@ -10,7 +10,7 @@
 
 ## Operator checkpoint 2026-10-22: compute paused
 
-**PAUSED BY OPERATOR; ACCEPTED: NO.** Active operator compilations take priority. Do not launch or resume builds, inference or benchmark workers from this checkpoint. Current all-agent handoff: [HANDOFF-DRAFTERS-20261022.md](HANDOFF-DRAFTERS-20261022.md).
+**PAUSED BY OPERATOR; ACCEPTED: NO.** Active operator compilations take priority. Do not launch or resume builds, inference or benchmark workers from this checkpoint. One packed MoE OTD bench at OFFLOAD_RATIO=75 is already recorded; do not start the next one from here. Current all-agent handoff: [HANDOFF-DRAFTERS-20261022.md](HANDOFF-DRAFTERS-20261022.md). Pack stop point: [HANDOFF-MOE-OTD-PACK-20261022.md](HANDOFF-MOE-OTD-PACK-20261022.md).
 
 | Track | Current evidence | Remaining gate |
 |---|---|---|
@@ -20,7 +20,7 @@
 | W7 AEON DFlash | Export PASS; startup FAILED on missing target hidden-state metadata | Candidate metadata overlay prepared; retry and K4/K6 measurements NOT RUN |
 | W7 EAGLE3 | Existing ordinary IR transform failure reproduced; Zenith MoE v5 source feasibility only | No compatible port or runtime acceptance |
 | W6 drafter agent loops | NOT RUN | Useful tool execution, parser/SSE and actual continuations on the chosen tuple |
-| W7 MoE OTD packs | `--build_moe_experts_pack` / `--moe_experts_pack_dir` merged on this line; GPU plugin P2–P4 on an unpublished OpenVINO branch; unit tests and compile only. See [HANDOFF-MOE-OTD-PACK-20261022.md](HANDOFF-MOE-OTD-PACK-20261022.md) | Real pack build, packed vs unpacked baseline/MTP K3 at OFFLOAD_RATIO=40 NOT RUN |
+| W7 MoE OTD packs | Pack build (40 files) and one packed bench at OFFLOAD_RATIO=75 PASS: repeat TTFT 4.43/4.18/4.20 s, decode 5.75/5.94/5.97 tok/s. Plugin branches are on the OpenVINO fork. See [HANDOFF-MOE-OTD-PACK-20261022.md](HANDOFF-MOE-OTD-PACK-20261022.md) | Unpacked ratio-75, both ratio-40 rows, MTP K3, exit OTD counters NOT RUN. Started below the 15463 MiB floor |
 
 The operator explicitly authorized isolated drafter experiments as an extension to the original performance track. They do not replace protocol gates. The operator manually stopped repetitive 100/100 required/named loops; do not restart these as the default workload. Preserve historical evidence without claiming the stopped matrix completed. Exact 2048-token workload is prepared with thinking enabled; long-context speedup, pure prefill and decode results are not yet available. Short 27-input/64-output runs remain smoke only.
 

@@ -1,3 +1,17 @@
+# Current checkpoint: packed MoE OTD bench recorded, then stop
+
+- ACTIVE_STAGE: one packed serve at OFFLOAD_RATIO=75 measured with packs built at OFFLOAD_RATIO=40. Unpacked comparison, OFFLOAD_RATIO=40 serving and MTP K3 NOT RUN. ACCEPTED: NO.
+- BASE_SHA / REVERT_POINT: `145f1531c` before this stop note. WORK_BRANCH: `integration/qwm01-otd-pack-20261022`.
+- DEPENDENCY_LOCK: unchanged. Measured OVMS SHA-256 `1175bd25d6faf90e41c6591e23507cf6117895351462ff3b5648c8a6df08a760`. Measured GPU plugin SHA-256 `1093b69f6314898238ffec06fb46631759526e89c90e3e3fd2fd29c122e8058e`, cohort branch `47921924`. GenAI DLL unchanged `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`.
+- LAST_GREEN_TESTS: pack build wrote 40 packs; reuse run reported 40 pack files. Packed graph reached AVAILABLE in require mode. Warmup plus 3 repeats, 384 completion tokens, finish_reason=length. Repeat TTFT 4.43 / 4.18 / 4.20 s; decode 5.75 / 5.94 / 5.97 tok/s. Warmup TTFT 13.85 s, decode 5.68 tok/s.
+- CURRENT_FAILURE: unpacked ratio-75, both ratio-40 rows, MTP K3, `ovms_test` filter `*oeExpertsPack*`, and the process-exit OTD counters are NOT RUN. Available RAM at the packed start was 9824 MiB, below the 15463 MiB floor.
+- ROOT_CAUSE: n/a. The exit summary was not captured; the trace ended mid-record.
+- NEXT_ACTION: stop. Do not start another model until the operator asks. Next pack row is unpacked at OFFLOAD_RATIO=75 with the same token budget.
+- EVIDENCE_PATH: [HANDOFF-MOE-OTD-PACK-20261022.md](HANDOFF-MOE-OTD-PACK-20261022.md). Raw logs stay private.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current checkpoint: operator compute pause and drafter handoff
 
 - ACTIVE_STAGE: PAUSED BY OPERATOR, 2026-10-22. Status publication only; no new builds or inference. Operator compilations are active and untouched.
