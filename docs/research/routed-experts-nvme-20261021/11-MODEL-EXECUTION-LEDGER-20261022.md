@@ -7,36 +7,36 @@
 
 > **Два разных понятия «модель»:** (1) **coding model**, которой поручается инженерная работа; (2) **inference target**, на котором проверяется результат. Не смешивать стоимость агентного труда с VRAM/UMA бюджетом target model. Ниже есть отдельный ledger для обеих групп.
 
-## 1. Лестница исполнителей, разрешения и цена эскалации
+## 1. Независимая model-routing лестница (актуальная политика)
 
-| Уровень | Предпочтительная coding model | Тип работы | Условие повышения |
+**Обязательный supersession:** [12 — повторное ревью](12-COORDINATOR-REVIEW-20261022.md) и [13 — executable multi-provider prompt](13-HETEROGENEOUS-COORDINATOR-PROMPT-20261022.md) заменяют все прежние рекомендации «Haiku/Sonnet/L2 по умолчанию». Теперь **любой** connected model/provider должен быть обнаружен через real capability registry. Нельзя наследовать модель и контекст главного агента в child-сессию. Нужен отдельный provider-bound session ID, отдельный worktree и независимый reviewer.
+
+| Уровень | Исполнитель из обнаруженного реестра | Вид работы | Эскалация |
 |---|---|---|---|
-| **L0, потоковый** | Claude **Haiku 5.5** (Cursor); локальный/доступный OpenCode worker допустим для чисто механических задач | rg/поиск, вычитка хешей, инвентаризация, маленькие JSON/CSV fixtures, тестовая документация | Не хватает релевантных символов/контекста или возникли противоречия в источниках |
-| **L1, основной инженер** | Claude **Sonnet 5.5** (Cursor) | Ограниченные C++ изменения, tests-first, trace/replay, cmake/bazel harness, воспроизводимые отчёты | Требуется новая ownership-модель, lifecycle/async reasoning, сложная несовместимость либо два осмысленных fix→test цикла без результата |
-| **L2, ведущий архитектурный** | Claude **Opus 5.5 High Thinking** (Cursor) | Критичные интерфейсы, data races, cache I/O scheduler, multi-repo integration, unresolved failure triage, финальное architect review | Не передавать рутинный поиск/документацию ради «качества» |
-| **L3, независимая проверка** | Отдельный **Codex/GPT** или независимый Sonnet/Opus-сеанс **без совместной истории контекста** | Adversarial review опасных изменений, compiler/linker assumptions, негативные тесты, сравнение утверждений с исходниками | Обязателен для изменения GPU concurrency, файлового формата или production admission, но не должен незаметно изменять исходную ветку |
+| **L0, инвентаризация** | Дешёвый, реально доступный проверяющий (OpenAI / Anthropic / Google / OpenCode Zen; локальный только если разрешён runtime) | Source grep, manifests, простые fixtures, документы | Нет проверяемых исходников / противоречие |
+| **L1, инженер** | Подходящий coding worker любого доступного провайдера, **не унаследованный от координатора** | Ограниченный C++, unit tests, offline replay, harness | Сложная cross-component ownership проблема или два безрезультатных доказанных исправления |
+| **L2, архитектурный** | Самый сильный reasoning+coding worker из реально доступных; L2, Codex/GPT, Gemini и др. на равных при подтверждённых способностях | GPU concurrency, cancellation, slot leases, A5, A7 | До выдачи задачи — явное обоснование риска/невозможности L1; для A5/A7 уровень L2 оправдан сразу |
+| **L3, независимый критик** | **Другой model family/provider** в новой сессии и read-only worktree; fallback same-family отмечать явно | Adversarial review, тесты и контрактный аудит | Не пишут код в авторском worktree и не наследуют историю author/coordinator |
 
-Модель L3 выбирают **по независимости проверки**, а не как ещё более дорогую ступень. Код, написанный Opus, должен быть проверен не тем же Opus-сеансом.
+Стоимость, лимиты и реальные модельные ID **узнаются из интерфейса провайдера в момент назначения**, не фиксируются как вечные цены Cursor. Отсутствующая интеграция = `UNAVAILABLE`; нельзя симулировать delegate той же главной моделью.
 
-**Текущая цена Cursor за 1M токенов** (USD, input/output): Haiku 5.5 **0.10 / 0.50**, Sonnet 5.5 **2 / 10**, Opus 5.5 **4 / 20**. Цена cache read и режимов Fast/региональности отличаются; не считать это обещанием доступного пользователю тарифа/квоты. Обновлять перед бюджетированием из [Cursor Models & Pricing](https://cursor.com/docs/models-and-pricing) и [Cursor Opus 5.5](https://prod.cursor.com/docs/models/claude-opus-5-5). Cursor рекомендует Opus High Thinking, но он расходует prepaid credit / соответствующий legacy pool.
-
-**Локальное правило эскалации.** Перед L1→L2 агент фиксирует: `failed_gate`, `source_file:line`, `two hypotheses tested` (или почему тест невозможен), `risk_of_wrong_change`, `expected_output_from_Opus`. При отсутствии этого объяснения оставаться на L1. L0→L1 требует как минимум ссылки на конкретный код/неоднозначность. Не создавать дорогих L2 субагентов автоматически.
+**Условие эскалации:** запиши `failed_gate`, `source_file:line`, проверенные гипотезы или почему нельзя проверить, риск и ожидаемый выход от более сильной модели. Траты оправдывает задача, не имя модели.
 
 ## 2. Coding-model ledger: этапы A0–A8
 
-| Stage / зависимость | Основной исполнитель | Помощник / независимый review | Когда допускается Opus 5.5 | Конкретный deliverable и закрывающий gate |
+| Stage / зависимость | Основной исполнитель | Помощник / независимый review | Когда допускается L2 | Конкретный deliverable и закрывающий gate |
 |---|---|---|---|---|
-| **A0/P0 Model/IR capability** · первым | **Sonnet L1** | Haiku L0 инвентаризация; Opus L2 при blocker | Неясный `MOECompressed` lowering, shader/kernel eligibility, несовместимые IR/drafter artifacts | Model-specific SHA/IR/quant/tokenizer/DLL capability ledger; отсутствие доказательства = `UNVERIFIED`, не `PASS` |
-| **A1/P1 Baseline/protocol** · после A0 и разрешения compute | **Sonnet L1** | Haiku fixtures; независимый L3 по найденному protocol RED | Qwen/Gemma parser-output disagreement, reasoning/tool lifecycle crossing, GPU fatal | Gemma C6 comparison; Qwen3.6/Ornith plain tool tests, C1/C2/C4 и U4 KV там, где умещаются; green только по trace |
-| **A2/P2 OTD observability** · параллельно A1 без тяжёлой GPU нагрузки | **Sonnet L1** | Haiku reports; Opus L2 на concurrency seams | Process-shutdown, ownership, timestamps, run/slot attribution, trace truncation | Read/transform/copy/hits/evictions, trace+summary reconciliation; marked `NOT_EXPOSED` для метрик, которых нет |
-| **A3/P3 Router trace + replay** · A0+A2 | **Sonnet L1**, Opus design review | Haiku synthetic event generation; L3 replay audit | Draft/verify/commit lifecycle, cross-slot event correlation, lease semantics | Schema v1, deterministic native LRU parity, C1/C2/C4 synthetic replay, реальные трассы после compute release |
-| **A4/P4 Packed layout** · **реализация уже есть** | **Sonnet L1 hardening** | L3 независимый integrity review; Opus L2 при race/corruption | Missing/foreign/corrupt payload, concurrent builders, safe publication, require/fallback boundary | Не переписывать packer; добавить negative packs tests + payload integrity contract, проверить `ovms_test *oeExpertsPack*` и GPU filters |
-| **A5/P5 Cache + bounded I/O scheduler** · только после A2+A3 | **Opus L2 High Thinking** | Sonnet L1 isolated implementation/fixtures; независимый L3 review | Opus назначен сразу: concurrency, demand priority, cancellation и GPU slot lifetime архитектурно высокорисковые | Feature-flagged prototype; no demand starvation, cache-miss dedup, bounded prefetch, no p95/p99 regression, clean native LRU fallback |
-| **A6/P6 CPU expert lane** · независим после A0 | **Sonnet L1** | Haiku ISA matrix; Opus L2 на kernel/NUMA parity | SIMD layout, divergent numeric kernels, cross-socket ownership | Separate microbenchmark + numerical parity; **не** интегрировать CPU lane в OVMS до реального улучшения |
-| **A7/P7 Integrated reliability** · A1+A4+A5, при разрешённом compute | **Opus L2 High Thinking** | Sonnet L1 runner, L3 adversarial regression review | Opus назначен сразу: multi-repo/ABI, shutdown/cancel, GPU races, rollback | Pinned candidate, 30–60-min soak, fault injection, C1/C2/C4, original C6 unchanged; fail on protocol/slot/model regression |
-| **A8/P8 Qwen3.8 feasibility** · после A0, не блокирует A5 | **Sonnet L1** | Haiku manifests; Opus L2 при IR/kernel design | Layer-dependent quant dispatch, model metadata/drafter compatibility ambiguity | Mixed-quant/checkpoint/kernel/KV budget matrix; no invented 32-GiB fit or token/s claim |
+| **A0/P0 Model/IR capability** · первым | **L1 выбранного провайдера** | L0 инвентаризация; L2 при blocker | Неясный `MOECompressed` lowering, shader/kernel eligibility, несовместимые IR/drafter artifacts | Model-specific SHA/IR/quant/tokenizer/DLL capability ledger; отсутствие доказательства = `UNVERIFIED`, не `PASS` |
+| **A1/P1 Baseline/protocol** · после A0 и разрешения compute | **L1 выбранного провайдера** | Haiku fixtures; независимый L3 по найденному protocol RED | Qwen/Gemma parser-output disagreement, reasoning/tool lifecycle crossing, GPU fatal | Gemma C6 comparison; Qwen3.6/Ornith plain tool tests, C1/C2/C4 и U4 KV там, где умещаются; green только по trace |
+| **A2/P2 OTD observability** · параллельно A1 без тяжёлой GPU нагрузки | **L1 выбранного провайдера** | Haiku reports; L2 на concurrency seams | Process-shutdown, ownership, timestamps, run/slot attribution, trace truncation | Read/transform/copy/hits/evictions, trace+summary reconciliation; marked `NOT_EXPOSED` для метрик, которых нет |
+| **A3/P3 Router trace + replay** · A0+A2 | **L1 выбранного провайдера**, L2 независимый design review | Haiku synthetic event generation; L3 replay audit | Draft/verify/commit lifecycle, cross-slot event correlation, lease semantics | Schema v1, deterministic native LRU parity, C1/C2/C4 synthetic replay, реальные трассы после compute release |
+| **A4/P4 Packed layout** · **реализация уже есть** | **L1 hardening** | L3 независимый integrity review; L2 при race/corruption | Missing/foreign/corrupt payload, concurrent builders, safe publication, require/fallback boundary | Не переписывать packer; добавить negative packs tests + payload integrity contract, проверить `ovms_test *oeExpertsPack*` и GPU filters |
+| **A5/P5 Cache + bounded I/O scheduler** · только после A2+A3 | **L2 High Thinking** | L1 isolated implementation/fixtures; независимый L3 review | L2 назначен сразу: concurrency, demand priority, cancellation и GPU slot lifetime архитектурно высокорисковые | Feature-flagged prototype; no demand starvation, cache-miss dedup, bounded prefetch, no p95/p99 regression, clean native LRU fallback |
+| **A6/P6 CPU expert lane** · независим после A0 | **L1 выбранного провайдера** | Haiku ISA matrix; L2 на kernel/NUMA parity | SIMD layout, divergent numeric kernels, cross-socket ownership | Separate microbenchmark + numerical parity; **не** интегрировать CPU lane в OVMS до реального улучшения |
+| **A7/P7 Integrated reliability** · A1+A4+A5, при разрешённом compute | **L2 High Thinking** | L1 runner, L3 adversarial regression review | L2 назначен сразу: multi-repo/ABI, shutdown/cancel, GPU races, rollback | Pinned candidate, 30–60-min soak, fault injection, C1/C2/C4, original C6 unchanged; fail on protocol/slot/model regression |
+| **A8/P8 Qwen3.8 feasibility** · после A0, не блокирует A5 | **L1 выбранного провайдера** | Haiku manifests; L2 при IR/kernel design | Layer-dependent quant dispatch, model metadata/drafter compatibility ambiguity | Mixed-quant/checkpoint/kernel/KV budget matrix; no invented 32-GiB fit or token/s claim |
 
-**Ориентировочный выбор L2 по умолчанию:** только **A5 и A7**; в A0/A1/A2/A3/A4/A6/A8 Opus включается **по указанному blocker**, а не по номеру этапа. Отдельные высокорисковые A4 негативные тесты reviewer может посмотреть независимо без Opus как автора.
+**Ориентировочный выбор L2 по умолчанию:** только **A5 и A7**; в A0/A1/A2/A3/A4/A6/A8 L2 включается **по указанному blocker**, а не по номеру этапа. Отдельные высокорисковые A4 негативные тесты reviewer может посмотреть независимо без L2 как автора.
 
 ### Реальная готовность до начала нового агентного плана
 
@@ -103,7 +103,7 @@ Every coding-agent stage logs:
 {
   "stage": "A4",
   "task_id": "PACK-REQUIRE-PAYLOAD-CRC",
-  "coding_model": "claude-sonnet-5-5",
+  "coding_model": "OBSERVED_EXACT_MODEL_ID",
   "model_tier": "L1",
   "escalated_from": "claude-haiku-5-5",
   "escalation_reason": "A checksum check may require a new trusted read boundary; implementation ownership is not mechanical.",
@@ -134,4 +134,4 @@ For any model escalation, keep **precise reason, expected benefit, allowed files
 
 ## 6. Resumption note
 
-Read this ledger alongside the [frozen checkpoint](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/blob/4215aa39da160eb742ecd7f0fa2ace5c90d64efa/docs/qwenmonster/CHECKPOINT-OTD-PACK-QWM01-20261022.md). **Next immediate handoff:** Sonnet L1 + Haiku L0 for A0 static gap list and A4 integrity tests; Opus L2 only for a substantive blocked design decision. The existing A4 format is preserved. Until operator authorizes GPU jobs, restrict action to code reviews, docs and offline tests. Nothing in this ledger authorizes a new runtime launch.
+Read this ledger alongside the [frozen checkpoint](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/blob/4215aa39da160eb742ecd7f0fa2ace5c90d64efa/docs/qwenmonster/CHECKPOINT-OTD-PACK-QWM01-20261022.md). **Next immediate handoff:** L1 + L0 for A0 static gap list and A4 integrity tests; L2 only for a substantive blocked design decision. The existing A4 format is preserved. Until operator authorizes GPU jobs, restrict action to code reviews, docs and offline tests. Nothing in this ledger authorizes a new runtime launch.
