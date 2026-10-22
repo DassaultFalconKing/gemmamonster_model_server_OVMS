@@ -8,6 +8,21 @@
 
 **Зафиксированное исключение 2026-10-22:** по явному решению оператора кандидатная GenAI DLL заменила staged runtime и копию рядом с серверным исполняемым файлом. Установленный SHA-256 `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`. Предыдущий SHA-256 `7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da` сохранён в частном hub. Tokenizers не заменялись. `public-source-lock.json` не менялся. Агентам нельзя откатывать или подменять эти DLL без нового явного решения.
 
+## Operator checkpoint 2026-10-22: compute paused
+
+**PAUSED BY OPERATOR; ACCEPTED: NO.** Active operator compilations take priority. Do not launch or resume builds, inference or benchmark workers from this checkpoint. Current all-agent handoff: [HANDOFF-DRAFTERS-20261022.md](HANDOFF-DRAFTERS-20261022.md).
+
+| Track | Current evidence | Remaining gate |
+|---|---|---|
+| W3 disconnect | Source fix `3e3d38a8e` skips premature metrics access | New executable build/regression/live cancel proof NOT RUN by this coordinator; memory reclamation remains unproven |
+| W7 schema compilation | Source fix `8f88ca704` caches XML tool schemas per request | Build/regression and measured cost comparison NOT RUN by this coordinator |
+| W7 MTP extension | Isolated export/transform PASS; short HTTP/SSE/native smoke completed | 2048-input, 2048/4096-output-budget matrix ALL NOT RUN; diagnostic prepared only |
+| W7 AEON DFlash | Export PASS; startup FAILED on missing target hidden-state metadata | Candidate metadata overlay prepared; retry and K4/K6 measurements NOT RUN |
+| W7 EAGLE3 | Existing ordinary IR transform failure reproduced; Zenith MoE v5 source feasibility only | No compatible port or runtime acceptance |
+| W6 drafter agent loops | NOT RUN | Useful tool execution, parser/SSE and actual continuations on the chosen tuple |
+
+The operator explicitly authorized isolated drafter experiments as an extension to the original performance track. They do not replace protocol gates. The operator manually stopped repetitive 100/100 required/named loops; do not restart these as the default workload. Preserve historical evidence without claiming the stopped matrix completed. Exact 2048-token workload is prepared with thinking enabled; long-context speedup, pure prefill and decode results are not yet available. Short 27-input/64-output runs remain smoke only.
+
 ## 0. Цели, scope и правила
 
 **Цели:** правильный native tool calling Qwen3.6 и Ornith; надёжная цепочка reasoning → tool → tool result → continuation; tool_choice none/auto/required/named; SSE, multi-call, malformed XML и bounded recovery; история рассуждений; OpenCode/совместимые harnesses; параллельные сессии; ноль регрессий Gemma4/C6. Измерять автономное делегирование, а не искусственно вынуждать модель создавать агентов.

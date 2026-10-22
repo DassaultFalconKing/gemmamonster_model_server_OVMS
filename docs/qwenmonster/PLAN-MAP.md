@@ -7,6 +7,7 @@
 | Документ | Вопрос | Статус |
 |---|---|---|
 | [MASTER-PLAN.md](MASTER-PLAN.md) | Какие цели R0–R6 и активные W1–W7? | Единственный актуальный рабочий план |
+| [HANDOFF-DRAFTERS-20261022.md](HANDOFF-DRAFTERS-20261022.md) | Current drafter status and all-agent resume contract | Operator compute pause; long-context matrix NOT RUN |
 | [AGENTS.md](../../AGENTS.md) | Как осуществлять изменения, RED/GREEN, шесть полей и privacy? | Обязательная инженерная политика |
 | [ACCEPTANCE.md](ACCEPTANCE.md) | Какой gate необходимо пройти для PASS? | Нормативные acceptance критерии |
 | [STATE.md](STATE.md) | Какой фактический HEAD, результат и NEXT_ACTION? | **Читать самый верхний checkpoint** |

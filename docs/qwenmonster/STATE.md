@@ -1,3 +1,17 @@
+# Current checkpoint: operator compute pause and drafter handoff
+
+- ACTIVE_STAGE: PAUSED BY OPERATOR, 2026-10-22. Status publication only; no new builds or inference. Operator compilations are active and untouched.
+- BASE_SHA / REVERT_POINT: `8f88ca704`; WORK_BRANCH: `qwm01-request-schema`. CURRENT_HEAD: resolve after this documentation commit.
+- DEPENDENCY_LOCK: unchanged. Drafter measurements used executable SHA-256 `3f4316ebc3c843c75215d120a2a542c5df685c1f2d4c3b12d9d1ccca67a3f527` and GenAI DLL `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`. This executable predates source fixes `3e3d38a8e` and `8f88ca704`.
+- LAST_GREEN_TESTS: isolated MTP export/transform; short baseline/K1/K2/K3 HTTP/SSE and native smoke. Smoke is 27 input / 64 output tokens, not long-context acceptance. Exact 2048-token templated workload and private diagnostic prepared; final diagnostic validation NOT RUN.
+- CURRENT_FAILURE: AEON startup lacks target hidden-state metadata (1/5 fallback outputs). Candidate metadata overlay exists but has not been runtime-tested. Ordinary EAGLE3 IR paged-attention transform fails. Full long-context matrix and drafter agentic gates NOT RUN. External worker reached its step limit and exited; no benchmark runner was launched.
+- ROOT_CAUSE: see handoff for separate export, target metadata, transform and diagnostic API boundaries. Neither short token-rate measurements nor process exit prove operational acceptance.
+- NEXT_ACTION: wait for operator release of compute. Then validate existing diagnostic, run baseline and MTP K3 with honest separate prefill/TTFT/decode metrics, review results, extend candidate matrix and useful tool-result loops. Do not restart repetitive 100/100 loops by default.
+- EVIDENCE_PATH: [HANDOFF-DRAFTERS-20261022.md](HANDOFF-DRAFTERS-20261022.md); exact machine paths/raw evidence remain private. MASTER-PLAN.md has synchronized statuses.
+- ACCEPTED: NO. No persistent OVMS or diagnostic process active at the pause snapshot; operator compiler left running.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: mid-generation disconnect measured
 
 - ACTIVE_STAGE: a streaming request on the installed candidate DLL was closed after content tokens had started. Memory did not return while that process stayed alive. ACCEPTED stays NO.
