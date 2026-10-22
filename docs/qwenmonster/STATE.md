@@ -1,3 +1,18 @@
+# Current implementation checkpoint: installed candidate DLL live-reviewed
+
+- ACTIVE_STAGE: the installed candidate GenAI DLL was loaded by the server and reviewed on unary, SSE, disconnect-follow-up, and one required city tool call. ACCEPTED stays NO.
+- BASE_SHA / REVERT_POINT: `cb17e2867646d233d0317523f2d576d957148670`. CURRENT_HEAD: resolve with `git rev-parse HEAD` after this commit.
+- WORK_BRANCH: `qwm01-request-schema` → `origin/feature/qwenmonster-qwm01-request-schema-20261021`.
+- DEPENDENCY_LOCK: unchanged. Loaded module SHA-256 `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`.
+- LAST_GREEN_TESTS: the listening process loaded that hash. Unary `max_tokens=16` returned `finish_reason=length`, 16 completion tokens, content `NUMBER 1 2 3 4 5 6 7 `. SSE ended with `length` and `[DONE]`. After a client socket close, the follow-up returned `finish_reason=stop` and content `OK`. One non-streaming tool call returned `finish_reason=tool_calls` and `get_weather` with `city` `Paris`. The executor log returned to 0 requests. The server was stopped.
+- CURRENT_FAILURE: cancel is NOT_PROVEN. Working set stayed about 1.5 MiB above the pre-request sample, and the log has no generation-handle stop line. Executor drain to 0 also happens on normal completion. Undeclared-required empty XML remains. 100/100 required, named, and autonomous loops are not this run.
+- ROOT_CAUSE: n/a. The loaded module is the installed candidate, so this run is not the earlier side-by-side process.
+- NEXT_ACTION: cancel/resource measurement remains open. Do not edit the public lock. Keep ACCEPTED NO.
+- EVIDENCE_PATH: XGRAMMAR-650-NOTE.md. Raw JSON stays in the private hub.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: candidate GenAI DLL installed
 
 - ACTIVE_STAGE: the isolated candidate replaced both the staged runtime GenAI DLL and the copy beside the server executable. Originals were kept privately. ACCEPTED stays NO.

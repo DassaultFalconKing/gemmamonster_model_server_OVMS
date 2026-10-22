@@ -1,8 +1,8 @@
 # XGrammar #650 end-marker note (source port measured, gate OPEN)
 
-Status: **CANDIDATE DLL INSTALLED OVER THE STAGED RUNTIME AND THE SERVER-ADJACENT COPY. LOCK UNCHANGED. ACCEPTED: NO.**
+Status: **INSTALLED CANDIDATE DLL LIVE-REVIEWED. LOCK UNCHANGED. ACCEPTED: NO.**
 
-Installed SHA-256 `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`. Previous SHA-256 `7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da`, retained privately. Tokenizers were not replaced. Live runs of this installed copy are delegated and not yet reviewed.  
+Installed SHA-256 `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`. Previous SHA-256 `7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da`, retained privately. Tokenizers were not replaced. The listening process loaded the installed hash. Unary and SSE `max_tokens=16` returned `length` (16 completion tokens, content `NUMBER 1 2 3 4 5 6 7 `) and SSE contained `[DONE]`. After client close, the follow-up returned `stop` / `OK`. One required city tool call returned `tool_calls` and `get_weather({"city":"Paris"})`. Cancel remains NOT_PROVEN: working set stayed about 1.5 MiB above the pre-request sample, with no generation-handle stop line. The server was stopped.  
 Recorded: 2026-10-22  
 Upstream: [#650](https://github.com/mlc-ai/xgrammar/issues/650), proposed fix [PR #651](https://github.com/mlc-ai/xgrammar/pull/651) (unmerged; the fork carries an equivalent on its own Aho-Corasick builder).
 
@@ -20,7 +20,7 @@ This is a **decoder-mask / TagDispatch** defect. Parser rejection of malformed X
 
 ## What is now measured
 
-The dedicated fork branch `fix/qwenmonster-xml-end-marker-lock-20261022` at `5b0b7084a65a2059b44c03fbc6320ad7fcc41f33` adds `lock_excluded_prefixes` and sets it on the XML `xml_string` rule. GenAI `8f305a1c1bc11e348c8ad0cc37269a91ba21cc74` fetches that revision. An isolated candidate DLL contains the string `lock_excluded_prefixes`; the staged DLL does not. The public lock and the staged runtime were not changed.
+The dedicated fork branch `fix/qwenmonster-xml-end-marker-lock-20261022` at `5b0b7084a65a2059b44c03fbc6320ad7fcc41f33` adds `lock_excluded_prefixes` and sets it on the XML `xml_string` rule. GenAI `8f305a1c1bc11e348c8ad0cc37269a91ba21cc74` fetches that revision. The candidate DLL contains the string `lock_excluded_prefixes`; the previous staged file does not. That candidate later replaced the staged runtime and the copy beside the server. The public lock was not changed.
 
 The native matcher linked to that candidate static library reported 43/43 PASS and `SUMMARY failures=0`:
 
@@ -37,9 +37,9 @@ Undeclared-required `{type:object, required:[a]}` still accepts empty XML. That 
 1. Compatible #651 (or equivalent) backport on a dedicated XGrammar branch. **Done** at `5b0b708`.
 2. RED→GREEN mask evidence on the actual Qwen tokenizer at the token where `</parameter>` and `</parameter1>` diverge. **Done** on the Qwen3-8B unit tokenizer, vocab 151669. The common prefix is 9 tokens. Token 16 (`1`), token 55 (`X`), token 9174 (`_function`) and token 9685 (`/>`) are masked off. Token 29 (`>`) is allowed, the good sequence completes, and each bad sequence is rejected. Masks at the shorter character prefixes inside `</parameter` were not enumerated; the lock applies at the penultimate prefix, which is this divergence.
 3. Separate parser fixtures remain required but are insufficient alone (`MALFORMED-ENVELOPE-RED.txt` / partition corpus).
-4. A live probe that loads the candidate DLL, not the staged runtime. **Done** for unary and SSE `max_tokens=16` (`length`, 16 completion tokens) and a follow-up `stop` / `OK` after client close. The process module list matched the candidate DLL. Cancel and resource reclamation remain unproven. The server was stopped.
+4. A live probe that loads the candidate DLL. **Done** twice. The first process was side-by-side, before the files were installed. The installed copy was then loaded by the listening process at SHA-256 `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`: unary and SSE `max_tokens=16` (`length`, 16 completion tokens), a follow-up `stop` / `OK` after client close, and one required city tool call (`tool_calls`, `city` `Paris`). Cancel and resource reclamation remain unproven. The server was stopped. This live slice does not exercise the `</parameter1>` mask.
 
 ## Explicit non-actions
 
-- No public-lock edit and no staged-runtime swap.
-- Do not treat the synthetic mask or the string accept/reject result as live acceptance.
+- No public-lock edit. The staged runtime replacement is recorded above and is not a lock change.
+- Do not treat the synthetic mask, the string accept/reject result, or this live slice as acceptance.
