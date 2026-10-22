@@ -256,6 +256,11 @@ struct ServerSettingsImpl {
     uint32_t memoryTrimmingIntervalSeconds = 300;
     uint32_t idleUnloadTimeoutSeconds = 0;
     std::string cacheDir;
+    // Directory of pre-packed MoE routed-expert files used by GPU offload-to-disk.
+    // When set, GPU compilation requires a valid pack for every offloaded MoE layer.
+    std::string moeExpertsPackDir;
+    // Load all configured servables only to (re)build packs into moeExpertsPackDir, then exit.
+    bool buildMoeExpertsPack = false;
     bool withPython = false;
     bool startedWithCLI = false;
     ConfigExportType exportConfigType = UNKNOWN_MODEL;

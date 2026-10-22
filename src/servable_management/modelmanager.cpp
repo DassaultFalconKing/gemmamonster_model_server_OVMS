@@ -257,8 +257,9 @@ Status ModelManager::start(const Config& config) {
     Status status;
     this->startedWithConfigFile = (config.configPath() != "");
 
-    // Initialize model group manager if idle unload is enabled and using config file
-    if (this->startedWithConfigFile && config.idleUnloadTimeoutSeconds() > 0) {
+    // Initialize model group manager if idle unload is enabled and using config file.
+    // Building MoE experts packs must compile every servable, so lazy (sleeping) groups are disabled.
+    if (this->startedWithConfigFile && config.idleUnloadTimeoutSeconds() > 0 && !config.getServerSettings().buildMoeExpertsPack) {
         servableGroupManager = std::make_unique<ServableGroupManager>(static_cast<uint64_t>(config.idleUnloadTimeoutSeconds()) * 1'000'000ULL);
         SPDLOG_INFO("Model group idle management enabled with {}s timeout", config.idleUnloadTimeoutSeconds());
     }

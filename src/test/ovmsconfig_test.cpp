@@ -175,6 +175,46 @@ TEST_F(OvmsConfigDeathTest, negativeConfigPathWithPluginConfig) {
     EXPECT_EXIT(ovms::Config::instance().parse(arg_count, n_argv), ::testing::ExitedWithCode(OVMS_EX_USAGE), "Model parameters in CLI are exclusive with the config file");
 }
 
+TEST_F(OvmsConfigDeathTest, buildMoeExpertsPackRequiresPackDir) {
+    const char* n_argv[] = {"ovms", "--config_path", "/path1", "--build_moe_experts_pack"};
+    int arg_count = 4;
+    EXPECT_EXIT(ovms::Config::instance().parse(arg_count, n_argv), ::testing::ExitedWithCode(OVMS_EX_USAGE), "--build_moe_experts_pack requires --moe_experts_pack_dir");
+}
+
+TEST_F(OvmsConfigDeathTest, buildMoeExpertsPackExclusiveWithPull) {
+    const char* n_argv[] = {"ovms", "--pull", "--source_model", "some/model", "--model_repository_path", "/models", "--task", "text_generation",
+        "--build_moe_experts_pack", "--moe_experts_pack_dir", "/packs"};
+    int arg_count = 11;
+    EXPECT_EXIT(ovms::Config::instance().parse(arg_count, n_argv), ::testing::ExitedWithCode(OVMS_EX_USAGE), "--build_moe_experts_pack cannot be used with --pull");
+}
+
+TEST_F(OvmsConfigDeathTest, buildMoeExpertsPackExclusiveWithListModels) {
+    const char* n_argv[] = {"ovms", "--list_models", "--model_repository_path", "/models", "--build_moe_experts_pack", "--moe_experts_pack_dir", "/packs"};
+    int arg_count = 7;
+    EXPECT_EXIT(ovms::Config::instance().parse(arg_count, n_argv), ::testing::ExitedWithCode(OVMS_EX_USAGE), "--build_moe_experts_pack cannot be used with --list_models");
+}
+
+TEST(OvmsConfigTest, buildMoeExpertsPackWithConfigPathNeedsNoPorts) {
+    const char* n_argv[] = {"ovms", "--config_path", "/path/to/config", "--build_moe_experts_pack", "--moe_experts_pack_dir", "/packs"};
+    int arg_count = 6;
+    auto& config = ovms::Config::instance();
+    config.parse(arg_count, n_argv);
+    EXPECT_TRUE(config.validate());
+    EXPECT_TRUE(config.getServerSettings().buildMoeExpertsPack);
+    EXPECT_EQ(config.getServerSettings().moeExpertsPackDir, "/packs");
+    EXPECT_EQ(config.getServerSettings().serverMode, ovms::SERVING_MODELS_MODE);
+}
+
+TEST(OvmsConfigTest, moeExpertsPackDirForServing) {
+    const char* n_argv[] = {"ovms", "--config_path", "/path/to/config", "--rest_port", "8080", "--moe_experts_pack_dir", "/packs"};
+    int arg_count = 7;
+    auto& config = ovms::Config::instance();
+    config.parse(arg_count, n_argv);
+    EXPECT_TRUE(config.validate());
+    EXPECT_FALSE(config.getServerSettings().buildMoeExpertsPack);
+    EXPECT_EQ(config.getServerSettings().moeExpertsPackDir, "/packs");
+}
+
 TEST_F(OvmsConfigDeathTest, negativeMissingPathAndName) {
     const char* n_argv[] = {"ovms", "--rest_port", "8080"};
     int arg_count = 3;

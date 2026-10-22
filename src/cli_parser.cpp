@@ -292,6 +292,16 @@ std::variant<bool, std::pair<int, std::string>> CLIParser::parse(int argc, const
                 cxxopts::value<std::string>(),
                 "EXTRA_QUANTIZATION_PARAMS");
 
+        options->add_options("moe experts pack")
+            ("build_moe_experts_pack",
+            "Load all configured servables only to build pre-packed MoE routed-expert files for GPU offload-to-disk into --moe_experts_pack_dir, then exit. Existing valid packs are reused.",
+            cxxopts::value<bool>()->default_value("false"),
+            "BUILD_MOE_EXPERTS_PACK")
+            ("moe_experts_pack_dir",
+            "Directory of pre-packed MoE routed-expert files. When set without --build_moe_experts_pack, every GPU MoE layer with offload-to-disk enabled requires a valid pack and fails to load otherwise.",
+            cxxopts::value<std::string>(),
+            "MOE_EXPERTS_PACK_DIR");
+
         options->add_options("single model")
             ("model_name",
                 "Name of the model",
@@ -531,6 +541,18 @@ std::variant<bool, std::pair<int, std::string>> CLIParser::parse(int argc, const
             ss << "error parsing options - --model_path cannot be used with --remove_from_config" << std::endl;
             return std::make_pair(OVMS_EX_USAGE, ss.str());
         }
+        if (result->count("build_moe_experts_pack")) {
+            if (!result->count("moe_experts_pack_dir")) {
+                ss << "error parsing options - --build_moe_experts_pack requires --moe_experts_pack_dir" << std::endl;
+                return std::make_pair(OVMS_EX_USAGE, ss.str());
+            }
+            for (const char* exclusive : {"pull", "configure", "list_models", "add_to_config", "remove_from_config"}) {
+                if (result->count(exclusive)) {
+                    ss << "error parsing options - --build_moe_experts_pack cannot be used with --" << exclusive << std::endl;
+                    return std::make_pair(OVMS_EX_USAGE, ss.str());
+                }
+            }
+        }
 #pragma warning(push)
 #pragma warning(disable : 4129)
         if (result->count("version")) {
@@ -548,7 +570,7 @@ std::variant<bool, std::pair<int, std::string>> CLIParser::parse(int argc, const
         }
 
         if (result->count("help") || result->arguments().size() == 0) {
-            ss << options->help({"", "multi model", "single model", "pull hf model", "generative task (applies to: pull hf model, configure, single model)"}) << std::endl;
+            ss << options->help({"", "multi model", "single model", "pull hf model", "moe experts pack", "generative task (applies to: pull hf model, configure, single model)"}) << std::endl;
             ss << "configure mode (create or update graph.pbtxt for a local model):" << std::endl;
             ss << "  ovms --configure --model_path <MODEL_PATH> --task <TASK> [TASK OPTIONS ...]" << std::endl;
             ss << std::endl;
@@ -612,6 +634,9 @@ void CLIParser::prepareServer(ServerSettingsImpl& serverSettings) {
     serverSettings.memoryTrimmingIntervalSeconds = result->operator[]("memory_trimming_interval_seconds").as<uint32_t>();
 
     serverSettings.idleUnloadTimeoutSeconds = result->operator[]("idle_unload_timeout_seconds").as<uint32_t>();
+    if (result->count("moe_experts_pack_dir"))
+        serverSettings.moeExpertsPackDir = result->operator[]("moe_experts_pack_dir").as<std::string>();
+    serverSettings.buildMoeExpertsPack = result->operator[]("build_moe_experts_pack").as<bool>();
     serverSettings.grpcWorkers = result->operator[]("grpc_workers").as<uint32_t>();
 
     if (result->count("log_level"))

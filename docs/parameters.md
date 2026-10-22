@@ -71,6 +71,20 @@ Notes:
 - The first request after an idle unload pays the reload latency. Combine with [model caching](model_cache.md) (`--cache_dir`) so the reload is a fast cache import rather than a full recompile.
 - The servable reports as `AVAILABLE` while idle-unloaded and reloads on demand. The `ovms_graph_loaded` metric reports `1` when loaded and `0` when idle-unloaded.
 
+## MoE experts pack options
+
+GPU MoE offload-to-disk (`OFFLOAD_RATIO` in the GPU plugin config) reads non-resident routed experts from disk on a cache miss. A pre-packed layout stores every expert of a MoE layer as one aligned, already-transposed record, so a miss is a single read. Packs are built once per model in a dedicated run, similar to `--pull`, and the serving run then requires them.
+
+| Option | Value format | Description |
+|--------|--------------|-------------|
+| `build_moe_experts_pack` | `NA` | Loads all configured servables (same `--config_path` or `--model_path` arguments as for serving), builds one pack file per offloaded MoE layer into `moe_experts_pack_dir` and exits. Valid existing packs are reused. gRPC and REST are not started, so ports are not required. Fails if any servable does not load or no pack was produced. |
+| `moe_experts_pack_dir` | `string` | Directory with MoE experts packs. Without `--build_moe_experts_pack`, every offloaded MoE layer must have a valid pack in this directory, otherwise the servable fails to load. |
+
+```
+ovms --config_path <CONFIG> --build_moe_experts_pack --moe_experts_pack_dir <PACK_DIR>
+ovms --config_path <CONFIG> --rest_port 8000 --moe_experts_pack_dir <PACK_DIR>
+```
+
 ## Config management mode options
 
 Configuration options for the config management mode, which is used to manage config file in the model repository.
