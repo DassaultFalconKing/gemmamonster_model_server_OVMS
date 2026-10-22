@@ -32,7 +32,7 @@
 
 R0 → R1 official template/token IDs → R4 reasoning handoff → R5 real autonomous loops. Параллельно R2 parser + R3 policy/grammar; R3 требует отдельной проверки #802 candidate installed DLL и фикса #650. Стресс R5 зависит от W1 resource accounting. R6 возможен после принятия Qwen3.6.
 
-**Текущая очередь MASTER W1–W7:** W3 cancel/resource — текущее измерение. W4: исходный порт и маска tokenizer сделаны, живая проба `</parameter1>` не запускалась. W5: кандидатная DLL установлена явным решением, lock не менялся, live unary/SSE/city разобраны. W2 native matrix 24 PASS / 4 OPEN; Jinja history всё ещё открыта. W6 и W7 позже: 100/100, autonomous loops, 1/2/4.
+**Текущая очередь MASTER W1–W7:** W3 cancel/resource измерен и остаётся NOT_PROVEN: private bytes не вернулись, система получила память только после выхода процесса; disconnect падает на `generation_stream.hpp:136`. W4: исходный порт и маска tokenizer сделаны, живая проба `</parameter1>` не запускалась. W5: кандидатная DLL установлена явным решением, lock не менялся. W2 native matrix 24 PASS / 4 OPEN; Jinja history открыта. W6 и W7 позже.
 
 ## 4. Документальный timeline: почему старые NOT RUN не главные
 

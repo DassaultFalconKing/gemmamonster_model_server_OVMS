@@ -42,6 +42,8 @@ Same tip binary, existing GPU profile (`OFFLOAD_RATIO` 20, `max_num_seqs` 1), mo
 
 The listening process loaded SHA-256 `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`. Unary and SSE `max_tokens=16` again returned `length`. The follow-up after a first-chunk socket close returned `stop` / `OK`. One required city tool call returned `tool_calls` with `Paris`. Working set stayed about 1.5 MiB above the pre-request sample. The executor log returned to 0 requests, which also happens on normal completion. No generation-handle stop line was present. Cancel stays NOT_PROVEN. The server was stopped.
 
+A later run closed the socket only after three content events (`NUMBER 1`, `max_tokens=256`). Private bytes moved from 15965.5 MiB to 16121.3 MiB and were unchanged at both 5 s and 15 s. Working set moved from 2764.0 MiB to 16113.2 MiB and stayed there. The same disconnect failed `LLMExecutor` at `generation_stream.hpp:136` because perf metrics are read before generation has completed. The process stayed up and the follow-up returned `OK`. System memory returned only after that process was stopped. Cancel stays NOT_PROVEN.
+
 ## Still NOT RUN / OPEN
 
 - Generation-handle cancel with resource reclamation proof

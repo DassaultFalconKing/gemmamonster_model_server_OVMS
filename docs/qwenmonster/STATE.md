@@ -1,3 +1,18 @@
+# Current implementation checkpoint: mid-generation disconnect measured
+
+- ACTIVE_STAGE: a streaming request on the installed candidate DLL was closed after content tokens had started. Memory did not return while that process stayed alive. ACCEPTED stays NO.
+- BASE_SHA / REVERT_POINT: `af3b0099dc7e140a9805ae31e7a1faf204abba04`. CURRENT_HEAD: resolve with `git rev-parse HEAD` after this commit.
+- WORK_BRANCH: `qwm01-request-schema` → `origin/feature/qwenmonster-qwm01-request-schema-20261021`.
+- DEPENDENCY_LOCK: unchanged. Loaded module SHA-256 `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`.
+- LAST_GREEN_TESTS: three content SSE events arrived (`NUMBER 1`), then the socket was closed. The executor log reached `All requests: 0` 0.27 s after the disconnect error. The follow-up returned `finish_reason=stop` and content `OK`. The server was then stopped, and the listening port was closed.
+- CURRENT_FAILURE: cancel is NOT_PROVEN. Private bytes were 15965.5 MiB before the request and 16121.3 MiB at both 5 s and 15 s after the close (+155.8 MiB). Working set rose from 2764.0 MiB to 16113.2 MiB and stayed there; that is residency of memory already committed, not a release. No generation-handle stop line. The disconnect also failed the executor with `generation_stream.hpp:136`: perf metrics are not available until generation has completed. The process survived that error. Undeclared-required empty XML remains.
+- ROOT_CAUSE: n/a for the memory samples. The perf-metrics assertion fires because stop/disconnect reads metrics before generation has completed.
+- NEXT_ACTION: the perf-metrics assertion is the concrete disconnect RED. Do not treat process exit as resource reclamation. Do not edit the public lock. Keep ACCEPTED NO.
+- EVIDENCE_PATH: W3-LENGTH-CANCEL.md. Raw JSON stays in the private hub.
+- ACCEPTED: NO.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current implementation checkpoint: installed candidate DLL live-reviewed
 
 - ACTIVE_STAGE: the installed candidate GenAI DLL was loaded by the server and reviewed on unary, SSE, disconnect-follow-up, and one required city tool call. ACCEPTED stays NO.

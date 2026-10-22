@@ -43,7 +43,7 @@
 
 1. Маска Qwen3-8B tokenizer на расхождении `</parameter` — сделано, 71/71.
 2. Живой прогон установленной кандидатной DLL — сделано: hash совпал, unary/SSE `length`, follow-up `OK`, один required city. Сервер остановлен. Это не acceptance и не проба `</parameter1>`.
-3. **Текущий пункт:** cancel и возврат ресурсов на этой же DLL. Обрыв после первого SSE-chunk и рабочий набор примерно на 1.5 МиБ выше базового замера — NOT_PROVEN. Повтор такого раннего обрыва не засчитывается. `stop()` в disconnect callback уже есть; правку продукта из отсутствия строки лога не выдумывать.
+3. **Измерено 2026-10-22, всё ещё NOT_PROVEN:** обрыв после трёх content-событий (`NUMBER 1`, далеко ниже `max_tokens=256`). Executor стал `All requests: 0` через 0.27 с. Private bytes: 15965.5 МиБ до запроса, 16121.3 МиБ и через 5 с, и через 15 с (+155.8 МиБ). Working set вырос с 2764.0 до 16113.2 МиБ и не снизился: это резидентность уже выделенной памяти, не освобождение. Строки остановки handle нет. Обрыв уронил executor проверкой `generation_stream.hpp:136` (perf metrics недоступны, пока генерация не завершена); процесс после этого жил и ответил `OK`. Память системы вернулась только когда процесс завершили. Это не доказательство возврата ресурсов. Правку продукта из этого RED ещё не начинать, пока разбор не зафиксирован отдельно.
 4. Undeclared-required пустой XML — зафиксированный остаток. Без отдельного контракта грамматику не менять.
 5. Public lock и ACCEPTED не двигать. Нужно отдельное решение после разобранных измерений.
 
@@ -130,7 +130,7 @@ Qwen3.8, Flash/Next и Ornith регистрировать по capability profi
 5. Тест: real LENGTH, STOP, CANCEL, retry, Qwen/Gemma/generic.
 6. Источник: STREAMING-LIFECYCLE-DECISION.md и EXTERNAL-GATES-20261021.md.
 
-**Статус 2026-10-22:** unit `CbChatStreamingPreservesBackendLengthFinishReason` PASS. Live unary/SSE `length` и follow-up `OK` PASS на установленной кандидатной DLL. Generation-handle cancel и возврат памяти NOT_PROVEN. Новую правку продукта не начинать, пока измерение не даст конкретный RED.
+**Статус 2026-10-22:** unit `CbChatStreamingPreservesBackendLengthFinishReason` PASS. Live unary/SSE `length` и follow-up `OK` PASS на установленной кандидатной DLL. Поздний обрыв после начавшегося контента тоже NOT_PROVEN: private bytes +155.8 МиБ и не вернулись за 15 с, working set вырос до размера уже committed памяти и остался. Disconnect при этом падает на `generation_stream.hpp:136`. Процесс после ошибки жив. Новую правку не начинать, пока этот RED не разобран отдельно.
 
 ### W4 · XGrammar #650 + required-key gap (P0, R3)
 1. Причина: #802 не исправляет </parameter1> и required вне declared properties.
