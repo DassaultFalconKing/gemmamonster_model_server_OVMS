@@ -1,6 +1,6 @@
 # W3 — LENGTH / CANCEL lifecycle (unit measured)
 
-Status: **CHAT STREAM UNIT PASS. LIVE max_tokens PASS. CANCEL NOT PROVEN. ACCEPTED: NO.**  
+Status: **CHAT STREAM UNIT PASS. LIVE max_tokens PASS ON THE INSTALLED CANDIDATE DLL. CANCEL NOT PROVEN. ACCEPTED: NO.**  
 Master-plan card: W3.
 
 ## Source contract (already in tree)
@@ -37,6 +37,10 @@ Same tip binary, existing GPU profile (`OFFLOAD_RATIO` 20, `max_num_seqs` 1), mo
 - SSE `max_tokens=16`: HTTP 200, final `finish_reason=length`, `[DONE]` present, no `stop`.
 - Client closed the socket after the first SSE event (379 bytes). Executor samples then showed 0 scheduled requests. That does **not** prove generation-handle cancel or resource reclamation.
 - Next unary (`Reply with exactly OK.`): HTTP 200, `finish_reason=stop`, content `OK`.
+
+## Installed-candidate rerun (2026-10-22)
+
+The listening process loaded SHA-256 `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`. Unary and SSE `max_tokens=16` again returned `length`. The follow-up after a first-chunk socket close returned `stop` / `OK`. One required city tool call returned `tool_calls` with `Paris`. Working set stayed about 1.5 MiB above the pre-request sample. The executor log returned to 0 requests, which also happens on normal completion. No generation-handle stop line was present. Cancel stays NOT_PROVEN. The server was stopped.
 
 ## Still NOT RUN / OPEN
 

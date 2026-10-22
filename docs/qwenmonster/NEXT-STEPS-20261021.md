@@ -1,3 +1,5 @@
+> **2026-10-22 standing:** read the top of STATE.md and «Где стоит очередь» in MASTER-PLAN.md. The paragraphs below are earlier snapshots. The installed candidate GenAI DLL (`442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`) is live-reviewed for length, SSE, and one required city. Cancel and resource reclamation are the open measurement. The public lock is unchanged. **ACCEPTED: NO.**
+
 > Native implementation checkpoint: R1 configure/build and 28-row matrix executed (24 PASS, 4 known OPEN, 0 unexpected); original checks PASS in hard/lazy modes. CB parser failure reproduced with native RED, patched at shared serializer and LM/VLM handle owners. Final test integration results are recorded in CB-PARSER-FAILURE.md. Runtime handle stop/resource reclamation and new dependency cohort remain NOT RUN.
 
 > Resource tooling checkpoint: passive collector and 10 tests implemented; 28 combined tests and 3 idle samples PASS. Before/during/after load characterization is not closed by idle results. See RESOURCE-PROBE.md.

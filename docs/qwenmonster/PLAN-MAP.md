@@ -1,6 +1,6 @@
 # QWENMONSTER — карта планов
 
-**Точка входа:** [MASTER-PLAN.md](MASTER-PLAN.md). **ACCEPTED: NO.** Версия 2026-10-21. Генеральный R0–R6 получен из пользовательской программы, а не из производных source-only отчётов.
+**Точка входа:** [MASTER-PLAN.md](MASTER-PLAN.md). **ACCEPTED: NO.** Версия 2026-10-22. Генеральный R0–R6 получен из пользовательской программы, а не из производных source-only отчётов. Текущий пункт очереди — раздел «Где стоит очередь» в MASTER-PLAN и верх STATE.md.
 
 ## 1. Иерархия и приоритет
 
@@ -22,8 +22,8 @@
 |---|---|---|
 | **R0** frozen baseline/upstream | [C6-BASELINE.md](C6-BASELINE.md), [UPSTREAM-ARCHAEOLOGY.md](UPSTREAM-ARCHAEOLOGY.md), [COMPARATIVE-QWEN-PARSER-VERDICT.md](COMPARATIVE-QWEN-PARSER-VERDICT.md), [PUBLIC-COHORT-INTEGRATION.md](PUBLIC-COHORT-INTEGRATION.md), [public-source-lock.json](public-source-lock.json) | Source freeze подтверждён, отдельный C6 live сравнить |
 | **R1** templates/history | [GENERATION-POLICY-DESIGN.md](GENERATION-POLICY-DESIGN.md), [ACCEPTANCE.md](ACCEPTANCE.md), fixtures/ | Canonical Jinja + 50/100-turn tokens OPEN; 28-row R1 runner относится к XML schema, не Jinja |
-| **R2** XML streaming/parser | [STREAMING-LIFECYCLE-DECISION.md](STREAMING-LIFECYCLE-DECISION.md), [SCHEMA-VALIDATION-PROFILE.md](SCHEMA-VALIDATION-PROFILE.md), [PROTOCOL-MATRIX.md](PROTOCOL-MATRIX.md), [PARALLEL-INDEPENDENT-CODING.md](PARALLEL-INDEPENDENT-CODING.md) | Qwen69/69 и 2340 partitions; LENGTH/CANCEL OPEN |
-| **R3** tool generation | [GENERATION-POLICY-DESIGN.md](GENERATION-POLICY-DESIGN.md), [XGRAMMAR-650-NOTE.md](XGRAMMAR-650-NOTE.md), [XGRAMMAR-802-COHORT-PROPOSAL.md](XGRAMMAR-802-COHORT-PROPOSAL.md), [WHITESPACE-DEFECT-TAXONOMY.md](WHITESPACE-DEFECT-TAXONOMY.md) | Policy9/9; #802 native only; #650 и undeclared-required OPEN |
+| **R2** XML streaming/parser | [STREAMING-LIFECYCLE-DECISION.md](STREAMING-LIFECYCLE-DECISION.md), [W3-LENGTH-CANCEL.md](W3-LENGTH-CANCEL.md), [SCHEMA-VALIDATION-PROFILE.md](SCHEMA-VALIDATION-PROFILE.md), [PROTOCOL-MATRIX.md](PROTOCOL-MATRIX.md), [PARALLEL-INDEPENDENT-CODING.md](PARALLEL-INDEPENDENT-CODING.md) | Qwen69/69 и 2340 partitions; live LENGTH измерен; CANCEL OPEN |
+| **R3** tool generation | [GENERATION-POLICY-DESIGN.md](GENERATION-POLICY-DESIGN.md), [XGRAMMAR-650-NOTE.md](XGRAMMAR-650-NOTE.md), [XGRAMMAR-802-COHORT-PROPOSAL.md](XGRAMMAR-802-COHORT-PROPOSAL.md), [WHITESPACE-DEFECT-TAXONOMY.md](WHITESPACE-DEFECT-TAXONOMY.md) | Policy9/9; #650 tokenizer mask измерен; кандидатная DLL установлена, lock не менялся; undeclared-required и 100/100 OPEN |
 | **R4** reasoning/tool phase | [ACCEPTANCE.md](ACCEPTANCE.md), [OVMS-MODEL-FAMILY-ADAPTATION-PROTOCOL.md](OVMS-MODEL-FAMILY-ADAPTATION-PROTOCOL.md) | Full phase matrix OPEN |
 | **R5** multi-turn/agents | [FOLLOWUP-20261021.md](FOLLOWUP-20261021.md), [EXTERNAL-GATES-20261021.md](EXTERNAL-GATES-20261021.md), [NEXT-STEPS-20261021.md](NEXT-STEPS-20261021.md) | HTTP400 17/17 + controlled two-turn20/20; autonomous20,100 calls,2/4 agents,1/2/4 requests OPEN |
 | **R6** Qwen3.8/Next | [OVMS-MODEL-FAMILY-ADAPTATION-PROTOCOL.md](OVMS-MODEL-FAMILY-ADAPTATION-PROTOCOL.md) | Deferred separate model capability profiles |
@@ -32,7 +32,7 @@
 
 R0 → R1 official template/token IDs → R4 reasoning handoff → R5 real autonomous loops. Параллельно R2 parser + R3 policy/grammar; R3 требует отдельной проверки #802 candidate installed DLL и фикса #650. Стресс R5 зависит от W1 resource accounting. R6 возможен после принятия Qwen3.6.
 
-**Текущая очередь MASTER W1–W7:** W1 resource/receipts → W2 real 28-row matrix + Jinja history → W3 actual backend termination → W4 XGrammar #650/required gap → W5 isolated GenAI candidate cohort → W6 100 required/named + autonomous20 + 2/4 subagents + concurrency → W7 profile-driven optimization.
+**Текущая очередь MASTER W1–W7:** W3 cancel/resource — текущее измерение. W4: исходный порт и маска tokenizer сделаны, живая проба `</parameter1>` не запускалась. W5: кандидатная DLL установлена явным решением, lock не менялся, live unary/SSE/city разобраны. W2 native matrix 24 PASS / 4 OPEN; Jinja history всё ещё открыта. W6 и W7 позже: 100/100, autonomous loops, 1/2/4.
 
 ## 4. Документальный timeline: почему старые NOT RUN не главные
 

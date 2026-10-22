@@ -1,10 +1,12 @@
 # QWENMONSTER — генеральная рабочая программа R0–R6
 
-**ACTIVE · ACCEPTED: NO · 2026-10-21**
+**ACTIVE · ACCEPTED: NO · 2026-10-22**
 
 Первоисточник: пользовательская программа «QWENMONSTER — C6 Protocol & Agentic Reliability Program» от 2026-10-21. Эта редакция сохраняет её нормативные R0–R6, первоначальные требования и gates, объединяет измеренные QWM-01/Ornith/Gemma/XGrammar результаты и даёт единую очередь W1–W7. Навигация: [PLAN-MAP.md](PLAN-MAP.md).
 
-**Неприкосновенные границы:** исходный C6 c6-head-mainline-20261020@ba6ec792c3121850fea167fa7d7e190b25fcdc76, основной установленный runtime и принятый public-source-lock.json не изменять. XGrammar #802@b288dca18ee25d2f35197fb3971334ca049c8554 — отдельный кандидат, НЕ часть lock или установленного GenAI. Для новых бинарников использовать только изолированные worktree и отдельный candidate runtime. Публичные документы не должны содержать локальную карту компьютера, пути, токены и raw логи: только placeholders <WORKTREE>, <MODEL_DIR>, <CANDIDATE_RUNTIME>, <PRIVATE_EVIDENCE>.
+**Неприкосновенные границы:** исходный C6 c6-head-mainline-20261020@ba6ec792c3121850fea167fa7d7e190b25fcdc76 и принятый public-source-lock.json не изменять. XGrammar #802@b288dca18ee25d2f35197fb3971334ca049c8554 — отдельный кандидат, НЕ часть lock. Публичные документы не должны содержать локальную карту компьютера, пути, токены и raw логи: только placeholders <WORKTREE>, <MODEL_DIR>, <CANDIDATE_RUNTIME>, <PRIVATE_EVIDENCE>.
+
+**Зафиксированное исключение 2026-10-22:** по явному решению оператора кандидатная GenAI DLL заменила staged runtime и копию рядом с серверным исполняемым файлом. Установленный SHA-256 `442452056e06c3a7e05d71ca082e9f30fd0034c8f6dcf5b2e56f04f140599e4d`. Предыдущий SHA-256 `7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da` сохранён в частном hub. Tokenizers не заменялись. `public-source-lock.json` не менялся. Агентам нельзя откатывать или подменять эти DLL без нового явного решения.
 
 ## 0. Цели, scope и правила
 
@@ -21,19 +23,29 @@
 | Gate | Подтверждено отчетами | Осталось |
 |---|---|---|
 | C6 и исходники | source cohort locked, C6 frozen | самостоятельный live C6 comparison |
-| Qwen parser | 69/69 Qwen, 9/9 generation-policy, 29/29 generic; 14 случаев / 2340 chunk partitions | actual LENGTH/CANCEL, handoff |
+| Qwen parser | 69/69 Qwen, 9/9 generation-policy, 29/29 generic; 14 случаев / 2340 chunk partitions; live LENGTH измерен | cancel и handoff |
 | HTTP intake | 2/2 unit (12 внутренних случаев); 11/11 related tools; 17/17 реальных HTTP400 | Hermes контроль, полная policy matrix |
 | Gemma | 79/79 Gemma после bounded repairs; combined 148/148 parser controls | live negative control; escaped-quote fixture corrected, это НЕ третий production fix |
-| OVMS | полные цели ovms_test и ovms построены | rebuilt GenAI/XGrammar runtime candidate |
-| Ornith live | unary, SSE, ping без аргументов, required city, none smoke PASS | live работает на старой GenAI DLL, не доказывает #802 |
+| OVMS | полные цели ovms_test и ovms построены; кандидатная GenAI DLL собрана и установлена, SHA-256 выше | public lock не менялся; ACCEPTED нет |
+| Ornith live | установленная кандидатная DLL: unary и SSE `max_tokens=16` → `length`, следующий запрос `OK`, один required `city=Paris` | это не проба маски `</parameter1>`; cancel NOT_PROVEN |
 | Continuation | 20/20 controlled two-turn (10 unary + 10 SSE); отдельный error → valid named → receipt → continuation с shell exit0 | НЕ 20 длинных автономных loops; первый wrapper у 20/20 завершился exit1 после сохранения semantic traces |
-| XGrammar #802 | isolated native29/29, GenAI31/31, Qwen3-8B whitespace baseline 422/425 → candidate 0/425 | новая DLL и реальный Ornith tokenizer не проверены |
-| R1 schema-matrix runner | 28 sealed cases, новые 18/18 offline runner tests | native R1 matrix NOT RUN; это НЕ R1 Jinja/history |
-| XGrammar #650 / required-key | unresolved end-marker drift и required key вне properties | оба OPEN |
+| XGrammar #802 | isolated native29/29, GenAI31/31, Qwen3-8B whitespace baseline 422/425 → candidate 0/425 | undeclared-required пустой XML всё ещё принимается; грамматику без отдельного контракта не менять |
+| R1 schema-matrix runner | native matrix 24 PASS, 4 known OPEN, 0 unexpected; 18/18 offline runner tests | это НЕ R1 Jinja/history; 50/100 ходов OPEN |
+| XGrammar #650 / required-key | порт `5b0b708`, native matcher 71/71 на Qwen3-8B tokenizer; `lock_excluded_prefixes` есть в установленной DLL | живая маска `</parameter1>` на Ornith не измерялась; undeclared-required OPEN |
 | Stability | после live доступная RAM падала до 514 MiB и частично восстанавливалась | не доказана утечка; stress/concurrency unsafe до измерений |
 | Promotion | **ACCEPTED NO** | end-to-end gates не закрыты |
 
-Точные источники: [STATE.md](STATE.md), [R1-RUNNER-HARDENING.md](R1-RUNNER-HARDENING.md), [EXTERNAL-GATES-20261021.md](EXTERNAL-GATES-20261021.md), [FOLLOWUP-20261021.md](FOLLOWUP-20261021.md), [OVMS-TEST-HTTP-RESULTS.md](OVMS-TEST-HTTP-RESULTS.md), [XGRAMMAR-802-COHORT-PROPOSAL.md](XGRAMMAR-802-COHORT-PROPOSAL.md), [BOUNDED-REPAIRS.md](../gemma4-repairs/BOUNDED-REPAIRS.md).
+Точные источники: верх [STATE.md](STATE.md), [XGRAMMAR-650-NOTE.md](XGRAMMAR-650-NOTE.md), [W3-LENGTH-CANCEL.md](W3-LENGTH-CANCEL.md), [R1-RUNNER-HARDENING.md](R1-RUNNER-HARDENING.md), [EXTERNAL-GATES-20261021.md](EXTERNAL-GATES-20261021.md), [FOLLOWUP-20261021.md](FOLLOWUP-20261021.md), [OVMS-TEST-HTTP-RESULTS.md](OVMS-TEST-HTTP-RESULTS.md), [XGRAMMAR-802-COHORT-PROPOSAL.md](XGRAMMAR-802-COHORT-PROPOSAL.md), [BOUNDED-REPAIRS.md](../gemma4-repairs/BOUNDED-REPAIRS.md).
+
+### Где стоит очередь
+
+Читать вместе с самым верхним checkpoint STATE.md. Нижние исторические абзацы этого файла не отменяют срез.
+
+1. Маска Qwen3-8B tokenizer на расхождении `</parameter` — сделано, 71/71.
+2. Живой прогон установленной кандидатной DLL — сделано: hash совпал, unary/SSE `length`, follow-up `OK`, один required city. Сервер остановлен. Это не acceptance и не проба `</parameter1>`.
+3. **Текущий пункт:** cancel и возврат ресурсов на этой же DLL. Обрыв после первого SSE-chunk и рабочий набор примерно на 1.5 МиБ выше базового замера — NOT_PROVEN. Повтор такого раннего обрыва не засчитывается. `stop()` в disconnect callback уже есть; правку продукта из отсутствия строки лога не выдумывать.
+4. Undeclared-required пустой XML — зафиксированный остаток. Без отдельного контракта грамматику не менять.
+5. Public lock и ACCEPTED не двигать. Нужно отдельное решение после разобранных измерений.
 
 ## R0 — Frozen baseline и upstream archaeology (P0)
 
@@ -51,7 +63,7 @@
 
 Native Qwen3-Coder FSM: queue validated name/id then arguments, stable per-request indexes; single/N calls per chunk, arbitrarily split markers, typed/nested args, duplicate/malformed tags, unknown names, zero-args; restore only completed call at STOP, never fabricate open args for LENGTH/CANCEL/ERROR. Maintain 2340+ partition and reset invariants.
 
-**Сейчас:** parser and policy units pass; output publication hardened, schema fail-closed; real HTTP rejects and controlled continuation pass. **Открыто:** real backend LENGTH, cancel, disconnect, subsequent healthy request, phase boundaries. Static review установил, что внешняя API сериализация использует фактический GenerationOutput.finish_reason, а STOP в streamer.end() может быть только parser cleanup. Не переписывать API finish mapping без RED. **Gate R2:** детерминированный stream со всеми finish modes и без потерь/ложных executable calls.
+**Сейчас:** parser and policy units pass; output publication hardened, schema fail-closed; real HTTP rejects and controlled continuation pass. Live backend LENGTH и следующий здоровый запрос измерены на установленной кандидатной DLL. **Открыто:** cancel и возврат ресурсов, phase boundaries. Static review установил, что внешняя API сериализация использует фактический GenerationOutput.finish_reason, а STOP в streamer.end() может быть только parser cleanup. Не переписывать API finish mapping без RED. **Gate R2:** детерминированный stream со всеми finish modes и без потерь/ложных executable calls.
 
 ## R3 — GenerationConfigBuilder / tool policy / XML grammar (P0)
 
@@ -108,6 +120,8 @@ Qwen3.8, Flash/Next и Ornith регистрировать по capability profi
 5. Тест: 28 native schema rows real build/run + Qwen3.6/Ornith 50/100 turn token-level A/B.
 6. Источник: R1 original program и R1-RUNNER-HARDENING.md.
 
+**Статус 2026-10-22:** native matrix 24 PASS, 4 known OPEN, 0 unexpected. Jinja/history 50/100 ходов по-прежнему OPEN. Эта карточка не текущий пункт.
+
 ### W3 · Real LENGTH/CANCEL/disconnect semantics (P0, R2/R4)
 1. Причина: старые direct parser тесты не равны backend cancellation.
 2. Файлы: streamer/API owning C++ только при конкретном RED; focused tests и evidence.
@@ -115,6 +129,8 @@ Qwen3.8, Flash/Next и Ornith регистрировать по capability profi
 4. Эффект: завершение без malformed executable call и без незавершённых SSE.
 5. Тест: real LENGTH, STOP, CANCEL, retry, Qwen/Gemma/generic.
 6. Источник: STREAMING-LIFECYCLE-DECISION.md и EXTERNAL-GATES-20261021.md.
+
+**Статус 2026-10-22:** unit `CbChatStreamingPreservesBackendLengthFinishReason` PASS. Live unary/SSE `length` и follow-up `OK` PASS на установленной кандидатной DLL. Generation-handle cancel и возврат памяти NOT_PROVEN. Новую правку продукта не начинать, пока измерение не даст конкретный RED.
 
 ### W4 · XGrammar #650 + required-key gap (P0, R3)
 1. Причина: #802 не исправляет </parameter1> и required вне declared properties.
@@ -124,6 +140,8 @@ Qwen3.8, Flash/Next и Ornith регистрировать по capability profi
 5. Тест: actual token mask at every delimiter prefix, hard/lazy, #802 regression, Gemma JSON controls.
 6. Источник: XGrammar #650/#651, XGRAMMAR-650-NOTE.md и XGRAMMAR-802-COHORT-PROPOSAL.md.
 
+**Статус 2026-10-22:** эквивалент #651 на `5b0b708`; upstream #837 не мержить. Маска Qwen3-8B unit tokenizer PASS. Undeclared-required пустой XML остаётся. Живой Ornith этот пункт не закрывает: он не проверял `</parameter1>`.
+
 ### W5 · GenAI/XGrammar installed candidate cohort (P0, R3)
 1. Причина: native #802 PASS не входит в активный GenAI DLL.
 2. Файлы: отдельные кандидатные build configs, runtime manifest и sanitized evidence; не public lock.
@@ -131,6 +149,8 @@ Qwen3.8, Flash/Next и Ornith регистрировать по capability profi
 4. Эффект: настоящая constrained generation на протестированном matcher, не подмена installed C6.
 5. Тест: exact build/link/DLL receipts, Q-ZERO/Q-END, GenAI31/31, Gemma and Ornith live A/B.
 6. Источник: XGRAMMAR-802-COHORT-PROPOSAL.md; independent isolated packaging.
+
+**Статус 2026-10-22:** изолированная сборка есть и по явному решению оператора установлена (hash в исключении выше). Public lock не обновлялся. Unary/SSE/один city на установленном файле разобраны. Это не cohort acceptance.
 
 ### W6 · Agentic acceptance R3/R4/R5 (P0, после W1)
 1. Причина: HTTP 17/17 и controlled two-turn20/20 не закрывают автономию.
