@@ -9,13 +9,13 @@
 
 ## 1. Независимая model-routing лестница (актуальная политика)
 
-**Обязательный supersession:** [12 — повторное ревью](12-COORDINATOR-REVIEW-20261022.md) и [13 — executable multi-provider prompt](13-HETEROGENEOUS-COORDINATOR-PROMPT-20261022.md) заменяют все прежние рекомендации «Haiku/Sonnet/L2 по умолчанию». Теперь **любой** connected model/provider должен быть обнаружен через real capability registry. Нельзя наследовать модель и контекст главного агента в child-сессию. Нужен отдельный provider-bound session ID, отдельный worktree и независимый reviewer.
+**Обязательный supersession:** [12 — повторное ревью](12-COORDINATOR-REVIEW-20261022.md) и [13 — executable multi-provider prompt](13-HETEROGENEOUS-COORDINATOR-PROMPT-20261022.md) заменяют все прежние рекомендации «Haiku/Sonnet/Opus по умолчанию». Теперь **любой** connected model/provider должен быть обнаружен через real capability registry. Нельзя наследовать модель и контекст главного агента в child-сессию. Нужен отдельный provider-bound session ID, отдельный worktree и независимый reviewer.
 
 | Уровень | Исполнитель из обнаруженного реестра | Вид работы | Эскалация |
 |---|---|---|---|
 | **L0, инвентаризация** | Дешёвый, реально доступный проверяющий (OpenAI / Anthropic / Google / OpenCode Zen; локальный только если разрешён runtime) | Source grep, manifests, простые fixtures, документы | Нет проверяемых исходников / противоречие |
 | **L1, инженер** | Подходящий coding worker любого доступного провайдера, **не унаследованный от координатора** | Ограниченный C++, unit tests, offline replay, harness | Сложная cross-component ownership проблема или два безрезультатных доказанных исправления |
-| **L2, архитектурный** | Самый сильный reasoning+coding worker из реально доступных; L2, Codex/GPT, Gemini и др. на равных при подтверждённых способностях | GPU concurrency, cancellation, slot leases, A5, A7 | До выдачи задачи — явное обоснование риска/невозможности L1; для A5/A7 уровень L2 оправдан сразу |
+| **L2, архитектурный** | Самый сильный reasoning+coding worker из реально доступных; Claude Opus, Codex/GPT, Gemini и др. на равных при подтверждённых способностях | GPU concurrency, cancellation, slot leases, A5, A7 | До выдачи задачи — явное обоснование риска/невозможности L1; для A5/A7 уровень L2 оправдан сразу |
 | **L3, независимый критик** | **Другой model family/provider** в новой сессии и read-only worktree; fallback same-family отмечать явно | Adversarial review, тесты и контрактный аудит | Не пишут код в авторском worktree и не наследуют историю author/coordinator |
 
 Стоимость, лимиты и реальные модельные ID **узнаются из интерфейса провайдера в момент назначения**, не фиксируются как вечные цены Cursor. Отсутствующая интеграция = `UNAVAILABLE`; нельзя симулировать delegate той же главной моделью.
