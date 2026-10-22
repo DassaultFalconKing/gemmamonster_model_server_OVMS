@@ -68,3 +68,7 @@ Available draft candidates are now identified, not hypothetical: [Unsloth Qwen3.
 - [13 — Ready-to-paste heterogeneous coordinator prompt](13-HETEROGENEOUS-COORDINATOR-PROMPT-20261022.md): explicit provider/model registry, fresh isolated agents (no parent-model/context inheritance), source locks, task packets, independent cross-family reviews, correct DAG and hardware pause.
 
 These two artifacts replace the Anthropic-only execution assignment in [11](11-MODEL-EXECUTION-LEDGER-20261022.md) without changing the target-model, MTP or U4 UMA ledgers. Documents only, no runtime source, C6, dependency locks, GPU jobs or automatically accepted release.
+
+## Cloud code authoring and local engineering handoff (2026-10-22)
+
+- [14 — CLOUD GPT CODEGEN MISSION](14-CLOUD-GPT-CODEGEN-MISSION-20261022.md): copy/paste mission for a **separate cloud GPT coding session**. It writes isolated Draft PRs in the OpenVINO GPU fork for existing pack require-mode integrity, safe pack publication and trustworthy trace/offline accounting; emits concrete local PC handoffs. No cloud GPU acceptance is claimed. Coordinator owns the future A5 scheduler decision, and the operator compute pause remains active.
