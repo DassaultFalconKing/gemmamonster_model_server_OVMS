@@ -57,3 +57,7 @@ Available draft candidates are now identified, not hypothetical: [Unsloth Qwen3.
 - [Original root flowchart v1](../../../architecture_flowchart_graph.mermaid) remains unchanged for provenance.
 
 **Evidence boundary:** v2 synthesizes the research already published in this branch through commit `d2954601`. The newly requested Deep Research hot/cold architecture synthesis was started but its final report was not available as an export at publication time; do not attribute v2 text to that unreceived report. Future research arrivals should be added as dated supplements, not overwrite the manual original or stable C6.
+
+## Coding/inference model execution ledger (2026-10-22)
+
+[11 — A0–A8 model assignment, target-model acceptance and UMA ledger](11-MODEL-EXECUTION-LEDGER-20261022.md) records which Cursor models perform each stage, the justification for Opus 5.5 escalation, the Gemma4/Qwen3.6/Ornith/Qwen3.8 test roles, speculative modes, physical 32-GiB memory accounting and STOP/PASS gates. This is a **docs-only plan**; see the separate [frozen QWM01/OTD checkpoint](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/blob/4215aa39da160eb742ecd7f0fa2ace5c90d64efa/docs/qwenmonster/CHECKPOINT-OTD-PACK-QWM01-20261022.md) for measured implementation evidence. No new GPU jobs are authorized by the ledger.
