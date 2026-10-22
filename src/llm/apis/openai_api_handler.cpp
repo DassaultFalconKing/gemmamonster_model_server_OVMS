@@ -524,9 +524,13 @@ absl::Status OpenAIApiHandler::parseTools() {
                 rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
                 parametersValue->Accept(writer);
                 std::string parametersStr = buffer.GetString();
-                if (qwenXmlPolicy && !isSupportedQwenXmlToolSchema(parametersStr))
-                    return absl::InvalidArgumentError(
-                        "Qwen XML tool parameters use an unsupported restricted Draft 4 schema");
+                std::shared_ptr<const QwenXmlCompiledSchema> qwenXmlSchema;
+                if (qwenXmlPolicy) {
+                    qwenXmlSchema = compileQwenXmlToolSchema(parametersStr);
+                    if (!qwenXmlSchema)
+                        return absl::InvalidArgumentError(
+                            "Qwen XML tool parameters use an unsupported restricted Draft 4 schema");
+                }
                 auto existing = request.toolNameSchemaMap.find(functionName);
                 if (strictToolPolicy && existing != request.toolNameSchemaMap.end()) {
                     const bool sameSchema =
@@ -538,7 +542,7 @@ absl::Status OpenAIApiHandler::parseTools() {
                     }
                     continue;
                 }
-                ToolSchemaWrapper schemaReprs{parametersValue, std::move(parametersStr)};
+                ToolSchemaWrapper schemaReprs{parametersValue, std::move(parametersStr), std::move(qwenXmlSchema)};
                 request.toolNameSchemaMap[functionName] = std::move(schemaReprs);
             }
         }

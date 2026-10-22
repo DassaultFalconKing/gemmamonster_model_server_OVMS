@@ -6,9 +6,24 @@
 //*****************************************************************************
 #pragma once
 
+#include <cstddef>
+#include <memory>
 #include <string>
 
 namespace ovms {
+// One compiled restricted Draft 4 schema. The request owns it; each argument
+// check builds a fresh validator so compiled state is not shared mutably.
+class QwenXmlCompiledSchema {
+public:
+    virtual ~QwenXmlCompiledSchema() = default;
+    virtual bool validateArguments(const std::string& argumentsText) const = 0;
+};
+
+// nullptr means the schema is outside the restricted profile. A successful
+// result is immutable and may be reused for the rest of that request.
+std::shared_ptr<const QwenXmlCompiledSchema> compileQwenXmlToolSchema(const std::string& schemaText);
+std::size_t qwenXmlToolSchemaCompileCount();
+
 // Qwen XML executable-tool profile. The request handler and parser must agree.
 // This is a deliberately restricted Draft 4 profile, not full JSON Schema.
 bool isSupportedQwenXmlToolSchema(const std::string& schemaText);

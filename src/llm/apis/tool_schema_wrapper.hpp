@@ -18,14 +18,19 @@
 // this way we store information about which image is associated with which chat turn
 #pragma once
 #include <map>
+#include <memory>
 #include <string>
 
+#include "src/llm/io_processing/qwen3coder/tool_schema_profile.hpp"
 #include "src/port/rapidjson_document.hpp"
 
 namespace ovms {
 struct ToolSchemaWrapper {
-    rapidjson::Value* rapidjsonRepr;
+    rapidjson::Value* rapidjsonRepr = nullptr;
     std::string stringRepr;
+    // Set for a Qwen XML request after one successful compile. Later argument
+    // checks in that request reuse it instead of compiling the schema again.
+    std::shared_ptr<const QwenXmlCompiledSchema> qwenXmlSchema;
 };
 using ToolsSchemas_t = std::map<std::string, ToolSchemaWrapper>;
 }  // namespace ovms

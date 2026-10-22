@@ -345,8 +345,10 @@ bool Qwen3CoderToolParser::isRegisteredToolName(const std::string& name) const {
 
 bool Qwen3CoderToolParser::hasValidArguments(const ToolCall& toolCall) const {
     const auto it = toolSchemas.find(toolCall.name);
-    return it != toolSchemas.end() &&
-           validateQwenXmlToolArguments(it->second.stringRepr, toolCall.arguments);
+    if (it == toolSchemas.end()) return false;
+    if (it->second.qwenXmlSchema)
+        return it->second.qwenXmlSchema->validateArguments(toolCall.arguments);
+    return validateQwenXmlToolArguments(it->second.stringRepr, toolCall.arguments);
 }
 
 void Qwen3CoderToolParser::queueFullDeltas(const ToolCalls_t& toolCalls) {

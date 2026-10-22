@@ -3051,6 +3051,18 @@ cc_test(
     linkstatic = 1,
 )
 
+cc_test(
+    name = "qwen_xml_schema_cache_test",
+    srcs = ["test/llm/qwen_xml_schema_cache_test.cpp"],
+    deps = [
+        "@com_google_googletest//:gtest_main",
+        "//src/llm:io_processing_qwen3coder_tool_schema_profile",
+    ],
+    copts = COPTS_TESTS,
+    local_defines = COMMON_LOCAL_DEFINES,
+    linkstatic = 1,
+)
+
 # Qwenmonster R3: standalone native Qwen XML policy contract.
 cc_test(
     name = "qwenmonster_generation_policy_test",

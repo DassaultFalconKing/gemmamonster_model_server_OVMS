@@ -6,8 +6,10 @@
 //*****************************************************************************
 #include "tool_schema_profile.hpp"
 
+#include <atomic>
 #include <cstring>
 #include <unordered_set>
+#include <utility>
 
 #pragma warning(push)
 // Match the existing Qwen restricted-schema compiler settings for MSVC.
@@ -66,14 +68,30 @@ void removeSchemaDefaults(rapidjson::Value& schema) {
 
 
 namespace {
+std::atomic<std::size_t> g_qwenXmlSchemaCompiles{0};
+
+struct CompiledQwenXmlSchema : QwenXmlCompiledSchema {
+    rapidjson::Document schemaValue;
+    std::unique_ptr<rapidjson::SchemaDocument> compiled;
+
+    bool validateArguments(const std::string& argumentsText) const override {
+        if (argumentsText.find('\0') != std::string::npos) return false;
+        rapidjson::Document args;
+        args.Parse(argumentsText.c_str());
+        if (args.HasParseError() || !args.IsObject() || !safeValidationInput(args, false))
+            return false;
+        rapidjson::SchemaValidator argumentsValidator(*compiled);
+        return args.Accept(argumentsValidator);
+    }
+};
+
 // Compile the same restricted Draft 4 schema used for executable output.
-// Per-request compiled-schema reuse is a separate measured optimization.
-bool verifyQwenXmlToolProfile(const std::string& schemaText, const std::string* argumentsText) {
-    if (schemaText.empty() || schemaText.find('\0') != std::string::npos) return false;
-    rapidjson::Document schema;
-    schema.Parse(schemaText.c_str());
-    if (schema.HasParseError() || !schema.IsObject()) return false;
-    if (!safeValidationInput(schema, false)) return false;
+std::shared_ptr<CompiledQwenXmlSchema> compileOwnedQwenXmlToolSchema(const std::string& schemaText) {
+    if (schemaText.empty() || schemaText.find('\0') != std::string::npos) return nullptr;
+    auto compiled = std::make_shared<CompiledQwenXmlSchema>();
+    compiled->schemaValue.Parse(schemaText.c_str());
+    if (compiled->schemaValue.HasParseError() || !compiled->schemaValue.IsObject()) return nullptr;
+    if (!safeValidationInput(compiled->schemaValue, false)) return nullptr;
     static const rapidjson::SchemaDocument metaSchema = []() {
         rapidjson::Document meta;
         meta.Parse(QWEN_DRAFT4_META_SCHEMA);
@@ -107,29 +125,31 @@ bool verifyQwenXmlToolProfile(const std::string& schemaText, const std::string* 
         return rapidjson::SchemaDocument(meta);
     }();
     rapidjson::SchemaValidator schemaValidator(metaSchema);
-    if (!schema.Accept(schemaValidator)) return false;
-    removeSchemaDefaults(schema);
-    if (!safeValidationInput(schema, true)) return false;
-    rapidjson::SchemaDocument compiledSchema(schema);
-    if (!compiledSchema.IsSupportedSpecification() || !compiledSchema.GetError().ObjectEmpty())
-        return false;
-    if (!argumentsText) return true;
-
-    if (argumentsText->find('\0') != std::string::npos) return false;
-    rapidjson::Document args;
-    args.Parse(argumentsText->c_str());
-    if (args.HasParseError() || !args.IsObject() || !safeValidationInput(args, false))
-        return false;
-    rapidjson::SchemaValidator argumentsValidator(compiledSchema);
-    return args.Accept(argumentsValidator);
+    if (!compiled->schemaValue.Accept(schemaValidator)) return nullptr;
+    removeSchemaDefaults(compiled->schemaValue);
+    if (!safeValidationInput(compiled->schemaValue, true)) return nullptr;
+    g_qwenXmlSchemaCompiles.fetch_add(1, std::memory_order_relaxed);
+    compiled->compiled = std::make_unique<rapidjson::SchemaDocument>(compiled->schemaValue);
+    if (!compiled->compiled->IsSupportedSpecification() || !compiled->compiled->GetError().ObjectEmpty())
+        return nullptr;
+    return compiled;
 }
 }  // namespace
 
+std::shared_ptr<const QwenXmlCompiledSchema> compileQwenXmlToolSchema(const std::string& schemaText) {
+    return compileOwnedQwenXmlToolSchema(schemaText);
+}
+
+std::size_t qwenXmlToolSchemaCompileCount() {
+    return g_qwenXmlSchemaCompiles.load(std::memory_order_relaxed);
+}
+
 bool isSupportedQwenXmlToolSchema(const std::string& schemaText) {
-    return verifyQwenXmlToolProfile(schemaText, nullptr);
+    return static_cast<bool>(compileQwenXmlToolSchema(schemaText));
 }
 
 bool validateQwenXmlToolArguments(const std::string& schemaText, const std::string& argumentsText) {
-    return verifyQwenXmlToolProfile(schemaText, &argumentsText);
+    const auto compiled = compileQwenXmlToolSchema(schemaText);
+    return compiled && compiled->validateArguments(argumentsText);
 }
 }  // namespace ovms

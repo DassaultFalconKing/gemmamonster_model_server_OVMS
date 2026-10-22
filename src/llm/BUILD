@@ -279,6 +279,7 @@ ovms_cc_library(
     name = "apis_tool_schema_wrapper",
     hdrs = ["apis/tool_schema_wrapper.hpp"],
     deps = [
+        ":io_processing_qwen3coder_tool_schema_profile",
         "//src/port:rapidjson_document",
     ],
     visibility = ["//visibility:public"],
