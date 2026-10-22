@@ -7,6 +7,7 @@
 | Документ | Вопрос | Статус |
 |---|---|---|
 | [MASTER-PLAN.md](MASTER-PLAN.md) | Какие цели R0–R6 и активные W1–W7? | Единственный актуальный рабочий план |
+| [FROZEN-PARSER-GREEN-20261021.md](FROZEN-PARSER-GREEN-20261021.md) | Operator freeze of exact parser-green 2026.5 tuple and component pins | STOP 2026.5 work; prepare semantic refit on known-good 2026.4 |
 | [HANDOFF-DRAFTERS-20261022.md](HANDOFF-DRAFTERS-20261022.md) | Current drafter status and all-agent resume contract | Operator compute pause; long-context matrix NOT RUN |
 | [AGENTS.md](../../AGENTS.md) | Как осуществлять изменения, RED/GREEN, шесть полей и privacy? | Обязательная инженерная политика |
 | [ACCEPTANCE.md](ACCEPTANCE.md) | Какой gate необходимо пройти для PASS? | Нормативные acceptance критерии |

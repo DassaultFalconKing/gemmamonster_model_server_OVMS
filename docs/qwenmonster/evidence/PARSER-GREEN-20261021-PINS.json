@@ -1,0 +1,401 @@
+{
+  "schema": "qwm-parser-green-freeze-v1",
+  "captured_utc": "2026-10-22T23:32:27.994292+00:00",
+  "state": "FROZEN_DO_NOT_RESUME_2026_5",
+  "scope": "Historical 2026-10-21 18:28 and 18:54 Europe/Berlin parser-green points ONLY; excludes subsequent QWM and drafter changes",
+  "operator_reason": "Operator reports sensitive performance regression in 2026.5; semantic refit target is known-good 2026.4. No new regression benchmark or causal attribution was run.",
+  "historical_loaded_modules": {
+    "openvino.dll": {
+      "sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f",
+      "matches_staged_core": true
+    },
+    "opencv_world4140.dll": {
+      "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46"
+    },
+    "openvino_genai.dll": {
+      "sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da",
+      "matches_staged_core": true
+    },
+    "libcurl-x64.dll": {
+      "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334"
+    },
+    "git2.dll": {
+      "sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8"
+    },
+    "python312.dll": {
+      "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120"
+    },
+    "openvino_tokenizers.dll": {
+      "sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66",
+      "matches_staged_core": true
+    },
+    "openvino_ir_frontend.dll": {
+      "sha256": "f4db5c945ce4bbe055450b31d706dfc530f6fa79e9b8398c6832c2626ae192ef",
+      "matches_staged_core": true
+    },
+    "openvino_intel_cpu_plugin.dll": {
+      "sha256": "0cf9706f38ad67535c09842b4678accd207c132364cfe63e5cbb2f2eaa5fda77",
+      "matches_staged_core": true
+    },
+    "openvino_auto_batch_plugin.dll": {
+      "sha256": "ec1fb6bd0c2c2db23ab83e527736ec02c231c13c5573794d66367a9e2a455634",
+      "matches_staged_core": true
+    }
+  },
+  "historical_auxiliary_dependencies": {
+    "started_utc": "2026-10-21T13:26:42.173557+00:00",
+    "policy": "Restore exact versions selected by checked-out Windows recipe; no core cohort updates.",
+    "boringssl": {
+      "tag": "0.32.1",
+      "sha": "38b03401110f03bde32bc7e86ff4f815238ed2d3",
+      "dirty": false
+    },
+    "curl": {
+      "archive_sha256": "7c8c6b953b4eb2953d2bdc08cca1d5f09a964e9f86c361693559400c9a6d6db0",
+      "version": "8.22.0_2",
+      "dll_sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334",
+      "import_lib_sha256": "a625c9a15507438a18ec83aced74849ab28f809d5464d797ee6a753b07a63f45"
+    },
+    "opencv": {
+      "version": "4.14.0",
+      "url": "https://github.com/opencv/opencv/releases/download/4.14.0/opencv-4.14.0-windows.exe",
+      "archive_sha256": "5f266a8b73bed535962d7e861a6457e32a0dd5f463ad0a7cf8707a135469be63",
+      "verification": "Official package extracted and required headers/import library/DLL verified",
+      "layout_alias": "vc17 junction to official vc16 directory; unchanged binary/import library",
+      "dll_sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46",
+      "import_lib_sha256": "ccbbb6223096a0d4cc2cbc0f12babcf6a5d6ee1a1918a16e5da058c144a0fad9",
+      "matches_historical_release_dll": false
+    },
+    "python3_embed_alias_sha256": "4d6f5f81a4bca11191c4c7c6b43632694d0a4ce74e068619d8fdc161d469859a",
+    "python3_embed_alias_note": "Temporary diagnostic alias removed; private development Python selected; global PATH unchanged."
+  },
+  "historical_status": "BUILD/UNIT PASS; LIVE/AGENTIC/RELEASE NOT ACCEPTED",
+  "notes": [
+    "Source lock revisions are pinned separately from the historical binary hashes; no fresh dependency rebuild attestation is inferred.",
+    "Full integrated ovms_test.exe has been overwritten. Its historical SHA256 and green XML are preserved; no exact old executable recovery is claimed.",
+    "Archives preserve tracked commit trees. Git submodule contents and LFS objects are not automatically a self-contained build environment.",
+    "Standalone test binaries are byte-identical to the preserved post-merge confirmation receipt; initial first-green 18:28 XML is separately preserved."
+  ],
+  "fixture_receipt": {
+    "repository": "facebook/opt-125m",
+    "revision": "27dcfa74d334bc871f3234de431e71c6eeba5dd6",
+    "scope": "tokenizer-only unit fixture, no inference model or weights",
+    "source_files": {
+      "config.json": "54162c9cd0377110df1859dfabebb106fc0988c8aadb88207ce1ee0d34985df6",
+      "generation_config.json": "d37de99f9835d7a4d0916257f724504d12c4a668f36a50b2d42e09ba4ebd05d5",
+      "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+      "special_tokens_map.json": "0f3cd5f307a2735cfee31ddf33be88655e8be165ee2cdc26ced966f04258adf0",
+      "tokenizer_config.json": "d1e4185b43a0a06421ab7218d5c1a775350bd13024507b34fbed25dcf6c14c6b",
+      "vocab.json": "06b4d46c8e752d410213d9548eb27a54db70fda0319b6271fb8d59dead5e1cab"
+    },
+    "core_version": "2026.5.0-5-591ab0b517a-codex/c6-head-20261019-openvino",
+    "tokenizers_source": "d73028e255ddc279483fbc6e8ea90dc802e820f5",
+    "conversion": "existing pinned OpenVINO Python bindings and tokenizers DLL; transformers4.57.6 numpy2.2.5",
+    "probes": [
+      {
+        "text": "What is the weather like in Paris today?",
+        "token_ids": [
+          2,
+          2264,
+          16,
+          5,
+          1650,
+          101,
+          11,
+          2201,
+          452,
+          116
+        ],
+        "match": true
+      },
+      {
+        "text": "<tool_call>\n<function=weather>",
+        "token_ids": [
+          2,
+          41552,
+          43342,
+          1215,
+          16395,
+          15698,
+          50118,
+          41552,
+          35435,
+          5214,
+          21693,
+          15698
+        ],
+        "match": true
+      },
+      {
+        "text": "Hello, мир!",
+        "token_ids": [
+          2,
+          31414,
+          6,
+          18697,
+          4394,
+          35328,
+          24269,
+          328
+        ],
+        "match": true
+      }
+    ],
+    "generated_files": {
+      "openvino_detokenizer.bin": "50cd9af30112ff045bdd59615c0d9570a0686682d4b92b13792765b85896cfd3",
+      "openvino_detokenizer.xml": "a2a889bb9ff40472a4b2a0f59b918e44f86a16bfa0a4867e1516a7ebc18feb03",
+      "openvino_tokenizer.bin": "7bdde72e3966a74cc9216c98ef607d5dbd6dab57a9e016e33d87fc852c94be46",
+      "openvino_tokenizer.xml": "e97f211b581b0778d31c64a7e62f45144aad38a9c5a5399848ef03169ddf618d"
+    }
+  },
+  "sources": [
+    {
+      "component": "ovms-repair",
+      "sha": "6378400a6aa984dd064dd47b3a0af9082a7420df",
+      "tree_sha": "ef10e85bd726812d6716a7f8e97fa550b5a98b15",
+      "pin_ref": "refs/tags/qwm-parser-green-20261021-ovms-repair",
+      "archive_sha256": "f7cb6f3a189cca40634d768121ac66f9a5410b497c5e6bfb9d65c8ce0dc4980f"
+    },
+    {
+      "component": "ovms-repair-report",
+      "sha": "de5032f71ca17fe8d61edcf858ea7a030a91c9e6",
+      "tree_sha": "87f90b95ad9ab9d404553644aa43572fb5200328",
+      "pin_ref": "refs/tags/qwm-parser-green-20261021-ovms-repair-report",
+      "archive_sha256": "ccec3240eb8e9065cfa412d12c20a94c03a928dadf22d6327e87b39e7cc395c1"
+    },
+    {
+      "component": "ovms-integrated",
+      "sha": "ac2d190d565b693c5ca0e67ddae904a4d10d5342",
+      "tree_sha": "36dd3a9b812671a0ceea7a32aae147c1df54aba5",
+      "pin_ref": "refs/tags/qwm-parser-green-20261021-ovms-integrated",
+      "archive_sha256": "6f49805212b27e0ccbe9353f6f562c6890e9608f16b076d4a139bf0d80607bd6"
+    },
+    {
+      "component": "genai",
+      "sha": "2decb9ec4bea827e01db47524352ad72d23b33ab",
+      "tree_sha": "360714a3557a124954a551c7d8c0d5071a41cd6a",
+      "pin_ref": "refs/tags/qwm-parser-green-20261021-genai",
+      "archive_sha256": "8aa17eab2633fb554a193c0f60af29de6233128a6de5e386cb1336f1f718c7b3"
+    },
+    {
+      "component": "openvino",
+      "sha": "b5bfb14860320ae2a44d0fc55d78caa9a9d789b9",
+      "tree_sha": "2d05349dcdb7f2224bf3e6122b7b1383a855d048",
+      "pin_ref": "refs/tags/qwm-parser-green-20261021-openvino",
+      "archive_sha256": "e126393b47dda516ac8d6fc21bbe732247a293f1cdc81060af586a6821c038f0"
+    },
+    {
+      "component": "xgrammar",
+      "sha": "c77d5e0d62411d17d4cf55d280463eb5b3bec7ba",
+      "tree_sha": "e44b39870b49a648ab7d3587e84af9092b7b8f4f",
+      "pin_ref": "refs/tags/qwm-parser-green-20261021-xgrammar",
+      "archive_sha256": "7e3f6989b8f28b9100df36617fa0f0090af361142d0630d583c03065f2a25aef"
+    },
+    {
+      "component": "minja",
+      "sha": "83eb074e42140b0d1194d1dd61f29c31e4515ee9",
+      "tree_sha": "546072cdfe2cea5659c3d099e76e124e96c40004",
+      "pin_ref": "refs/tags/qwm-parser-green-20261021-minja",
+      "archive_sha256": "ec757486e655f64591355dd5e97f52e43ff6b937a4a714019940d08233aee51a"
+    },
+    {
+      "component": "tokenizers",
+      "sha": "d73028e255ddc279483fbc6e8ea90dc802e820f5",
+      "tree_sha": "1e754ff55b82358ea9268a1ed76fc23433e389e9",
+      "pin_ref": "refs/tags/qwm-parser-green-20261021-tokenizers",
+      "archive_sha256": "15af6cb6c31d8d6a963e953a8d55b9c6c90c3825553bb5f9c7ee88f5ad2be4f1"
+    },
+    {
+      "component": "minja-build-tree",
+      "sha": "1bdb178afd6f527354e17a1db1b3a22b59189f21",
+      "tree_sha": "c8fc2e13df17223dca1a50f8792d0a43ea33e422",
+      "pin_ref": "refs/tags/qwm-parser-green-20261021-minja-build-tree",
+      "archive_sha256": "fca4fc14c24172b31b7b3cc670d867e43401a9d460390e142fbe6f028325d7f4"
+    }
+  ],
+  "binaries": [
+    {
+      "expected_sha256": "80625f3047fae6746aa7eb338438f665fcbeddf48479a771ce3c846655b63691",
+      "sha256": "80625f3047fae6746aa7eb338438f665fcbeddf48479a771ce3c846655b63691",
+      "bytes": 1452032,
+      "status": "VERIFIED_PRESERVED",
+      "name": "gemma4_output_parser_test.exe"
+    },
+    {
+      "expected_sha256": "2aa8dd23ef400729986c30bfd1ee38d6af710bc07cd5fb724f12d6928966c291",
+      "sha256": "2aa8dd23ef400729986c30bfd1ee38d6af710bc07cd5fb724f12d6928966c291",
+      "bytes": 681984,
+      "status": "VERIFIED_PRESERVED",
+      "name": "output_parser_core_test.exe"
+    },
+    {
+      "expected_sha256": "a6ded77e9766506ecb576d1b7055995aa8f3f0a7f78491576bea147470ba8470",
+      "sha256": "a6ded77e9766506ecb576d1b7055995aa8f3f0a7f78491576bea147470ba8470",
+      "bytes": 1439232,
+      "status": "VERIFIED_PRESERVED",
+      "name": "qwenmonster_output_parser_test.exe"
+    },
+    {
+      "expected_sha256": "9b0389721ebb093a166ef436ea0c5376f63f01589fcc876e636089180b031e8c",
+      "sha256": "9b0389721ebb093a166ef436ea0c5376f63f01589fcc876e636089180b031e8c",
+      "bytes": 519168,
+      "status": "VERIFIED_PRESERVED",
+      "name": "qwenmonster_generation_policy_test.exe"
+    },
+    {
+      "expected_sha256": "3526f552cf9eab1014eecb2f59cf2e31d5cfc46229499e47bb71625d88bda12f",
+      "sha256": "127816b0cac8e9d632d1907efd8f69cd74f4162f62efe37de94bf89a5804a223",
+      "bytes": 36001792,
+      "status": "REPLACED_SINCE_TEST_NOT_HISTORICAL_BINARY",
+      "name": "ovms_test.exe"
+    },
+    {
+      "expected_sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f",
+      "sha256": "13a3c5a91bd6aa45d29271e08613056f09f0f7dd067250c2bac6b02c96597c8f",
+      "bytes": 16566272,
+      "status": "VERIFIED_PRESERVED",
+      "name": "openvino.dll"
+    },
+    {
+      "expected_sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46",
+      "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46",
+      "bytes": 79832576,
+      "status": "VERIFIED_PRESERVED",
+      "name": "opencv_world4140.dll"
+    },
+    {
+      "expected_sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da",
+      "sha256": "7892465a3bca67e103e26b198f47fb1d5c0a98fc2cc7cb4616ba0e8d5ad054da",
+      "bytes": 8745472,
+      "status": "VERIFIED_PRESERVED",
+      "name": "staged-openvino_genai.dll"
+    },
+    {
+      "expected_sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334",
+      "status": "MISSING_NOW_RECEIPT_ONLY",
+      "name": "libcurl-x64.dll"
+    },
+    {
+      "expected_sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334",
+      "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334",
+      "bytes": 3647080,
+      "status": "VERIFIED_PRESERVED",
+      "name": "libcurl-x64.dll"
+    },
+    {
+      "expected_sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8",
+      "status": "MISSING_NOW_RECEIPT_ONLY",
+      "name": "git2.dll"
+    },
+    {
+      "expected_sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8",
+      "sha256": "68b3b4112faddf15d203184dbef6dd0267e11a0a2156faeb17fbc47028b3fa82",
+      "bytes": 1756672,
+      "status": "REPLACED_SINCE_TEST_NOT_HISTORICAL_BINARY",
+      "name": "git2.dll"
+    },
+    {
+      "expected_sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120",
+      "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120",
+      "bytes": 6945272,
+      "status": "VERIFIED_PRESERVED",
+      "name": "python312.dll"
+    },
+    {
+      "expected_sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66",
+      "sha256": "a7b4a454ccf9e242938e79038ec80b5ba8f07f1ed488138497e17c96f52b7f66",
+      "bytes": 3470848,
+      "status": "VERIFIED_PRESERVED",
+      "name": "openvino_tokenizers.dll"
+    },
+    {
+      "expected_sha256": "f4db5c945ce4bbe055450b31d706dfc530f6fa79e9b8398c6832c2626ae192ef",
+      "sha256": "f4db5c945ce4bbe055450b31d706dfc530f6fa79e9b8398c6832c2626ae192ef",
+      "bytes": 489984,
+      "status": "VERIFIED_PRESERVED",
+      "name": "openvino_ir_frontend.dll"
+    },
+    {
+      "expected_sha256": "0cf9706f38ad67535c09842b4678accd207c132364cfe63e5cbb2f2eaa5fda77",
+      "sha256": "0cf9706f38ad67535c09842b4678accd207c132364cfe63e5cbb2f2eaa5fda77",
+      "bytes": 46342656,
+      "status": "VERIFIED_PRESERVED",
+      "name": "openvino_intel_cpu_plugin.dll"
+    },
+    {
+      "expected_sha256": "ec1fb6bd0c2c2db23ab83e527736ec02c231c13c5573794d66367a9e2a455634",
+      "sha256": "ec1fb6bd0c2c2db23ab83e527736ec02c231c13c5573794d66367a9e2a455634",
+      "bytes": 206848,
+      "status": "VERIFIED_PRESERVED",
+      "name": "openvino_auto_batch_plugin.dll"
+    },
+    {
+      "expected_sha256": null,
+      "sha256": "7e94bc2f47e85239e3e0b2dd66a6f0d90db4c1ffa4beaf69a8f9a966a6788daa",
+      "bytes": 32907776,
+      "status": "VERIFIED_PRESERVED",
+      "scope": "Staged GPU plugin captured now; parser tests do not establish GPU loading",
+      "name": "openvino_intel_gpu_plugin.dll"
+    },
+    {
+      "expected_sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8",
+      "sha256": "f5faca49993a93090f5d2b64db9aadc9d103f9ca30ee47e18408e3f1911de2a2",
+      "bytes": 1766920,
+      "status": "REPLACED_SINCE_TEST_NOT_HISTORICAL_BINARY",
+      "name": "git2.dll"
+    },
+    {
+      "expected_sha256": "798b6233d750b8e9be903b926c18e6d150b9f4205d4cc69d56bddf4946dc01e8",
+      "sha256": "6ff4f8bc30ce885aa856e2a9b8bd632ea7ff97975d3afb31bcebed5bad3567e4",
+      "bytes": 1756672,
+      "status": "REPLACED_SINCE_TEST_NOT_HISTORICAL_BINARY",
+      "name": "git2.dll"
+    }
+  ],
+  "known_good_2026_4": {
+    "operator_core_version": "2026.4.0-22930-61afcb26271",
+    "operator_genai_version": "2026.4.0.0-3401-5f7f1278107",
+    "operator_decode_tok_s": "31.8-33.0",
+    "capabilities_operator_supplied": [
+      "QwenXMLParametersFormat",
+      "qwen_xml_parameter",
+      "TriggeredTags",
+      "TagsWithSeparator",
+      "stop_after_first"
+    ],
+    "speed_retested": false,
+    "file_product_versions_verified_without_loading": {
+      "openvino.dll": "2026.4.0-22930-61afcb26271-releases/2026/4",
+      "openvino_genai.dll": "2026.4.0.0-3401-5f7f1278107",
+      "openvino_intel_gpu_plugin.dll": "2026.4.0-22930-61afcb26271-moe38545-backport"
+    },
+    "binaries": [
+      {
+        "name": "ovms.exe",
+        "sha256": "073ed783610883f9060fe861736c683a7edff59937b25dbd18e1fdeea14007fc",
+        "status": "VERIFIED_PRESERVED"
+      },
+      {
+        "name": "openvino.dll",
+        "sha256": "829c4642e287522f8a8e748a726d4ad3117a701e22ab46adc82771f98e5d2f7e",
+        "status": "VERIFIED_PRESERVED"
+      },
+      {
+        "name": "openvino_genai.dll",
+        "sha256": "5a2904f2564e4ce002db5ef5fe003a782e6f296f6377cd66df1b2db41d4c5e8d",
+        "status": "VERIFIED_PRESERVED"
+      },
+      {
+        "name": "openvino_intel_gpu_plugin.dll",
+        "sha256": "21a2fd9f5d856c297416059325832f0f902c84a4e78b840f859ca508f5aea66d",
+        "status": "VERIFIED_PRESERVED"
+      },
+      {
+        "name": "openvino_tokenizers.dll",
+        "sha256": "e96e02744f4cd9567e54065430aa609e97c48951299a21f30abc00fba6078d3c",
+        "status": "VERIFIED_PRESERVED"
+      }
+    ]
+  },
+  "private_manifest_sha256": "fa05e7d31784a250231f95f95555cdb11288f611ad922c5c05c92b51f4cb188e"
+}

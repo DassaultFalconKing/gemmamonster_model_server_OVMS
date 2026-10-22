@@ -1,3 +1,17 @@
+# Current checkpoint: historical parser-green 2026.5 frozen; 2026.4 refit preparation
+
+- ACTIVE_STAGE: FROZEN by operator, 2026-10-23. Freeze specifically repair `6378400a6`, report `de5032f71`, integrated `ac2d190d5`; later QWM/drafter changes are not this tuple.
+- BASE_SHA / REVERT_POINT: historical integrated `ac2d190d565b693c5ca0e67ddae904a4d10d5342`; documentation working branch `qwm01-request-schema`, pre-freeze-doc HEAD `0c597075ca0078a84fbbfd4c01eb02adf7965acd`. Resolve documentation CURRENT_HEAD after commit.
+- DEPENDENCY_LOCK: unchanged. Exact historical source pins, loaded DLL hashes, preserved artifact status and archive checksums in `evidence/PARSER-GREEN-20261021-PINS.json`; full physical paths and copies private.
+- LAST_GREEN_TESTS: 2026-10-21 18:28 Berlin: Qwen69/69, Gemma79/79, core29/29, policy9/9; integrated 18:54:148/148 Qwen/Gemma. Four matching focused EXEs and historical GenAI789246... DLL preserved. Full old ovms_test3526f552... has been replaced at its build path; its hash/XML/log preserved, exact old EXE recovery not claimed.
+- CURRENT_FAILURE: operator reports a sensitive 2026.5 performance regression. This freeze did not rerun performance or establish its mechanism. Prior long-context/drafter work remains NOT_RUN and must not resume on this basis.
+- ROOT_CAUSE: NOT ESTABLISHED. Source lock is distinct from actual reused binary identities.
+- NEXT_ACTION: prepare semantic refit on known-good 2026.4 in separate future locations. Confirmed file identities: core2026.4.0-22930-61afcb26271, GPU same base with moe38545-backport, GenAI2026.4.0.0-3401-5f7f1278107, OVMS073ed783...; reported31.8-33.0 tok/s not retested. No implementation, build or inference started.
+- EVIDENCE_PATH: [FROZEN-PARSER-GREEN-20261021.md](FROZEN-PARSER-GREEN-20261021.md); private physical-address manifest retained. Historic earlier resume instructions below are superseded.
+- ACCEPTED: NO. Parser UNIT green does not establish new tuple LIVE/AGENTIC or performance acceptance.
+
+Historical checkpoints below retain their measured scopes.
+
 # Current checkpoint: operator compute pause and drafter handoff
 
 - ACTIVE_STAGE: PAUSED BY OPERATOR, 2026-10-22. Status publication only; no new builds or inference. Operator compilations are active and untouched.

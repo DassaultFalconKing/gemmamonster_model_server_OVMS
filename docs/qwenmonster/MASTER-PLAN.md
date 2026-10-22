@@ -1,6 +1,8 @@
 # QWENMONSTER — генеральная рабочая программа R0–R6
 
-**ACTIVE · ACCEPTED: NO · 2026-10-22**
+**2026.5 PARSER-GREEN POINT FROZEN · ACCEPTED: NO · 2026-10-23**
+
+**Current operator decision:** preserve repair `6378400a6` / report `de5032f71` / integrated `ac2d190d5` with all component identities and private physical addresses. Stop further work on the 2026.5 basis because of the operator-reported sensitive performance regression. The next track is preparation of a semantic refit onto exact known-good 2026.4 (`61afcb26271` core/backported GPU, `5f7f1278107` GenAI, `073ed783...` OVMS). See [FROZEN-PARSER-GREEN-20261021.md](FROZEN-PARSER-GREEN-20261021.md) and [component pins](evidence/PARSER-GREEN-20261021-PINS.json). This supersedes all earlier benchmark/build resume queues. Refit implementation and new acceptance are NOT RUN.
 
 Первоисточник: пользовательская программа «QWENMONSTER — C6 Protocol & Agentic Reliability Program» от 2026-10-21. Эта редакция сохраняет её нормативные R0–R6, первоначальные требования и gates, объединяет измеренные QWM-01/Ornith/Gemma/XGrammar результаты и даёт единую очередь W1–W7. Навигация: [PLAN-MAP.md](PLAN-MAP.md).
 

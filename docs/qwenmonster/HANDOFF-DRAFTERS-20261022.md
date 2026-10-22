@@ -1,5 +1,7 @@
 # Agent handoff: Ornith drafters, 2026-10-22
 
+**SUPERSEDED resume authorization, 2026-10-23:** the operator has frozen the historical parser-green 2026.5 basis and stopped work on it. Do not execute this document's resume sequence. Next direction is semantic refit preparation on known-good 2026.4; see [FROZEN-PARSER-GREEN-20261021.md](FROZEN-PARSER-GREEN-20261021.md). Historical measurements below remain scoped evidence only.
+
 **PAUSED BY OPERATOR. ACCEPTED: NO.** The operator has active compilations and requested status commits/publication only. Do not start or resume models, benchmarks, exporters or builds from this handoff. No benchmark or OVMS process was active at the pause snapshot; an unrelated compiler was active and was left untouched.
 
 ## Source and runtime boundary

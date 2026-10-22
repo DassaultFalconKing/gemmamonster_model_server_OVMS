@@ -1,5 +1,9 @@
 # AGENTS.md — Gemmamonster / Qwenmonster engineering contract
 
+## Operator freeze, 2026-10-23 (takes precedence over earlier resume queues)
+
+The historical parser-green **2026.5** point is frozen: repair `6378400a6`, report `de5032f71`, integrated `ac2d190d5`. Do not continue builds, model/drafter benchmarks, dependency advances or promotion on that basis. The operator reports a performance regression and directs preparation of a **semantic refit onto known-good 2026.4**. Read `docs/qwenmonster/FROZEN-PARSER-GREEN-20261021.md` and its exact component pins before any work. Preserve the original 2026.4 runtime, frozen artifacts, shared checkout and published lock; use separate future refit locations. Earlier resume instructions do not override this freeze.
+
 This file applies to automated agents working in this repository. It is an
 engineering workflow policy, **not** evidence that the current candidate is
 accepted. Preserve the accepted Gemma4 baseline and the published C6 dependency
