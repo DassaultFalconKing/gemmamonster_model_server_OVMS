@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-23",
+  "purpose": "Final published heads of the 2026.5 development line. Supersedes component SHAs in public-source-lock.json (2026-10-21) as the current tips. That lock file stays the publication record of that day. This file is not runtime acceptance and not the 2026.4 known-good.",
+  "known_good_2026_4_not_these_heads": {
+    "openvino": "2026.4.0-22930-61afcb26271",
+    "genai": "2026.4.0.0-3401-5f7f1278107",
+    "ovms_freeze": {
+      "repository": "DassaultFalconKing/gemmamonster_model_server_OVMS",
+      "branch": "freeze/gemmamonster-2026.4-known-good",
+      "sha": "c48366fee1f10cdf6b5fe3c181522ed0c58fc9fd"
+    }
+  },
+  "heads": {
+    "openvino": {
+      "repository": "DassaultFalconKing/openvino",
+      "branch": "codex/c6-head-20261019-openvino",
+      "sha": "e5606d01c464dc125ab79183ca43c2042d0e2f67",
+      "url": "https://github.com/DassaultFalconKing/openvino/tree/codex/c6-head-20261019-openvino",
+      "subject": "Add env-gated MOE_PATH_LOG to identify which MoE GEMM path decode actually takes.",
+      "prior_lock_sha": "b5bfb14860320ae2a44d0fc55d78caa9a9d789b9",
+      "runtime_product_string": "2026.5.0-5-591ab0b517a-codex/c6-head-20261019-openvino",
+      "note": "Git tip is e5606d01. The staged openvino.dll product string is still stamped 591ab0b517a; that commit is an ancestor, not this head."
+    },
+    "genai": {
+      "repository": "DassaultFalconKing/openvino.genai",
+      "branch": "codex/qwenmonster-xgrammar-802-20261022",
+      "sha": "8f305a1c1bc11e348c8ad0cc37269a91ba21cc74",
+      "url": "https://github.com/DassaultFalconKing/openvino.genai/tree/codex/qwenmonster-xgrammar-802-20261022",
+      "subject": "Pin GenAI FetchContent to the XGrammar XML end-marker lock.",
+      "prior_lock_branch": "codex/c6-head-20261019-genai",
+      "prior_lock_sha": "2decb9ec4bea827e01db47524352ad72d23b33ab",
+      "prior_lock_is_ancestor": true,
+      "runtime_product_string": "2026.5.0.0-10-8f305a1c1bc-codex/qwenmonster-xgrammar-802-20261022"
+    },
+    "xgrammar": {
+      "repository": "DassaultFalconKing/xgrammar",
+      "branch": "fix/qwenmonster-xml-end-marker-lock-20261022",
+      "sha": "5b0b7084a65a2059b44c03fbc6320ad7fcc41f33",
+      "url": "https://github.com/DassaultFalconKing/xgrammar/tree/fix/qwenmonster-xml-end-marker-lock-20261022",
+      "subject": "fix(xgrammar): lock XML end-marker prefixes against closer drift",
+      "prior_lock_branch": "codex/c6-head-20261019-xgrammar",
+      "prior_lock_sha": "c77d5e0d62411d17d4cf55d280463eb5b3bec7ba",
+      "prior_lock_is_ancestor": true
+    },
+    "minja": {
+      "repository": "DassaultFalconKing/minja",
+      "branch": "codex/c6-head-20261019-minja",
+      "sha": "1bdb178afd6f527354e17a1db1b3a22b59189f21",
+      "url": "https://github.com/DassaultFalconKing/minja/tree/codex/c6-head-20261019-minja",
+      "cohort_lock_branch": "codex/c6-head-20261019-minja-locked",
+      "cohort_lock_sha": "83eb074e42140b0d1194d1dd61f29c31e4515ee9",
+      "note": "Later published minja branch. Ancestry against the locked SHA was not rechecked in this freeze; both refs exist on the fork."
+    },
+    "tokenizers": {
+      "repository": "openvinotoolkit/openvino_tokenizers",
+      "sha": "d73028e255ddc279483fbc6e8ea90dc802e820f5",
+      "note": "Unchanged. No local patch."
+    },
+    "ovms_pre_otd": {
+      "repository": "DassaultFalconKing/gemmamonster_model_server_OVMS",
+      "branch": "feature/qwenmonster-qwm01-request-schema-20261021",
+      "sha": "0c597075ca0078a84fbbfd4c01eb02adf7965acd",
+      "url": "https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/tree/feature/qwenmonster-qwm01-request-schema-20261021",
+      "contains": "bounded Gemma parser, qwen3coder parser, generation policy",
+      "otd_pack_commit_is_ancestor": false
+    },
+    "ovms_otd": {
+      "repository": "DassaultFalconKing/gemmamonster_model_server_OVMS",
+      "branch": "research/ovms-otd-pack-mode-2026",
+      "sha": "1d9b497ea27221c51636af028e597e6c681d42b2",
+      "url": "https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/tree/research/ovms-otd-pack-mode-2026",
+      "subject": "Add --build_moe_experts_pack mode and --moe_experts_pack_dir",
+      "fork_point": "ba6ec792c3121850fea167fa7d7e190b25fcdc76"
+    },
+    "ovms_joined": {
+      "repository": "DassaultFalconKing/gemmamonster_model_server_OVMS",
+      "branch": "integration/qwm01-otd-pack-20261022",
+      "sha": "746dc833dc3bcccf64fabdb469feda9260582bae",
+      "url": "https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/tree/integration/qwm01-otd-pack-20261022",
+      "join_commit": "44d76afecbb7909ac696a2a13a930c57a7625334",
+      "join_parents": [
+        "0c597075ca0078a84fbbfd4c01eb02adf7965acd",
+        "1d9b497ea27221c51636af028e597e6c681d42b2"
+      ],
+      "docs_checkpoint_branch": "checkpoint/qwm01-otd-pack-20261022",
+      "docs_checkpoint_sha": "4215aa39da160eb742ecd7f0fa2ace5c90d64efa"
+    }
+  },
+  "evidence_not_product": {
+    "repository": "DassaultFalconKing/openvino",
+    "branch": "Testrun_2026-10-23-moe-decode-regression",
+    "sha": "c6db4588ee03b48c31cf471744195549b48e8946",
+    "note": "Root commit. Logs and the cloud task only. Source authority remains codex/c6-head-20261019-openvino at e5606d01."
+  }
+}
