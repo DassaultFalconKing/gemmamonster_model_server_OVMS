@@ -86,4 +86,5 @@ If the operator prefers sequencing: complete Wave-01 GPU authorization / COMPUTE
 - [x] Recommended next action (§6)  
 - [x] Explicit: no merge, no COMPUTE_GO assumed  
 
-**Draft PR URL:** _(pending push)_
+**Draft PR URL:** https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/pull/22 (docs-only; **do not merge**)  
+**This pack commit:** `c3b2ff0f6d3f52bf4fa2b7fd70f367faffc6afee`
