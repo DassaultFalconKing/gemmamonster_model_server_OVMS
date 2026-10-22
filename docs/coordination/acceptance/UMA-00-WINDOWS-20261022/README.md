@@ -11,3 +11,5 @@ Docs-only investigation for Draft PR #20 / ADR-UMA-01.
 Raw host probe outputs (not committed; local machine): `C:\gm\orchestration\uma-00-windows-20261022\evidence\`
 
 **Decision:** `UMA_B_PROTOTYPE_READY_FOR_DESIGN` — do not merge without operator approval.
+
+**Follow-on design:** [UMA-01-DESIGN-20261022](../UMA-01-DESIGN-20261022/) (scratch path B + UMA-02 plan).

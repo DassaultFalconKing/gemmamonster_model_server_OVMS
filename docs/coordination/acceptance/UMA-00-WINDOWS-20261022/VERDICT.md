@@ -79,4 +79,6 @@ See `RISKS.md`: non-coherent UMA, WDDM overlapping budgets, nine-way scatter res
 
 ## Recommended single next design step
 
-**Write a scratch-only design note (no production PR) specifying:** OTD resident alloc = `usm_host` (or explicit policy flag), keep Wave-01 verify-before-publish, replace nine `copy_from` with CPU slot scatter after verify, define fence/`set_filled` ordering, and list the UMA-02 byte-parity + corrupt-record negative tests — still **no** GPU merge and **no** Wave-01 interference until operator approval for UMA-02.
+**DONE (2026-10-22):** scratch design + UMA-02 plan published under  
+[`../UMA-01-DESIGN-20261022/`](../UMA-01-DESIGN-20261022/) (`DESIGN.md`, `UMA-02-PLAN.md`, `HANDOFF.md`).  
+Next engineering action: operator-gated host-only UMA-02 harness — still **no** GPU merge, **no** COMPUTE_GO, **no** production allocator switch.
