@@ -20,6 +20,7 @@
 | W7 AEON DFlash | Export PASS; startup FAILED on missing target hidden-state metadata | Candidate metadata overlay prepared; retry and K4/K6 measurements NOT RUN |
 | W7 EAGLE3 | Existing ordinary IR transform failure reproduced; Zenith MoE v5 source feasibility only | No compatible port or runtime acceptance |
 | W6 drafter agent loops | NOT RUN | Useful tool execution, parser/SSE and actual continuations on the chosen tuple |
+| W7 MoE OTD packs | `--build_moe_experts_pack` / `--moe_experts_pack_dir` merged on this line; GPU plugin P2–P4 on an unpublished OpenVINO branch; unit tests and compile only. See [HANDOFF-MOE-OTD-PACK-20261022.md](HANDOFF-MOE-OTD-PACK-20261022.md) | Real pack build, packed vs unpacked baseline/MTP K3 at OFFLOAD_RATIO=40 NOT RUN |
 
 The operator explicitly authorized isolated drafter experiments as an extension to the original performance track. They do not replace protocol gates. The operator manually stopped repetitive 100/100 required/named loops; do not restart these as the default workload. Preserve historical evidence without claiming the stopped matrix completed. Exact 2048-token workload is prepared with thinking enabled; long-context speedup, pure prefill and decode results are not yet available. Short 27-input/64-output runs remain smoke only.
 

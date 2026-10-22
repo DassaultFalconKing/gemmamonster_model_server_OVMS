@@ -9,6 +9,7 @@
 - NEXT_ACTION: wait for operator release of compute. Then validate existing diagnostic, run baseline and MTP K3 with honest separate prefill/TTFT/decode metrics, review results, extend candidate matrix and useful tool-result loops. Do not restart repetitive 100/100 loops by default.
 - EVIDENCE_PATH: [HANDOFF-DRAFTERS-20261022.md](HANDOFF-DRAFTERS-20261022.md); exact machine paths/raw evidence remain private. MASTER-PLAN.md has synchronized statuses.
 - ACCEPTED: NO. No persistent OVMS or diagnostic process active at the pause snapshot; operator compiler left running.
+- LINKED_TRACK: integration branch `integration/qwm01-otd-pack-20261022` = this checkpoint plus the MoE experts pack mode. The drafter executable above does not contain it. See [HANDOFF-MOE-OTD-PACK-20261022.md](HANDOFF-MOE-OTD-PACK-20261022.md).
 
 Historical checkpoints below retain their measured scopes.
 
