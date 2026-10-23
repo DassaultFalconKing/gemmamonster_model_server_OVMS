@@ -1,0 +1,86 @@
+[
+  {
+    "ModuleName": "_pyopenvino.cp312-win_amd64.pyd",
+    "FileName": "<EVAL_ROOT>\\venv-latest\\Lib\\site-packages\\openvino\\_pyopenvino.cp312-win_amd64.pyd",
+    "Version": null,
+    "bytes": 4040192,
+    "sha256_on_disk_after_run": "ffc67002a6d46f50892b54acd6ad5954eb06e35a58fb932cc507b7497dd76d02"
+  },
+  {
+    "ModuleName": "openvino.dll",
+    "FileName": "<EVAL_ROOT>\\venv-latest\\Lib\\site-packages\\openvino\\libs\\openvino.dll",
+    "Version": "2026.5.0.23594",
+    "bytes": 16744200,
+    "sha256_on_disk_after_run": "887aeb30b473114699d71cf47114d62a16886c435519c557513b7dc12a8233c1"
+  },
+  {
+    "ModuleName": "tbb12.dll",
+    "FileName": "<EVAL_ROOT>\\venv-latest\\Lib\\site-packages\\openvino\\libs\\tbb12.dll",
+    "Version": "2021.13.3",
+    "bytes": 337168,
+    "sha256_on_disk_after_run": "a7a236bb095ac33f463a996d16ad7f5ee6bb9046bc151c667c2340061e5fc348"
+  },
+  {
+    "ModuleName": "py_openvino_genai.cp312-win_amd64.pyd",
+    "FileName": "<EVAL_ROOT>\\venv-latest\\Lib\\site-packages\\openvino_genai\\py_openvino_genai.cp312-win_amd64.pyd",
+    "Version": null,
+    "bytes": 2676736,
+    "sha256_on_disk_after_run": "0fceb666290f35b3fcefad530289e329144f26d4a26932cfa6dfabe4994db922"
+  },
+  {
+    "ModuleName": "openvino_genai.dll",
+    "FileName": "<EVAL_ROOT>\\venv-latest\\Lib\\site-packages\\openvino_genai\\openvino_genai.dll",
+    "Version": "2026.5.0.0",
+    "bytes": 8271112,
+    "sha256_on_disk_after_run": "6263547658010af7059039c24d78ef92b657fcd0de9ccdcbf9591b94fdff2dbd"
+  },
+  {
+    "ModuleName": "openvino_gguf_frontend.dll",
+    "FileName": "<EVAL_ROOT>\\venv-latest\\Lib\\site-packages\\openvino\\libs\\openvino_gguf_frontend.dll",
+    "Version": "2026.5.0.23594",
+    "bytes": 2175248,
+    "sha256_on_disk_after_run": "8732d91ae92d61255ccee8de2417cddd403450af7cba069c963bbc7e139c0940"
+  },
+  {
+    "ModuleName": "openvino_ir_frontend.dll",
+    "FileName": "<EVAL_ROOT>\\venv-latest\\Lib\\site-packages\\openvino\\libs\\openvino_ir_frontend.dll",
+    "Version": "2026.5.0.23594",
+    "bytes": 515344,
+    "sha256_on_disk_after_run": "b57c09f9f92fe1d85085ed787c6163d0ff1ddb9485199304c9db792bcdb8e9de"
+  },
+  {
+    "ModuleName": "openvino_tokenizers.dll",
+    "FileName": "<EVAL_ROOT>\\venv-latest\\Lib\\site-packages\\openvino_tokenizers\\lib\\openvino_tokenizers.dll",
+    "Version": "2026.5.0.0",
+    "bytes": 3473680,
+    "sha256_on_disk_after_run": "4af8aa17be72238be54ac9ee4656e804052197005f16a6bd01a84543366f058d"
+  },
+  {
+    "ModuleName": "openvino_auto_batch_plugin.dll",
+    "FileName": "<EVAL_ROOT>\\venv-latest\\Lib\\site-packages\\openvino\\libs\\openvino_auto_batch_plugin.dll",
+    "Version": "2026.5.0.23594",
+    "bytes": 208136,
+    "sha256_on_disk_after_run": "b87d2fc37ba7f3edadcb3b31feda2b896c9111882273f7fe8337562f8216aecd"
+  },
+  {
+    "ModuleName": "openvino_intel_cpu_plugin.dll",
+    "FileName": "<EVAL_ROOT>\\venv-latest\\Lib\\site-packages\\openvino\\libs\\openvino_intel_cpu_plugin.dll",
+    "Version": "2026.5.0.23594",
+    "bytes": 46613256,
+    "sha256_on_disk_after_run": "c03e57699a3093be5481225cb53cf29665e746ce91fd217f3e66727457c526fc"
+  },
+  {
+    "ModuleName": "openvino_intel_gpu_plugin.dll",
+    "FileName": "<EVAL_ROOT>\\venv-latest\\Lib\\site-packages\\openvino\\libs\\openvino_intel_gpu_plugin.dll",
+    "Version": "2026.5.0.23594",
+    "bytes": 33997064,
+    "sha256_on_disk_after_run": "b39d00f6c8112dc8a3a33af12a39154b719e0fbec8b7db97ca1d2708e01c427e"
+  },
+  {
+    "ModuleName": "igdrcl64.dll",
+    "FileName": "<WINDIR>\\System32\\DriverStore\\FileRepository\\iigd_dch.inf_amd64_9a6d05f5d3be77f9\\igdrcl64.dll",
+    "Version": "32.0.101.9150",
+    "bytes": 40072576,
+    "sha256_on_disk_after_run": "0ac5822e42cdc7642ea96ab99b35e3ff92254bccfe2e08f808914d425ac4def5"
+  }
+]

@@ -1,5 +1,18 @@
 # Evaluation state
 
+## Current checkpoint: 2026-10-24
+
+ACTIVE_STAGE: MEMORY_BLOCKED_LIVE; ACCEPTED: NO; MERGE_AUTHORIZATION: NO.
+STARTING_HEAD: 16b239e417454b65e3c004fd5e2dcd33e7a6f222; current HEAD: resolve with git rev-parse HEAD.
+Operator authorized memory reclamation and live scripts. Desktop working-set trims completed without closing apps, stopping services, purging standby or changing production runtime/cache.
+Two actual nightly GPU constructor attempts (default threads and COMPILATION_NUM_THREADS=1) were stopped by the 3 GiB sampled RAM watchdog after 29.047 and 32.469 seconds. The second run sampled tree RSS/private peaks of 20.578/20.651 GiB and minimum available RAM 1.970 GiB before termination. Construction never completed; generation was NOT_RUN.
+CURRENT_FAILURE: measured memory pressure during GPU VLMPipeline construction, not merely the old static admission threshold. No unsupported-op exception was obtained before the stop.
+LAST_GREEN_TESTS: supervisor offline controls 3/3 PASS, covering unrelated worker exclusion, complete owned-tree timeout cleanup and native exit/phase preservation. These are not inference PASS.
+EVIDENCE_PATH: docs/minicpm-v47/evidence/live-20261024; report: LIVE-MEMORY-20261024.md. Exact second-run script snapshot and SHA256 retained there. Final available RAM 22.587 GiB; no surviving Python/inference worker observed.
+NEXT_ACTION: no extended retries after two memory-floor stops. Further reduce persistent desktop footprint or establish a supported memory-saving loading/compilation configuration before another isolated GPU test. Keep text/image/video/performance and OVMS acceptance gated.
+
+## Historical checkpoint: 2026-10-23
+
 Evaluation date: 2026-10-23, Europe/Berlin client context.
 ACTIVE_STAGE: MEMORY_BLOCKED; ACCEPTED: NO.
 BASE_SHA / REVERT_POINT: eb76a74f7aa39573d452d95443e189b1f5f4d9e8.

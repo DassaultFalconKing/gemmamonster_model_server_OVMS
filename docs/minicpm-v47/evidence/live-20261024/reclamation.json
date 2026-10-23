@@ -1,0 +1,32 @@
+[
+  {
+    "pass_name": "trim-first.json",
+    "available_before": 18880856064,
+    "available_after": 20517531648,
+    "successful": 59,
+    "policy": "One working-set trim pass; no process termination, cache purge, service or system setting changes.",
+    "groups": {
+      "msedge.exe": 8,
+      "msedgewebview2.exe": 19,
+      "Signal.exe": 1,
+      "Cursor.exe": 15,
+      "handy.exe": 1,
+      "ChatGPT.exe": 14,
+      "TextInputHost.exe": 1
+    }
+  },
+  {
+    "pass_name": "trim-secondary.json",
+    "available_before": 22401417216,
+    "available_after": 22738874368,
+    "successful": 5,
+    "policy": "One working-set trim pass; no process termination, cache purge, service or system setting changes.",
+    "groups": {
+      "PowerToys.Peek.UI.exe": 1,
+      "explorer.exe": 1,
+      "WidgetBoard.exe": 1,
+      "Microsoft.CmdPal.UI.exe": 1,
+      "NordVPN.exe": 1
+    }
+  }
+]

@@ -1,5 +1,7 @@
 # MiniCPM-V 4.7 / Arc 140V final checkpoint report
 
+Latest continuation: [2026-10-24 live memory report](LIVE-MEMORY-20261024.md). Two real GPU constructor attempts now reproduced memory pressure and were stopped by the watchdog; generation and performance remain unexecuted. The admission-only measurements below are the historical 2026-10-23 checkpoint.
+
 The exact working GenAI 2026.4 RC1 cannot construct this model: `Unsupported 'minicpmv4_7' VLM model type`, thrown in visual_language/vlm_config.cpp:45 before GPU compilation. This is a model dispatcher gap, not an allocation failure. Both SDKs see GPU and read all five IR graphs after tokenizer extension registration.
 The independent nightly has source support but GPU execution remains unverified. Available RAM 14.601 GiB is below the conservative admission threshold 21.368 GiB (BIN 18.368 GiB + 3 GiB). The smoke supervisor also independently returned BLOCKED without starting an inference child. This policy does not prove the model cannot fit on an otherwise idle 32 GB machine; no swap storm, WDDM eviction or GPU reset was observed because compile/inference was not started.
 

@@ -1,0 +1,5 @@
+{
+  "status": "BLOCKED",
+  "reason": "Memory pressure floor 3 GiB",
+  "returncode": 1
+}

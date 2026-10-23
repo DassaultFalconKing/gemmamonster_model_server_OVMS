@@ -1,0 +1,12 @@
+{
+  "status": "BLOCKED",
+  "reason": "Memory pressure floor 3 GiB",
+  "returncode": 15,
+  "last_child_state": {
+    "device": "GPU",
+    "max_new_tokens": 32,
+    "do_sample": false,
+    "phase": "constructing",
+    "compile_threads": 1
+  }
+}

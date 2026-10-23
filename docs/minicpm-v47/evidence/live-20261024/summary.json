@@ -1,0 +1,27 @@
+{
+  "status": "MEMORY_BLOCKED",
+  "base_source": "16b239e417454b65e3c004fd5e2dcd33e7a6f222",
+  "single_thread_script_sha256": "6328641e94ef322bf06e09537f7b67e2c11a7db6b0f7282bcd8c0c63b3234c96",
+  "first": {
+    "seconds": 29.04700000000048,
+    "start_available_gib": 20.124542236328125,
+    "min_available_gib": 2.7960433959960938,
+    "peak_rss": "NOT_RECORDED: early monitor observed venv redirector only",
+    "stop_reason": "Memory pressure floor 3 GiB"
+  },
+  "single_thread": {
+    "seconds": 32.46899999999914,
+    "start_available_gib": 21.184253692626953,
+    "min_available_gib": 1.9704818725585938,
+    "peak_tree_rss_gib": 20.577743530273438,
+    "peak_tree_private_gib": 20.65102767944336,
+    "stop_reason": "Memory pressure floor 3 GiB",
+    "last_phase": "constructing"
+  },
+  "final_available_gib": 22.587482452392578,
+  "final_workers": [],
+  "display_reset_4101_events": [],
+  "generated_tokens": null,
+  "correctness": "NOT_RUN",
+  "benchmark": "NOT_RUN"
+}

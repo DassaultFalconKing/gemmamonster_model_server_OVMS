@@ -1,6 +1,6 @@
 # MiniCPM-V 4.7 / GEMMAMONSTER — execution and MFP-1 program
 
-**23 October 2026. MEMORY_BLOCKED / NOT ACCEPTED.** Local file verification and GPU discovery/IR reads completed. Pinned 2026.4 RC1 rejects the model type; isolated nightly compilation/inference is blocked by physical RAM admission. No model GPU inference or benchmark was run.
+**24 October 2026. MEMORY_BLOCKED / NOT ACCEPTED.** Local file verification and GPU discovery/IR reads completed. Pinned 2026.4 RC1 rejects the model type. Two isolated nightly GPU constructor attempts reproduced physical RAM pressure and were stopped by watchdog; construction never completed. No model generation or benchmark was run. See [LIVE-MEMORY-20261024.md](LIVE-MEMORY-20261024.md).
 
 Measured checkpoint: [FINAL-REPORT.md](FINAL-REPORT.md), [COMPATIBILITY-MATRIX.md](COMPATIBILITY-MATRIX.md), [MODEL-IDENTITY.md](MODEL-IDENTITY.md), [TOOL-PROTOCOL-FIT.md](TOOL-PROTOCOL-FIT.md). The two documents below remain the execution and MFP-1 roadmaps; their planned stages are not runtime evidence.
 

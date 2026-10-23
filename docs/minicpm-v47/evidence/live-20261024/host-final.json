@@ -1,0 +1,38 @@
+{
+  "ram": {
+    "total": 33866633216,
+    "available": 24253124608,
+    "percent": 28.4,
+    "used": 9613508608,
+    "free": 24253124608
+  },
+  "swap": {
+    "total": 103079215104,
+    "used": 1125957632,
+    "free": 101953257472,
+    "percent": 1.1,
+    "sin": 0,
+    "sout": 0
+  },
+  "disk": {
+    "total": 1000257613824,
+    "used": 903739568128,
+    "free": 96518045696,
+    "percent": 90.4
+  },
+  "dxgi": {
+    "local": {
+      "Budget": 28658664529,
+      "CurrentUsage": 0,
+      "AvailableForReservation": 14463549992,
+      "CurrentReservation": 0
+    },
+    "non_local": {
+      "Budget": 0,
+      "CurrentUsage": 0,
+      "AvailableForReservation": 0,
+      "CurrentReservation": 0
+    },
+    "scope": "Adapter index 0, calling-process usage only; not global WDDM usage. Budget is dynamic."
+  }
+}
