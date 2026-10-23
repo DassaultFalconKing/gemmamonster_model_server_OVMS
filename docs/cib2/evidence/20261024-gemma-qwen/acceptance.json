@@ -1,0 +1,921 @@
+{
+  "schema": "cib2.gemma-qwen-static-acceptance.v1",
+  "captured_utc": "2026-10-23T23:07:24.313828+00:00",
+  "tested_functionality_commit": "03b32911b0189791c2ad3b9a746e676871b40eb5",
+  "models": [
+    {
+      "label": "OpenVINO/gemma-4-E4B-it-int4-ov",
+      "model_type": "gemma4",
+      "text_model_type": "gemma4_text",
+      "status": "PASS",
+      "routed_const_nodes": 0,
+      "graphs": [
+        {
+          "file": "openvino_detokenizer.xml",
+          "const_nodes_checked": 6,
+          "const_roles": {
+            "unknown": 6
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_language_model.xml",
+          "const_nodes_checked": 4185,
+          "const_roles": {
+            "unknown": 3786,
+            "attention_kv_or_state": 396,
+            "embeddings": 3
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 42
+        },
+        {
+          "file": "openvino_text_embeddings_model.xml",
+          "const_nodes_checked": 4,
+          "const_roles": {
+            "embeddings": 3,
+            "unknown": 1
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_text_embeddings_per_layer_model.xml",
+          "const_nodes_checked": 12,
+          "const_roles": {
+            "embeddings": 3,
+            "unknown": 9
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_tokenizer.xml",
+          "const_nodes_checked": 30,
+          "const_roles": {
+            "unknown": 30
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_vision_embeddings_model.xml",
+          "const_nodes_checked": 1606,
+          "const_roles": {
+            "unknown": 1232,
+            "vision": 374
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 16
+        }
+      ],
+      "actual_bin_samples": [],
+      "config_sha256": "2b37a0000817cc7680de9902d49d4e1ead2718cfc8f7d4a43a8d0aad80aabc16",
+      "full_map_sha256": "e5df7a801150624e29b11b25e1b7b70fc17d7fa0138128fe077c4dfcfc35fe87"
+    },
+    {
+      "label": "OpenVINO/gemma4-google-template-overlay",
+      "model_type": "gemma4",
+      "text_model_type": "gemma4_text",
+      "status": "PASS",
+      "routed_const_nodes": 90,
+      "graphs": [
+        {
+          "file": "openvino_detokenizer.xml",
+          "const_nodes_checked": 6,
+          "const_roles": {
+            "unknown": 6
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_language_model.xml",
+          "const_nodes_checked": 4450,
+          "const_roles": {
+            "unknown": 3922,
+            "attention_kv_or_state": 345,
+            "routed_expert": 90,
+            "router": 90,
+            "embeddings": 3
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 90,
+          "observed_blocks": 30
+        },
+        {
+          "file": "openvino_text_embeddings_model.xml",
+          "const_nodes_checked": 4,
+          "const_roles": {
+            "embeddings": 3,
+            "unknown": 1
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_text_embeddings_per_layer_model.xml",
+          "const_nodes_checked": 3,
+          "const_roles": {
+            "unknown": 3
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_tokenizer.xml",
+          "const_nodes_checked": 30,
+          "const_roles": {
+            "unknown": 30
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_vision_embeddings_model.xml",
+          "const_nodes_checked": 2673,
+          "const_roles": {
+            "unknown": 2057,
+            "vision": 616
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 27
+        }
+      ],
+      "actual_bin_samples": [
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 449,
+          "node_id": "449",
+          "name": "self.model.language_model.layers.0.experts.down_proj",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 570345520,
+          "size": 126877696,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "64"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "1288a791afe0ee72b0a89e1a8dae21c4c4ed8ebab78a518d1d6694bd295d151d",
+          "last_sha256": "4b05c1dafc3e910703aa35c214dc15e045baf3b33c37d20dc8e2e4287f13d21e"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 451,
+          "node_id": "451",
+          "name": "self.model.language_model.layers.0.experts.down_proj/zero_point",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 697223216,
+          "size": 1982464,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "fea1d5d069c1972faaee568f1bd9fe971ac899010b83e93d035fe3390ccd2c1a",
+          "last_sha256": "fd8efc159a0aeebe9e20f5e926209c6612a91a85b8c4c2ba6c172a0b58f7328b"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 454,
+          "node_id": "454",
+          "name": "self.model.language_model.layers.0.experts.down_proj/scale",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 699205680,
+          "size": 7929856,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "f16",
+          "sample_bytes_each": 4096,
+          "first_sha256": "84142594e636ae2f6fee6a01a96c7af06f14bd4883a477da92c3a277102e9fd3",
+          "last_sha256": "4b8730f1b0e89ce1168655ffaf21c64d2f754181bb799116e0ed5c9e831b4707"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 801,
+          "node_id": "801",
+          "name": "self.model.language_model.layers.1.experts.down_proj",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 1010521340,
+          "size": 126877696,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "64"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "8844de974dd304abb55a181f5925314719347b33cb86706567c04c14e29a5471",
+          "last_sha256": "52c4021bb5a9bcc94c5e42f87c39a0fbf426a9179bf7bd1df6b57be518ae6eca"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 803,
+          "node_id": "803",
+          "name": "self.model.language_model.layers.1.experts.down_proj/zero_point",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 1137399036,
+          "size": 1982464,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "503de047691d6b1c23f732cea3042c31987e34cde148c673ccfc74b2488fd158",
+          "last_sha256": "29d9842351d1e6d5c41b9312c1a5cd5480b524e157e46457670735e6eee8761e"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 806,
+          "node_id": "806",
+          "name": "self.model.language_model.layers.1.experts.down_proj/scale",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 1139381500,
+          "size": 7929856,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "f16",
+          "sample_bytes_each": 4096,
+          "first_sha256": "f7ba40dcd11a10921d9f2fd67594730454f16db0b9615e4455e9e8f5c1500247",
+          "last_sha256": "6571acf02afce0900395be9b925042d8ac99f222512c81ca9357de8e576fbb75"
+        }
+      ],
+      "config_sha256": "a62ff7eb0a97a7c6e83ba42edff8dc4118c109a7ededcd6d83cc08ffda6a7361",
+      "full_map_sha256": "e3d58913de2aa7abbedeb7fbeb8b6ca7ddfbd2de2e5b1f83c4d6447343da691e"
+    },
+    {
+      "label": "OpenVINO/Wondernutts/gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov-new",
+      "model_type": "gemma4",
+      "text_model_type": "gemma4_text",
+      "status": "PASS",
+      "routed_const_nodes": 90,
+      "graphs": [
+        {
+          "file": "openvino_detokenizer.xml",
+          "const_nodes_checked": 6,
+          "const_roles": {
+            "unknown": 6
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_language_model.xml",
+          "const_nodes_checked": 4450,
+          "const_roles": {
+            "unknown": 3922,
+            "attention_kv_or_state": 345,
+            "routed_expert": 90,
+            "router": 90,
+            "embeddings": 3
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 90,
+          "observed_blocks": 30
+        },
+        {
+          "file": "openvino_text_embeddings_model.xml",
+          "const_nodes_checked": 4,
+          "const_roles": {
+            "embeddings": 3,
+            "unknown": 1
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_text_embeddings_per_layer_model.xml",
+          "const_nodes_checked": 3,
+          "const_roles": {
+            "unknown": 3
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_tokenizer.xml",
+          "const_nodes_checked": 30,
+          "const_roles": {
+            "unknown": 30
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_vision_embeddings_model.xml",
+          "const_nodes_checked": 2673,
+          "const_roles": {
+            "unknown": 2057,
+            "vision": 616
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 27
+        }
+      ],
+      "actual_bin_samples": [
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 449,
+          "node_id": "449",
+          "name": "self.model.language_model.layers.0.experts.down_proj",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 570345520,
+          "size": 126877696,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "64"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "1288a791afe0ee72b0a89e1a8dae21c4c4ed8ebab78a518d1d6694bd295d151d",
+          "last_sha256": "4b05c1dafc3e910703aa35c214dc15e045baf3b33c37d20dc8e2e4287f13d21e"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 451,
+          "node_id": "451",
+          "name": "self.model.language_model.layers.0.experts.down_proj/zero_point",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 697223216,
+          "size": 1982464,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "fea1d5d069c1972faaee568f1bd9fe971ac899010b83e93d035fe3390ccd2c1a",
+          "last_sha256": "fd8efc159a0aeebe9e20f5e926209c6612a91a85b8c4c2ba6c172a0b58f7328b"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 454,
+          "node_id": "454",
+          "name": "self.model.language_model.layers.0.experts.down_proj/scale",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 699205680,
+          "size": 7929856,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "f16",
+          "sample_bytes_each": 4096,
+          "first_sha256": "84142594e636ae2f6fee6a01a96c7af06f14bd4883a477da92c3a277102e9fd3",
+          "last_sha256": "4b8730f1b0e89ce1168655ffaf21c64d2f754181bb799116e0ed5c9e831b4707"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 801,
+          "node_id": "801",
+          "name": "self.model.language_model.layers.1.experts.down_proj",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 1010521340,
+          "size": 126877696,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "64"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "8844de974dd304abb55a181f5925314719347b33cb86706567c04c14e29a5471",
+          "last_sha256": "52c4021bb5a9bcc94c5e42f87c39a0fbf426a9179bf7bd1df6b57be518ae6eca"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 803,
+          "node_id": "803",
+          "name": "self.model.language_model.layers.1.experts.down_proj/zero_point",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 1137399036,
+          "size": 1982464,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "503de047691d6b1c23f732cea3042c31987e34cde148c673ccfc74b2488fd158",
+          "last_sha256": "29d9842351d1e6d5c41b9312c1a5cd5480b524e157e46457670735e6eee8761e"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 806,
+          "node_id": "806",
+          "name": "self.model.language_model.layers.1.experts.down_proj/scale",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 1139381500,
+          "size": 7929856,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "f16",
+          "sample_bytes_each": 4096,
+          "first_sha256": "f7ba40dcd11a10921d9f2fd67594730454f16db0b9615e4455e9e8f5c1500247",
+          "last_sha256": "6571acf02afce0900395be9b925042d8ac99f222512c81ca9357de8e576fbb75"
+        }
+      ],
+      "config_sha256": "a62ff7eb0a97a7c6e83ba42edff8dc4118c109a7ededcd6d83cc08ffda6a7361",
+      "full_map_sha256": "81cb297acd8982c1f7d6414dd0a0dfe2226443f8d5cd9333612c993484b288f2"
+    },
+    {
+      "label": "ornith-35b-ov",
+      "model_type": "qwen3_5_moe",
+      "text_model_type": "qwen3_5_moe_text",
+      "status": "PASS",
+      "routed_const_nodes": 120,
+      "graphs": [
+        {
+          "file": "openvino_detokenizer.xml",
+          "const_nodes_checked": 4,
+          "const_roles": {
+            "unknown": 4
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_language_model.xml",
+          "const_nodes_checked": 5854,
+          "const_roles": {
+            "unknown": 4561,
+            "attention_kv_or_state": 571,
+            "shared_expert": 480,
+            "routed_expert": 120,
+            "router": 120,
+            "output": 2
+          },
+          "duplicate_raw_node_id_count": 1050,
+          "routed_with_divisible_leading_dimension": 120,
+          "observed_blocks": 40
+        },
+        {
+          "file": "openvino_text_embeddings_model.xml",
+          "const_nodes_checked": 3,
+          "const_roles": {
+            "unknown": 2,
+            "embeddings": 1
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_tokenizer.xml",
+          "const_nodes_checked": 28,
+          "const_roles": {
+            "unknown": 28
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_vision_embeddings_merger_model.xml",
+          "const_nodes_checked": 1095,
+          "const_roles": {
+            "unknown": 933,
+            "attention_kv_or_state": 162
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 27
+        },
+        {
+          "file": "openvino_vision_embeddings_model.xml",
+          "const_nodes_checked": 5,
+          "const_roles": {
+            "unknown": 5
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_vision_embeddings_pos_model.xml",
+          "const_nodes_checked": 3,
+          "const_roles": {
+            "unknown": 2,
+            "embeddings": 1
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        }
+      ],
+      "actual_bin_samples": [
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 379,
+          "node_id": "344",
+          "name": "self.model.model.language_model.layers.0.mlp.experts.down_proj",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 309329201,
+          "size": 134217728,
+          "shape": [
+            "256",
+            "2048",
+            "8",
+            "64"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "4f0ddb384ed5e6dd600deeb38fb1f6457cc44515883983eabf4f5d8cf44ddffa",
+          "last_sha256": "5e96908200224f4a3783ee89e9800204769f5d57848a80e9bce7dba5c30a5405"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 381,
+          "node_id": "346",
+          "name": "self.model.model.language_model.layers.0.mlp.experts.down_proj/zero_point",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 443546929,
+          "size": 2097152,
+          "shape": [
+            "256",
+            "2048",
+            "8",
+            "1"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "60659dc007acbc195ff5e9aeca54b150d91b6c0648f93734c8fdfb0b8bf050f6",
+          "last_sha256": "a6ac79121d6b24e8b37243eb9df3ed978e0ff22c1c078b5a57d6af4301846fe5"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 384,
+          "node_id": "349",
+          "name": "self.model.model.language_model.layers.0.mlp.experts.down_proj/scale",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 445644081,
+          "size": 8388608,
+          "shape": [
+            "256",
+            "2048",
+            "8",
+            "1"
+          ],
+          "element_type": "f16",
+          "sample_bytes_each": 4096,
+          "first_sha256": "38999a4c59a5474d610ea7022708ba5ab955d75339e47a23b087c3539991e589",
+          "last_sha256": "872b4a2c1b811343b88389f1f28211693b6b4c1aa6cf8bd4751549c347bbc41c"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 780,
+          "node_id": "710",
+          "name": "self.model.model.language_model.layers.1.mlp.experts.down_proj",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 763644113,
+          "size": 134217728,
+          "shape": [
+            "256",
+            "2048",
+            "8",
+            "64"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "30f6d65ad8d06e2c665ec43f32d47613f2bb84bf1fac6521cd058773bad6b3f9",
+          "last_sha256": "5f204ba3ce23aabc0ca3c1f4a0d3ce21a5b1c4f471ceae4bd06362667e52cedc"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 782,
+          "node_id": "712",
+          "name": "self.model.model.language_model.layers.1.mlp.experts.down_proj/zero_point",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 897861841,
+          "size": 2097152,
+          "shape": [
+            "256",
+            "2048",
+            "8",
+            "1"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "f860144f7ef121f7073972b077eac6a664640e3a62daef7ed89f6f77c251995c",
+          "last_sha256": "a153dbbebf0c441117a06a9998318e937b8d6e4be937aebf1fa5275d33d3e835"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 785,
+          "node_id": "715",
+          "name": "self.model.model.language_model.layers.1.mlp.experts.down_proj/scale",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 899958993,
+          "size": 8388608,
+          "shape": [
+            "256",
+            "2048",
+            "8",
+            "1"
+          ],
+          "element_type": "f16",
+          "sample_bytes_each": 4096,
+          "first_sha256": "a6fe604571a3f145c139a2f84308b5d9dce8ff22e215c53c3efa3a2a93890de0",
+          "last_sha256": "d9a7994520c53c97a54ab3f3e9289f434f3584318fc63364f6e63a802b02c8e7"
+        }
+      ],
+      "config_sha256": "a2f437dca9dbdf94133eebe54b4057790701ee6dc5a7fd892ee2bfea45445312",
+      "full_map_sha256": "6c28952db0c80d43817d6a9e4e5d2da5ce9340fbfdc8505a229b381726c7a3d2"
+    },
+    {
+      "label": "qwen3.6-35b-a3b-eagle3-ov-int4",
+      "model_type": "llama",
+      "text_model_type": "llama",
+      "status": "PASS",
+      "routed_const_nodes": 0,
+      "graphs": [
+        {
+          "file": "openvino_model.xml",
+          "const_nodes_checked": 129,
+          "const_roles": {
+            "unknown": 109,
+            "embeddings": 4,
+            "attention_kv_or_state": 13,
+            "output": 3
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        }
+      ],
+      "actual_bin_samples": [],
+      "config_sha256": "a709ab279900bdad5103493b77c9ba543389a7189490ac862777d31dbee7cba7",
+      "full_map_sha256": "131f2741c10c7607128f3b14664665001c9d9f27a3be33f98704fe82e1a67f12"
+    },
+    {
+      "label": "runtime/gemma4-26-heretic-google-current",
+      "model_type": "gemma4",
+      "text_model_type": "gemma4_text",
+      "status": "PASS",
+      "routed_const_nodes": 90,
+      "graphs": [
+        {
+          "file": "openvino_detokenizer.xml",
+          "const_nodes_checked": 6,
+          "const_roles": {
+            "unknown": 6
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_language_model.xml",
+          "const_nodes_checked": 4450,
+          "const_roles": {
+            "unknown": 3922,
+            "attention_kv_or_state": 345,
+            "routed_expert": 90,
+            "router": 90,
+            "embeddings": 3
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 90,
+          "observed_blocks": 30
+        },
+        {
+          "file": "openvino_text_embeddings_model.xml",
+          "const_nodes_checked": 4,
+          "const_roles": {
+            "embeddings": 3,
+            "unknown": 1
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_text_embeddings_per_layer_model.xml",
+          "const_nodes_checked": 3,
+          "const_roles": {
+            "unknown": 3
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_tokenizer.xml",
+          "const_nodes_checked": 30,
+          "const_roles": {
+            "unknown": 30
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 0
+        },
+        {
+          "file": "openvino_vision_embeddings_model.xml",
+          "const_nodes_checked": 2673,
+          "const_roles": {
+            "unknown": 2057,
+            "vision": 616
+          },
+          "duplicate_raw_node_id_count": 0,
+          "routed_with_divisible_leading_dimension": 0,
+          "observed_blocks": 27
+        }
+      ],
+      "actual_bin_samples": [
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 449,
+          "node_id": "449",
+          "name": "self.model.language_model.layers.0.experts.down_proj",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 570345520,
+          "size": 126877696,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "64"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "1288a791afe0ee72b0a89e1a8dae21c4c4ed8ebab78a518d1d6694bd295d151d",
+          "last_sha256": "4b05c1dafc3e910703aa35c214dc15e045baf3b33c37d20dc8e2e4287f13d21e"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 451,
+          "node_id": "451",
+          "name": "self.model.language_model.layers.0.experts.down_proj/zero_point",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 697223216,
+          "size": 1982464,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "fea1d5d069c1972faaee568f1bd9fe971ac899010b83e93d035fe3390ccd2c1a",
+          "last_sha256": "fd8efc159a0aeebe9e20f5e926209c6612a91a85b8c4c2ba6c172a0b58f7328b"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 454,
+          "node_id": "454",
+          "name": "self.model.language_model.layers.0.experts.down_proj/scale",
+          "block": 0,
+          "binary": "openvino_language_model.bin",
+          "offset": 699205680,
+          "size": 7929856,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "f16",
+          "sample_bytes_each": 4096,
+          "first_sha256": "84142594e636ae2f6fee6a01a96c7af06f14bd4883a477da92c3a277102e9fd3",
+          "last_sha256": "4b8730f1b0e89ce1168655ffaf21c64d2f754181bb799116e0ed5c9e831b4707"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 801,
+          "node_id": "801",
+          "name": "self.model.language_model.layers.1.experts.down_proj",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 1010521340,
+          "size": 126877696,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "64"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "8844de974dd304abb55a181f5925314719347b33cb86706567c04c14e29a5471",
+          "last_sha256": "52c4021bb5a9bcc94c5e42f87c39a0fbf426a9179bf7bd1df6b57be518ae6eca"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 803,
+          "node_id": "803",
+          "name": "self.model.language_model.layers.1.experts.down_proj/zero_point",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 1137399036,
+          "size": 1982464,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "u4",
+          "sample_bytes_each": 4096,
+          "first_sha256": "503de047691d6b1c23f732cea3042c31987e34cde148c673ccfc74b2488fd158",
+          "last_sha256": "29d9842351d1e6d5c41b9312c1a5cd5480b524e157e46457670735e6eee8761e"
+        },
+        {
+          "graph": "openvino_language_model.xml",
+          "node_ordinal": 806,
+          "node_id": "806",
+          "name": "self.model.language_model.layers.1.experts.down_proj/scale",
+          "block": 1,
+          "binary": "openvino_language_model.bin",
+          "offset": 1139381500,
+          "size": 7929856,
+          "shape": [
+            "128",
+            "2816",
+            "11",
+            "1"
+          ],
+          "element_type": "f16",
+          "sample_bytes_each": 4096,
+          "first_sha256": "f7ba40dcd11a10921d9f2fd67594730454f16db0b9615e4455e9e8f5c1500247",
+          "last_sha256": "6571acf02afce0900395be9b925042d8ac99f222512c81ca9357de8e576fbb75"
+        }
+      ],
+      "config_sha256": "a62ff7eb0a97a7c6e83ba42edff8dc4118c109a7ededcd6d83cc08ffda6a7361",
+      "full_map_sha256": "c9c0336ebe0e71123d4c95a55dda5c1ebc7e0e81916b5d6e759e61e0b8f46e82"
+    }
+  ],
+  "host_tests": "67/67 PASS",
+  "gpu_runtime": "NOT_RUN",
+  "expert_pack_payload_parity": "NOT_RUN",
+  "scope": "Actual XML fields, binary range bounds, independent unions and bounded actual byte samples. No per-expert physical layout or fused-kernel eligibility acceptance. BIN sample hashes are not full weight hashes."
+}
