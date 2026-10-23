@@ -1,0 +1,208 @@
+{
+  "stages": {
+    "core_gpu": {
+      "status": "PASS",
+      "seconds": 0.32926120000047376,
+      "result": {
+        "devices": [
+          "CPU",
+          "GPU",
+          "NPU"
+        ],
+        "versions": {
+          "GPU": "<Version: 2026.4.0-22930-61afcb26271-releases/2026/4 Intel GPU plugin>"
+        },
+        "FULL_DEVICE_NAME": "Intel(R) Arc(TM) 140V GPU (16GB) (iGPU)",
+        "DEVICE_TOTAL_MEM_SIZE": "Exception from src\\inference\\src\\cpp\\core.cpp:268:\nException from src\\inference\\src\\dev\\plugin.cpp:112:\nCheck 'it != all_properties.end()' failed at src\\plugins\\intel_gpu\\src\\plugin\\plugin.cpp:600:\n[GPU] Property DEVICE_TOTAL_MEM_SIZE is not in a list of supported properties\n\n\n",
+        "GPU_DEVICE_TOTAL_MEM_SIZE": "27224272896",
+        "GPU_MEMORY_STATISTICS": "{'cl_mem': 0, 'unknown': 0, 'usm_device': 0, 'usm_host': 0, 'usm_shared': 0}",
+        "SUPPORTED_PROPERTIES": "{'SUPPORTED_PROPERTIES': 'RO', 'AVAILABLE_DEVICES': 'RO', 'RANGE_FOR_ASYNC_INFER_REQUESTS': 'RO', 'RANGE_FOR_STREAMS': 'RO', 'OPTIMAL_BATCH_SIZE': 'RO', 'MAX_BATCH_SIZE': 'RO', 'DEVICE_ARCHITECTURE': 'RO', 'FULL_DEVICE_NAME': 'RO', 'DEVICE_UUID': 'RO', 'DEVICE_LUID': 'RO', 'DEVICE_TYPE': 'RO', 'DEVICE_GOPS': 'RO', 'OPTIMIZATION_CAPABILITIES': 'RO', 'DEVICE_PCI_INFO': 'RO', 'GPU_DEVICE_ID': 'RO', 'GPU_DEVICE_TOTAL_MEM_SIZE': 'RO', 'GPU_DEVICE_MAX_ALLOC_MEM_SIZE': 'RO', 'GPU_UARCH_VERSION': 'RO', 'GPU_CACHELINE_SIZE': 'RO', 'GPU_EXECUTION_UNITS_COUNT': 'RO', 'GPU_MEMORY_STATISTICS': 'RO', 'COMPATIBILITY_CHECK': 'RO', 'PERF_COUNT': 'RW', 'MODEL_PRIORITY': 'RW', 'GPU_HOST_TASK_PRIORITY': 'RW', 'GPU_QUEUE_PRIORITY': 'RW', 'GPU_QUEUE_THROTTLE': 'RW', 'GPU_ENABLE_SDPA_OPTIMIZATION': 'RW', 'GPU_ENABLE_LORA_OPERATION': 'RW', 'GPU_ENABLE_LARGE_ALLOCATIONS': 'RW', 'GPU_ENABLE_LOOP_UNROLLING': 'RW', 'GPU_DISABLE_WINOGRAD_CONVOLUTION': 'RW', 'CACHE_DIR': 'RW', 'CACHE_MODE': 'RW', 'PERFORMANCE_HINT': 'RW', 'EXECUTION_MODE_HINT': 'RW', 'COMPILATION_NUM_THREADS': 'RW', 'NUM_STREAMS': 'RW', 'PERFORMANCE_HINT_NUM_REQUESTS': 'RW', 'INFERENCE_PRECISION_HINT': 'RW', 'ENABLE_CPU_PINNING': 'RW', 'ENABLE_CPU_RESERVATION': 'RW', 'DEVICE_ID': 'RW', 'DYNAMIC_QUANTIZATION_GROUP_SIZE': 'RW', 'ACTIVATIONS_SCALE_FACTOR': 'RW', 'WEIGHTS_PATH': 'RW', 'CACHE_ENCRYPTION_CALLBACKS': 'WO', 'KV_CACHE_PRECISION': 'RW', 'MODEL_PTR': 'WO', 'OFFLOAD_RATIO': 'RW', 'CONFIG_FILE': 'RW'}"
+      }
+    },
+    "read_openvino_detokenizer": {
+      "status": "PASS",
+      "seconds": 0.016212499998800922,
+      "result": {
+        "inputs": [
+          "<Output: names[Parameter_344522] shape[?,?] type: i64>"
+        ],
+        "outputs": [
+          "<Output: names[Result_344539, string_output] shape[?] type: string>"
+        ],
+        "ops": 11
+      }
+    },
+    "read_openvino_language_model": {
+      "status": "PASS",
+      "seconds": 0.3720067000012932,
+      "result": {
+        "inputs": [
+          "<Output: names[inputs_embeds] shape[?,?,2048] type: f32>",
+          "<Output: names[attention_mask] shape[?,?] type: i64>",
+          "<Output: names[position_ids] shape[3,?,?] type: i64>",
+          "<Output: names[beam_idx] shape[?] type: i32>"
+        ],
+        "outputs": [
+          "<Output: names[logits] shape[?,?,248144] type: f32>"
+        ],
+        "ops": 15581
+      }
+    },
+    "read_openvino_text_embeddings_model": {
+      "status": "PASS",
+      "seconds": 0.001936599999680766,
+      "result": {
+        "inputs": [
+          "<Output: names[input] shape[?,?] type: i64>"
+        ],
+        "outputs": [
+          "<Output: names[inputs_embeds] shape[?,?,2048] type: f32>"
+        ],
+        "ops": 10
+      }
+    },
+    "read_openvino_tokenizer": {
+      "status": "PASS",
+      "seconds": 0.013707999998587184,
+      "result": {
+        "inputs": [
+          "<Output: names[Parameter_344389] shape[?] type: string>"
+        ],
+        "outputs": [
+          "<Output: names[input_ids] shape[?,?] type: i64>",
+          "<Output: names[attention_mask] shape[?,?] type: i64>"
+        ],
+        "ops": 54
+      }
+    },
+    "read_openvino_vision_embeddings_model": {
+      "status": "PASS",
+      "seconds": 0.04944380000051751,
+      "result": {
+        "inputs": [
+          "<Output: names[pixel_values] shape[1,3,14,?] type: f32>",
+          "<Output: names[position_ids] shape[?] type: i64>",
+          "<Output: names[window_index] shape[?] type: i64>",
+          "<Output: names[merge_index] shape[?] type: i64>"
+        ],
+        "outputs": [
+          "<Output: names[last_hidden_state] shape[?,2048] type: f32>"
+        ],
+        "ops": 2566
+      }
+    },
+    "pipeline": {
+      "status": "FAIL",
+      "seconds": 0.9120218000007299,
+      "exception": "Traceback (most recent call last):\n  File \"<WORKTREE>\\scripts\\minicpm-v47\\evaluate.py\", line 75, in stage\n    value = fn()\n            ^^^^\n  File \"<WORKTREE>\\scripts\\minicpm-v47\\evaluate.py\", line 119, in <lambda>\n    stage('pipeline', lambda: str(genai.VLMPipeline(str(args.model), 'GPU')))\n                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Exception from src\\cpp\\src\\visual_language\\vlm_config.cpp:45:\nUnsupported 'minicpmv4_7' VLM model type\n\n"
+    }
+  },
+  "python": "3.12.13 (main, Jun 23 2026, 15:23:43) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "<EVAL_ROOT>\\venv-pinned\\Scripts\\python.exe",
+  "model": "<MODEL_DIR>",
+  "available_ram": 16048058368,
+  "openvino_version": "2026.4.0-22930-61afcb26271-releases/2026/4",
+  "genai_version": "2026.4.0.0-3401-5f7f1278107",
+  "admission": {
+    "required_ram": 22943931296,
+    "available_ram": 15894286336,
+    "policy": "BIN bytes + 3 GiB, conservative safety gate"
+  },
+  "loaded_modules": [
+    {
+      "path": "<SDK_RC1>\\runtime\\bin\\intel64\\Release\\openvino_intel_npu_plugin.dll",
+      "bytes": 7615752,
+      "sha256": "e27a466c9690e079b82d453a93a583d9008cb08e9965a6f459c56bccde965198"
+    },
+    {
+      "path": "C:\\Windows\\System32\\DriverStore\\FileRepository\\iigd_dch.inf_amd64_9a6d05f5d3be77f9\\igdrcl64.dll",
+      "bytes": 40072576,
+      "sha256": "0ac5822e42cdc7642ea96ab99b35e3ff92254bccfe2e08f808914d425ac4def5"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\bin\\intel64\\Release\\openvino_intel_gpu_plugin.dll",
+      "bytes": 34629896,
+      "sha256": "b90b57aecb9d8bbb7b0a1e945e45a088e94ea7baf61eaf5dd7d8fe5e06c9e55d"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\bin\\intel64\\Release\\openvino_intel_cpu_plugin.dll",
+      "bytes": 46222600,
+      "sha256": "ce9c65b551e36139b62e28f2c8c7b9fc2a5c02c82e1dfd01e578dac30695e78b"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\bin\\intel64\\Release\\openvino_tokenizers.dll",
+      "bytes": 3483912,
+      "sha256": "e96e02744f4cd9567e54065430aa609e97c48951299a21f30abc00fba6078d3c"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\bin\\intel64\\Release\\openvino_genai.dll",
+      "bytes": 7425808,
+      "sha256": "5a2904f2564e4ce002db5ef5fe003a782e6f296f6377cd66df1b2db41d4c5e8d"
+    },
+    {
+      "path": "<SDK_RC1>\\python\\openvino_genai\\py_openvino_genai.cp312-win_amd64.pyd",
+      "bytes": 2382088,
+      "sha256": "c49a43409cf5d6ceed4ca6b5f0d191c54ad6af012e1257b34ca35ffc4556413d"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\bin\\intel64\\Release\\openvino.dll",
+      "bytes": 16465168,
+      "sha256": "829c4642e287522f8a8e748a726d4ad3117a701e22ab46adc82771f98e5d2f7e"
+    },
+    {
+      "path": "<SDK_RC1>\\python\\openvino\\_pyopenvino.cp312-win_amd64.pyd",
+      "bytes": 4048136,
+      "sha256": "fb017b4b815145dc4630a11723a8052ad9526ab0639a786396e96bc7dada7b4c"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\bin\\intel64\\Release\\openvino_ir_frontend.dll",
+      "bytes": 509192,
+      "sha256": "44604b39cbafcf4d8aa27697cee639038bdfcf24f5245f0be07abcf30609d4cd"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\bin\\intel64\\Release\\openvino_hetero_plugin.dll",
+      "bytes": 531728,
+      "sha256": "c21be45cea174c79163394e4cfe3a782ebef7a7a64b4ee43dfcf3828d558de16"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\bin\\intel64\\Release\\openvino_auto_plugin.dll",
+      "bytes": 720656,
+      "sha256": "ed1492fe3f901d2b882ea89c8909d8ce35eb52986a3559353a44917ee3fb3e47"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\3rdparty\\tbb\\bin\\tbbbind_2_5.dll",
+      "bytes": 209168,
+      "sha256": "235047df3f97a6b94c3a5e70d93b892141e32ae27ef06f0c583667b417118b20"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\bin\\intel64\\Release\\openvino_auto_batch_plugin.dll",
+      "bytes": 208144,
+      "sha256": "d21dc67bee39d3af3fbda6720198a6b025eda297680d5d747996730bc75496dd"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\3rdparty\\tbb\\bin\\tbbmalloc.dll",
+      "bytes": 119056,
+      "sha256": "06e72fd9ed67405efd411c33d8dfbe9bf21cb62ff8ef2ccb1003bb1bc32b2924"
+    },
+    {
+      "path": "<SDK_RC1>\\runtime\\3rdparty\\tbb\\bin\\tbb12.dll",
+      "bytes": 337160,
+      "sha256": "63cc8a5a9cee86e9d57967337053569df6335aca09d03f8657343633645d2727"
+    },
+    {
+      "path": "C:\\Windows\\System32\\DriverStore\\FileRepository\\npu.inf_amd64_597e96d1fdad31a4\\openvino_intel_npu_compiler_loader.dll",
+      "bytes": 539776,
+      "sha256": "8df6d149c80841d6eaeb78acb526530823992f1fd7916451da40f480b9cb5162"
+    },
+    {
+      "path": "C:\\Windows\\System32\\ze_tracing_layer.dll",
+      "bytes": 803000,
+      "sha256": "d3f8f8c4bd055c464495703761f5754c140137e4c457f60a168e35085ee2c51f"
+    },
+    {
+      "path": "C:\\Windows\\System32\\ze_loader.dll",
+      "bytes": 824176,
+      "sha256": "a56a109788c97ed42275803202e42a44c591a24064a038e6aa3cbc5908f98b4b"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "checks": [
+    "pinned-probe: GPU detected and 5/5 IR reads",
+    "nightly-probe: GPU detected and 5/5 IR reads",
+    "Pinned exact dispatcher rejection; nightly and supervised smoke admission blocked",
+    "20/20 sizes and all LFS SHA256 match pinned HF API snapshot; all local ETags match",
+    "Three PNG and five prompt hashes verified; all inference fixture statuses NOT_RUN",
+    "Six native template/tokenizer cases and one documented negative argument case",
+    "Published text has no inspected private physical root or username"
+  ],
+  "scope": "Artifact/provenance verification only; no GPU compile, model inference or native parser acceptance"
+}

@@ -1,0 +1,6 @@
+{
+  "status": "BLOCKED",
+  "reason": "Memory admission gate",
+  "required_bytes": 22943931296,
+  "available_bytes": 15898517504
+}

@@ -1,0 +1,402 @@
+[
+  {
+    "variable_id": "cache_params.past.value.9cache_params.present.value.9",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.conv.0cache_params.present.conv.0",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.0cache_params.present.ssm.0",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.1cache_params.present.conv.1",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.1cache_params.present.ssm.1",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.2cache_params.present.conv.2",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.2cache_params.present.ssm.2",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.key.0cache_params.present.key.0",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.value.0cache_params.present.value.0",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.conv.3cache_params.present.conv.3",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.3cache_params.present.ssm.3",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.4cache_params.present.conv.4",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.4cache_params.present.ssm.4",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.5cache_params.present.conv.5",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.5cache_params.present.ssm.5",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.key.1cache_params.present.key.1",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.value.1cache_params.present.value.1",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.conv.6cache_params.present.conv.6",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.6cache_params.present.ssm.6",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.7cache_params.present.conv.7",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.7cache_params.present.ssm.7",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.8cache_params.present.conv.8",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.8cache_params.present.ssm.8",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.key.2cache_params.present.key.2",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.value.2cache_params.present.value.2",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.conv.9cache_params.present.conv.9",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.9cache_params.present.ssm.9",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.10cache_params.present.conv.10",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.10cache_params.present.ssm.10",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.11cache_params.present.conv.11",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.11cache_params.present.ssm.11",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.key.3cache_params.present.key.3",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.value.3cache_params.present.value.3",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.conv.12cache_params.present.conv.12",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.12cache_params.present.ssm.12",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.13cache_params.present.conv.13",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.13cache_params.present.ssm.13",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.14cache_params.present.conv.14",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.14cache_params.present.ssm.14",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.key.4cache_params.present.key.4",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.value.4cache_params.present.value.4",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.conv.15cache_params.present.conv.15",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.15cache_params.present.ssm.15",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.16cache_params.present.conv.16",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.16cache_params.present.ssm.16",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.17cache_params.present.conv.17",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.17cache_params.present.ssm.17",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.key.5cache_params.present.key.5",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.value.5cache_params.present.value.5",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.conv.18cache_params.present.conv.18",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.18cache_params.present.ssm.18",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.19cache_params.present.conv.19",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.19cache_params.present.ssm.19",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.20cache_params.present.conv.20",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.20cache_params.present.ssm.20",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.key.6cache_params.present.key.6",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.value.6cache_params.present.value.6",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.conv.21cache_params.present.conv.21",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.21cache_params.present.ssm.21",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.22cache_params.present.conv.22",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.22cache_params.present.ssm.22",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.23cache_params.present.conv.23",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.23cache_params.present.ssm.23",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.key.7cache_params.present.key.7",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.value.7cache_params.present.value.7",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.conv.24cache_params.present.conv.24",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.24cache_params.present.ssm.24",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.25cache_params.present.conv.25",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.25cache_params.present.ssm.25",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.26cache_params.present.conv.26",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.26cache_params.present.ssm.26",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.key.8cache_params.present.key.8",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.value.8cache_params.present.value.8",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  },
+  {
+    "variable_id": "cache_params.past.conv.27cache_params.present.conv.27",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.27cache_params.present.ssm.27",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.28cache_params.present.conv.28",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.28cache_params.present.ssm.28",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.conv.29cache_params.present.conv.29",
+    "variable_type": "f32",
+    "variable_shape": "?,8192,4"
+  },
+  {
+    "variable_id": "cache_params.past.ssm.29cache_params.present.ssm.29",
+    "variable_type": "f32",
+    "variable_shape": "?,32,128,128"
+  },
+  {
+    "variable_id": "cache_params.past.key.9cache_params.present.key.9",
+    "variable_type": "f32",
+    "variable_shape": "?,2,?,256"
+  }
+]

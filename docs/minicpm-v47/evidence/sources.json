@@ -1,0 +1,26 @@
+[
+  {
+    "url": "https://huggingface.co/api/models/OpenVINO/MiniCPM-V-4.7-35B-A3B-int4-ov/revision/8b28ee2fe3a13fe38826d615579141af1c6d406a?blobs=true",
+    "file": "hf-snapshot.json",
+    "sha256": "2c51a9ef1449486b25e9e6b6fcd23034191f6c9fa3aa42a90b8a4f4609b7c3f0",
+    "status": "PASS"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openvinotoolkit/openvino.genai/73c4b0db060/src/cpp/src/visual_language/vlm_config.cpp",
+    "file": "nightly-vlm_config.cpp",
+    "sha256": "9543fef64437bef092e892c2b130d4fd02af56b0bb05ff08f95909b2df121428",
+    "status": "PASS"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openvinotoolkit/openvino.genai/73c4b0db060/src/cpp/src/visual_language/inputs_embedder.cpp",
+    "file": "nightly-inputs_embedder.cpp",
+    "sha256": "d959622cbdca5541b4fce38548c28331ad87493e9e0d43bf38b2f9948a585bed",
+    "status": "PASS"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openvinotoolkit/openvino.genai/73c4b0db060/src/cpp/src/visual_language/vision_encoder.cpp",
+    "file": "nightly-vision_encoder.cpp",
+    "sha256": "f2d5f5a71c328795995d6d182251436eb8513263423d686bf3f22e039ba113bd",
+    "status": "PASS"
+  }
+]

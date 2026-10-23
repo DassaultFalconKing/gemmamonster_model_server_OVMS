@@ -1,0 +1,142 @@
+[
+  {
+    "name": ".gitattributes",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "52373fe24473b1aa44333d318f578ae6bf04b49b",
+    "actual": "52373fe24473b1aa44333d318f578ae6bf04b49b",
+    "status": "PASS"
+  },
+  {
+    "name": "chat_template.jinja",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "0948ab105fab2a52f84bdc85c3a784221f8452d4",
+    "actual": "0948ab105fab2a52f84bdc85c3a784221f8452d4",
+    "status": "PASS"
+  },
+  {
+    "name": "config.json",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "4292a8d88bdb1571400fdac638abab223bc7a88a",
+    "actual": "4292a8d88bdb1571400fdac638abab223bc7a88a",
+    "status": "PASS"
+  },
+  {
+    "name": "generation_config.json",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "90d188d4cdfacb873c6c4fbf2eebc3808bab8b89",
+    "actual": "90d188d4cdfacb873c6c4fbf2eebc3808bab8b89",
+    "status": "PASS"
+  },
+  {
+    "name": "openvino_config.json",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "89586cc30e72a0cafe87985fbf060dbceab01ea5",
+    "actual": "89586cc30e72a0cafe87985fbf060dbceab01ea5",
+    "status": "PASS"
+  },
+  {
+    "name": "openvino_detokenizer.bin",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "4958d4da72efaf03840400261e0b14b548c39594688e218aae2bd955ce04b30f",
+    "actual": "4958d4da72efaf03840400261e0b14b548c39594688e218aae2bd955ce04b30f",
+    "status": "PASS"
+  },
+  {
+    "name": "openvino_detokenizer.xml",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "19022c145ad1074e03b164679e696ccbfd540fca",
+    "actual": "19022c145ad1074e03b164679e696ccbfd540fca",
+    "status": "PASS"
+  },
+  {
+    "name": "openvino_language_model.bin",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "c420194c98379a15872bdb301cbd28785c8f97198fc3ac1e46d14b7051abab21",
+    "actual": "c420194c98379a15872bdb301cbd28785c8f97198fc3ac1e46d14b7051abab21",
+    "status": "PASS"
+  },
+  {
+    "name": "openvino_language_model.xml",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "f34f1475996220752124305b5ee238dbebe83e85",
+    "actual": "f34f1475996220752124305b5ee238dbebe83e85",
+    "status": "PASS"
+  },
+  {
+    "name": "openvino_text_embeddings_model.bin",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "e9d2a678a59357aabea2ec7315ecdcf4dda406bda0bc4f19972054cf1ea02b97",
+    "actual": "e9d2a678a59357aabea2ec7315ecdcf4dda406bda0bc4f19972054cf1ea02b97",
+    "status": "PASS"
+  },
+  {
+    "name": "openvino_text_embeddings_model.xml",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "f86bef48c38e65fd49c0220c5d03378ce31ab7ff",
+    "actual": "f86bef48c38e65fd49c0220c5d03378ce31ab7ff",
+    "status": "PASS"
+  },
+  {
+    "name": "openvino_tokenizer.bin",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "dd69a774718352bf4531ca8d1c7d342a77d08489b3405cb93af0a233eee23550",
+    "actual": "dd69a774718352bf4531ca8d1c7d342a77d08489b3405cb93af0a233eee23550",
+    "status": "PASS"
+  },
+  {
+    "name": "openvino_tokenizer.xml",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "5dc6ccdd3b581ad250aa88e59a8cec5772e5a751",
+    "actual": "5dc6ccdd3b581ad250aa88e59a8cec5772e5a751",
+    "status": "PASS"
+  },
+  {
+    "name": "openvino_vision_embeddings_model.bin",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "26d0050ae071f170d8b8b682a62bf469695e1ecbdff5ee9223f10b4b3eb28582",
+    "actual": "26d0050ae071f170d8b8b682a62bf469695e1ecbdff5ee9223f10b4b3eb28582",
+    "status": "PASS"
+  },
+  {
+    "name": "openvino_vision_embeddings_model.xml",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "757d1749a3e7ad67dcb564798f89a6e8532bae91",
+    "actual": "757d1749a3e7ad67dcb564798f89a6e8532bae91",
+    "status": "PASS"
+  },
+  {
+    "name": "preprocessor_config.json",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "8bf74cbc0e90f4487fa6351f8b100a754adf51e5",
+    "actual": "8bf74cbc0e90f4487fa6351f8b100a754adf51e5",
+    "status": "PASS"
+  },
+  {
+    "name": "processor_config.json",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "8d1b6e92c724a6b82ea848908540eac42bff8827",
+    "actual": "8d1b6e92c724a6b82ea848908540eac42bff8827",
+    "status": "PASS"
+  },
+  {
+    "name": "README.md",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "e7c5bb602c529bee125657606f68903c6ce57f81",
+    "actual": "e7c5bb602c529bee125657606f68903c6ce57f81",
+    "status": "PASS"
+  },
+  {
+    "name": "tokenizer.json",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "e4608c5d7b3f4f30ba83be16a82cdac856b2e7191d40f0a08cbacc76c2a926ee",
+    "actual": "e4608c5d7b3f4f30ba83be16a82cdac856b2e7191d40f0a08cbacc76c2a926ee",
+    "status": "PASS"
+  },
+  {
+    "name": "tokenizer_config.json",
+    "revision": "8b28ee2fe3a13fe38826d615579141af1c6d406a",
+    "etag": "8e770fcb719c9a4a459c168ac9aa373f56b03106",
+    "actual": "8e770fcb719c9a4a459c168ac9aa373f56b03106",
+    "status": "PASS"
+  }
+]

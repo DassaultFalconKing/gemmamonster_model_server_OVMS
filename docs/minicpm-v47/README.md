@@ -1,6 +1,8 @@
 # MiniCPM-V 4.7 / GEMMAMONSTER — execution and MFP-1 program
 
-**23 October 2026. DOCUMENTED / NOT ACCEPTED / no GPU run in this branch.**
+**23 October 2026. MEMORY_BLOCKED / NOT ACCEPTED.** Local file verification and GPU discovery/IR reads completed. Pinned 2026.4 RC1 rejects the model type; isolated nightly compilation/inference is blocked by physical RAM admission. No model GPU inference or benchmark was run.
+
+Measured checkpoint: [FINAL-REPORT.md](FINAL-REPORT.md), [COMPATIBILITY-MATRIX.md](COMPATIBILITY-MATRIX.md), [MODEL-IDENTITY.md](MODEL-IDENTITY.md), [TOOL-PROTOCOL-FIT.md](TOOL-PROTOCOL-FIT.md). The two documents below remain the execution and MFP-1 roadmaps; their planned stages are not runtime evidence.
 
 Target: [OpenVINO MiniCPM-V-4.7-35B-A3B INT4](https://huggingface.co/OpenVINO/MiniCPM-V-4.7-35B-A3B-int4-ov), experimental Windows Arc 140V / 32 GiB unified-LPDDR.
 
