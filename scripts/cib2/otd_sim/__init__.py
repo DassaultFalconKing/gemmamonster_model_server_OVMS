@@ -1,0 +1,51 @@
+# Copyright (C) 2018-2026 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+"""CIB2-03 offline OTD trace replay package (stdlib only)."""
+
+from .otd_sim import (  # noqa: F401
+    POLICIES,
+    SCHEMA,
+    TRACE_HEADER,
+    Belady,
+    Call,
+    Clock,
+    Counters,
+    Event,
+    ExactLRU,
+    Layer,
+    Policy,
+    Trace,
+    TraceFormatError,
+    TwoQ,
+    main,
+    measured_summary,
+    parse_trace,
+    parse_trace_text,
+    phase_of,
+    replay,
+    verify_lru,
+)
+
+__all__ = [
+    "POLICIES",
+    "SCHEMA",
+    "TRACE_HEADER",
+    "Belady",
+    "Call",
+    "Clock",
+    "Counters",
+    "Event",
+    "ExactLRU",
+    "Layer",
+    "Policy",
+    "Trace",
+    "TraceFormatError",
+    "TwoQ",
+    "main",
+    "measured_summary",
+    "parse_trace",
+    "parse_trace_text",
+    "phase_of",
+    "replay",
+    "verify_lru",
+]
