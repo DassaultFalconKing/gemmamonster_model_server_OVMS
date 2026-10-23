@@ -2,6 +2,8 @@
 
 ## Current checkpoint: 2026-10-24
 
+**Current normative design documents:** [LAYER-EXPERT-PACK-IMPLEMENTATION-20261024.md](LAYER-EXPERT-PACK-IMPLEMENTATION-20261024.md) and [PROFILE-GUIDED-EXPERT-PACKING-20261024.md](PROFILE-GUIDED-EXPERT-PACKING-20261024.md), including explicit UMA Path A default and gated B, with [flowchart](PGP-UMA-PATH-AB-20261024.mermaid). Previous 2026-10-23 work plan/preflight writeups are preserved in [archive/20261023/](archive/20261023/README.md) without altering source evidence. **Archive is not an acceptance gate**: full GPU runtime/2026.4 source-build evidence remains open.
+
 Branch `feature/cib2-offload-family-map-20261024`. HOST_WAVE_REVIEWED, runtime acceptance NO. 67/67 host tests PASS, seven static export maps. Working-postfix EXE/DLL hashes now collected; build association and loaded evidence remain open. [Results and next gates](RESULTS-20261024.md). Earlier state below is historical.
 
 ---
@@ -47,7 +49,7 @@ Branch `feature/cib2-offload-family-map-20261024`. HOST_WAVE_REVIEWED, runtime a
 - **FROZEN_WORKING_BASE:** `freeze/rc3b-postfix-20261023-eb76a74f` -> `eb76a74f7aa39573d452d95443e189b1f5f4d9e8`, four additional postfix commits after RC3B. Preserve Qwen lossless parser, Ornith template pin and retainer architecture document.
 - **CIB2_SYNC_MERGE:** `7351bb921e16382e4357bcc1311471b13964f64b`, two parents: prior CIB2 `d1f04532ed392ca134fc0a8158492861c555df16` + freeze `eb76a74f`. Merge tree is freeze + CIB2-only paths; working semantic-refit branch untouched.
 - **LAST_GREEN_TESTS:** GitHub tag ancestry and tree compare; existing Qwen 81/81 XML at frozen commit is HISTORICAL operator evidence, not a new test execution.
-- **CODEWORK:** `docs/cib2/CODE-WORK-PLAN-20261023.md`; CIB2-00 through CIB2-08, gated by exact 2026.4rc1 SDK and preserved protocol fixture baseline.
+- **HISTORICAL CODEWORK:** `docs/cib2/archive/20261023/CODE-WORK-PLAN-20261023.md`; its old CIB2-00 through CIB2-08 gates were elaborated by `docs/cib2/LAYER-EXPERT-PACK-IMPLEMENTATION-20261024.md` and `docs/cib2/PROFILE-GUIDED-EXPERT-PACKING-20261024.md`. Exact 2026.4rc1 SDK and protected protocol fixtures remain mandatory.
 - **PREFLIGHT:** `scripts/cib2/preflight_rc3b.py` v2 distinguishes tag from freeze, refuses drift of protected Qwen/Ornith source blobs and committed diff outside CIB2 directories. `--binary-cohort tagged-rc3b` validates known release EXE hashes; `--binary-cohort frozen-postfix` (default) cannot mark EXEs verified without new build identity.
 - **NOT_RUN:** Python unit test execution, new postfix executable SHA attestation, full `ovms_test`, Windows loaded DLL checks, GPU OTD performance and long agentic soak.
 - **CURRENT_BLOCKER:** actual new working-postfix binary identities and exact isolated SDK 2026.4rc1 loaded-module evidence unavailable here. Archived tagged RC3B EXE hashes cannot substitute.
