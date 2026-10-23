@@ -5,7 +5,7 @@ Owner seam: `src/llm/ovms_text_streamer.cpp`, `src/llm/io_processing/output_pars
 
 ## Invariants
 
-**RLC-INV-01 / decoded-body identity.** After excluding **only** proven native framing (opener, closer, recognized header), the concatenation of emitted `ReasoningDelta.text` is byte-identical to the reference **decoded** body. Do not `trim`, `unescape`, `JSON.parse`, normalize Unicode, whitespace, number spelling, quotes or backslashes. A string `9007199254740993`, `1.10` or `C:\\tmp\\x` remains textual; no type is inferred.
+**RLC-INV-01 / decoded-body identity.** After excluding **only** proven native framing (opener, closer, recognized header), the concatenation of emitted `ReasoningDelta.text` is byte-identical to the reference **decoded** body. Do not `trim`, `unescape`, `JSON.parse`, normalize Unicode, whitespace, number spelling, quotes or backslashes. A string `9007199254740993`, `1.10` or `C:\tmp\x` or `C:\\tmp\\x` remains textual; no type is inferred.
 
 **RLC-INV-02 / phase ownership.** A tool-looking body span remains private reasoning unless the **family's canonical format** defines a legal handoff; Qwen requires its thought closing boundary, Gemma4 supports a specific native handoff. Repeated or partial markers must not create extra channels.
 
