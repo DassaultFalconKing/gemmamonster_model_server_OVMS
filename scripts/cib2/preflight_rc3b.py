@@ -110,6 +110,18 @@ def check_file(checks: list[Check], name: str, path: Path | None, expected: tupl
         checks.append(Check(name, "FAIL", f"Expected {expected[0]}/{expected[1]}, got {actual_hash}/{actual_size}"))
 
 
+def check_postfix_binary(checks: list[Check], name: str, path: Path | None) -> None:
+    """Working postfix is newer than tagged RC3B: tag exe hashes do not apply."""
+    if path is None:
+        checks.append(Check(name, "NOT_RUN", "Postfix binary not supplied; fresh build identity unavailable"))
+    elif not path.is_file():
+        checks.append(Check(name, "FAIL", f"Postfix binary path does not exist: {path.name}"))
+    else:
+        checks.append(Check(name, "NOT_RUN",
+                            f"Working postfix candidate only; SHA256={sha256(path)}; "
+                            f"bytes={path.stat().st_size}; no pinned postfix binary manifest yet"))
+
+
 def check_plugin_pair(checks: list[Check], sdk: Path | None, active: Path | None) -> None:
     if sdk is None and active is None:
         checks.append(Check("stock_gpu_plugin", "NOT_RUN", "Supply both --sdk-gpu-plugin and --active-gpu-plugin"))
@@ -188,8 +200,12 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
     except (RuntimeError, OSError, ValueError, json.JSONDecodeError) as exc:
         checks.append(Check("source_verification", "FAIL", str(exc).replace(str(repo), "<repo>")))
 
-    check_file(checks, "ovms_binary", args.ovms_exe, EXPECTED["ovms"])
-    check_file(checks, "ovms_test_binary", args.ovms_test_exe, EXPECTED["ovms_test"])
+    if args.binary_cohort == "tagged-rc3b":
+        check_file(checks, "ovms_binary", args.ovms_exe, EXPECTED["ovms"])
+        check_file(checks, "ovms_test_binary", args.ovms_test_exe, EXPECTED["ovms_test"])
+    else:
+        check_postfix_binary(checks, "ovms_binary", args.ovms_exe)
+        check_postfix_binary(checks, "ovms_test_binary", args.ovms_test_exe)
     check_plugin_pair(checks, args.sdk_gpu_plugin, args.active_gpu_plugin)
     checks.append(Check("sdk_rc1_source_abi", "NOT_RUN", "Exact 2026.4.0.0rc1 SDK source/ABI audit required on host"))
     checks.append(Check("full_ovms_test", "NOT_RUN", "Owner's full suite not covered by this static preflight"))
@@ -203,6 +219,7 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
         "base_sha": BASE,
         "frozen_working_sha": FROZEN,
         "freeze_branch": FREEZE_BRANCH,
+        "binary_cohort": args.binary_cohort,
         "verdict": verdict,
         "checks": [asdict(c) for c in checks],
         "counts": {s: statuses.count(s) for s in ("PASS", "FAIL", "NOT_RUN")},
@@ -222,6 +239,9 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--repo", type=Path, default=Path.cwd())
+    p.add_argument("--binary-cohort", choices=("frozen-postfix", "tagged-rc3b"),
+                   default="frozen-postfix",
+                   help="RC3B tagged executable hashes cannot validate new postfix builds")
     p.add_argument("--ovms-exe", type=Path)
     p.add_argument("--ovms-test-exe", type=Path)
     p.add_argument("--sdk-gpu-plugin", type=Path)
