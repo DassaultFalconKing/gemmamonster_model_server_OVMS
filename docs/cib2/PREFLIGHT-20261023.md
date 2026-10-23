@@ -85,3 +85,44 @@ Verifier exit 2 means FAIL; exit 3 means strict mandatory evidence missing. Miss
 Preflight branch allows only docs/cib2/, scripts/cib2/ and tests/cib2/. No edits to Gemma/Qwen parsers, XGrammar, build dependency locks, driver configuration or RC3B tags. Separate 2026.4 GPU source candidate branch is required for future functional patches.
 
 Active state: docs/cib2/STATE.md. Revert point: qwm-semantic-refit-2026.4-rc3b. No private prompts, host path secrets, model binaries or unsanitized traces in GitHub.
+
+## 2026-10-23 update: new immutable working-postfix snapshot
+
+The previous portion records exact RC3B **release tag** evidence and remains correct. Since that tag, `semantic-refit-2026.4` gained **four** commits at the captured snapshot:
+
+1. `ab07f58d` — Ornith chat-template pin after tool-result boundary; repo SHA and installed template digest published separately.
+2. `5af105a0` — Qwen3Coder lossless arguments, no unescaping of literal strings or float/large-int rewrite, plus saved baseline/focused/full tests.
+3. `5b9cbaea` — explicit parser-retainer publication contract.
+4. `eb76a74f` — retainer architecture clarifications.
+
+The new, **separate** branch `freeze/rc3b-postfix-20261023-eb76a74f` points to `eb76a74f7aa39573d452d95443e189b1f5f4d9e8`. The active `semantic-refit-2026.4` branch and both original release tags were **not changed**.
+
+The CIB2 branch received a **non-rewriting two-parent merge** at `7351bb921e16382e4357bcc1311471b13964f64b` (parents previous CIB2 `d1f04532` and frozen postfix `eb76a74f`). Its resulting tree is the frozen working tree plus only CIB2 preflight docs/scripts/tests.
+
+The verifier now:
+- Requires original `qwm-semantic-refit-2026.4-rc3b` tag to still equal `b77b0f23` and direct RC3 ancestry.
+- Requires `FROZEN=eb76a74f...` to descend from the tag and CIB2 HEAD to descend from the freeze.
+- Compares HEAD against **frozen working** SHA for scope protection, not the older release tag.
+- Pins the exact frozen Qwen source, Qwen parser regression test, Ornith template and adaptation documentation via Git blob IDs.
+- Requires the RC3B release manifest to be identical at tag, freeze and checkout.
+- Defaults to `--binary-cohort frozen-postfix`. **Executable hashes from the old release tag do not validate new Qwen-rebuilt binaries.** Until a postfix build identity manifest exists, those files remain NOT_RUN even if supplied.
+- Retains `--binary-cohort tagged-rc3b` specifically for original tag-built executables: `ovms.exe` SHA256 `2beed15e...` and `ovms_test.exe` SHA256 `aacd1f13...`.
+- Never marks full `ovms_test`/GPU/owner signoff as PASS.
+
+### Updated local steps
+
+~~~powershell
+git fetch origin tag qwm-semantic-refit-2026.4-rc3 tag qwm-semantic-refit-2026.4-rc3b
+git fetch origin freeze/rc3b-postfix-20261023-eb76a74f
+git fetch origin feature/cib2-rc3b-otd-preflight-20261023
+git switch feature/cib2-rc3b-otd-preflight-20261023
+
+py -3 -m unittest discover -s tests/cib2 -p 'test_*.py' -v
+py -3 scripts/cib2/preflight_rc3b.py --repo . --binary-cohort frozen-postfix
+# Older RC3B EXE hashes only apply to the original tagged cohort:
+py -3 scripts/cib2/preflight_rc3b.py --repo . --binary-cohort tagged-rc3b
+~~~
+
+No GPU hardware or Windows exe was invoked from this cloud session. The Python unit suite remains NOT_RUN until independently executed.
+
+**Next coding specification:** [CODE-WORK-PLAN-20261023.md](CODE-WORK-PLAN-20261023.md).
