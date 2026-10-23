@@ -1,0 +1,316 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cib2.local/schemas/cib2.component-manifest.v1.json",
+  "title": "CIB2 static component identity manifest v1",
+  "description": "Static file-byte identity only. accepted=false, source-build association UNVERIFIED, loaded DLL evidence NOT_RUN, runtime acceptance NO. Caller assertions cannot be promoted; external build/module evidence needs an independent verifier.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "kind",
+    "accepted",
+    "generated_at_utc",
+    "source_revision",
+    "source_revision_reference_only",
+    "provenance",
+    "components",
+    "summary",
+    "notes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "cib2.component-manifest.v1"
+    },
+    "kind": {
+      "const": "cib2_component_manifest"
+    },
+    "accepted": {
+      "const": false
+    },
+    "generated_at_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_revision_reference_only": {
+      "const": true
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/component"
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component_count",
+        "total_bytes",
+        "roles"
+      ],
+      "properties": {
+        "component_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "roles": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "provenanceStatus": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": [
+            "string",
+            "array",
+            "object",
+            "null"
+          ]
+        },
+        "note": {
+          "type": "string"
+        },
+        "accepted": {
+          "type": "boolean"
+        },
+        "requested_revision": {
+          "type": "string"
+        },
+        "reference_only": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file_bytes",
+        "source_build_association",
+        "loaded_dll_evidence",
+        "runtime_acceptance"
+      ],
+      "properties": {
+        "file_bytes": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/provenanceStatus"
+            },
+            {
+              "properties": {
+                "status": {
+                  "const": "VERIFIED"
+                }
+              }
+            }
+          ]
+        },
+        "source_build_association": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/provenanceStatus"
+            },
+            {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "UNVERIFIED"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "loaded_dll_evidence": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/provenanceStatus"
+            },
+            {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "NOT_RUN"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "runtime_acceptance": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/provenanceStatus"
+            },
+            {
+              "properties": {
+                "status": {
+                  "const": "NO"
+                },
+                "accepted": {
+                  "const": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "componentProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file_bytes",
+        "source_build_association",
+        "loaded_dll_evidence",
+        "runtime_acceptance"
+      ],
+      "properties": {
+        "file_bytes": {
+          "const": "VERIFIED"
+        },
+        "source_build_association": {
+          "enum": [
+            "UNVERIFIED"
+          ]
+        },
+        "loaded_dll_evidence": {
+          "enum": [
+            "NOT_RUN"
+          ]
+        },
+        "runtime_acceptance": {
+          "const": "NO"
+        }
+      }
+    },
+    "digestVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "computed_from_file_bytes",
+        "expected_sha256",
+        "match",
+        "caller_supplied_sha_used_as_identity"
+      ],
+      "properties": {
+        "computed_from_file_bytes": {
+          "const": true
+        },
+        "expected_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "match": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "caller_supplied_sha_used_as_identity": {
+          "const": false
+        }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "role",
+        "requested_path",
+        "resolved_path",
+        "file_name",
+        "size_bytes",
+        "sha256",
+        "digest_verification",
+        "provenance"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "role": {
+          "enum": [
+            "executable",
+            "dll",
+            "config"
+          ]
+        },
+        "requested_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resolved_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "file_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "digest_verification": {
+          "$ref": "#/$defs/digestVerification"
+        },
+        "provenance": {
+          "$ref": "#/$defs/componentProvenance"
+        }
+      }
+    }
+  }
+}
