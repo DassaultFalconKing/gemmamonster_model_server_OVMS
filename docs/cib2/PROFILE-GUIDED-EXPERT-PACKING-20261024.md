@@ -259,3 +259,108 @@ model-identity-<sha>/
 **Never partition original weights into “hot/cold” physically unless the corresponding OpenVINO loader understands the new offsets.** For fixed layers executed each token, “cold” is normally a workload/conditional-component property (e.g. image branch absent from text requests), not popularity of a routed expert. File layout and quantization cannot substitute for proper compute placement and memory admission. Cross-layer adjacent physical storage is only an optional launch/read-ahead experiment, not a supported inference pager.
 
 This keeps the **unified model component manifest** useful immediately for measurements while leaving the proven expert V1 and canonical IR untouched.
+
+
+## 11. UMA Path A / optional Path B: placement controller integrated with PGP (2026-10-24)
+
+**New canonical architecture drawing:** [PGP-UMA-PATH-AB-20261024.mermaid](PGP-UMA-PATH-AB-20261024.mermaid). Its solid Path A is the **unchanged default control**; dotted Path B is an experimental, opt-in memory strategy. This extends, rather than replaces, the native disk Pack V1 / expert placement work. The authoritative earlier design/evidence lives in [ADR-UMA-01, §§4–11](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/blob/docs/adr-uma-arc140v-shared-memory-20261022/docs/qwenmonster/ADR-UMA-ARC140V-MEMORY-MODEL-20261022.md) and [OpenVINO Draft PR #8](https://github.com/DassaultFalconKing/openvino/pull/8); these are independent branches, not silently merged code.
+
+### 11.1 Two real datapaths, one pack format, one physical LPDDR pool
+
+| Step | A — production-control target, §usm_device§ | B — experiment only, §OTD_RESIDENT_USM_HOST=1§ |
+| --- | --- | --- |
+| Disk | Positional read one exact native Pack V1 record from NVMe into CPU staging | **Same** read into CPU staging; not a disk-to-GPU zero-copy path |
+| Before write | Follow queue/device copy ordering; do not evict in-flight readers | Explicitly **finish all registered streams whose GPU kernels may still read a recycled slot before any CPU scatter** |
+| Verification | Same-handle source pin, layer/quant/placement bounds, full record checksum **before slot update** | Exactly the same, never trust a merely sampled source ID |
+| Residency | Allocate GPU-owned §usm_device§ routed resident | Allocate GPU-readable/CPU-writable §usm_host§ routed resident; still uses same physical LPDDR |
+| Fill | Nine logical §copy_from§ for weight/scale/ZP slices | Nine CPU §memcpy§ scatters from verified staging; **not** nine disk reads |
+| Visibility | Device queue completion/ordering per exact RC1 API | **After** scatter, explicit GPU visibility §flush/finish§ before any publish |
+| Publish | Atomically set filled only once entire payload and reader lease ordering are valid | Same; never publish stale, partially overwritten or wrong-mode slot |
+| On cache hit | Native resident GPU kernel | GPU reads host-allocated residency; kernel cost must be measured, not assumed same as A |
+| On error/cancel | No false hit, no copy after lifetime ends, bounded cleanup | Same + cross-stream no-use-after-overwrite; B disabled and fail closed on missing lease/fence evidence |
+
+The old scratch correctness proof used global §stream.finish()§. That is suitable for isolated safety trials but **not** an accepted scalable per-slot ownership mechanism. Before production promotion define request/stream-aware per-slot **reader events/lease counts**, explicit pre-write wait and post-write visibility, correct cancellation and multi-slot/concurrent MTP verifier state. Never remove the pre-write barrier and keep only the post-write fence: the earlier implementation had that race.
+
+**B is not another memory tier**. Both §usm_device§ and §usm_host§ allocate pages in the single 32 GiB LPDDR pool on Core Ultra 258V; WDDM ≈27.5 GiB reported GPU budget cannot be added to system RAM. Path B can reduce GPU copy overhead on cold misses but can worsen steady GPU GEMV/compute and severely delay startup.
+
+### 11.2 Local measured evidence and why there is no automatic B promotion
+
+Provenance: [P0-B Phases 4–5 verdict](https://github.com/DassaultFalconKing/openvino/blob/scratch/uma-02-host-harness-20261022/docs/coordination/acceptance/P0B-PHASE45-20261022/VERDICT.md), **2026.5-derived scratch cohort** on Arc 140V; **not** full/identical §2026.4.0.0rc1§ acceptance:
+
+| Metric | A | B | Interpretation |
+| --- | ---: | ---: | --- |
+| 1,695,744-byte expert cold p50 | 3.1876 ms | 2.5149 ms | B about 21% faster on this isolated cold miss |
+| Fill/copy p50 | 612.1 µs | 93.0 µs | B cheaper in measured resident fill |
+| GEMV, M=1 p50 | 46.5 µs | 53.8 µs | **B ~15.7% slower** on single-token kernel |
+| Short Ornith model ready @ ratio20 | ~42 s | ~283 s | B severe startup regression in this cohort |
+| Short OVMS C1/C2/C4 | PASS | PASS | Small model/slot slice only; no soak, no production correctness or overall throughput verdict |
+
+A cold-miss gain is not evidence that B improves accepted target tok/s; no evidence supports universally allocating §usm_host§, or that it shrinks the resident working set. Selection is gated first by reproducible **same 2026.4 source/IR/quant/kernel/driver** A/B and by *startup*, *steady GEMV*, *token throughput*, *TPOT p95/p99*, *WDDM memory* and *concurrent reader lifetime*.
+
+### 11.3 Controller and cost model: pack ordering independent from allocation mode
+
+Decision state for a compiled routed layer/expert-cache arena:
+
+§§§text
+model/quant/IR lock
+  → compiled OTD eligible + immutable verified Pack V1
+  → ONE UMA resource ledger + C1/C2/C4 admission
+  → physical file placement (identity | frequency | coaccess; offline)
+  → resident allocation mode (A default; B opt-in scratch with matching ABI)
+  → native exact router top-k / LRU demand miss
+  → verified record staged once
+  → safe write, visibility and publish by chosen mode
+  → GPU kernel / accepted target token / trace
+§§§
+
+- Pack physical placement answers **where on SSD**; A/B answers **how a verified byte record becomes GPU-readable resident state**. They should be measured as separate factors: §pack_layout × memory_mode × offload_ratio × C1/C2/C4 × phase§. Never infer correlated gain from comparing different checkpoint/layouts.
+- A mode switch must **not reinterpret existing slot pointers**. A and B arena storage types/allocators are different. The scratch implementation selects B with a **global opt-in flag** at allocation time. Per-expert or per-layer adaptive A/B is **research only**: requires distinct typed arenas, typed slot leases and explicit data migration/rebuild with complete memory accounting. Never hot-flip a live slot's type.
+- If future mixed A/B arenas exist, the cache identity and trace must include §checkpoint / scoped_layer / expert / quant_profile / pack_version / resident_mode / allocation_generation§ as appropriate. Logical expert identity is independent of physical residency, so no false cache hit may arise from a mode key change.
+- For decision-making, compare §expected saved cold-stall along target critical path§ against §steady GPU compute penalty × actual reuse§, extra synchronization, startup cost, and resident RAM overhead; measure conditional by request phase, not using a single hotness threshold.
+- B should not be automatically equated to “cold”: a rare expert can be a transient miss in the same A arena. Real hot experts often spend more time in GEMV than in fill, suggesting A may remain preferable for those workloads, but this is a **hypothesis** until same-run data.
+- Modes §auto§ and §hybrid§ should **not** be advertised to users until an actual safe runtime allocator/lease controller is implemented and benchmarked. Only §A§ and explicit global experimental §B§ may be tested initially, never silently switched.
+
+### 11.4 Unified memory admission and eviction contracts
+
+§§§text
+B_expert_resident_available = max(0,
+  min(system_available_after_OS_reserve, WDDM_budget_minus_usage_after_GPU_reserve)
+  - incremental_unique_KV_U4_draft_vision_activation_staging_demand)
+§§§
+
+This is an **admission heuristic**, not an equation claiming both reported counters measure identical allocations or independently additive capacities. Prefer measured unique physical allocations/commit deltas and conservative headroom; report §NOT_EXPOSED§ for unknown budgets. The two constraints overlap; do not sum their free bytes. Track §GPU_BUDGET, GPU_CURRENT_USAGE, system_available, hard_faults, private_commit, per-mode resident allocations, pinned/core, OS page cache§ and actual queue occupancy.
+
+- Define fixed non-expert weights/router/attention/vision obligations, active prefix and KV U4 per slot, speculative draft weights+KV, activation workspaces, pack staging, OS/driver/UI safety, and bounded expert arena.
+- Keep a single budget for A+B. If §usm_host§ and §usm_device§ arenas coexist in a future trial, count both **unique** physical page ranges and migration peak; do not double count merely aliased host/device views; do not silently duplicate all hot experts in both arenas.
+- On pressure: stop/reduce speculative prefetch → reduce candidate draft window or slots if allowed → shrink future expert arena at safe lease points → run supported plain fallback or refuse admission. **Never** evict a live reader, silently lower quantization, swap storm, or kill the desktop.
+- Cache hit invalidation includes model/quant/pack generation/allocator mode and completed stream reader lifetimes. A resident prefetch or B fill has no executable effect until both exact bytes and visibility are proved.
+- Startup allocation order matters: measure §model_ready§, cold pack build and cold first request independently; a B performance boost on 1.6-MiB miss cannot justify a 6.7× model-start regression without an explicit amortization proof.
+
+### 11.5 Phase-aware profiling and test matrix addition
+
+Extend §cib2.expert_trace.v2§ (section 3) with §resident_mode, resident_arena_id, arena_generation, allocated_unique_bytes, staging_peak_bytes, slot_owner_stream_ids, prewrite_wait_us, scatter_or_copy_us, postwrite_visibility_us, copy_queue_stall_us, kernel_gemm_m, residency_hold_tokens, accepted_target_tokens§. Never expose raw prompts or private paths.
+
+Run **4 distinct controls** once 2026.4 Pack V1/GPU correctness PASS:
+
+| Arm | Pack layout | Resident mode | Question |
+| --- | --- | --- | --- |
+| A0 | identity Pack V1 | §usm_device§ | Canonical performance and safety control |
+| A1 | profile-optimized Pack V1 | §usm_device§ | Does physical placement alone help without grouped reads? |
+| B0 | identity Pack V1 | §usm_host§ explicit opt-in | Are B cold gains worth startup/steady/memory cost? |
+| B1 | profile-optimized Pack V1 | §usm_host§ explicit opt-in | Does placement interact with B enough to justify complexity? |
+
+Each: exact source/build/DLL identities, LRU cold/warm, 20/40/75 only if compiled eligibility, 512/2048 prefill and 8K+ by admission, Qwen/Ornith agentic loop + Gemma regression control, C1/C2/C4, tool/reasoning SSE/unary parity, error/cancel and same-slot/two-queue ownership, GPU numerical/logits parity. One warmup + ≥3 measured paired samples for screening; repeat for confidence and soak only after local correctness. For B record both prewrite drain and visibility, not just total copy. If packed layout / B mode makes startup, p95/p99, memory or M=1 unacceptable, **reject that arm** even if cold p50 improved.
+
+### 11.6 Atomic implementation tickets and promotion order
+
+| Ticket | Work | Dependency / PASS gate |
+| --- | --- | --- |
+| §UMA-PGP-00§ | Read-only unified LPDDR/WDDM accounting + disk/sector and unique allocations, Windows process attribution; short provenance snapshots | Starts now; no production changes, unknowns §NOT_EXPOSED§ |
+| §UMA-PGP-01§ | Extend profiler/trace v2 and offline replay for A/B copy, lifetime, phase and actual physical I/O | After passive trace gated; exact event sequence + overhead control |
+| §UMA-PGP-02§ | A-only verified Pack V1 memory correctness + placement A0/A1 and no-copy-on-corrupt tests | Native §2026.4rc1§ Pack V1 / semantics accepted |
+| §UMA-PGP-03§ | Port scratch B with **pre-write** ownership and **post-write** visibility to **isolated compatible 2026.4** branch, global opt-in only; no unproven per-expert hybrid | Model identity + compiled kernel; reader overlap, C1/C2/C4, error/cancel/eviction GPU tests |
+| §UMA-PGP-04§ | Full A0/A1/B0/B1 matched benchmark and memory admission controller; audit cold read, GEMV, startup and 1–4 slots | Same runtime ABI and exact source; B remain OFF if any critical regression |
+| §UMA-PGP-05§ | Optional typed per-layer/per-slot A/B allocator + event/lease ownership, per-mode cache key, rollback/transition and bounded admission | **Research only after B0 useful**; no global §finish()§ per miss in promoted runtime |
+| §UMA-PGP-06§ | Bring into OVMS semantic-refit as explicit operator flag only after independent QA+owner approval | Full regression and owner signoff; no default B and no silent fallback |
+
+**Priority:** ship native A Pack V1 + profile optimizer/trace first. B stays behind §OTD_RESIDENT_USM_HOST=1§ and is an *independent* measured memory-path experiment. Do not introduce Path B into a hot/cold-file sharding PR; one mechanism per independently reversible commit.
