@@ -291,3 +291,14 @@ Snapshot at distillation (2026-10-21): A0 partially proven (C6 SHA), A1/official
 Semantic refit 2026.4 (2026-10-23): the Qwen3.6 policy above is implemented for tool parser `qwen3coder` with reasoning parser `qwen3`. Gemma4 hard policy uses an EBNF argument grammar with whitespace bound `{0,2}` because this GenAI DLL does not apply `max_whitespace_cnt`. A one-argument `JSONSchema` leaves the call open on newlines. Gemma4 reasoning may open again after a tool envelope. LFM2.5-24B-A2B and the experimental GLM notes are consciously deferred. `ACCEPTED` requires a live model run of the candidate binary. No ACCEPTED status.
 
 Qwen3Coder argument-retention checkpoint: commit `5af105a04904713b58b13bbd82a421c6f15844fa` preserves literal strings and raw numeric/container JSON, including the compatible unclassified-parameter path. Its recorded checks are `*VariousArgumentTypes*` 34/34 (including 11 unchanged Onyx cases), `*Qwen3Coder*` 81/81, and successful test/server builds. The test filters overlap. See [testing handoff and evidence](QWEN3CODER-LOSSLESS-TESTING-HANDOFF.md) for commands, exact binaries and the NOT RUN boundaries. This is parser/build evidence; it does not establish live Qwen/Ornith, HTTP/SSE or agent acceptance. No Gemma implementation or acceptance was changed by that checkpoint or this documentation clarification.
+
+
+## Applied candidate: MiniCPM-V 4.7 (evaluation and implementation plan)
+
+**Status: planned, not accepted.** Independent v4.7-MoE VLM onboarding is specified in:
+
+- [MiniCPM-V 4.7 Arc140V INT4 evaluation](../minicpm-v47/ARC140V-EVALUATION-20261023.md): standalone pinned 2026.4 vs isolated new GenAI, GPU memory/vision/performance and OVMS VLM_CB gating.
+- [MiniCPM-V 4.7 full MFP-1 implementation program](../minicpm-v47/MFP1-FULL-COMPATIBILITY-PROGRAM-20261023.md): A0–A9 per-family native Jinja/token corpus, anti-hallucination tool parser-retainer, lossless typed params, model-specific generation policy for none/auto/required/named/parallel, reasoning and multimodal tool replay, SSE and acceptance.
+- [Live state and acceptance matrix](../minicpm-v47/STATE.md).
+
+MiniCPM-V v4.7 (`<tool_call><function=...><parameter=...>`) and MiniCPM5 (`<function name="..."><param name="...">`) are **not the same parser dialect**. Qwen3Coder reuse is a source-pinned hypothesis until byte/token/phase/streaming and schema equivalence passes its RED/GREEN corpus. The published 35B INT4 model is not validated on our Windows 2026.4 RC1 / Arc 140V by its Hugging Face listing or by upstream GenAI export merges alone.
