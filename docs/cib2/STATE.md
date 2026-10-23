@@ -4,7 +4,7 @@
 **Branch:** `feature/cib2-rc3b-otd-preflight-20261023`
 **Immutable base:** `qwm-semantic-refit-2026.4-rc3b` -> `b77b0f23fa7417e61778ef86ecb0ca739cc85f14`
 **Parent release:** `qwm-semantic-refit-2026.4-rc3` -> `b12a913ba492b951eb3384583e46541ffe467763`
-**Status:** PREFLIGHT_IN_PROGRESS; not accepted.
+**Status:** SOURCE_PREFLIGHT_RECORDED / HOST_GATES_OPEN; not accepted.
 **Scope:** documentation, reproducible static gates, benchmark contracts. Do not mutate RC3B core, published tags or runtime DLLs.
 
 ## Verified so far
@@ -32,11 +32,17 @@
 4. Keep no-OTD and stock-OTD outputs identical across instrumentation changes. OTD `OFFLOAD_RATIO=0` is negative control, not OTD coverage.
 5. Performance reference is stock RC3B with pinned model/checkpoint/driver and memory profile; never infer its throughput from the closed 2026.5 fork.
 
-## Active
-- **ACTIVE_STAGE:** create static provenance preflight harness, compatibility report and optional host gates.
-- **BASE_SHA:** `b77b0f23fa7417e61778ef86ecb0ca739cc85f14`
-- **LAST_GREEN_TESTS:** source tag ancestry, manifest identity only.
-- **CURRENT_FAILURE:** no access to operator Windows SDK/runtime or original test logs; cannot independently run GPU or full-suite tests.
-- **NEXT_ACTION:** run local preflight verifier on RC3B installation; capture SDK plugin/DLL hashes; inspect exact 2026.4.0.0rc1 OTD provider before any GPU patch.
-- **REVERT_POINT:** base RC3B tag.
-- **EVIDENCE_PATH:** `docs/cib2/` (non-secret sanitized evidence only).
+## Active (updated 2026-10-23)
+
+- **ACTIVE_STAGE:** source preflight delivered; no GPU runtime code port attempted.
+- **BASE_SHA:** `b77b0f23fa7417e61778ef86ecb0ca739cc85f14`, tag `qwm-semantic-refit-2026.4-rc3b`.
+- **CURRENT_HEAD:** `cd12e2bcd11075cfa1c6616c343657633a35c923` (as of state update preparation; this state edit will create one subsequent docs-only SHA).
+- **LAST_GREEN_TESTS:** GitHub tag resolution, direct RC3 parent verification, source manifests, published upstream 2026.4 OTD path, GitHub compare scope. No binary/runtime tests executed.
+- **CURRENT_FAILURE:** exact 2026.4.0.0rc1 SDK source / active module provenance and operator Windows model host unavailable; full test suite and owner signoff unverified.
+- **NOT_RUN:** Python preflight unit suite execution, full `ovms_test`, DLL file rehash, GPU OTD runtime performance, Windows source build, agentic soak.
+- **NEXT_ACTION:** local operator runs `py -3 -m unittest discover -s tests/cib2 -p 'test_*.py' -v` and `py -3 scripts/cib2/preflight_rc3b.py --repo .`; then supplies actual pinned binaries and stock SDK DLLs for strict hash preflight. Capture true kernel/ABI profile before any OTD patch.
+- **DOCUMENT:** `docs/cib2/PREFLIGHT-20261023.md` (verified static findings, gated commit map and operator steps).
+- **ARTIFACTS:** `scripts/cib2/preflight_rc3b.py`, `tests/cib2/test_preflight_rc3b.py`.
+- **REVERT_POINT:** `qwm-semantic-refit-2026.4-rc3b`.
+- **EVIDENCE_PATH:** `docs/cib2/` only. No unsanitized host paths or private traces.
+- **PROMOTION:** explicit `NOT_ACCEPTED`, source-preflight branch only.
