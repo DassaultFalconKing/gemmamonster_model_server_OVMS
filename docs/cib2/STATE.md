@@ -1,5 +1,17 @@
 # CIB2 current execution state
 
+
+## Documentation consolidation (2026-10-24; docs-only)
+
+- **Branch:** `docs/cib2-layer-expert-pack-implementation-20261024` (branch source is executed family-map wave `ab7412c85a...`); only docs/diagram/archival moves here. Frozen `eb76a74f7aa...` untouched.
+- **ACTIVE DOCUMENTATION:** [README](README.md) → [CIB2 P0–P9](LAYER-EXPERT-PACK-IMPLEMENTATION-20261024.md) → [PGP+UMA A/B](PROFILE-GUIDED-EXPERT-PACKING-20261024.md) → [inline Mermaid and editable source](PGP-UMA-PATH-AB-20261024.mermaid).
+- **PATH A:** default `usm_device` resident and queue-ordered GPU copies; **PATH B:** optional scratch `usm_host`, pre-write GPU-reader drain + CPU scatter + post-write visibility; never silently enabled. B prior short model tests not production/2026.4 acceptance.
+- **ARCHIVE:** byte-identical 2026-10-23 codework and preflight notes moved under [archive/20261023](archive/20261023/README.md); execution evidence, 67/67 host suite reports, mapper/replay scripts, and active state retained.
+- **CURRENT_STAGE:** architecture and implementation plan documented; no new 2026.4 native GPU or OVMS tests executed by this docs branch.
+- **NEXT_ACTION:** local agents start read-only PGP-00 Windows geometry/UMA ledger and synthetic PGP-02 optimizer; do not launch optional B or pack promotion until P0/P1 compiled eligibility and native 2026.4 Pack V1/A gates PASS. Preserve MFP-1 negative regressions.
+- **ACCEPTANCE:** `NOT_ACCEPTED`; no runtime source, binaries or pack data modified.
+
+
 ## Current checkpoint: 2026-10-24
 
 **Current normative design documents:** [LAYER-EXPERT-PACK-IMPLEMENTATION-20261024.md](LAYER-EXPERT-PACK-IMPLEMENTATION-20261024.md) and [PROFILE-GUIDED-EXPERT-PACKING-20261024.md](PROFILE-GUIDED-EXPERT-PACKING-20261024.md), including explicit UMA Path A default and gated B, with [flowchart](PGP-UMA-PATH-AB-20261024.mermaid). Previous 2026-10-23 work plan/preflight writeups are preserved in [archive/20261023/](archive/20261023/README.md) without altering source evidence. **Archive is not an acceptance gate**: full GPU runtime/2026.4 source-build evidence remains open.
