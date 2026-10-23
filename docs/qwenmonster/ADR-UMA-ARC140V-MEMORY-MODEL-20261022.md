@@ -141,3 +141,60 @@ Not authorized: CLD-04 scheduler, prefetch/paging runtime, `mmap` default flips,
 6. Existing model-specific hotness/precision plan: `docs/qwenmonster/HOT_COLD_EXPERTS_ARCHITECTURE.md` on pinned OVMS integration.
 
 **Status summary:** This ADR changes the architecture **hypotheses, evidence requirements and experiment ordering only**. It does **not** claim that zero-copy is possible for existing OTD tensors or that a 27.5-GiB GPU cap is a carved-out physical region. Keep the verified native OTD path as baseline until local results prove otherwise.
+
+
+## 11. Addendum 2026-10-23: measured UMA Path A/B and CIB2 decision
+
+**Status: measured on 2026.5 scratch GPU cohort; NOT portable runtime acceptance for RC3B 2026.4.** Earlier research-only sections 1–10 were written before UMA-00/02 and P0-B tests. Preserve them as historical hypotheses; use this addendum for updated evidence.
+
+### 11.1 Tested implementations (not equivalent to theoretical zero-copy)
+
+| Path | Actual data flow | Resident type | Default |
+| --- | --- | --- | --- |
+| A, control | NVMe pack positional read -> CPU staging -> verify -> up to nine GPU copy_from calls -> publish LRU slot | usm_device / preferred | on |
+| B, scratch | NVMe pack positional read -> same staging -> verify -> drain in-flight GPU readers **before writes** -> nine CPU scatters -> post-write visibility fence -> publish | usm_host, GPU-readable | off; OTD_RESIDENT_USM_HOST=1 |
+
+Path B eliminates a separate staging-to-device copy path, **not** the staging buffer, CPU scatter, pack verification, or nine logical slices. It is not NVMe-to-final-resident zero-copy. Both live within the same physical 32 GiB LPDDR; they do not create extra capacity. UMA=true, CacheCoherentUMA=false (Windows host UMA-00 observations). WDDM ~27.5 GiB shared GPU figure is not an additive independent VRAM pool.
+
+### 11.2 Correctness: GPU read ownership and memory visibility
+
+The initial scratch B implementation performed CPU scatter before calling stream.flush/finish, allowing a recycled slot to be overwritten while an old GPU reader still used it. P0-B fixed this race by **pre-write reader drain** on the fill and registered secondary streams, followed by scatter and a **separate post-write** flush+finish before set_filled. P0B-O1/O2/V1/L1 passed, plus 9 UMA02 tests passed with one skip dependent on logging, and sweetspot 20/25/30 suite 10/10 passed. Blocking finish is acceptable as scratch correctness proof, **not a scalable asynchronous lease protocol**. No production switch without a per-slot owner/in-flight event/lease design for C2/C4/MTP.
+
+Source: OpenVINO scratch PR #8 https://github.com/DassaultFalconKing/openvino/pull/8 ; root cause https://github.com/DassaultFalconKing/openvino/blob/scratch/uma-02-host-harness-20261022/docs/coordination/acceptance/P0B-INFLIGHT-20261022/ROOT-CAUSE.md ; fix ed246cdf0252185fae6f16c6391afa63ec36404c.
+
+### 11.3 Real Arc 140V performance, representative 1,695,744-byte packed expert record
+
+From 2026-10-22 P0-B Phases 4–5, 8 cold-miss iterations per mode:
+
+| Metric | Path A, usm_device | Path B, usm_host | Readout |
+| --- | ---: | ---: | --- |
+| Cold miss p50 | 3187.6 us | 2514.9 us | B 21.1% faster cold fill |
+| Cold miss p95 | 3340.1 us | 2675.4 us | B faster in this short sample |
+| Memory fill/copy p50 | 612.1 us | 93.0 us | B avoids GPU copy; definitions/ordering differ |
+| GEMM/GEMV M=1 p50 | 46.5 us | 53.8 us | **B 15.7% slower** on typical single-token decode |
+| M=2 p50 | 100.7 us | 52.0 us | B faster in microbenchmark; atypical A outlier needs repeat |
+| M=4 p50 | 51.9 us | 50.7 us | near parity |
+| M=8 p50 | 49.8 us | 49.1 us | near parity |
+| M=11 p50 | 44.3 us | 49.7 us | B 12.2% slower |
+
+These figures establish a cold-miss advantage and uneven steady GEMV/GEMM performance; they do **not** establish a universal model decode acceleration. See https://github.com/DassaultFalconKing/openvino/blob/scratch/uma-02-host-harness-20261022/docs/coordination/acceptance/P0B-PHASE45-20261022/VERDICT.md.
+
+### 11.4 Short real OVMS model A/B, OFFLOAD_RATIO=20
+
+After rebuilding fresh 40-file Ornith pack, both variants started and completed short max_tokens=48 batches: A C1 1/1, C2 2/2, C4 4/4; B C1 1/1, C2 2/2, C4 4/4; no observed fatal/OOM. Startup A ~42 s vs B ~283 s; warmup TTFT A ~8.95 s vs B ~13.79 s. The C1–C4 short request wall measurements alone are not statistically defensible decode tok/s benchmarks. No long soak, no reliable p95/p99, no rigorous accepted tok/s superiority proof. Verdict: **B_SAFE_FOR_MODEL_AB**, **MODEL_PASS** short only, **PRODUCTION_ENABLEMENT=NO**.
+
+### 11.5 Decision for CIB2 anchored to the fast 2026.4 RC3B-postfix
+
+1. **A remains the production baseline**, stable hot weights and frequently accessed routed experts; pack v1 can be ported with Wave01 integrity, reader handle pin and atomic publish. Only compatible 2026.4 source adaptation is allowed. No 2026.5 GPU DLL mixing.
+2. **B remains experimental** for miss-heavy routed experts or transient residency: port behind a default-off feature flag to a separately built 2026.4 GPU-plugin source branch **after** exact RC1 SDK/ABI and baseline parity. Prefer event/lease-based per-slot ownership to global stream.finish.
+3. **Adaptive A/B placement is a separate later experiment**. Use measured (layer, expert) routing hotness, cold-fill cost, GPU M=1 vs M>1 bandwidth, live resident budget and C1/C2/C4/multi-stream traces. Thresholds must be learned via replay; no hardcoded resident percentages as production truth.
+4. **Fixed dense/attention/convolution layers must not be automatically assigned to B**: they run every token. A/B here refers to *routed expert cache allocations*, not arbitrary layer NVMe offload, GPU/CPU workload splitting or an additional RAM tier.
+5. **Cold NVMe** is file-backed expert storage, not a free GPU cache. Path C (mapped file backing) and CPU cold execution D remain research-only. All tiers share one bounded physical LPDDR allocation ledger with fixed weights, KV U4, MTP/drafter and OS reserve.
+
+Decision gate for Path B promotion: exact pack payload parity, no false cache hits, correct cancellation and in-flight two-queue/C4 lifetime, no extra memory overcommit, full model outputs/tool protocol parity, measured accepted tok/s, TTFT, TPOT p95/p99 and NVMe/DRAM contention; improvement over A under at least one defined target workload with no unacceptable regressions elsewhere. Current evidence does not satisfy that gate.
+
+Frozen CIB2 base: https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/tree/freeze/rc3b-postfix-20261023-eb76a74f ; detailed CIB2 work plan: https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/blob/feature/cib2-rc3b-otd-preflight-20261023/docs/cib2/CODE-WORK-PLAN-20261023.md.
+
+---
+
+**ADR conclusion as of 23 October:** A is control; B is a demonstrated cold-miss optimization hypothesis with passed short Arc GPU/model correctness gates and a real M=1 compute penalty. Future CIB2 work retains both and tests adaptive selection instead of globally converting residents to usm_host.
