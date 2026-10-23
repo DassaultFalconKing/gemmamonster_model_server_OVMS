@@ -4,7 +4,7 @@
 **Branch:** `feature/cib2-rc3b-otd-preflight-20261023`
 **Immutable base:** `qwm-semantic-refit-2026.4-rc3b` -> `b77b0f23fa7417e61778ef86ecb0ca739cc85f14`
 **Parent release:** `qwm-semantic-refit-2026.4-rc3` -> `b12a913ba492b951eb3384583e46541ffe467763`
-**Status:** SOURCE_PREFLIGHT_RECORDED / HOST_GATES_OPEN; not accepted.
+**Status:** SYNCED_WITH_FROZEN_WORKING_POSTFIX / STATIC_PREFLIGHT_OPEN; not accepted.
 **Scope:** documentation, reproducible static gates, benchmark contracts. Do not mutate RC3B core, published tags or runtime DLLs.
 
 ## Verified so far
@@ -32,17 +32,18 @@
 4. Keep no-OTD and stock-OTD outputs identical across instrumentation changes. OTD `OFFLOAD_RATIO=0` is negative control, not OTD coverage.
 5. Performance reference is stock RC3B with pinned model/checkpoint/driver and memory profile; never infer its throughput from the closed 2026.5 fork.
 
-## Active (updated 2026-10-23)
+## Active (updated 2026-10-23, post-freeze sync)
 
-- **ACTIVE_STAGE:** source preflight delivered; no GPU runtime code port attempted.
-- **BASE_SHA:** `b77b0f23fa7417e61778ef86ecb0ca739cc85f14`, tag `qwm-semantic-refit-2026.4-rc3b`.
-- **CURRENT_HEAD:** `cd12e2bcd11075cfa1c6616c343657633a35c923` (as of state update preparation; this state edit will create one subsequent docs-only SHA).
-- **LAST_GREEN_TESTS:** GitHub tag resolution, direct RC3 parent verification, source manifests, published upstream 2026.4 OTD path, GitHub compare scope. No binary/runtime tests executed.
-- **CURRENT_FAILURE:** exact 2026.4.0.0rc1 SDK source / active module provenance and operator Windows model host unavailable; full test suite and owner signoff unverified.
-- **NOT_RUN:** Python preflight unit suite execution, full `ovms_test`, DLL file rehash, GPU OTD runtime performance, Windows source build, agentic soak.
-- **NEXT_ACTION:** local operator runs `py -3 -m unittest discover -s tests/cib2 -p 'test_*.py' -v` and `py -3 scripts/cib2/preflight_rc3b.py --repo .`; then supplies actual pinned binaries and stock SDK DLLs for strict hash preflight. Capture true kernel/ABI profile before any OTD patch.
-- **DOCUMENT:** `docs/cib2/PREFLIGHT-20261023.md` (verified static findings, gated commit map and operator steps).
-- **ARTIFACTS:** `scripts/cib2/preflight_rc3b.py`, `tests/cib2/test_preflight_rc3b.py`.
-- **REVERT_POINT:** `qwm-semantic-refit-2026.4-rc3b`.
-- **EVIDENCE_PATH:** `docs/cib2/` only. No unsanitized host paths or private traces.
-- **PROMOTION:** explicit `NOT_ACCEPTED`, source-preflight branch only.
+- **ACTIVE_STAGE:** detailed code-work planning, source preflight and host provenance checks. Runtime OTD patch **not started**.
+- **IMMUTABLE_RELEASE:** `qwm-semantic-refit-2026.4-rc3b` -> `b77b0f23fa7417e61778ef86ecb0ca739cc85f14`; RC3 parent `b12a913ba492b951eb3384583e46541ffe467763`. Do not retag or substitute this release SHA.
+- **FROZEN_WORKING_BASE:** `freeze/rc3b-postfix-20261023-eb76a74f` -> `eb76a74f7aa39573d452d95443e189b1f5f4d9e8`, four additional postfix commits after RC3B. Preserve Qwen lossless parser, Ornith template pin and retainer architecture document.
+- **CIB2_SYNC_MERGE:** `7351bb921e16382e4357bcc1311471b13964f64b`, two parents: prior CIB2 `d1f04532ed392ca134fc0a8158492861c555df16` + freeze `eb76a74f`. Merge tree is freeze + CIB2-only paths; working semantic-refit branch untouched.
+- **LAST_GREEN_TESTS:** GitHub tag ancestry and tree compare; existing Qwen 81/81 XML at frozen commit is HISTORICAL operator evidence, not a new test execution.
+- **CODEWORK:** `docs/cib2/CODE-WORK-PLAN-20261023.md`; CIB2-00 through CIB2-08, gated by exact 2026.4rc1 SDK and preserved protocol fixture baseline.
+- **PREFLIGHT:** `scripts/cib2/preflight_rc3b.py` v2 distinguishes tag from freeze, refuses drift of protected Qwen/Ornith source blobs and committed diff outside CIB2 directories. `--binary-cohort tagged-rc3b` validates known release EXE hashes; `--binary-cohort frozen-postfix` (default) cannot mark EXEs verified without new build identity.
+- **NOT_RUN:** Python unit test execution, new postfix executable SHA attestation, full `ovms_test`, Windows loaded DLL checks, GPU OTD performance and long agentic soak.
+- **CURRENT_BLOCKER:** actual new working-postfix binary identities and exact isolated SDK 2026.4rc1 loaded-module evidence unavailable here. Archived tagged RC3B EXE hashes cannot substitute.
+- **NEXT_ACTION:** local operator checks out CIB2 branch (with both tag and freeze fetched), runs `py -3 -m unittest discover -s tests/cib2 -p 'test_*.py' -v`, captures new postfix binaries and hardware-verified profile, tests `--strict`. Then open CIB2-00/01/03 PRs.
+- **REVERT_POINTS:** immutable RC3B tag `b77b0f23` and working freeze `eb76a74f`; neither branch is modified by CIB2 work.
+- **REVIEW_BOUNDARY:** modifications to `docs/cib2/`, `scripts/cib2/`, `tests/cib2/` only. No runtime/core GPU/plugin writes on this branch.
+- **ACCEPTANCE:** explicit NOT_ACCEPTED pending full-suite and owner signoff.
