@@ -1,8 +1,8 @@
-test_external_python_blocks_without_starting_child (__main__.SupervisorTests.test_external_python_blocks_without_starting_child) ... ok
-test_native_exit_preserves_constructor_phase (__main__.SupervisorTests.test_native_exit_preserves_constructor_phase) ... ok
-test_timeout_terminates_owned_descendants (__main__.SupervisorTests.test_timeout_terminates_owned_descendants) ... ok
-
-----------------------------------------------------------------------
-Ran 3 tests in 3.574s
-
-OK
+test_external_python_blocks_without_starting_child (__main__.SupervisorTests.test_external_python_blocks_without_starting_child) ... ok
+test_native_exit_preserves_constructor_phase (__main__.SupervisorTests.test_native_exit_preserves_constructor_phase) ... ok
+test_timeout_terminates_owned_descendants (__main__.SupervisorTests.test_timeout_terminates_owned_descendants) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 3.574s
+
+OK
