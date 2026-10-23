@@ -4,7 +4,7 @@ Date: 2026-10-24. Operator authorized execution through external harnesses. ACCE
 
 ## Fixed inputs
 
-- CIB2 plan: `CODE-WORK-PLAN-20261023.md`, source branch `feature/cib2-rc3b-otd-preflight-20261023` at `c62aa040d46581625933e536b6b92958f2577bd0`.
+- Historical CIB2 plan (archived unchanged): [`archive/20261023/CODE-WORK-PLAN-20261023.md`](archive/20261023/CODE-WORK-PLAN-20261023.md), source branch `feature/cib2-rc3b-otd-preflight-20261023` at `c62aa040d46581625933e536b6b92958f2577bd0`.
 - Working runtime/source boundary remains the frozen 2026.4 postfix `eb76a74f7aa39573d452d95443e189b1f5f4d9e8`. Tagged RC3B and working-postfix binary identities remain separate.
 - MiniCPM live input fixed at `1caffd79ed1c7868242dbaa23e99289f36cc4ddf` on its independent feature branch. Two actual isolated nightly constructors stopped on physical RAM pressure; no generation/performance acceptance. Its immutable `docs/minicpm-v47/evidence/live-20261024/summary.json` is the resource-failure input, not evidence of native OTD eligibility.
 - Program branch: `feature/cib2-offload-family-map-20261024`, from the existing CIB2 plan. Frozen product and other worktrees are read-only.
