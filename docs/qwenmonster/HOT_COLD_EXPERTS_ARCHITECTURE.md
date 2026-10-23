@@ -2,6 +2,8 @@
 
 > **UMA update (22.10.2026):** [ADR-UMA-01 — физическая LPDDR, zero-copy hypotheses и WDDM/USM gates](ADR-UMA-ARC140V-MEMORY-MODEL-20261022.md). К осям residency/precision hotness добавлена независимая ось **memory-access policy**. Shared physical DRAM на Arc 140V **не гарантирует** CPU/GPU cache coherence, zero-copy или то, что `27.5 GiB GPU memory` является firmware-reserved физической областью. До Windows `UMA-00/01` доказательств обязательный путь — existing verified-read/staging/copy, без замены serving runtime. [Локальный Windows handoff](HANDOFF-UMA-00-WINDOWS-20261022.md).
 
+> **Execution-order revision, 22.10.2026:** [Post-Wave01 / UMA roadmap](POST-WAVE01-UMA-ROADMAP-20261022.md) and [Windows handoff](HANDOFF-ROADMAP-UMA-WAVE01-20261022.md). After actual Wave-01 Windows host acceptance (PR #7), Arc UMA-00 evidence (OVMS #21) and **scratch** path-B G01–G03 / 2-KiB timing (OpenVINO #8), prioritize **CPU scatter / in-flight GPU slot ownership**, then real GEMM bandwidth and C1/C2/C4 before adaptive eviction/prefetch. Early 2-KiB synthetic speedups are NOT full-model gains; `OTD_RESIDENT_USM_HOST` stays default OFF. This updates staging and gate order, not existing model architecture. Linux deferred.
+
 ## Резюме
 
 Главный вывод исследования: **для GEMMAMONSTER правильнее моделировать не просто “горячие/холодные слои”, а две независимые оси**:
