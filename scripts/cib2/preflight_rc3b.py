@@ -18,6 +18,19 @@ TAG = "qwm-semantic-refit-2026.4-rc3b"
 PARENT_TAG = "qwm-semantic-refit-2026.4-rc3"
 BASE = "b77b0f23fa7417e61778ef86ecb0ca739cc85f14"
 PARENT = "b12a913ba492b951eb3384583e46541ffe467763"
+# Independent frozen working checkpoint. Release tag BASE remains unchanged.
+FROZEN = "eb76a74f7aa39573d452d95443e189b1f5f4d9e8"
+FREEZE_BRANCH = "freeze/rc3b-postfix-20261023-eb76a74f"
+SEMANTIC_FILES = (
+    "src/llm/io_processing/qwen3coder/qwen3coder_tool_parser.cpp",
+    "src/llm/io_processing/qwen3coder/qwen3coder_tool_parser.hpp",
+    "src/llm/io_processing/utils.cpp",
+    "src/llm/io_processing/utils.hpp",
+    "src/test/llm/output_parsers/qwen3coder_output_parser_test.cpp",
+    "docs/qwenmonster/chat-templates/ornith/chat_template.jinja",
+    "docs/qwenmonster/chat-templates/ornith/CHAT-TEMPLATE-PIN.json",
+    "docs/qwenmonster/OVMS-MODEL-FAMILY-ADAPTATION-PROTOCOL.md",
+)
 MANIFEST = "docs/qwenmonster/RELEASE-CANDIDATE-20261023-RC3B-IDENTITY.json"
 EXPECTED = {
     "ovms": ("2beed15ee7f6af9a2c45854005caff24886562c8da5586f052bd2133e3d671c2", 22589440),
@@ -130,11 +143,27 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
         checks.append(Check("rc3b_direct_parent", "PASS" if parent_of_base == PARENT else "FAIL",
                             f"{BASE}^ -> {parent_of_base}"))
         try:
-            git(repo, "merge-base", "--is-ancestor", BASE, "HEAD")
-            checks.append(Check("head_ancestry", "PASS", f"HEAD descends from {BASE}"))
+            git(repo, "merge-base", "--is-ancestor", BASE, FROZEN)
+            checks.append(Check("frozen_release_ancestry", "PASS", "Freeze descends from immutable RC3B tag"))
         except RuntimeError:
-            checks.append(Check("head_ancestry", "FAIL", "HEAD does not descend from RC3B"))
-        changed = git(repo, "diff", "--name-only", BASE, "HEAD").splitlines()
+            checks.append(Check("frozen_release_ancestry", "FAIL", "Freeze does not descend from RC3B"))
+        try:
+            git(repo, "merge-base", "--is-ancestor", FROZEN, "HEAD")
+            checks.append(Check("head_ancestry", "PASS", f"HEAD descends from frozen working SHA {FROZEN}"))
+        except RuntimeError:
+            checks.append(Check("head_ancestry", "FAIL", "HEAD does not descend from frozen working RC3B-postfix"))
+        semantic_drift = []
+        for protected in SEMANTIC_FILES:
+            try:
+                original_blob = git(repo, "rev-parse", f"{FROZEN}:{protected}")
+                current_blob = git(repo, "rev-parse", f"HEAD:{protected}")
+                if original_blob != current_blob:
+                    semantic_drift.append(protected)
+            except RuntimeError:
+                semantic_drift.append(protected)
+        checks.append(Check("semantic_freeze", "FAIL" if semantic_drift else "PASS",
+                            f"Frozen Qwen/Ornith source blob drift: {semantic_drift}"))
+        changed = git(repo, "diff", "--name-only", FROZEN, "HEAD").splitlines()
         unexpected = safe_changed_paths(changed)
         checks.append(Check("preflight_scope", "FAIL" if unexpected else "PASS",
                             f"Changed {len(changed)} committed paths; outside preflight scope: {unexpected}"))
@@ -147,9 +176,12 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
         checks.append(Check("worktree_scope", "FAIL" if dirty_outside else "PASS",
                             f"Uncommitted/untracked paths outside preflight scope: {dirty_outside}"))
         original = git(repo, "show", f"{BASE}:{MANIFEST}")
+        frozen_manifest = git(repo, "show", f"{FROZEN}:{MANIFEST}")
         checked_in = (repo / MANIFEST).read_text(encoding="utf-8").strip()
-        checks.append(Check("manifest_immutable", "PASS" if original == checked_in else "FAIL",
-                            "Working manifest equals tag content" if original == checked_in else "Manifest was changed"))
+        manifest_ok = original == frozen_manifest == checked_in
+        checks.append(Check("manifest_immutable", "PASS" if manifest_ok else "FAIL",
+                            "RC3B tag, freeze and checkout have identical release manifest" if manifest_ok
+                            else "RC3B release manifest changed across tag/freeze/checkout"))
         problems = verify_manifest(json.loads(original))
         checks.append(Check("manifest_identity", "FAIL" if problems else "PASS",
                             "; ".join(problems) if problems else "All RC3B fields and recorded executable identities match"))
@@ -166,9 +198,11 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
     statuses = [c.status for c in checks]
     verdict = "FAIL" if "FAIL" in statuses else ("INCOMPLETE" if "NOT_RUN" in statuses else "PASS")
     report = {
-        "schema": "cib2-rc3b-preflight-v1",
+        "schema": "cib2-rc3b-preflight-v2",
         "base_tag": TAG,
         "base_sha": BASE,
+        "frozen_working_sha": FROZEN,
+        "freeze_branch": FREEZE_BRANCH,
         "verdict": verdict,
         "checks": [asdict(c) for c in checks],
         "counts": {s: statuses.count(s) for s in ("PASS", "FAIL", "NOT_RUN")},
@@ -176,7 +210,8 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
     }
     mandatory = {
         "repo_root", "rc3b_tag", "rc3_parent_tag", "rc3b_direct_parent",
-        "head_ancestry", "preflight_scope", "worktree_scope", "manifest_immutable",
+        "head_ancestry", "frozen_release_ancestry", "semantic_freeze",
+        "preflight_scope", "worktree_scope", "manifest_immutable",
         "manifest_identity", "ovms_binary", "ovms_test_binary", "stock_gpu_plugin",
     }
     mandatory_incomplete = any(c.status == "NOT_RUN" and c.id in mandatory for c in checks)
