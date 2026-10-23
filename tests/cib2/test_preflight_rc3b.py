@@ -12,8 +12,8 @@ SCRIPTS = Path(__file__).resolve().parents[2] / "scripts" / "cib2"
 sys.path.insert(0, str(SCRIPTS))
 
 from preflight_rc3b import (  # noqa: E402
-    BASE, EXPECTED, MANIFEST, PARENT, PARENT_TAG, TAG,
-    Check, check_file, check_plugin_pair, safe_changed_paths, sha256,
+    BASE, FROZEN, FREEZE_BRANCH, SEMANTIC_FILES, EXPECTED, MANIFEST, PARENT, PARENT_TAG, TAG,
+    Check, check_file, check_plugin_pair, check_postfix_binary, safe_changed_paths, sha256,
     verify_manifest,
 )
 
@@ -82,6 +82,23 @@ class StaticContractTest(unittest.TestCase):
             active.write_bytes(b"modified-plugin")
             check_plugin_pair(checks, sdk, active)
             self.assertEqual(checks[-1].status, "FAIL")
+
+    def test_freeze_identity_does_not_move_tag(self):
+        self.assertNotEqual(FROZEN, BASE)
+        self.assertTrue(FREEZE_BRANCH.startswith("freeze/"))
+        self.assertTrue(any("qwen3coder_tool_parser.cpp" in f for f in SEMANTIC_FILES))
+        self.assertTrue(any("chat_template.jinja" in f for f in SEMANTIC_FILES))
+
+    def test_new_postfix_binary_must_not_use_rc3b_hash_as_success(self):
+        with tempfile.TemporaryDirectory() as temp:
+            exe = Path(temp) / "ovms.exe"
+            exe.write_bytes(b"new Qwen postfix binary, not rc3b release")
+            checks = []
+            check_postfix_binary(checks, "postfix_bin", exe)
+            self.assertEqual(checks[-1].status, "NOT_RUN")
+            self.assertIn("no pinned postfix binary manifest", checks[-1].detail)
+            check_postfix_binary(checks, "postfix_bin", None)
+            self.assertEqual(checks[-1].status, "NOT_RUN")
 
     def test_absent_runtime_is_not_run(self):
         checks = []
