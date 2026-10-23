@@ -168,3 +168,14 @@ E) Resource and throughput measured against **same** stock 2026.4, no hidden 202
 F) An additional dense/layer offload route is accepted **only separately** after actual source/kernel research; it is not part of the routed Pack V1 completion.
 
 This is the minimal path to realize the planned hot/cold layer architecture without manufacturing compatibility, speedups or memory that do not exist.
+
+
+## Addendum 2026-10-24: profile-guided physical packing and SSD geometry
+
+The core P0–P9 plan above establishes correctness and an exact 2026.4-compatible Pack V1 before *any* profile optimization. The next programme is [PGP-01: Profile-Guided Expert Packing](PROFILE-GUIDED-EXPERT-PACKING-20261024.md), with `PGP-00…PGP-05` independent tickets.
+
+- **Start without V2:** existing Pack V1 `PackLayout::set_placement` and `build_pack(..., placement)` support per-layer expert record permutation with unchanged logical IDs, checksums and reader ABI. Native `fill_weights_from_pack` still reads one payload only; physical reordering alone is not a proven improvement.
+- **Trace-driven hotness:** use complete, provenance-pinned real expert access sequences with C1/C2/C4 and verifier/drafter ownership. Static XML Const offsets and synthetic 67/67 host tests are **not** hotness evidence.
+- **Three independent knobs:** (1) bounded unique-LPDDR expert residency, (2) per-layer physical record order/co-access locality, (3) bounded grouped reads/prefetch. No fake OS-cache/`usm_host` capacity tier or auto-pinning.
+- **Windows:** measure NTFS allocation cluster, physical/logical sectors, aligned I/O extent, OS cache effect and file fragmentation separately. Do not format drives, assume 4KiB hardware sectors, or label `FILE_FLAG_NO_BUFFERING` as GPU direct DMA.
+- **V2 only on objective evidence:** versioned manifest/shards and async IO after Pack V1 same-runtime correctness and paired performance. Quant/mixed precision changes are a separate, quality-sensitive model export project.
