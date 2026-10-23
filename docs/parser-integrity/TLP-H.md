@@ -11,7 +11,7 @@ The parser can promise `model-emitted identifier == published identifier` if the
 
 ## Mandatory invariants
 
-**TLP-INV-01 strings:** native literal strings are encoded into JSON **once**; backslashes are not globally unescaped. Keep `C:\\tmp\\foo`, `15400-PLM-A02`, `1HGCM82633A004352`, `#B4E8`, zero-prefixed IDs, `\\t` as two characters, embedded quotes and Unicode. Explicit ordinary JSON strings obey JSON escape syntax; do not confuse these with native literal delimiters.
+**TLP-INV-01 strings:** native literal strings are encoded into JSON **once**; backslashes are not globally unescaped. Keep `C:\tmp\foo`, `C:\\tmp\\foo`, `15400-PLM-A02`, `1HGCM82633A004352`, `#B4E8`, zero-prefixed IDs, `\\t` as two characters, embedded quotes and Unicode. Explicit ordinary JSON strings obey JSON escape syntax; do not confuse these with native literal delimiters.
 
 **TLP-INV-02 numbers:** avoid numeric DOM re-serialization. Preserve lexical forms `1.10`, `1e3`, `-0`, `9007199254740993` and nested numeric lexemes when valid under the chosen supported schema profile. Keep separate validation and raw-payload paths; `RawValue(kNumberType)` may be needed for exact writers. No claim of arbitrary-precision numeric **comparison** from a RapidJSON DOM validator.
 
