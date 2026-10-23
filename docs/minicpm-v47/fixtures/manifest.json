@@ -1,0 +1,69 @@
+[
+  {
+    "id": "IMG-01",
+    "file": "IMG-01.png",
+    "sha256": "b4ea95bb6a3d0d84b52dd19d30b3def72879e1c1f75be82b5e385e9cfea8e024",
+    "prompt": "Count the red circles and blue squares. Reply with their counts.",
+    "expected": {
+      "red_circles": 2,
+      "blue_squares": 1
+    },
+    "status": "NOT_RUN",
+    "prompt_sha256": "81ce767c87d479d2385b476c5fc99be6365ce9ce9c27d5f9d3e256b77494701c",
+    "output": null,
+    "generated_tokens": null
+  },
+  {
+    "id": "IMG-02",
+    "file": "IMG-02.png",
+    "sha256": "93553a834440d496339142daf86e82c7645ffd36876184b12cfee59e8b8e78b6",
+    "prompt": "Extract the title, inventory number, and table rows as JSON.",
+    "expected": {
+      "title": "INVENTORY",
+      "number": 42,
+      "Apples": 7,
+      "Pears": 3
+    },
+    "status": "NOT_RUN",
+    "prompt_sha256": "97c96826935f28acd99bd0c2e229eb00558fda2c1e4d0295f495e12236671fe1",
+    "output": null,
+    "generated_tokens": null
+  },
+  {
+    "id": "IMG-03",
+    "file": "IMG-03.png",
+    "sha256": "188b81994ceb485f341ae48495a553ca792b8f8df831d2c831c703e1d7a49bb1",
+    "prompt": "Name the two buttons and the current status.",
+    "expected": {
+      "buttons": [
+        "Start",
+        "Cancel"
+      ],
+      "status": "Ready"
+    },
+    "status": "NOT_RUN",
+    "prompt_sha256": "1700b2157edb5232f187042f314cb85bb5ca801702d710ca35d08f07ca4efe82",
+    "output": null,
+    "generated_tokens": null
+  },
+  {
+    "id": "TEXT-01",
+    "prompt": "Answer in one sentence: what is a compiler?",
+    "max_new_tokens": 32,
+    "expected": "translates source code",
+    "status": "NOT_RUN",
+    "prompt_sha256": "834c3d1c5647fa0855960decf5bd59b16190d8b7334a227b342c070f503f53a9",
+    "output": null,
+    "generated_tokens": null
+  },
+  {
+    "id": "TEXT-02",
+    "prompt": "Write only a Python function add(a, b) that returns their sum.",
+    "max_new_tokens": 32,
+    "expected": "def add(a, b): return a + b",
+    "status": "NOT_RUN",
+    "prompt_sha256": "482eb8ecb07caa78ae9c0349a01845c4f8e1523111085b24e0dbb1bde9736990",
+    "output": null,
+    "generated_tokens": null
+  }
+]
