@@ -170,6 +170,43 @@ def _component_specs(components: Iterable[object]) -> List[Tuple[str, str]]:
     return specs
 
 
+def _prepare_expected_digests(expected_digests: Optional[Mapping[str, str]],
+                              component_names: Mapping[str, str]) -> Dict[str, str]:
+    """Validate every expected-digest name against actual component identities.
+
+    Matching is case-insensitive and consistent with component-identity deduplication.
+    Unknown names and duplicate case aliases are hard errors; they are never silently dropped.
+    """
+    if expected_digests is None:
+        return {}
+    try:
+        raw = dict(expected_digests)
+    except (TypeError, ValueError) as exc:
+        raise ComponentError(f"expected_digests must be a name->digest mapping: {exc}") from exc
+    normalized: Dict[str, str] = {}
+    aliases: Dict[str, str] = {}
+    for raw_name, digest in raw.items():
+        if not isinstance(raw_name, str):
+            raise ComponentError(f"expected digest name must be a string, got {raw_name!r}")
+        name = _check_name(raw_name)
+        key = name.casefold()
+        if key in normalized:
+            raise ComponentError(
+                f"conflicting duplicate expected digest name aliases "
+                f"{aliases[key]!r} and {name!r}"
+            )
+        _validate_sha256(digest, f"expected digest for component {name!r}")
+        normalized[key] = digest
+        aliases[key] = name
+    unknown = sorted(aliases[key] for key in normalized if key not in component_names)
+    if unknown:
+        raise ComponentError(
+            "expected digest specified for unknown component(s): "
+            + ", ".join(repr(name) for name in unknown)
+        )
+    return normalized
+
+
 def build_manifest(components: Iterable[object],
                    source_revision: str = FROZEN_SOURCE_REVISION,
                    captured_at: Optional[str] = None,
@@ -180,21 +217,23 @@ def build_manifest(components: Iterable[object],
         raise ComponentError("at least one --component NAME=PATH is required")
     if not isinstance(source_revision, str) or not source_revision.strip():
         raise ComponentError("source revision must be a non-empty string")
-    expected = dict(expected_digests or {})
+    component_names: Dict[str, str] = {}
+    for name, _path in specs:
+        key = name.casefold()
+        if key in component_names:
+            raise ComponentError(f"duplicate component name {name!r}")
+        component_names[key] = name
+    expected = _prepare_expected_digests(expected_digests, component_names)
     collected: List[dict] = []
-    seen_names: Dict[str, str] = {}
     seen_paths: Dict[str, str] = {}
     for name, path in specs:
-        if name.casefold() in seen_names:
-            raise ComponentError(f"duplicate component name {name!r}")
-        component = collect_component(name, path, expected.get(name))
+        component = collect_component(name, path, expected.get(name.casefold()))
         resolved_key = str(Path(component["resolved_path"])).casefold()
         if resolved_key in seen_paths:
             raise ComponentError(
                 f"duplicate component file identity: {name!r} and {seen_paths[resolved_key]!r} "
                 "both resolve to the same physical file"
             )
-        seen_names[name.casefold()] = name
         seen_paths[resolved_key] = name
         collected.append(component)
     collected.sort(key=lambda c: c["name"].casefold())
@@ -429,13 +468,18 @@ def load_manifest(path: str) -> dict:
 
 def _parse_expected(values: Iterable[str]) -> Dict[str, str]:
     expected: Dict[str, str] = {}
+    aliases: Dict[str, str] = {}
     for value in values:
         if "=" not in value:
             raise ComponentError(f"--expected must be NAME=SHA256, got {value!r}")
         name, digest = value.split("=", 1)
         name = _check_name(name.strip())
-        if name in expected:
-            raise ComponentError(f"duplicate --expected for component {name!r}")
+        key = name.casefold()
+        if key in aliases:
+            raise ComponentError(
+                f"conflicting duplicate --expected name aliases {aliases[key]!r} and {name!r}"
+            )
+        aliases[key] = name
         expected[name] = _validate_sha256(digest.strip(), f"--expected {name}")
     return expected
 

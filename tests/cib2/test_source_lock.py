@@ -102,6 +102,33 @@ class StaticCollectionTest(unittest.TestCase):
         with self.assertRaises(ComponentError):
             build_manifest([("ovms", str(self.exe))], expected_digests={"ovms": "0" * 64})
 
+    def test_expected_digest_names_match_case_insensitively(self):
+        actual = _digest(self.exe)
+        manifest = build_manifest([("ovms", str(self.exe))], expected_digests={"OVMS": actual})
+        component = manifest["components"][0]
+        self.assertEqual(component["name"], "ovms")
+        self.assertEqual(component["digest_verification"]["expected_sha256"], actual)
+        self.assertIs(component["digest_verification"]["match"], True)
+        # A mis-cased expected digest must still be compared, not skipped.
+        with self.assertRaises(ComponentError) as ctx:
+            build_manifest([("ovms", str(self.exe))], expected_digests={"OvMs": "0" * 64})
+        self.assertIn("do not match", str(ctx.exception))
+
+    def test_unknown_expected_digest_name_is_rejected(self):
+        actual = _digest(self.exe)
+        with self.assertRaises(ComponentError) as ctx:
+            build_manifest([("ovms", str(self.exe))], expected_digests={"ovsm": actual})
+        self.assertIn("unknown component", str(ctx.exception))
+
+    def test_conflicting_duplicate_expected_aliases_are_rejected(self):
+        actual = _digest(self.exe)
+        with self.assertRaises(ComponentError) as ctx:
+            build_manifest(
+                [("ovms", str(self.exe))],
+                expected_digests={"ovms": actual, "OVMS": "0" * 64},
+            )
+        self.assertIn("conflicting duplicate expected digest name aliases", str(ctx.exception))
+
     def test_model_weight_bin_is_refused(self):
         weights = _write(self.tmp / "model.bin", b"\x00\x01")
         with self.assertRaises(ComponentError) as ctx:
@@ -232,6 +259,42 @@ class CliTest(unittest.TestCase):
         manifest = load_manifest(str(out_path))
         self.assertIs(manifest["accepted"], False)
         self.assertEqual(manifest["summary"]["component_count"], 2)
+
+    def test_cli_expected_name_case_and_unknown(self):
+        actual = _digest(self.exe)
+        ok_out = self.tmp / "ok.json"
+        with redirect_stdout(io.StringIO()):
+            rc = main([
+                "--component", f"ovms={self.exe}",
+                "--expected", f"OVMS={actual}",
+                "--output", str(ok_out),
+            ])
+        self.assertEqual(rc, 0)
+        manifest = load_manifest(str(ok_out))
+        self.assertEqual(manifest["components"][0]["digest_verification"]["expected_sha256"], actual)
+
+        unknown_out = self.tmp / "unknown.json"
+        err = io.StringIO()
+        with redirect_stderr(err):
+            rc = main([
+                "--component", f"ovms={self.exe}",
+                "--expected", f"ovsm={actual}",
+                "--output", str(unknown_out),
+            ])
+        self.assertEqual(rc, 2)
+        self.assertIn("unknown component", err.getvalue())
+        self.assertFalse(unknown_out.exists())
+
+        alias_out = self.tmp / "alias.json"
+        with redirect_stderr(io.StringIO()):
+            rc = main([
+                "--component", f"ovms={self.exe}",
+                "--expected", f"ovms={actual}",
+                "--expected", f"OVMS={actual}",
+                "--output", str(alias_out),
+            ])
+        self.assertEqual(rc, 2)
+        self.assertFalse(alias_out.exists())
 
     def test_cli_rejects_duplicate_bin_and_expected_mismatch(self):
         out_path = self.tmp / "unused.json"

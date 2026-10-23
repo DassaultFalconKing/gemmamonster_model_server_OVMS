@@ -37,6 +37,7 @@ def run(root,out):
     spec=importlib.util.spec_from_file_location('cib2_family_inventory_mapper',source)
     mapper=importlib.util.module_from_spec(spec);spec.loader.exec_module(mapper)
     result=dict(schema='cib2.family_inventory/1',mapper_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),inventory_runner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),model_root=str(root),models=[],skipped_configs=[])
+    assigned_targets=set()
     for path in sorted(root.rglob('config.json')):
         try:config=json.loads(path.read_text(encoding='utf-8-sig'))
         except Exception as e:
@@ -44,9 +45,13 @@ def run(root,out):
         if not (config.get('architectures') or config.get('model_type')):
             result['skipped_configs'].append(dict(path=str(path),reason='Serving/non-model config: no architecture/model_type'));continue
         label=str(path.parent.relative_to(root)).replace('\\','/')
-        slug=re.sub('[^a-zA-Z0-9_-]+','_',label)
+        slug=re.sub('[^a-zA-Z0-9_-]+','_',label)[:40]+'-'+hashlib.sha256(label.encode('utf-8')).hexdigest()[:16]
+        target=out/(slug+'.json')
+        if target.name.casefold() in assigned_targets:
+            raise ValueError('Inventory output filename collision: '+label)
+        assigned_targets.add(target.name.casefold())
         mapping=mapper.scan_model_dir(path.parent)
-        target=out/(slug+'.json');target.write_text(json.dumps(mapping,indent=2),encoding='utf-8')
+        target.write_text(json.dumps(mapping,indent=2),encoding='utf-8')
         summary=compact(mapping,config,label);summary['private_full_map']=str(target)
         summary['config_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
         result['models'].append(summary)

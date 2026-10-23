@@ -92,6 +92,12 @@ class Base(unittest.TestCase):
     def tearDown(self):
         self._tmp.cleanup()
 
+    def make_config_only_json(self, **extra):
+        cfg = {"model_type": "unit_test_model", "architectures": ["TestModel"],
+               "num_experts": 256}
+        cfg.update(extra)
+        (self.dir / "config.json").write_text(json.dumps(cfg))
+
     def make(self, graph_layers=None, bin_size=0, name="model_graph", xml=None,
              config=True, namespaced=False):
         """Create graph xml (from layers or raw xml), dummy bin and config."""
@@ -459,6 +465,98 @@ class TestOpenVINORealFormat(Base):
                "num_experts": 256}
         cfg.update(extra)
         (self.dir / "config.json").write_text(json.dumps(cfg))
+
+
+class TestReviewFixes(Base):
+    """Bounded regressions matching the fresh external review findings."""
+
+    def test_const_without_data_is_invalid_without_exception(self):
+        self.make_config_only_json()
+        (self.dir / "m.bin").write_bytes(b"\x00" * 3000)
+        (self.dir / "m.xml").write_text(
+            '<net version="11"><layers><layer id="0" name="c0" type="Const"/></layers></net>'
+        )
+        inv = self.inv()  # must not raise
+        g = self.graph("m.xml")
+        self.assertEqual(g["status"], "invalid")
+        c = g["layers"][0].get("const") or {}
+        self.assertIn("missing_offset", c.get("errors", ["(no const record)"]))
+        self.assertIn("missing_size", c.get("errors", ["(no const record)"]))
+        # an invalid bare const contributes nothing to byte aggregates
+        self.assertEqual(g["byte_accounting"]["declared_const_bytes_sum"], 0)
+        self.assertEqual(g["byte_accounting"]["referenced_unique_bytes"], 0)
+
+    def test_invalid_range_never_inflates_union(self):
+        self.make_config_only_json()
+        (self.dir / "m.bin").write_bytes(b"\x00" * 3000)
+        layers = "\n".join(
+            [
+                const_layer(0, "c0", 0, 1000, "u8", "1000"),
+                const_layer(1, "c1", 500, 1000, "u8", "1000"),
+                const_layer(2, "c2", 1500, 2000, "u8", "2000"),
+            ]
+        )
+        (self.dir / "m.xml").write_text(
+            '<net version="11"><layers>%s</layers></net>' % layers
+        )
+        inv = self.inv()
+        g = self.graph("m.xml")
+        self.assertEqual(g["status"], "invalid")
+        acc = g["byte_accounting"]
+        # valid-only union [0,1500); the out-of-bounds [1500,3500) is excluded
+        self.assertEqual(acc["referenced_unique_bytes"], 1500)
+        self.assertEqual(acc["declared_const_bytes_sum"], 2000)
+        self.assertEqual(acc["aliased_shared_bytes_saved"], 500)
+        self.assertEqual(acc["referenced_intervals"], [[0, 1500]])
+        self.assertEqual(acc["unreferenced_bytes"], 1500)
+        b = next(x for x in inv["binaries"] if x["relative"] == "m.bin")
+        self.assertEqual(b["referenced_unique_bytes"], 1500)
+        self.assertTrue(b["accounting_consistent"])
+
+    def test_auxiliary_json_is_not_a_model_config(self):
+        self.make_config_only_json()
+        (self.dir / "m.bin").write_bytes(b"\x00" * 3000)
+        (self.dir / "m.xml").write_text(
+            '<net version="11"><layers><layer id="0" name="input" type="Parameter"/></layers></net>'
+        )
+        # remove the real model config, keep auxiliary only
+        (self.dir / "config.json").unlink()
+        (self.dir / "tokenizer_config.json").write_text(json.dumps({"tokenizer_class": "X"}))
+        inv = self.inv()
+        self.assertNotEqual(inv["model_status"], "complete")
+        self.assertIn("no actual model config", inv["model_status_reason"])
+        # model_config must not borrow architecture/model_type from auxiliary JSON
+        self.assertIsNone(inv["model_config"]["architecture"])
+        self.assertIsNone(inv["model_config"]["model_type"])
+        self.assertEqual(inv["configs"], [])
+        self.assertEqual(len(inv["auxiliary_configs"]), 1)
+        self.assertEqual(inv["auxiliary_configs"][0]["kind"], "json_auxiliary")        # aux + model config together: complete, aux stays separate
+        (self.dir / "config.json").write_text(
+            json.dumps({"model_type": "fixture_m", "architectures": ["FixtureModel"]})
+        )
+        inv2 = self.inv()
+        self.assertEqual(inv2["model_status"], "complete")
+        self.assertEqual([c["relative"] for c in inv2["configs"]], ["config.json"])
+        self.assertEqual([c["relative"] for c in inv2["auxiliary_configs"]], ["tokenizer_config.json"])
+
+    def test_missing_node_id_is_not_invented(self):
+        self.make_config_only_json()
+        (self.dir / "m.bin").write_bytes(b"\x00" * 64)
+        (self.dir / "m.xml").write_text(
+            '<net version="11"><layers>'
+            '<layer name="input" type="Parameter"/>'
+            '<layer id="7" name="w" type="Const"><data element_type="u8" shape="8" offset="0" size="8"/></layer>'
+            "</layers></net>"
+        )
+        inv = self.inv()
+        g = self.graph("m.xml")
+        self.assertEqual(g["status"], "invalid")
+        self.assertIsNone(g["layers"][0]["layer_id"])
+        self.assertEqual(g["layers"][1]["layer_id"], "7")
+        self.assertTrue(any("missing_node_id" in e for e in g["errors"]))
+        self.assertEqual(g["layers"][1].get("transformer_block_index"), None)
+        # const byte aggregate still valid-only and the file union stays in bounds
+        self.assertEqual(g["byte_accounting"]["referenced_unique_bytes"], 8)
 
 
 if __name__ == "__main__":

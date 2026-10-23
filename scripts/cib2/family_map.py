@@ -273,35 +273,43 @@ def parse_graph(
         la = _norm_attrs(le)
         name = la.get("name", "")
         op = _local(la.get("type", ""))
-        layer_id = la.get("id", str(order))
+        # Never fabricate node IDs from document order; missing id marks invalid.
+        layer_id = la.get("id")
         ports = _parse_ports(le)
 
+        is_const = op.lower() in ("const", "constant")
         # Const metadata lives on the <data> child in actual IR syntax.
         data_attrs: Dict[str, str] = {}
         shape: Optional[List[str]] = None
         et = la.get("element_type") or la.get("precision")
         offset = None
         size = None
+        offset_ok = False
+        size_ok = False
         const_errors: List[str] = []
         for child in le.iter():
             if _local(child.tag) == "data":
                 data_attrs = _norm_attrs(child)
                 break
-        if data_attrs:
+        if is_const and not data_attrs:
+            # No <data> child: report missing offset/size instead of crashing
+            # or carrying stale values from a previous const.
+            const_errors.append("missing_offset")
+            const_errors.append("missing_size")
+        elif data_attrs:
             shape = _split_dims(data_attrs.get("shape"))
             et = et or data_attrs.get("element_type")
             offset_ok, offset = _int_or_none(data_attrs.get("offset"))
             size_ok, size = _int_or_none(data_attrs.get("size"))
-            if data_attrs.get("offset") is None and op.lower() in ("const", "constant"):
-                const_errors.append("missing_offset")
-            elif op.lower() in ("const", "constant") and not offset_ok and data_attrs.get("offset") is not None:
-                const_errors.append("offset_not_nonnegative_integer")
-            if data_attrs.get("size") is None and op.lower() in ("const", "constant"):
-                const_errors.append("missing_size")
-            elif op.lower() in ("const", "constant") and not size_ok and data_attrs.get("size") is not None:
-                const_errors.append("size_not_nonnegative_integer")
-
-        is_const = op.lower() in ("const", "constant")
+            if is_const:
+                if data_attrs.get("offset") is None:
+                    const_errors.append("missing_offset")
+                elif not offset_ok:
+                    const_errors.append("offset_not_nonnegative_integer")
+                if data_attrs.get("size") is None:
+                    const_errors.append("missing_size")
+                elif not size_ok:
+                    const_errors.append("size_not_nonnegative_integer")
         role, ev = _class_layers(name, op, num_experts, shape)
         if SLIDING_HINT.search(name):
             sliding_seen = True
@@ -360,15 +368,19 @@ def parse_graph(
                 rng = (offset, offset + size)
                 declared_sum += size
                 valid_ranges.append(rng)
+                band_refs.append(rng)
             else:
+                # Invalid/malformed ranges never enter derived byte aggregates.
                 errors.extend(const_errors)
-            band_refs.append((offset or 0, (offset or 0) + (size or 0)))
+        if layer_id is None:
+            ev_missing = "missing_node_id (not invented from document order)"
+            if ev_missing not in errors:
+                errors.append(ev_missing)
+            rec.setdefault("id_evidence", []).append(ev_missing)
         layers.append(rec)
 
-    union = banded = None
-    if band_refs:
-        banded = _union_intervals(band_refs)
-        union = sum(hi - lo for lo, hi in banded)
+    banded = _union_intervals(band_refs) if band_refs else []
+    union = sum(hi - lo for lo, hi in banded) if banded else 0
     bin_rel_acc = default_bin
     bin_size = bin_sizes.get(bin_rel_acc) if bin_rel_acc else None
 
@@ -527,6 +539,18 @@ def parse_config_json(path: Path, rel: str) -> Dict[str, Any]:
     rec["nested"] = {
         k: data[k] for k in _JSON_NESTED_KEYS if isinstance(data, dict) and k in data
     }
+    # Only meaningful model-config evidence (architectures/model_type plus real
+    # model-shape keys) qualifies a JSON as an actual model config. Auxiliary
+    # JSON (tokenizer/generation/processor configs) stays separate/descriptive.
+    has_archs = isinstance(data, dict) and bool(
+        isinstance(data.get("architectures"), list) and data.get("architectures")
+    )
+    mt = data.get("model_type") if isinstance(data, dict) else None
+    modelish_keys = any(
+        k in data for k in ("text_config", "vision_config", "num_hidden_layers", "hidden_size")
+    ) if isinstance(data, dict) else False
+    rec["is_model_config"] = bool(has_archs or (mt and modelish_keys))
+    rec["kind"] = "json_model_config" if rec["is_model_config"] else "json_auxiliary"
     rec["sha256"] = _digest(path, HASH_LIMIT_XML_BYTES)
     return rec
 
@@ -609,8 +633,20 @@ def scan_model_dir(model_dir: Path) -> Dict[str, Any]:
         if not is_graph:
             configs.append(parse_config_xml(p, rel))
 
-    first_arch = first_model_type = first_num_experts = None
+    # JSONs are auxiliary unless they carry meaningful model-config evidence.
+    model_configs: List[Dict[str, Any]] = []
+    auxiliary_configs: List[Dict[str, Any]] = []
     for c in configs:
+        if c.get("kind") == "json_model_config" or (
+            c.get("kind") == "xml_config" and (c.get("evidence") or {}).get("arch") is not None
+        ):
+            c["is_model_config"] = True
+            model_configs.append(c)
+        else:
+            auxiliary_configs.append(c)
+
+    first_arch = first_model_type = first_num_experts = None
+    for c in model_configs:
         if c.get("status") != "ok":
             continue
         ev = c.get("evidence") or {}
@@ -626,7 +662,7 @@ def scan_model_dir(model_dir: Path) -> Dict[str, Any]:
             elif ev.get("num_experts") is not None:
                 first_num_experts = ev["num_experts"]
     # legacy XML config fallback: architecture may be stored as raw "arch"
-    for c in configs:
+    for c in model_configs:
         if c.get("status") != "ok":
             continue
         ev = c.get("evidence") or {}
@@ -635,7 +671,7 @@ def scan_model_dir(model_dir: Path) -> Dict[str, Any]:
 
     graph_records: List[Dict[str, Any]] = []
     config_hints: Dict[str, Any] = {}
-    for c in configs:
+    for c in model_configs:
         if c.get("status") != "ok":
             continue
         nested = c.get("nested") or {}
@@ -693,20 +729,27 @@ def scan_model_dir(model_dir: Path) -> Dict[str, Any]:
             }
         )
 
-    ok_cfgs = [c for c in configs if c.get("status") == "ok"]
-    has_cfg = bool(ok_cfgs)
+    ok_model_cfgs = [c for c in model_configs if c.get("status") == "ok"]
+    has_cfg = bool(ok_model_cfgs)
+    has_aux = bool(auxiliary_configs)
     if not configs and not graph_records:
         model_status, reason = "missing", "no configs and no IR graph files found"
     elif graph_records and has_cfg:
         model_status, reason = "complete", ""
+    elif graph_records and has_aux and not has_cfg:
+        model_status, reason = (
+            "partial",
+            "only auxiliary/tokenizer/generation JSON present; no actual model "
+            "config (architecture/model_type) - no model claimed complete",
+        )
     elif graph_records and not has_cfg:
         model_status, reason = "partial", "IR graph files present but no model config"
     else:
-        model_status = "partial" if configs else "missing"
         reason = (
             "model config present but no real language/model IR graph file; "
             "no model is fabricated from config alone"
         )
+        model_status = "partial" if configs else "missing"
     invalid = [g["relative"] for g in graph_records if g["status"] == "invalid"]
     if model_status == "complete" and invalid:
         model_status = "partial"
@@ -718,12 +761,16 @@ def scan_model_dir(model_dir: Path) -> Dict[str, Any]:
         model_status = "partial"
 
     model_config: Dict[str, Any] = {
-        "status": "found" if configs else "missing",
-        "files": [c["relative"] for c in configs],
+        "status": "found" if ok_model_cfgs else "missing",
+        "files": [c["relative"] for c in ok_model_cfgs],
         "architecture": first_arch,
         "model_type": first_model_type,
         "num_experts": first_num_experts,
-        "nested": {c["relative"]: c.get("nested", {}) for c in configs},
+        "nested": {c["relative"]: c.get("nested", {}) for c in ok_model_cfgs},
+        "auxiliary_metadata_note": (
+            "tokenizer/generation/processor JSON is descriptive auxiliary "
+            "metadata, not model-config evidence"
+        ),
     }
 
     return {
@@ -734,7 +781,8 @@ def scan_model_dir(model_dir: Path) -> Dict[str, Any]:
         "model_status_reason": reason,
         "malformed_ir_never_pass": bool(invalid) or model_status in ("missing", "partial"),
         "model_config": model_config,
-        "configs": configs,
+        "configs": model_configs,
+        "auxiliary_configs": auxiliary_configs,
         "graphs": graph_records,
         "binaries": bin_records,
         "static_only_notice": NOT_STATEMENTS,
