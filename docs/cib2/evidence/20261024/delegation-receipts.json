@@ -1,0 +1,283 @@
+{
+  "accepted": false,
+  "tasks": [
+    {
+      "id": "H0-cursor",
+      "title": "Modern Cursor shell/model preflight",
+      "status": "FAILED",
+      "owner": "Cursor 2026.10.22",
+      "model": "grok-4.7-high",
+      "depends_on": [],
+      "result": "Project permission schema requires deny array; no provider call launched",
+      "provider_session_id": null,
+      "backend": "cursor",
+      "started_utc": "2026-10-23T22:28:29.644612+00:00",
+      "finished_utc": "2026-10-23T22:28:31.659061+00:00",
+      "elapsed_seconds": 2.0159999999996217,
+      "exit_code": 1
+    },
+    {
+      "id": "H0b-cursor",
+      "title": "Modern Cursor preflight with valid exact permission",
+      "status": "FAILED",
+      "owner": "Cursor 2026.10.22",
+      "model": "grok-4.7-high",
+      "depends_on": [],
+      "result": "Workspace trust not yet recorded; no task/model invocation. User-authorized isolated workspace now uses --trust, no shell broadening.",
+      "provider_session_id": null,
+      "backend": "cursor",
+      "started_utc": "2026-10-23T22:29:49.100305+00:00",
+      "finished_utc": "2026-10-23T22:29:53.121876+00:00",
+      "elapsed_seconds": 4.0,
+      "exit_code": 1
+    },
+    {
+      "id": "H1-opencode",
+      "title": "OpenCode 2.1.3 shell/model preflight",
+      "status": "DONE",
+      "owner": "OpenCode 2.1.3",
+      "model": "opencode/glm-5.3-flash-free",
+      "depends_on": [],
+      "provider_session_id": "ses_e951eb36bffefHA2kpuZRQUoG8",
+      "result": "Reviewed actual shell tool exit0 rtk 0.44.2; exact frozen SHA and packet IDs match source",
+      "backend": "opencode",
+      "provider_session_ids": [
+        "ses_e951eb36bffefHA2kpuZRQUoG8"
+      ],
+      "started_utc": "2026-10-23T22:28:32.221219+00:00",
+      "finished_utc": "2026-10-23T22:28:50.323614+00:00",
+      "elapsed_seconds": 18.09400000000096,
+      "exit_code": 0,
+      "reviewed_scope": "Host tooling/static source audit only. Independent 67-test GREEN; GPU/runtime acceptance NO."
+    },
+    {
+      "id": "MAP-01",
+      "title": "Family and per-layer IR mapper with accounting tests",
+      "status": "FAILED",
+      "owner": "OpenCode",
+      "model": "opencode/glm-5.3-flash-free",
+      "depends_on": [
+        "H1-opencode"
+      ],
+      "write_scope": [
+        "scripts/cib2/family_map.py",
+        "tests/cib2/test_family_map.py",
+        "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\reports\\MAP-01.md"
+      ],
+      "brief": "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\briefs\\MAP-01.md",
+      "provider_session_id": "ses_e951bfc12ffejP05LgRcDnqrJY",
+      "verification": "Independent OpenVINO JSON/config acceptance fixture failed; initial XML-config-only implementation not accepted. Snapshot retained; MAP-02 corrects same owned files.",
+      "backend": "opencode",
+      "provider_session_ids": [
+        "ses_e951bfc12ffejP05LgRcDnqrJY"
+      ],
+      "started_utc": "2026-10-23T22:31:30.422912+00:00",
+      "finished_utc": "2026-10-23T22:39:23.056397+00:00",
+      "elapsed_seconds": 472.625,
+      "exit_code": 0,
+      "result": "Original mapper failed independent OpenVINO-format fixture; replaced by MAP-02 and MAP-03."
+    },
+    {
+      "id": "REPLAY-01",
+      "title": "Strict offline OTD trace replay",
+      "status": "DONE",
+      "owner": "OpenCode",
+      "model": "opencode/deepseek-v4.1-flash-free",
+      "depends_on": [
+        "H1-opencode"
+      ],
+      "write_scope": [
+        "scripts/cib2/otd_sim/",
+        "tests/cib2/test_otd_sim.py",
+        "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\reports\\REPLAY-01.md"
+      ],
+      "brief": "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\briefs\\REPLAY-01.md",
+      "provider_session_id": "ses_e951bd454ffe6VvgA9IB3Ve5F0",
+      "verification": "Coordinator independently reran focused 14/14 tests PASS and reviewed strict parser/replay scope; runtime acceptance separate.",
+      "backend": "opencode",
+      "provider_session_ids": [
+        "ses_e951bd454ffe6VvgA9IB3Ve5F0"
+      ],
+      "started_utc": "2026-10-23T22:31:40.594487+00:00",
+      "finished_utc": "2026-10-23T22:36:44.813357+00:00",
+      "elapsed_seconds": 304.20300000000134,
+      "exit_code": 0,
+      "reviewed_scope": "Host tooling/static source audit only. Independent 67-test GREEN; GPU/runtime acceptance NO."
+    },
+    {
+      "id": "AUDIT-01",
+      "title": "Exact RC1 native eligibility and current offload plan audit",
+      "status": "SUPERSEDED",
+      "owner": "Cursor",
+      "model": "grok-4.7-high",
+      "depends_on": [
+        "H0c-cursor"
+      ],
+      "write_scope": [
+        "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\reports\\AUDIT-01.md"
+      ],
+      "provider_session_id": "e1bd1974-49f2-434b-84e9-580050d03979",
+      "brief": "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\briefs\\AUDIT-01.md",
+      "verification": "Initial source audit retained; AUDIT-02 requested exact RC1 snapshots and correction of pre-fusion/dense eligibility and MiniCPM BIN-size statements.",
+      "backend": "cursor",
+      "provider_session_ids": [
+        "e1bd1974-49f2-434b-84e9-580050d03979"
+      ],
+      "started_utc": "2026-10-23T22:33:27.533393+00:00",
+      "finished_utc": "2026-10-23T22:37:44.103739+00:00",
+      "elapsed_seconds": 256.5619999999999,
+      "exit_code": 0
+    },
+    {
+      "id": "INTEGRATE-01",
+      "title": "Coordinator review, real IR maps, source lock and publication",
+      "status": "DONE",
+      "owner": "Codex coordinator",
+      "depends_on": [
+        "MAP-03",
+        "LOCK-02",
+        "REPLAY-01",
+        "AUDIT-02",
+        "REVIEW-01"
+      ],
+      "write_scope": [
+        "docs/cib2/",
+        "scripts/cib2/run_family_inventory.py"
+      ],
+      "result": "Reviewed first host wave, seven actual static maps, repaired six P2 findings, immutable RED snapshots and 67-test GREEN. Runtime plan remains open."
+    },
+    {
+      "id": "H0c-cursor",
+      "title": "Modern Cursor explicit workspace trust preflight",
+      "status": "DONE",
+      "owner": "Cursor",
+      "model": "grok-4.7-high",
+      "depends_on": [],
+      "provider_session_id": "e1bd1974-49f2-434b-84e9-580050d03979",
+      "verification": "Actual shellToolCall success exitCode 0; stdout rtk 0.44.2; provider session preserved",
+      "backend": "cursor",
+      "provider_session_ids": [
+        "e1bd1974-49f2-434b-84e9-580050d03979"
+      ],
+      "started_utc": "2026-10-23T22:31:20.323563+00:00",
+      "finished_utc": "2026-10-23T22:32:34.706813+00:00",
+      "elapsed_seconds": 74.375,
+      "exit_code": 0,
+      "reviewed_scope": "Host tooling/static source audit only. Independent 67-test GREEN; GPU/runtime acceptance NO."
+    },
+    {
+      "id": "MAP-02",
+      "title": "MAP-02 bounded continuation",
+      "owner": "OpenCode",
+      "model": "opencode/glm-5.3-flash-free",
+      "status": "DONE",
+      "depends_on": [
+        "MAP-01"
+      ],
+      "brief": "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\briefs\\MAP-02.md",
+      "provider_session_id": "ses_e951bfc12ffejP05LgRcDnqrJY",
+      "backend": "opencode",
+      "provider_session_ids": [
+        "ses_e951bfc12ffejP05LgRcDnqrJY"
+      ],
+      "started_utc": "2026-10-23T22:40:35.655552+00:00",
+      "finished_utc": "2026-10-23T22:49:40.950938+00:00",
+      "elapsed_seconds": 545.2810000000009,
+      "exit_code": 0,
+      "reviewed_scope": "Host tooling/static source audit only. Independent 67-test GREEN; GPU/runtime acceptance NO."
+    },
+    {
+      "id": "AUDIT-02",
+      "title": "AUDIT-02 bounded continuation",
+      "owner": "Cursor",
+      "model": "grok-4.7-high",
+      "status": "DONE",
+      "depends_on": [
+        "AUDIT-01"
+      ],
+      "brief": "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\briefs\\AUDIT-02.md",
+      "provider_session_id": "e1bd1974-49f2-434b-84e9-580050d03979",
+      "backend": "cursor",
+      "provider_session_ids": [
+        "e1bd1974-49f2-434b-84e9-580050d03979"
+      ],
+      "started_utc": "2026-10-23T22:39:04.000902+00:00",
+      "finished_utc": "2026-10-23T22:40:38.577720+00:00",
+      "elapsed_seconds": 94.5630000000001,
+      "exit_code": 0,
+      "reviewed_scope": "Host tooling/static source audit only. Independent 67-test GREEN; GPU/runtime acceptance NO."
+    },
+    {
+      "id": "LOCK-01",
+      "title": "LOCK-01 bounded continuation",
+      "owner": "OpenCode",
+      "model": "opencode/deepseek-v4.1-flash-free",
+      "status": "DONE",
+      "depends_on": [
+        "REPLAY-01"
+      ],
+      "brief": "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\briefs\\LOCK-01.md",
+      "provider_session_id": "ses_e951bd454ffe6VvgA9IB3Ve5F0",
+      "backend": "opencode",
+      "provider_session_ids": [
+        "ses_e951bd454ffe6VvgA9IB3Ve5F0"
+      ],
+      "started_utc": "2026-10-23T22:42:00.463730+00:00",
+      "finished_utc": "2026-10-23T22:47:03.279189+00:00",
+      "elapsed_seconds": 302.7970000000005,
+      "exit_code": 0,
+      "reviewed_scope": "Host tooling/static source audit only. Independent 67-test GREEN; GPU/runtime acceptance NO."
+    },
+    {
+      "id": "MAP-03",
+      "title": "MAP-03",
+      "status": "DONE",
+      "depends_on": [],
+      "model": "opencode/glm-5.3-flash-free",
+      "backend": "opencode",
+      "provider_session_id": "ses_e951bfc12ffejP05LgRcDnqrJY",
+      "provider_session_ids": [
+        "ses_e951bfc12ffejP05LgRcDnqrJY"
+      ],
+      "started_utc": "2026-10-23T22:58:46.630094+00:00",
+      "finished_utc": "2026-10-23T23:01:55.767631+00:00",
+      "elapsed_seconds": 189.125,
+      "exit_code": 0,
+      "reviewed_scope": "Host tooling/static source audit only. Independent 67-test GREEN; GPU/runtime acceptance NO."
+    },
+    {
+      "id": "LOCK-02",
+      "title": "LOCK-02",
+      "status": "DONE",
+      "depends_on": [],
+      "model": "opencode/deepseek-v4.1-flash-free",
+      "backend": "opencode",
+      "provider_session_id": "ses_e951bd454ffe6VvgA9IB3Ve5F0",
+      "provider_session_ids": [
+        "ses_e951bd454ffe6VvgA9IB3Ve5F0"
+      ],
+      "started_utc": "2026-10-23T22:58:56.787859+00:00",
+      "finished_utc": "2026-10-23T23:00:51.549274+00:00",
+      "elapsed_seconds": 114.75,
+      "exit_code": 0,
+      "reviewed_scope": "Host tooling/static source audit only. Independent 67-test GREEN; GPU/runtime acceptance NO."
+    },
+    {
+      "id": "REVIEW-01",
+      "title": "REVIEW-01",
+      "status": "DONE",
+      "depends_on": [],
+      "model": "opencode/deepseek-v4.1-flash-free",
+      "backend": "opencode",
+      "provider_session_id": "ses_e9507b957ffeOLDHeCj6anGlAD",
+      "provider_session_ids": [
+        "ses_e9507b957ffeOLDHeCj6anGlAD"
+      ],
+      "started_utc": "2026-10-23T22:53:38.233645+00:00",
+      "finished_utc": "2026-10-23T22:56:43.680241+00:00",
+      "elapsed_seconds": 185.4380000000001,
+      "exit_code": 0,
+      "reviewed_scope": "Host tooling/static source audit only. Independent 67-test GREEN; GPU/runtime acceptance NO."
+    }
+  ]
+}

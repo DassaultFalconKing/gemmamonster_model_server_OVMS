@@ -1,0 +1,38 @@
+[
+  {
+    "commit": "61afcb26271140347709138b13d678e8b1b5925c",
+    "path": "src/plugins/intel_gpu/src/plugin/ops/moe.cpp",
+    "url": "https://raw.githubusercontent.com/openvinotoolkit/openvino/61afcb26271140347709138b13d678e8b1b5925c/src/plugins/intel_gpu/src/plugin/ops/moe.cpp",
+    "status": "FETCHED_SOURCE_ONLY",
+    "file": "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\snapshots\\rc1-moe.cpp",
+    "bytes": 14426,
+    "sha256": "9d2633875b73aabb0503a7348c942a8cc4dd73431ad5f830a7968f53b9b4e6a3"
+  },
+  {
+    "commit": "61afcb26271140347709138b13d678e8b1b5925c",
+    "path": "src/plugins/intel_gpu/src/graph/impls/ocl_v2/moe/expert_weight_providers.cpp",
+    "url": "https://raw.githubusercontent.com/openvinotoolkit/openvino/61afcb26271140347709138b13d678e8b1b5925c/src/plugins/intel_gpu/src/graph/impls/ocl_v2/moe/expert_weight_providers.cpp",
+    "status": "FETCHED_SOURCE_ONLY",
+    "file": "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\snapshots\\rc1-expert_weight_providers.cpp",
+    "bytes": 4791,
+    "sha256": "96186f20a0f2711dbec8ae152143b538630a2d9b8836036002add3a20d509f1a"
+  },
+  {
+    "commit": "61afcb26271140347709138b13d678e8b1b5925c",
+    "path": "src/plugins/intel_gpu/src/graph/impls/ocl_v2/moe/lru_cache.cpp",
+    "url": "https://raw.githubusercontent.com/openvinotoolkit/openvino/61afcb26271140347709138b13d678e8b1b5925c/src/plugins/intel_gpu/src/graph/impls/ocl_v2/moe/lru_cache.cpp",
+    "status": "FETCHED_SOURCE_ONLY",
+    "file": "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\snapshots\\rc1-lru_cache.cpp",
+    "bytes": 1755,
+    "sha256": "29f8170d0c8288d505adc7b396c4b6018fba9aeef4bb028ba21380527423e3c8"
+  },
+  {
+    "commit": "61afcb26271140347709138b13d678e8b1b5925c",
+    "path": "src/plugins/intel_gpu/src/graph/impls/ocl_v2/moe/moe_otd_runtime.cpp",
+    "url": "https://raw.githubusercontent.com/openvinotoolkit/openvino/61afcb26271140347709138b13d678e8b1b5925c/src/plugins/intel_gpu/src/graph/impls/ocl_v2/moe/moe_otd_runtime.cpp",
+    "status": "FETCHED_SOURCE_ONLY",
+    "file": "<PRIVATE_ROOT>\\orchestration\\offload-family-20261024\\snapshots\\rc1-moe_otd_runtime.cpp",
+    "bytes": 12734,
+    "sha256": "a51a2201cb5d1d1589024fa1a50577c4131fbea533d203213124594ef1eb5769"
+  }
+]

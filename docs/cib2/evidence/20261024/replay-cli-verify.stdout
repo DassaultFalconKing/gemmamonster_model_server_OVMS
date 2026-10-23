@@ -1,0 +1,82 @@
+{
+  "schema": "cib2.otd_sim.v1",
+  "checked_events": 7,
+  "hits": 3,
+  "misses": 4,
+  "mismatches": 0,
+  "first_mismatches": [],
+  "logical_bytes": {
+    "requested": 400,
+    "read_from_storage": 400,
+    "copied_to_slots": 400,
+    "unknown_misses": 0,
+    "source": "recorded E bytes and per-layer expert_bytes",
+    "note": "logical expert payload accounting only; not a physical device measurement"
+  },
+  "physical_bytes": {
+    "nvme_read": "NOT_EXPOSED",
+    "nvme_write": "NOT_EXPOSED",
+    "reason": "trace-v1 records no NVMe/OS device counters; physical reads, writeback, readahead, retries and amplification require external device counters"
+  },
+  "bytes_known": true,
+  "decisions": [
+    {
+      "call": 0,
+      "expert": 0,
+      "hit": false,
+      "slot": 0,
+      "evicted": null
+    },
+    {
+      "call": 0,
+      "expert": 1,
+      "hit": false,
+      "slot": 1,
+      "evicted": null
+    },
+    {
+      "call": 1,
+      "expert": 0,
+      "hit": true,
+      "slot": 0,
+      "evicted": null
+    },
+    {
+      "call": 1,
+      "expert": 1,
+      "hit": true,
+      "slot": 1,
+      "evicted": null
+    },
+    {
+      "call": 2,
+      "expert": 2,
+      "hit": false,
+      "slot": 2,
+      "evicted": null
+    },
+    {
+      "call": 2,
+      "expert": 0,
+      "hit": true,
+      "slot": 0,
+      "evicted": null
+    },
+    {
+      "call": 3,
+      "expert": 3,
+      "hit": false,
+      "slot": 1,
+      "evicted": 1
+    }
+  ],
+  "offline_only": true,
+  "runtime_acceptance": "NO",
+  "workload_provenance": "offline trace input; synthetic traces are not live workloads",
+  "trace": {
+    "layers": 1,
+    "calls": 4,
+    "overflow_calls": 0,
+    "fallback_calls": 0
+  }
+}

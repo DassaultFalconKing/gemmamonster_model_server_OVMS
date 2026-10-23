@@ -1,0 +1,30 @@
+{
+  "captured_utc": "2026-10-23T23:04:09.743110+00:00",
+  "receipts": [
+    {
+      "name": "host-tests-final",
+      "exit_code": 0,
+      "log_sha256": "ce01d9332a8293af39daf1e0f17a3750d7914c7a14dc91014f9f0a89424736a4"
+    },
+    {
+      "name": "mapper-review-red",
+      "status": "EXPECTED_FAIL",
+      "failures": 3,
+      "errors": 1,
+      "snapshot_sha256": "18fd9c447bf2451ae19ba13623742b0df0ecf0a6120c3cde3d1f914a5a4aa6d8"
+    },
+    {
+      "name": "wrapper-review-red",
+      "status": "EXPECTED_FAIL",
+      "failures": 1,
+      "errors": 0,
+      "snapshot_sha256": "cc0b7ec6698c86e58e3f004f92e98ea4c7ee520e689ddf578f12d4fb4c157385"
+    },
+    {
+      "name": "family-inventory-final",
+      "exit_code": 0,
+      "log_sha256": "029b2d43be5b616286d48ecf67257141667c95b088d20c1f1732716e32b8eeb9"
+    }
+  ],
+  "runtime_acceptance": "NO"
+}

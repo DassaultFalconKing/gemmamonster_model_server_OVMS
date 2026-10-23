@@ -1,0 +1,4225 @@
+{
+  "schema": "cib2.family_inventory/1",
+  "mapper_sha256": "b7017dfc49f5237aa743b078c51d0df18d49939e9938c9f0036d7fac3763be34",
+  "inventory_runner_sha256": "d0e8bc5e15708d57544204871e0626df1a991151611335005362b8791c615f66",
+  "models": [
+    {
+      "label": "minicpm-v47-35b-a3b-int4-ov",
+      "model_status": "complete",
+      "model_type": "minicpmv4_7",
+      "architectures": [
+        "MiniCPMV4_7ForConditionalGeneration"
+      ],
+      "text_model_type": "qwen3_5_moe_text",
+      "text_fields": {
+        "hidden_size": 2048,
+        "max_position_embeddings": 262144,
+        "moe_intermediate_size": 512,
+        "num_experts": 256,
+        "num_experts_per_tok": 8,
+        "num_hidden_layers": 40,
+        "shared_expert_intermediate_size": 512
+      },
+      "layer_types": {
+        "linear_attention": 30,
+        "full_attention": 10
+      },
+      "compiled_otd": "NOT_RUN",
+      "runtime_acceptance": "NO",
+      "graphs": [
+        {
+          "file": "openvino_detokenizer.xml",
+          "sha256": "4134832be07affc156834703350e9165a924563c9ac03c6ceb087679060c2068",
+          "status": "ok",
+          "graph_name": "detokenizer",
+          "node_count": 11,
+          "role_counts": {
+            "unknown": 11
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_detokenizer.bin",
+            "bin_file_size_bytes": 3829740,
+            "declared_const_bytes_sum": 3829739,
+            "referenced_unique_bytes": 3829739,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                3829387
+              ],
+              [
+                3829388,
+                3829740
+              ]
+            ],
+            "unreferenced_bytes": 1,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_language_model.xml",
+          "sha256": "80ba3775361b9e090acf0d1bdc4aac118351069888ea2805e7e65a885257b701",
+          "status": "ok",
+          "graph_name": "Model30",
+          "node_count": 16631,
+          "role_counts": {
+            "embeddings": 1,
+            "attention_kv_or_state": 2032,
+            "unknown": 12553,
+            "routed_expert": 600,
+            "router": 240,
+            "shared_expert": 1200,
+            "output": 5
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 243,
+              "role_counts": {
+                "unknown": 141,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "1": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "2": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "3": {
+              "observed_node_count": 210,
+              "role_counts": {
+                "unknown": 108,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "4": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "5": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "6": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "7": {
+              "observed_node_count": 206,
+              "role_counts": {
+                "unknown": 105,
+                "attention_kv_or_state": 50,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "8": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "9": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "10": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "11": {
+              "observed_node_count": 206,
+              "role_counts": {
+                "unknown": 105,
+                "attention_kv_or_state": 50,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "12": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "13": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "14": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "15": {
+              "observed_node_count": 206,
+              "role_counts": {
+                "unknown": 105,
+                "attention_kv_or_state": 50,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "16": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "17": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "18": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "19": {
+              "observed_node_count": 206,
+              "role_counts": {
+                "unknown": 105,
+                "attention_kv_or_state": 50,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "20": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "21": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "22": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "23": {
+              "observed_node_count": 206,
+              "role_counts": {
+                "unknown": 105,
+                "attention_kv_or_state": 50,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "24": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "25": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "26": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "27": {
+              "observed_node_count": 206,
+              "role_counts": {
+                "unknown": 105,
+                "attention_kv_or_state": 50,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "28": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "29": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "30": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "31": {
+              "observed_node_count": 206,
+              "role_counts": {
+                "unknown": 105,
+                "attention_kv_or_state": 50,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "32": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "33": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "34": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "35": {
+              "observed_node_count": 206,
+              "role_counts": {
+                "unknown": 105,
+                "attention_kv_or_state": 50,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "36": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "37": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "38": {
+              "observed_node_count": 239,
+              "role_counts": {
+                "unknown": 137,
+                "attention_kv_or_state": 51,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            },
+            "39": {
+              "observed_node_count": 206,
+              "role_counts": {
+                "unknown": 105,
+                "attention_kv_or_state": 50,
+                "routed_expert": 15,
+                "router": 6,
+                "shared_expert": 30
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_language_model.bin",
+            "bin_file_size_bytes": 18646197448,
+            "declared_const_bytes_sum": 18646243185,
+            "referenced_unique_bytes": 18646197425,
+            "aliased_shared_bytes_saved": 45760,
+            "referenced_intervals": [
+              [
+                0,
+                4
+              ],
+              [
+                8,
+                8772
+              ],
+              [
+                8776,
+                8788
+              ],
+              [
+                8792,
+                9101948
+              ],
+              [
+                9101952,
+                9102009
+              ],
+              [
+                9102012,
+                9137508
+              ],
+              [
+                9137512,
+                18646197448
+              ]
+            ],
+            "unreferenced_bytes": 23,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_text_embeddings_model.xml",
+          "sha256": "fecf15a80c9fcd5d08acc569df3814bbe16a016bdf1d02439eb4588abda7c483",
+          "status": "ok",
+          "graph_name": "Model66",
+          "node_count": 10,
+          "role_counts": {
+            "unknown": 6,
+            "embeddings": 4
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_text_embeddings_model.bin",
+            "bin_file_size_bytes": 508695204,
+            "declared_const_bytes_sum": 508695204,
+            "referenced_unique_bytes": 508695204,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                508695204
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_tokenizer.xml",
+          "sha256": "c11339aad3605744517c5c0e665ab8700a562b94ef14ee9adb1aef9caa1e1a02",
+          "status": "ok",
+          "graph_name": "tokenizer",
+          "node_count": 54,
+          "role_counts": {
+            "unknown": 54
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_tokenizer.bin",
+            "bin_file_size_bytes": 9635064,
+            "declared_const_bytes_sum": 9635090,
+            "referenced_unique_bytes": 9635046,
+            "aliased_shared_bytes_saved": 44,
+            "referenced_intervals": [
+              [
+                0,
+                1
+              ],
+              [
+                8,
+                1779
+              ],
+              [
+                1780,
+                3831167
+              ],
+              [
+                3831168,
+                6750411
+              ],
+              [
+                6750412,
+                9632633
+              ],
+              [
+                9632636,
+                9634626
+              ],
+              [
+                9634628,
+                9635053
+              ],
+              [
+                9635056,
+                9635064
+              ]
+            ],
+            "unreferenced_bytes": 18,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_vision_embeddings_model.xml",
+          "sha256": "c1172341075423fd7e05eb89d5669d213f6eb40ea8ae364fc310376d7647e1f7",
+          "status": "ok",
+          "graph_name": "Model63",
+          "node_count": 2566,
+          "role_counts": {
+            "unknown": 452,
+            "vision": 2114
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "1": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "2": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "3": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "4": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "5": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "6": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "7": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "8": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "9": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "10": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "11": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "12": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "13": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "14": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "15": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "16": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "17": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "18": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "19": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "20": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "21": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "22": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "23": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "24": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "25": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            },
+            "26": {
+              "observed_node_count": 74,
+              "role_counts": {
+                "vision": 74
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_vision_embeddings_model.bin",
+            "bin_file_size_bytes": 554348368,
+            "declared_const_bytes_sum": 554353980,
+            "referenced_unique_bytes": 554348356,
+            "aliased_shared_bytes_saved": 5624,
+            "referenced_intervals": [
+              [
+                0,
+                7679868
+              ],
+              [
+                7679872,
+                10343348
+              ],
+              [
+                10343352,
+                113323684
+              ],
+              [
+                113323688,
+                554348368
+              ]
+            ],
+            "unreferenced_bytes": 12,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        }
+      ],
+      "bin_file_bytes": 19722705824,
+      "expert_fields": {
+        "moe_intermediate_size": 512,
+        "num_experts": 256,
+        "num_experts_per_tok": 8,
+        "shared_expert_intermediate_size": 512
+      },
+      "referenced_unique_bytes": 19722705770,
+      "scope": "Static inventory only. Transformer block IDs are parsed from actual names; node IDs are separate. No hotness, compiled fusion, resident-byte or physical NVMe claim.",
+      "config_sha256": "4ef15092c1e980ebd036a0bf0e6436b48df33ac92f29bc62c333648bef6e7d14",
+      "full_map_sha256": "7640ad2b520f81589ed3ff304a34c79c907ba54223953abe42b43ea3ecfcaec2"
+    },
+    {
+      "label": "OpenVINO/gemma-4-E4B-it-int4-ov",
+      "model_status": "complete",
+      "model_type": "gemma4",
+      "architectures": [
+        "Gemma4ForConditionalGeneration"
+      ],
+      "text_model_type": "gemma4_text",
+      "text_fields": {
+        "hidden_size": 2560,
+        "max_position_embeddings": 131072,
+        "moe_intermediate_size": null,
+        "num_experts": null,
+        "num_hidden_layers": 42
+      },
+      "layer_types": {
+        "sliding_attention": 35,
+        "full_attention": 7
+      },
+      "compiled_otd": "NOT_RUN",
+      "runtime_acceptance": "NO",
+      "graphs": [
+        {
+          "file": "openvino_detokenizer.xml",
+          "sha256": "3d3d911ee1e28b31e0bd9498dba8f7f3959bea821ad754e9273ecf9caed2067a",
+          "status": "ok",
+          "graph_name": "detokenizer",
+          "node_count": 15,
+          "role_counts": {
+            "unknown": 15
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_detokenizer.bin",
+            "bin_file_size_bytes": 4413547,
+            "declared_const_bytes_sum": 4413547,
+            "referenced_unique_bytes": 4413547,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                4413547
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_language_model.xml",
+          "sha256": "1ff96764cef92c659266cfe9bdc6a585f952f1a902b4fecf09bee099ca873e99",
+          "status": "ok",
+          "graph_name": "Model6",
+          "node_count": 10289,
+          "role_counts": {
+            "attention_kv_or_state": 1692,
+            "unknown": 8589,
+            "embeddings": 7,
+            "output": 1
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 166,
+              "role_counts": {
+                "unknown": 115,
+                "attention_kv_or_state": 51
+              }
+            },
+            "1": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "2": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "3": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "4": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "5": {
+              "observed_node_count": 165,
+              "role_counts": {
+                "unknown": 114,
+                "attention_kv_or_state": 51
+              }
+            },
+            "6": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "7": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "8": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "9": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "10": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "11": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "12": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "13": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "14": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "15": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "16": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "17": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "18": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "19": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "20": {
+              "observed_node_count": 160,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 50
+              }
+            },
+            "21": {
+              "observed_node_count": 161,
+              "role_counts": {
+                "unknown": 110,
+                "attention_kv_or_state": 51
+              }
+            },
+            "22": {
+              "observed_node_count": 159,
+              "role_counts": {
+                "unknown": 108,
+                "attention_kv_or_state": 51
+              }
+            },
+            "23": {
+              "observed_node_count": 159,
+              "role_counts": {
+                "unknown": 108,
+                "attention_kv_or_state": 51
+              }
+            },
+            "24": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "25": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "26": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "27": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "28": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "29": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "30": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "31": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "32": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "33": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "34": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "35": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "36": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "37": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "38": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "39": {
+              "observed_node_count": 113,
+              "role_counts": {
+                "unknown": 87,
+                "attention_kv_or_state": 26
+              }
+            },
+            "40": {
+              "observed_node_count": 115,
+              "role_counts": {
+                "unknown": 89,
+                "attention_kv_or_state": 26
+              }
+            },
+            "41": {
+              "observed_node_count": 115,
+              "role_counts": {
+                "unknown": 89,
+                "attention_kv_or_state": 26
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_language_model.bin",
+            "bin_file_size_bytes": 2738063913,
+            "declared_const_bytes_sum": 2738132167,
+            "referenced_unique_bytes": 2738063913,
+            "aliased_shared_bytes_saved": 68254,
+            "referenced_intervals": [
+              [
+                0,
+                2738063913
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_text_embeddings_model.xml",
+          "sha256": "6fc7c1cc010de6993ea7d3fd41fbf325d7b310f7291ae5b03b61376f52fc35d1",
+          "status": "ok",
+          "graph_name": "Model3",
+          "node_count": 12,
+          "role_counts": {
+            "unknown": 4,
+            "embeddings": 8
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_text_embeddings_model.bin",
+            "bin_file_size_bytes": 671612936,
+            "declared_const_bytes_sum": 671612936,
+            "referenced_unique_bytes": 671612936,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                671612936
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_text_embeddings_per_layer_model.xml",
+          "sha256": "b05ba34b035cc5508f3cb283fdf846987f7e7e9f70fdc0efbd319e7bedb137e1",
+          "status": "ok",
+          "graph_name": "Model9",
+          "node_count": 35,
+          "role_counts": {
+            "unknown": 27,
+            "embeddings": 8
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_text_embeddings_per_layer_model.bin",
+            "bin_file_size_bytes": 2819096656,
+            "declared_const_bytes_sum": 2819096668,
+            "referenced_unique_bytes": 2819096656,
+            "aliased_shared_bytes_saved": 12,
+            "referenced_intervals": [
+              [
+                0,
+                2819096656
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_tokenizer.xml",
+          "sha256": "f206b7b4a3663d3a249f0757bd479b03c77132b9e9ea2256cf59bb2c02d6e54f",
+          "status": "ok",
+          "graph_name": "tokenizer",
+          "node_count": 51,
+          "role_counts": {
+            "unknown": 51
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_tokenizer.bin",
+            "bin_file_size_bytes": 17270328,
+            "declared_const_bytes_sum": 17270377,
+            "referenced_unique_bytes": 17270328,
+            "aliased_shared_bytes_saved": 49,
+            "referenced_intervals": [
+              [
+                0,
+                17270328
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_vision_embeddings_model.xml",
+          "sha256": "c709b5d9e3a92c30077eddac9c11badd16cf427fb731c76c837c0c62c84350fc",
+          "status": "ok",
+          "graph_name": "Model0",
+          "node_count": 3894,
+          "role_counts": {
+            "unknown": 1355,
+            "vision": 2539
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 156,
+              "role_counts": {
+                "vision": 156
+              }
+            },
+            "1": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "2": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "3": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "4": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "5": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "6": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "7": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "8": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "9": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "10": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "11": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "12": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "13": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "14": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            },
+            "15": {
+              "observed_node_count": 152,
+              "role_counts": {
+                "vision": 152
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_vision_embeddings_model.bin",
+            "bin_file_size_bytes": 169812532,
+            "declared_const_bytes_sum": 169824612,
+            "referenced_unique_bytes": 169812532,
+            "aliased_shared_bytes_saved": 12080,
+            "referenced_intervals": [
+              [
+                0,
+                169812532
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        }
+      ],
+      "bin_file_bytes": 6420269912,
+      "expert_fields": {
+        "enable_moe_block": false,
+        "expert_intermediate_size": null,
+        "moe_intermediate_size": null,
+        "num_experts": null,
+        "top_k_experts": null
+      },
+      "referenced_unique_bytes": 6420269912,
+      "scope": "Static inventory only. Transformer block IDs are parsed from actual names; node IDs are separate. No hotness, compiled fusion, resident-byte or physical NVMe claim.",
+      "config_sha256": "2b37a0000817cc7680de9902d49d4e1ead2718cfc8f7d4a43a8d0aad80aabc16",
+      "full_map_sha256": "e5df7a801150624e29b11b25e1b7b70fc17d7fa0138128fe077c4dfcfc35fe87"
+    },
+    {
+      "label": "OpenVINO/gemma4-google-template-overlay",
+      "model_status": "complete",
+      "model_type": "gemma4",
+      "architectures": [
+        "Gemma4ForConditionalGeneration"
+      ],
+      "text_model_type": "gemma4_text",
+      "text_fields": {
+        "hidden_size": 2816,
+        "max_position_embeddings": 262144,
+        "moe_intermediate_size": 704,
+        "num_experts": 128,
+        "num_hidden_layers": 30
+      },
+      "layer_types": {
+        "sliding_attention": 25,
+        "full_attention": 5
+      },
+      "compiled_otd": "NOT_RUN",
+      "runtime_acceptance": "NO",
+      "graphs": [
+        {
+          "file": "openvino_detokenizer.xml",
+          "sha256": "1320325cd46efae0783b6b140006021f6f1023d75f2d8a97719d75acc4984a53",
+          "status": "ok",
+          "graph_name": "detokenizer",
+          "node_count": 15,
+          "role_counts": {
+            "unknown": 15
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_detokenizer.bin",
+            "bin_file_size_bytes": 4413547,
+            "declared_const_bytes_sum": 4413547,
+            "referenced_unique_bytes": 4413547,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                4413547
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_language_model.xml",
+          "sha256": "392e9eefbefde3047438a462868c841227512ad8a5f8b452d8bfcdf63cc8ed12",
+          "status": "ok",
+          "graph_name": "Model6",
+          "node_count": 10687,
+          "role_counts": {
+            "attention_kv_or_state": 1470,
+            "unknown": 8699,
+            "embeddings": 7,
+            "routed_expert": 180,
+            "router": 330,
+            "output": 1
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 214,
+              "role_counts": {
+                "unknown": 146,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "1": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "2": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "3": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "4": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "5": {
+              "observed_node_count": 200,
+              "role_counts": {
+                "unknown": 144,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "6": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "7": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "8": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "9": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "10": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "11": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "12": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "13": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "14": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "15": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "16": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "17": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "18": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "19": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "20": {
+              "observed_node_count": 207,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 50,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "21": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "22": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "23": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "24": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "25": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "26": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "27": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "28": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "29": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_language_model.bin",
+            "bin_file_size_bytes": 14788282880,
+            "declared_const_bytes_sum": 14788474380,
+            "referenced_unique_bytes": 14788282880,
+            "aliased_shared_bytes_saved": 191500,
+            "referenced_intervals": [
+              [
+                0,
+                14788282880
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_text_embeddings_model.xml",
+          "sha256": "7691e0b4aa243cf78809b3ad8799699045fee65b22a688b35982ce6ac8607cba",
+          "status": "ok",
+          "graph_name": "Model3",
+          "node_count": 12,
+          "role_counts": {
+            "unknown": 4,
+            "embeddings": 8
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_text_embeddings_model.bin",
+            "bin_file_size_bytes": 738721800,
+            "declared_const_bytes_sum": 738721800,
+            "referenced_unique_bytes": 738721800,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                738721800
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_text_embeddings_per_layer_model.xml",
+          "sha256": "716ea221d6666d0e57fd1c4d126a515e428aef413f250de6696b7f116ab67128",
+          "status": "ok",
+          "graph_name": "Model9",
+          "node_count": 8,
+          "role_counts": {
+            "unknown": 8
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_text_embeddings_per_layer_model.bin",
+            "bin_file_size_bytes": 20,
+            "declared_const_bytes_sum": 20,
+            "referenced_unique_bytes": 20,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                20
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_tokenizer.xml",
+          "sha256": "a2f844d2457574390a081b98ee15cf5b557a37078e87ecfc71a77a4c2e9ee4b8",
+          "status": "ok",
+          "graph_name": "tokenizer",
+          "node_count": 51,
+          "role_counts": {
+            "unknown": 51
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_tokenizer.bin",
+            "bin_file_size_bytes": 17270329,
+            "declared_const_bytes_sum": 17270378,
+            "referenced_unique_bytes": 17270329,
+            "aliased_shared_bytes_saved": 49,
+            "referenced_intervals": [
+              [
+                0,
+                17270329
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_vision_embeddings_model.xml",
+          "sha256": "5fdbf9ae7904ef6423baf8d09492629771dd70dcb8b67071e5948aef455fdc66",
+          "status": "ok",
+          "graph_name": "Model0",
+          "node_count": 6171,
+          "role_counts": {
+            "unknown": 2258,
+            "vision": 3913
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 145,
+              "role_counts": {
+                "vision": 145
+              }
+            },
+            "1": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "2": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "3": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "4": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "5": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "6": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "7": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "8": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "9": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "10": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "11": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "12": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "13": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "14": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "15": {
+              "observed_node_count": 140,
+              "role_counts": {
+                "vision": 140
+              }
+            },
+            "16": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "17": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "18": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "19": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "20": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "21": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "22": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "23": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "24": {
+              "observed_node_count": 140,
+              "role_counts": {
+                "vision": 140
+              }
+            },
+            "25": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "26": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_vision_embeddings_model.bin",
+            "bin_file_size_bytes": 573967772,
+            "declared_const_bytes_sum": 573992544,
+            "referenced_unique_bytes": 573967772,
+            "aliased_shared_bytes_saved": 24772,
+            "referenced_intervals": [
+              [
+                0,
+                573967772
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        }
+      ],
+      "bin_file_bytes": 16122656348,
+      "expert_fields": {
+        "enable_moe_block": true,
+        "moe_intermediate_size": 704,
+        "num_experts": 128,
+        "top_k_experts": 8
+      },
+      "referenced_unique_bytes": 16122656348,
+      "scope": "Static inventory only. Transformer block IDs are parsed from actual names; node IDs are separate. No hotness, compiled fusion, resident-byte or physical NVMe claim.",
+      "config_sha256": "a62ff7eb0a97a7c6e83ba42edff8dc4118c109a7ededcd6d83cc08ffda6a7361",
+      "full_map_sha256": "e3d58913de2aa7abbedeb7fbeb8b6ca7ddfbd2de2e5b1f83c4d6447343da691e"
+    },
+    {
+      "label": "OpenVINO/Wondernutts/gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov-new",
+      "model_status": "complete",
+      "model_type": "gemma4",
+      "architectures": [
+        "Gemma4ForConditionalGeneration"
+      ],
+      "text_model_type": "gemma4_text",
+      "text_fields": {
+        "hidden_size": 2816,
+        "max_position_embeddings": 262144,
+        "moe_intermediate_size": 704,
+        "num_experts": 128,
+        "num_hidden_layers": 30
+      },
+      "layer_types": {
+        "sliding_attention": 25,
+        "full_attention": 5
+      },
+      "compiled_otd": "NOT_RUN",
+      "runtime_acceptance": "NO",
+      "graphs": [
+        {
+          "file": "openvino_detokenizer.xml",
+          "sha256": "1320325cd46efae0783b6b140006021f6f1023d75f2d8a97719d75acc4984a53",
+          "status": "ok",
+          "graph_name": "detokenizer",
+          "node_count": 15,
+          "role_counts": {
+            "unknown": 15
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_detokenizer.bin",
+            "bin_file_size_bytes": 4413547,
+            "declared_const_bytes_sum": 4413547,
+            "referenced_unique_bytes": 4413547,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                4413547
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_language_model.xml",
+          "sha256": "392e9eefbefde3047438a462868c841227512ad8a5f8b452d8bfcdf63cc8ed12",
+          "status": "ok",
+          "graph_name": "Model6",
+          "node_count": 10687,
+          "role_counts": {
+            "attention_kv_or_state": 1470,
+            "unknown": 8699,
+            "embeddings": 7,
+            "routed_expert": 180,
+            "router": 330,
+            "output": 1
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 214,
+              "role_counts": {
+                "unknown": 146,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "1": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "2": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "3": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "4": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "5": {
+              "observed_node_count": 200,
+              "role_counts": {
+                "unknown": 144,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "6": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "7": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "8": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "9": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "10": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "11": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "12": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "13": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "14": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "15": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "16": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "17": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "18": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "19": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "20": {
+              "observed_node_count": 207,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 50,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "21": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "22": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "23": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "24": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "25": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "26": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "27": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "28": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "29": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_language_model.bin",
+            "bin_file_size_bytes": 14788282880,
+            "declared_const_bytes_sum": 14788474380,
+            "referenced_unique_bytes": 14788282880,
+            "aliased_shared_bytes_saved": 191500,
+            "referenced_intervals": [
+              [
+                0,
+                14788282880
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_text_embeddings_model.xml",
+          "sha256": "7691e0b4aa243cf78809b3ad8799699045fee65b22a688b35982ce6ac8607cba",
+          "status": "ok",
+          "graph_name": "Model3",
+          "node_count": 12,
+          "role_counts": {
+            "unknown": 4,
+            "embeddings": 8
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_text_embeddings_model.bin",
+            "bin_file_size_bytes": 738721800,
+            "declared_const_bytes_sum": 738721800,
+            "referenced_unique_bytes": 738721800,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                738721800
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_text_embeddings_per_layer_model.xml",
+          "sha256": "716ea221d6666d0e57fd1c4d126a515e428aef413f250de6696b7f116ab67128",
+          "status": "ok",
+          "graph_name": "Model9",
+          "node_count": 8,
+          "role_counts": {
+            "unknown": 8
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_text_embeddings_per_layer_model.bin",
+            "bin_file_size_bytes": 20,
+            "declared_const_bytes_sum": 20,
+            "referenced_unique_bytes": 20,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                20
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_tokenizer.xml",
+          "sha256": "a2f844d2457574390a081b98ee15cf5b557a37078e87ecfc71a77a4c2e9ee4b8",
+          "status": "ok",
+          "graph_name": "tokenizer",
+          "node_count": 51,
+          "role_counts": {
+            "unknown": 51
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_tokenizer.bin",
+            "bin_file_size_bytes": 17270329,
+            "declared_const_bytes_sum": 17270378,
+            "referenced_unique_bytes": 17270329,
+            "aliased_shared_bytes_saved": 49,
+            "referenced_intervals": [
+              [
+                0,
+                17270329
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_vision_embeddings_model.xml",
+          "sha256": "5fdbf9ae7904ef6423baf8d09492629771dd70dcb8b67071e5948aef455fdc66",
+          "status": "ok",
+          "graph_name": "Model0",
+          "node_count": 6171,
+          "role_counts": {
+            "unknown": 2258,
+            "vision": 3913
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 145,
+              "role_counts": {
+                "vision": 145
+              }
+            },
+            "1": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "2": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "3": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "4": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "5": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "6": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "7": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "8": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "9": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "10": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "11": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "12": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "13": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "14": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "15": {
+              "observed_node_count": 140,
+              "role_counts": {
+                "vision": 140
+              }
+            },
+            "16": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "17": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "18": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "19": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "20": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "21": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "22": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "23": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "24": {
+              "observed_node_count": 140,
+              "role_counts": {
+                "vision": 140
+              }
+            },
+            "25": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "26": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_vision_embeddings_model.bin",
+            "bin_file_size_bytes": 573967772,
+            "declared_const_bytes_sum": 573992544,
+            "referenced_unique_bytes": 573967772,
+            "aliased_shared_bytes_saved": 24772,
+            "referenced_intervals": [
+              [
+                0,
+                573967772
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        }
+      ],
+      "bin_file_bytes": 16122656348,
+      "expert_fields": {
+        "enable_moe_block": true,
+        "moe_intermediate_size": 704,
+        "num_experts": 128,
+        "top_k_experts": 8
+      },
+      "referenced_unique_bytes": 16122656348,
+      "scope": "Static inventory only. Transformer block IDs are parsed from actual names; node IDs are separate. No hotness, compiled fusion, resident-byte or physical NVMe claim.",
+      "config_sha256": "a62ff7eb0a97a7c6e83ba42edff8dc4118c109a7ededcd6d83cc08ffda6a7361",
+      "full_map_sha256": "81cb297acd8982c1f7d6414dd0a0dfe2226443f8d5cd9333612c993484b288f2"
+    },
+    {
+      "label": "ornith-35b-ov",
+      "model_status": "complete",
+      "model_type": "qwen3_5_moe",
+      "architectures": [
+        "Qwen3_5MoeForConditionalGeneration"
+      ],
+      "text_model_type": "qwen3_5_moe_text",
+      "text_fields": {
+        "hidden_size": 2048,
+        "max_position_embeddings": 262144,
+        "moe_intermediate_size": 512,
+        "num_experts": 256,
+        "num_experts_per_tok": 8,
+        "num_hidden_layers": 40,
+        "shared_expert_intermediate_size": 512
+      },
+      "layer_types": {
+        "linear_attention": 30,
+        "full_attention": 10
+      },
+      "compiled_otd": "NOT_RUN",
+      "runtime_acceptance": "NO",
+      "graphs": [
+        {
+          "file": "openvino_detokenizer.xml",
+          "sha256": "dbba69f73e6bd4946eeacedfe8318308ad2ab3de34fe514f4ebed4d3939f3f43",
+          "status": "ok",
+          "graph_name": "detokenizer",
+          "node_count": 11,
+          "role_counts": {
+            "unknown": 11
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_detokenizer.bin",
+            "bin_file_size_bytes": 3828184,
+            "declared_const_bytes_sum": 3828184,
+            "referenced_unique_bytes": 3828184,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                3828184
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_language_model.xml",
+          "sha256": "69a35f875e0d333fc5b884312225f3134ca6d04c0c1493d92f8232bc4f26b80c",
+          "status": "ok",
+          "graph_name": "Model30",
+          "node_count": 15765,
+          "role_counts": {
+            "attention_kv_or_state": 2032,
+            "embeddings": 1,
+            "unknown": 12047,
+            "shared_expert": 1200,
+            "routed_expert": 240,
+            "router": 240,
+            "output": 5
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 244,
+              "role_counts": {
+                "unknown": 151,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "1": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "2": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "3": {
+              "observed_node_count": 207,
+              "role_counts": {
+                "unknown": 114,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "4": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "5": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "6": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "7": {
+              "observed_node_count": 194,
+              "role_counts": {
+                "unknown": 102,
+                "attention_kv_or_state": 50,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "8": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "9": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "10": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "11": {
+              "observed_node_count": 194,
+              "role_counts": {
+                "unknown": 102,
+                "attention_kv_or_state": 50,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "12": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "13": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "14": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "15": {
+              "observed_node_count": 194,
+              "role_counts": {
+                "unknown": 102,
+                "attention_kv_or_state": 50,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "16": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "17": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "18": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "19": {
+              "observed_node_count": 194,
+              "role_counts": {
+                "unknown": 102,
+                "attention_kv_or_state": 50,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "20": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "21": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "22": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "23": {
+              "observed_node_count": 194,
+              "role_counts": {
+                "unknown": 102,
+                "attention_kv_or_state": 50,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "24": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "25": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "26": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "27": {
+              "observed_node_count": 194,
+              "role_counts": {
+                "unknown": 102,
+                "attention_kv_or_state": 50,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "28": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "29": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "30": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "31": {
+              "observed_node_count": 194,
+              "role_counts": {
+                "unknown": 102,
+                "attention_kv_or_state": 50,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "32": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "33": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "34": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "35": {
+              "observed_node_count": 194,
+              "role_counts": {
+                "unknown": 102,
+                "attention_kv_or_state": 50,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "36": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "37": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "38": {
+              "observed_node_count": 233,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            },
+            "39": {
+              "observed_node_count": 194,
+              "role_counts": {
+                "unknown": 102,
+                "attention_kv_or_state": 50,
+                "shared_expert": 30,
+                "routed_expert": 6,
+                "router": 6
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_language_model.bin",
+            "bin_file_size_bytes": 18646558250,
+            "declared_const_bytes_sum": 18646600418,
+            "referenced_unique_bytes": 18646558250,
+            "aliased_shared_bytes_saved": 42168,
+            "referenced_intervals": [
+              [
+                0,
+                18646558250
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_text_embeddings_model.xml",
+          "sha256": "6844125b0c843b7fff0b0e905098b82a1195a518db2126fef39eb2406d2f1a1d",
+          "status": "ok",
+          "graph_name": "Model69",
+          "node_count": 10,
+          "role_counts": {
+            "unknown": 6,
+            "embeddings": 4
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_text_embeddings_model.bin",
+            "bin_file_size_bytes": 509056004,
+            "declared_const_bytes_sum": 509056004,
+            "referenced_unique_bytes": 509056004,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                509056004
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_tokenizer.xml",
+          "sha256": "d4ad56c420356e99491eb9c09a89cac2c524c6c412909fab4cca68ff16a35a62",
+          "status": "ok",
+          "graph_name": "tokenizer",
+          "node_count": 49,
+          "role_counts": {
+            "unknown": 49
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_tokenizer.bin",
+            "bin_file_size_bytes": 9631143,
+            "declared_const_bytes_sum": 9631187,
+            "referenced_unique_bytes": 9631143,
+            "aliased_shared_bytes_saved": 44,
+            "referenced_intervals": [
+              [
+                0,
+                9631143
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_vision_embeddings_merger_model.xml",
+          "sha256": "664d41ae6edd440b70e1a405aaadcf0983a5b4ee8d07253bbebcc970f04e7d71",
+          "status": "ok",
+          "graph_name": "Model66",
+          "node_count": 2773,
+          "role_counts": {
+            "attention_kv_or_state": 461,
+            "unknown": 2312
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 85,
+              "role_counts": {
+                "unknown": 68,
+                "attention_kv_or_state": 17
+              }
+            },
+            "1": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "2": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "3": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "4": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "5": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "6": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "7": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "8": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "9": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "10": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "11": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "12": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "13": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "14": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "15": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "16": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "17": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "18": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "19": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "20": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "21": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "22": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "23": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "24": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "25": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            },
+            "26": {
+              "observed_node_count": 77,
+              "role_counts": {
+                "unknown": 60,
+                "attention_kv_or_state": 17
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_vision_embeddings_merger_model.bin",
+            "bin_file_size_bytes": 443361892,
+            "declared_const_bytes_sum": 443368480,
+            "referenced_unique_bytes": 443361892,
+            "aliased_shared_bytes_saved": 6588,
+            "referenced_intervals": [
+              [
+                0,
+                443361892
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_vision_embeddings_model.xml",
+          "sha256": "cad8ddd2a0d2c96aa6f2dded48c0e039c68941ac422e7dbea615a40ed04cb976",
+          "status": "ok",
+          "graph_name": "Model63",
+          "node_count": 14,
+          "role_counts": {
+            "attention_kv_or_state": 1,
+            "unknown": 13
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_vision_embeddings_model.bin",
+            "bin_file_size_bytes": 1776440,
+            "declared_const_bytes_sum": 1776440,
+            "referenced_unique_bytes": 1776440,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                1776440
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_vision_embeddings_pos_model.xml",
+          "sha256": "46d001ee196cc143e541fbdf92eb5d038fa5d07b2854b639d18254dd672e4a1b",
+          "status": "ok",
+          "graph_name": "Model72",
+          "node_count": 10,
+          "role_counts": {
+            "unknown": 6,
+            "embeddings": 4
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_vision_embeddings_pos_model.bin",
+            "bin_file_size_bytes": 2658820,
+            "declared_const_bytes_sum": 2658820,
+            "referenced_unique_bytes": 2658820,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                2658820
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        }
+      ],
+      "bin_file_bytes": 19616870733,
+      "expert_fields": {
+        "moe_intermediate_size": 512,
+        "num_experts": 256,
+        "num_experts_per_tok": 8,
+        "shared_expert_intermediate_size": 512
+      },
+      "referenced_unique_bytes": 19616870733,
+      "scope": "Static inventory only. Transformer block IDs are parsed from actual names; node IDs are separate. No hotness, compiled fusion, resident-byte or physical NVMe claim.",
+      "config_sha256": "a2f437dca9dbdf94133eebe54b4057790701ee6dc5a7fd892ee2bfea45445312",
+      "full_map_sha256": "6c28952db0c80d43817d6a9e4e5d2da5ce9340fbfdc8505a229b381726c7a3d2"
+    },
+    {
+      "label": "qwen3.6-35b-a3b-eagle3-ov-int4",
+      "model_status": "complete",
+      "model_type": "llama",
+      "architectures": [
+        "LlamaForCausalLMEagle3"
+      ],
+      "text_model_type": "llama",
+      "text_fields": {
+        "hidden_size": 2048,
+        "max_position_embeddings": 262144,
+        "num_hidden_layers": 1
+      },
+      "layer_types": {},
+      "compiled_otd": "NOT_RUN",
+      "runtime_acceptance": "NO",
+      "graphs": [
+        {
+          "file": "openvino_model.xml",
+          "sha256": "979306ed8d449f83eadce73fc87b608797512057c7b053915cade1d593686359",
+          "status": "ok",
+          "graph_name": "Model0",
+          "node_count": 332,
+          "role_counts": {
+            "unknown": 273,
+            "attention_kv_or_state": 43,
+            "embeddings": 9,
+            "output": 7
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_model.bin",
+            "bin_file_size_bytes": 649289861,
+            "declared_const_bytes_sum": 649290357,
+            "referenced_unique_bytes": 649289861,
+            "aliased_shared_bytes_saved": 496,
+            "referenced_intervals": [
+              [
+                0,
+                649289861
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        }
+      ],
+      "bin_file_bytes": 649289861,
+      "expert_fields": {},
+      "referenced_unique_bytes": 649289861,
+      "scope": "Static inventory only. Transformer block IDs are parsed from actual names; node IDs are separate. No hotness, compiled fusion, resident-byte or physical NVMe claim.",
+      "config_sha256": "a709ab279900bdad5103493b77c9ba543389a7189490ac862777d31dbee7cba7",
+      "full_map_sha256": "131f2741c10c7607128f3b14664665001c9d9f27a3be33f98704fe82e1a67f12"
+    },
+    {
+      "label": "runtime/gemma4-26-heretic-google-current",
+      "model_status": "complete",
+      "model_type": "gemma4",
+      "architectures": [
+        "Gemma4ForConditionalGeneration"
+      ],
+      "text_model_type": "gemma4_text",
+      "text_fields": {
+        "hidden_size": 2816,
+        "max_position_embeddings": 262144,
+        "moe_intermediate_size": 704,
+        "num_experts": 128,
+        "num_hidden_layers": 30
+      },
+      "layer_types": {
+        "sliding_attention": 25,
+        "full_attention": 5
+      },
+      "compiled_otd": "NOT_RUN",
+      "runtime_acceptance": "NO",
+      "graphs": [
+        {
+          "file": "openvino_detokenizer.xml",
+          "sha256": "1320325cd46efae0783b6b140006021f6f1023d75f2d8a97719d75acc4984a53",
+          "status": "ok",
+          "graph_name": "detokenizer",
+          "node_count": 15,
+          "role_counts": {
+            "unknown": 15
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_detokenizer.bin",
+            "bin_file_size_bytes": 4413547,
+            "declared_const_bytes_sum": 4413547,
+            "referenced_unique_bytes": 4413547,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                4413547
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_language_model.xml",
+          "sha256": "392e9eefbefde3047438a462868c841227512ad8a5f8b452d8bfcdf63cc8ed12",
+          "status": "ok",
+          "graph_name": "Model6",
+          "node_count": 10687,
+          "role_counts": {
+            "attention_kv_or_state": 1470,
+            "unknown": 8699,
+            "embeddings": 7,
+            "routed_expert": 180,
+            "router": 330,
+            "output": 1
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 214,
+              "role_counts": {
+                "unknown": 146,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "1": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "2": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "3": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "4": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "5": {
+              "observed_node_count": 200,
+              "role_counts": {
+                "unknown": 144,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "6": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "7": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "8": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "9": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "10": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "11": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "12": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "13": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "14": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "15": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "16": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "17": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "18": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "19": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "20": {
+              "observed_node_count": 207,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 50,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "21": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "22": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "23": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "24": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "25": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "26": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "27": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "28": {
+              "observed_node_count": 208,
+              "role_counts": {
+                "unknown": 140,
+                "attention_kv_or_state": 51,
+                "routed_expert": 6,
+                "router": 11
+              }
+            },
+            "29": {
+              "observed_node_count": 195,
+              "role_counts": {
+                "unknown": 139,
+                "attention_kv_or_state": 39,
+                "routed_expert": 6,
+                "router": 11
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_language_model.bin",
+            "bin_file_size_bytes": 14788282880,
+            "declared_const_bytes_sum": 14788474380,
+            "referenced_unique_bytes": 14788282880,
+            "aliased_shared_bytes_saved": 191500,
+            "referenced_intervals": [
+              [
+                0,
+                14788282880
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_text_embeddings_model.xml",
+          "sha256": "7691e0b4aa243cf78809b3ad8799699045fee65b22a688b35982ce6ac8607cba",
+          "status": "ok",
+          "graph_name": "Model3",
+          "node_count": 12,
+          "role_counts": {
+            "unknown": 4,
+            "embeddings": 8
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_text_embeddings_model.bin",
+            "bin_file_size_bytes": 738721800,
+            "declared_const_bytes_sum": 738721800,
+            "referenced_unique_bytes": 738721800,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                738721800
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_text_embeddings_per_layer_model.xml",
+          "sha256": "716ea221d6666d0e57fd1c4d126a515e428aef413f250de6696b7f116ab67128",
+          "status": "ok",
+          "graph_name": "Model9",
+          "node_count": 8,
+          "role_counts": {
+            "unknown": 8
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_text_embeddings_per_layer_model.bin",
+            "bin_file_size_bytes": 20,
+            "declared_const_bytes_sum": 20,
+            "referenced_unique_bytes": 20,
+            "aliased_shared_bytes_saved": 0,
+            "referenced_intervals": [
+              [
+                0,
+                20
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_tokenizer.xml",
+          "sha256": "a2f844d2457574390a081b98ee15cf5b557a37078e87ecfc71a77a4c2e9ee4b8",
+          "status": "ok",
+          "graph_name": "tokenizer",
+          "node_count": 51,
+          "role_counts": {
+            "unknown": 51
+          },
+          "observed_transformer_blocks": {},
+          "accounting": {
+            "weights_bin": "openvino_tokenizer.bin",
+            "bin_file_size_bytes": 17270329,
+            "declared_const_bytes_sum": 17270378,
+            "referenced_unique_bytes": 17270329,
+            "aliased_shared_bytes_saved": 49,
+            "referenced_intervals": [
+              [
+                0,
+                17270329
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        },
+        {
+          "file": "openvino_vision_embeddings_model.xml",
+          "sha256": "5fdbf9ae7904ef6423baf8d09492629771dd70dcb8b67071e5948aef455fdc66",
+          "status": "ok",
+          "graph_name": "Model0",
+          "node_count": 6171,
+          "role_counts": {
+            "unknown": 2258,
+            "vision": 3913
+          },
+          "observed_transformer_blocks": {
+            "0": {
+              "observed_node_count": 145,
+              "role_counts": {
+                "vision": 145
+              }
+            },
+            "1": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "2": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "3": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "4": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "5": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "6": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "7": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "8": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "9": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "10": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "11": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "12": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "13": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "14": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "15": {
+              "observed_node_count": 140,
+              "role_counts": {
+                "vision": 140
+              }
+            },
+            "16": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "17": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "18": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "19": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "20": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "21": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "22": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "23": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "24": {
+              "observed_node_count": 140,
+              "role_counts": {
+                "vision": 140
+              }
+            },
+            "25": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            },
+            "26": {
+              "observed_node_count": 141,
+              "role_counts": {
+                "vision": 141
+              }
+            }
+          },
+          "accounting": {
+            "weights_bin": "openvino_vision_embeddings_model.bin",
+            "bin_file_size_bytes": 573967772,
+            "declared_const_bytes_sum": 573992544,
+            "referenced_unique_bytes": 573967772,
+            "aliased_shared_bytes_saved": 24772,
+            "referenced_intervals": [
+              [
+                0,
+                573967772
+              ]
+            ],
+            "unreferenced_bytes": 0,
+            "note": "shared/aliased Const offsets counted once via interval union; BIN never opened"
+          },
+          "errors": []
+        }
+      ],
+      "bin_file_bytes": 16122656348,
+      "expert_fields": {
+        "enable_moe_block": true,
+        "moe_intermediate_size": 704,
+        "num_experts": 128,
+        "top_k_experts": 8
+      },
+      "referenced_unique_bytes": 16122656348,
+      "scope": "Static inventory only. Transformer block IDs are parsed from actual names; node IDs are separate. No hotness, compiled fusion, resident-byte or physical NVMe claim.",
+      "config_sha256": "a62ff7eb0a97a7c6e83ba42edff8dc4118c109a7ededcd6d83cc08ffda6a7361",
+      "full_map_sha256": "c9c0336ebe0e71123d4c95a55dda5c1ebc7e0e81916b5d6e759e61e0b8f46e82"
+    }
+  ],
+  "skipped_configs": [
+    {
+      "path": "<PRIVATE_ROOT>\\models\\config.json",
+      "reason": "Serving/non-model config: no architecture/model_type"
+    },
+    {
+      "path": "<PRIVATE_ROOT>\\models\\OpenVINO\\config.json",
+      "reason": "Serving/non-model config: no architecture/model_type"
+    }
+  ],
+  "unavailable_families": [
+    "LFM: no matching config/IR found in this bounded root",
+    "GLM: no matching config/IR found in this bounded root"
+  ]
+}

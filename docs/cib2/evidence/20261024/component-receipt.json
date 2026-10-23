@@ -1,0 +1,163 @@
+{
+  "schema": "cib2.sanitized-component-receipt.v1",
+  "kind": "cib2_component_manifest",
+  "accepted": false,
+  "generated_at_utc": "2026-10-23T22:45:59Z",
+  "source_revision": "eb76a74f7aa39573d452d95443e189b1f5f4d9e8",
+  "source_revision_reference_only": true,
+  "provenance": {
+    "file_bytes": {
+      "status": "VERIFIED",
+      "method": "SHA256 over the exact resolved physical file bytes",
+      "evidence": "components[*].sha256"
+    },
+    "source_build_association": {
+      "status": "UNVERIFIED",
+      "requested_revision": "eb76a74f7aa39573d452d95443e189b1f5f4d9e8",
+      "reference_only": true,
+      "evidence": null,
+      "note": "a supplied revision is a reference, not proof that these bytes were built from it"
+    },
+    "loaded_dll_evidence": {
+      "status": "NOT_RUN",
+      "evidence": null,
+      "note": "no OVMS process was started and no loaded-module list was captured"
+    },
+    "runtime_acceptance": {
+      "status": "NO",
+      "accepted": false,
+      "evidence": null,
+      "note": "static file identity only; not a runtime or benchmark acceptance"
+    }
+  },
+  "components": [
+    {
+      "name": "openvino",
+      "role": "dll",
+      "file_name": "openvino.dll",
+      "size_bytes": 16465168,
+      "sha256": "829c4642e287522f8a8e748a726d4ad3117a701e22ab46adc82771f98e5d2f7e",
+      "digest_verification": {
+        "computed_from_file_bytes": true,
+        "expected_sha256": null,
+        "match": null,
+        "caller_supplied_sha_used_as_identity": false
+      },
+      "provenance": {
+        "file_bytes": "VERIFIED",
+        "source_build_association": "UNVERIFIED",
+        "loaded_dll_evidence": "NOT_RUN",
+        "runtime_acceptance": "NO"
+      }
+    },
+    {
+      "name": "openvino_genai",
+      "role": "dll",
+      "file_name": "openvino_genai.dll",
+      "size_bytes": 7425808,
+      "sha256": "5a2904f2564e4ce002db5ef5fe003a782e6f296f6377cd66df1b2db41d4c5e8d",
+      "digest_verification": {
+        "computed_from_file_bytes": true,
+        "expected_sha256": null,
+        "match": null,
+        "caller_supplied_sha_used_as_identity": false
+      },
+      "provenance": {
+        "file_bytes": "VERIFIED",
+        "source_build_association": "UNVERIFIED",
+        "loaded_dll_evidence": "NOT_RUN",
+        "runtime_acceptance": "NO"
+      }
+    },
+    {
+      "name": "openvino_intel_gpu_plugin",
+      "role": "dll",
+      "file_name": "openvino_intel_gpu_plugin.dll",
+      "size_bytes": 34629896,
+      "sha256": "b90b57aecb9d8bbb7b0a1e945e45a088e94ea7baf61eaf5dd7d8fe5e06c9e55d",
+      "digest_verification": {
+        "computed_from_file_bytes": true,
+        "expected_sha256": null,
+        "match": null,
+        "caller_supplied_sha_used_as_identity": false
+      },
+      "provenance": {
+        "file_bytes": "VERIFIED",
+        "source_build_association": "UNVERIFIED",
+        "loaded_dll_evidence": "NOT_RUN",
+        "runtime_acceptance": "NO"
+      }
+    },
+    {
+      "name": "openvino_tokenizers",
+      "role": "dll",
+      "file_name": "openvino_tokenizers.dll",
+      "size_bytes": 3483912,
+      "sha256": "e96e02744f4cd9567e54065430aa609e97c48951299a21f30abc00fba6078d3c",
+      "digest_verification": {
+        "computed_from_file_bytes": true,
+        "expected_sha256": null,
+        "match": null,
+        "caller_supplied_sha_used_as_identity": false
+      },
+      "provenance": {
+        "file_bytes": "VERIFIED",
+        "source_build_association": "UNVERIFIED",
+        "loaded_dll_evidence": "NOT_RUN",
+        "runtime_acceptance": "NO"
+      }
+    },
+    {
+      "name": "ovms",
+      "role": "executable",
+      "file_name": "ovms.exe",
+      "size_bytes": 22596608,
+      "sha256": "f472d619097b3d64c3899a4628f219381941e99bb388d9c9c8a1d84956475397",
+      "digest_verification": {
+        "computed_from_file_bytes": true,
+        "expected_sha256": null,
+        "match": null,
+        "caller_supplied_sha_used_as_identity": false
+      },
+      "provenance": {
+        "file_bytes": "VERIFIED",
+        "source_build_association": "UNVERIFIED",
+        "loaded_dll_evidence": "NOT_RUN",
+        "runtime_acceptance": "NO"
+      }
+    },
+    {
+      "name": "ovms_test",
+      "role": "executable",
+      "file_name": "ovms_test.exe",
+      "size_bytes": 40555520,
+      "sha256": "3ac79a92468f0de2582ae99133018c1d58eaa3f0584ef9184dabc13f93857df4",
+      "digest_verification": {
+        "computed_from_file_bytes": true,
+        "expected_sha256": null,
+        "match": null,
+        "caller_supplied_sha_used_as_identity": false
+      },
+      "provenance": {
+        "file_bytes": "VERIFIED",
+        "source_build_association": "UNVERIFIED",
+        "loaded_dll_evidence": "NOT_RUN",
+        "runtime_acceptance": "NO"
+      }
+    }
+  ],
+  "summary": {
+    "component_count": 6,
+    "total_bytes": 125156912,
+    "roles": {
+      "dll": 4,
+      "executable": 2
+    }
+  },
+  "notes": [
+    "caller-supplied SHA256 and filenames are not used as identity",
+    "old release/tag hashes are not identities for newly observed binaries",
+    "runtime acceptance remains NO"
+  ],
+  "note": "Sanitized receipt, not a loadable component manifest. Physical path map retained privately."
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "name": "strict-preflight",
+    "returncode": 3,
+    "expected_returncode": 3
+  },
+  {
+    "name": "replay-tests",
+    "returncode": 0,
+    "expected_returncode": 0
+  },
+  {
+    "name": "mapper-v1-independent-contract-red",
+    "status": "EXPECTED_FAIL",
+    "failures": 1,
+    "errors": 0,
+    "snapshot_sha256": "13e803c309564ba7cc92aaac0bb1edb58a27b0b362075e60acb078ce6a3a0565",
+    "test_sha256": "f9aa78357ade2a98255d0b2c905e16ce6dfc6b2f75e30b5a4507222aa4581bfe"
+  },
+  {
+    "name": "replay-cli-verify",
+    "returncode": 0,
+    "expected_returncode": 0
+  },
+  {
+    "name": "replay-cli-truncated",
+    "returncode": 2,
+    "expected_returncode": 2
+  }
+]

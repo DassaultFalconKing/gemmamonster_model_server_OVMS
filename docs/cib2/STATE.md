@@ -1,3 +1,11 @@
+# CIB2 current execution state
+
+## Current checkpoint: 2026-10-24
+
+Branch `feature/cib2-offload-family-map-20261024`. HOST_WAVE_REVIEWED, runtime acceptance NO. 67/67 host tests PASS, seven static export maps. Working-postfix EXE/DLL hashes now collected; build association and loaded evidence remain open. [Results and next gates](RESULTS-20261024.md). Earlier state below is historical.
+
+---
+
 # CIB2 / RC3B OTD preflight state
 
 **Date:** 2026-10-23

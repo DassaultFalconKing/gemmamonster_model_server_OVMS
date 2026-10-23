@@ -1,0 +1,16 @@
+test_expected_digest_case_matches_component_identity (independent_wrapper_review_red.ReviewWrapperCases.test_expected_digest_case_matches_component_identity) ... ok
+test_expected_digest_unknown_name_refused (independent_wrapper_review_red.ReviewWrapperCases.test_expected_digest_unknown_name_refused) ... ok
+test_slug_collision_cannot_overwrite_first_model_map (independent_wrapper_review_red.ReviewWrapperCases.test_slug_collision_cannot_overwrite_first_model_map) ... FAIL
+
+======================================================================
+FAIL: test_slug_collision_cannot_overwrite_first_model_map (independent_wrapper_review_red.ReviewWrapperCases.test_slug_collision_cannot_overwrite_first_model_map)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PRIVATE_ROOT>\cib2-offload-family-map-20261024\tests\cib2\test_review_wrappers.py", line 27, in test_slug_collision_cannot_overwrite_first_model_map
+    self.assertEqual(len(set(files)),2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.019s
+
+FAILED (failures=1)

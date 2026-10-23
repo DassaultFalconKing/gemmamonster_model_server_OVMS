@@ -1,0 +1,7 @@
+{
+  "schema": "cib2.otd_sim.v1",
+  "error": "call 3 is incomplete: 0/1 events",
+  "kind": "trace_format_error",
+  "offline_only": true,
+  "runtime_acceptance": "NO"
+}

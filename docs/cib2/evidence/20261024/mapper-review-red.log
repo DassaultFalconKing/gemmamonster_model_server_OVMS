@@ -1,0 +1,54 @@
+test_auxiliary_json_does_not_substitute_for_model_config (independent_mapper_review_red.ReviewCases.test_auxiliary_json_does_not_substitute_for_model_config) ... FAIL
+test_bad_range_cannot_create_negative_alias_saving (independent_mapper_review_red.ReviewCases.test_bad_range_cannot_create_negative_alias_saving) ... FAIL
+test_const_without_data_is_invalid_without_exception (independent_mapper_review_red.ReviewCases.test_const_without_data_is_invalid_without_exception) ... ERROR
+test_missing_node_id_is_not_invented (independent_mapper_review_red.ReviewCases.test_missing_node_id_is_not_invented) ... FAIL
+
+======================================================================
+ERROR: test_const_without_data_is_invalid_without_exception (independent_mapper_review_red.ReviewCases.test_const_without_data_is_invalid_without_exception)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PRIVATE_ROOT>\cib2-offload-family-map-20261024\tests\cib2\test_family_map_review.py", line 23, in test_const_without_data_is_invalid_without_exception
+    result=self.scan('<layer id="0" name="c0" type="Const"/>')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<PRIVATE_ROOT>\cib2-offload-family-map-20261024\tests\cib2\test_family_map_review.py", line 20, in scan
+    return mapper.scan_model_dir(root)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<PRIVATE_ROOT>\orchestration\offload-family-20261024\snapshots\family-map-v2.py", line 663, in scan_model_dir
+    g = parse_graph(p, bin_sizes, model_dir, first_num_experts, config_hints or None)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<PRIVATE_ROOT>\orchestration\offload-family-20261024\snapshots\family-map-v2.py", line 338, in parse_graph
+    if offset_ok and size_ok and bin_size is not None:
+       ^^^^^^^^^
+UnboundLocalError: cannot access local variable 'offset_ok' where it is not associated with a value
+
+======================================================================
+FAIL: test_auxiliary_json_does_not_substitute_for_model_config (independent_mapper_review_red.ReviewCases.test_auxiliary_json_does_not_substitute_for_model_config)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PRIVATE_ROOT>\cib2-offload-family-map-20261024\tests\cib2\test_family_map_review.py", line 28, in test_auxiliary_json_does_not_substitute_for_model_config
+    self.assertNotEqual(result['model_status'],'complete')
+AssertionError: 'complete' == 'complete'
+
+======================================================================
+FAIL: test_bad_range_cannot_create_negative_alias_saving (independent_mapper_review_red.ReviewCases.test_bad_range_cannot_create_negative_alias_saving)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PRIVATE_ROOT>\cib2-offload-family-map-20261024\tests\cib2\test_family_map_review.py", line 34, in test_bad_range_cannot_create_negative_alias_saving
+    self.assertEqual(graph['byte_accounting']['referenced_unique_bytes'],1500)
+AssertionError: 3500 != 1500
+
+======================================================================
+FAIL: test_missing_node_id_is_not_invented (independent_mapper_review_red.ReviewCases.test_missing_node_id_is_not_invented)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PRIVATE_ROOT>\cib2-offload-family-map-20261024\tests\cib2\test_family_map_review.py", line 40, in test_missing_node_id_is_not_invented
+    self.assertEqual(graph['status'],'invalid')
+AssertionError: 'ok' != 'invalid'
+- ok
++ invalid
+
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.022s
+
+FAILED (failures=3, errors=1)

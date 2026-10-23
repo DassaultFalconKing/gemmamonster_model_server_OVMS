@@ -1,0 +1,107 @@
+{
+  "schema": "cib2-rc3b-preflight-v2",
+  "base_tag": "qwm-semantic-refit-2026.4-rc3b",
+  "base_sha": "b77b0f23fa7417e61778ef86ecb0ca739cc85f14",
+  "frozen_working_sha": "eb76a74f7aa39573d452d95443e189b1f5f4d9e8",
+  "freeze_branch": "freeze/rc3b-postfix-20261023-eb76a74f",
+  "binary_cohort": "frozen-postfix",
+  "verdict": "INCOMPLETE",
+  "checks": [
+    {
+      "id": "repo_root",
+      "status": "PASS",
+      "detail": "Repository root confirmed"
+    },
+    {
+      "id": "rc3b_tag",
+      "status": "PASS",
+      "detail": "qwm-semantic-refit-2026.4-rc3b -> b77b0f23fa7417e61778ef86ecb0ca739cc85f14"
+    },
+    {
+      "id": "rc3_parent_tag",
+      "status": "PASS",
+      "detail": "qwm-semantic-refit-2026.4-rc3 -> b12a913ba492b951eb3384583e46541ffe467763"
+    },
+    {
+      "id": "rc3b_direct_parent",
+      "status": "PASS",
+      "detail": "b77b0f23fa7417e61778ef86ecb0ca739cc85f14^ -> b12a913ba492b951eb3384583e46541ffe467763"
+    },
+    {
+      "id": "frozen_release_ancestry",
+      "status": "PASS",
+      "detail": "Freeze descends from immutable RC3B tag"
+    },
+    {
+      "id": "head_ancestry",
+      "status": "PASS",
+      "detail": "HEAD descends from frozen working SHA eb76a74f7aa39573d452d95443e189b1f5f4d9e8"
+    },
+    {
+      "id": "semantic_freeze",
+      "status": "PASS",
+      "detail": "Frozen Qwen/Ornith source blob drift: []"
+    },
+    {
+      "id": "preflight_scope",
+      "status": "PASS",
+      "detail": "Changed 5 committed paths; outside preflight scope: []"
+    },
+    {
+      "id": "worktree_scope",
+      "status": "PASS",
+      "detail": "Uncommitted/untracked paths outside preflight scope: []"
+    },
+    {
+      "id": "manifest_immutable",
+      "status": "PASS",
+      "detail": "RC3B tag, freeze and checkout have identical release manifest"
+    },
+    {
+      "id": "manifest_identity",
+      "status": "PASS",
+      "detail": "All RC3B fields and recorded executable identities match"
+    },
+    {
+      "id": "ovms_binary",
+      "status": "NOT_RUN",
+      "detail": "Working postfix candidate only; SHA256=f472d619097b3d64c3899a4628f219381941e99bb388d9c9c8a1d84956475397; bytes=22596608; no pinned postfix binary manifest yet"
+    },
+    {
+      "id": "ovms_test_binary",
+      "status": "NOT_RUN",
+      "detail": "Working postfix candidate only; SHA256=3ac79a92468f0de2582ae99133018c1d58eaa3f0584ef9184dabc13f93857df4; bytes=40555520; no pinned postfix binary manifest yet"
+    },
+    {
+      "id": "stock_gpu_plugin",
+      "status": "NOT_RUN",
+      "detail": "Supply both --sdk-gpu-plugin and --active-gpu-plugin"
+    },
+    {
+      "id": "sdk_rc1_source_abi",
+      "status": "NOT_RUN",
+      "detail": "Exact 2026.4.0.0rc1 SDK source/ABI audit required on host"
+    },
+    {
+      "id": "full_ovms_test",
+      "status": "NOT_RUN",
+      "detail": "Owner's full suite not covered by this static preflight"
+    },
+    {
+      "id": "gpu_live_perf",
+      "status": "NOT_RUN",
+      "detail": "This preflight deliberately does not launch inference"
+    },
+    {
+      "id": "owner_signoff",
+      "status": "NOT_RUN",
+      "detail": "RC3B manifest explicitly marks accepted=false"
+    }
+  ],
+  "counts": {
+    "PASS": 11,
+    "FAIL": 0,
+    "NOT_RUN": 7
+  },
+  "acceptance": "NOT_ACCEPTED"
+}
