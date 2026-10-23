@@ -14,6 +14,7 @@ Use these as literal **text**, not parsed numeric inputs:
 1e3
 9007199254740993
 -0
+C:\tmp\foo
 C:\\tmp\\foo
 \\t
 #B4E8
