@@ -265,6 +265,50 @@ This keeps the **unified model component manifest** useful immediately for measu
 
 **New canonical architecture drawing:** [PGP-UMA-PATH-AB-20261024.mermaid](PGP-UMA-PATH-AB-20261024.mermaid). Its solid Path A is the **unchanged default control**; dotted Path B is an experimental, opt-in memory strategy. This extends, rather than replaces, the native disk Pack V1 / expert placement work. The authoritative earlier design/evidence lives in [ADR-UMA-01, §§4–11](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/blob/docs/adr-uma-arc140v-shared-memory-20261022/docs/qwenmonster/ADR-UMA-ARC140V-MEMORY-MODEL-20261022.md) and [OpenVINO Draft PR #8](https://github.com/DassaultFalconKing/openvino/pull/8); these are independent branches, not silently merged code.
 
+### Path A/B memory controller flow (rendered diagram)
+
+```mermaid
+flowchart TD
+    %% CIB2/PGP 2026-10-24; PLAN, NOT DEPLOYED
+    %% Solid Path A is the baseline. Dashed B is optional experimental gated code.
+    RT["OVMS semantic-refit 2026.4<br/>MFP-1 / tool protocol unchanged"]
+    AD["Admission: 32 GiB physical UMA<br/>OS + WDDM overlap; KV U4 + vision + draft + staging<br/>bounded expert budget / C1 C2 C4"]
+    IR{"Compiled model eligible?<br/>MOECompressed GEMM3_SWIGLU<br/>weights_path + PackSpec exact"}
+    NO["No routed OTD<br/>dense/non-GEMM3 separate track"]
+    PK["Immutable Pack V1 per layer<br/>expert_id => placement[] => offset<br/>9 slices / 4 KiB record alignment"]
+    CH["Trace-based profile<br/>hotness / co-access / prefill vs decode<br/>no static invented hot layer IDs"]
+    MISS["Router exact top-k<br/>LRU hit or demand miss"]
+    HIT["Existing resident slot<br/>no SSD read"]
+    READ["NVMe positional read → bounded CPU staging<br/>checksum + provenance verification"]
+    SELECT{"Resident allocation mode<br/>A default; B only after explicit gate"}
+    A["PATH A (CONTROL)<br/>usm_device resident<br/>9 GPU copy_from after verify<br/>queue/device ownership"]
+    B["PATH B (EXPERIMENTAL, flag OFF)<br/>usm_host GPU-readable resident<br/>pre-write drain old GPU readers<br/>9 CPU memcpy scatters"]
+    VF["B post-write GPU visibility fence<br/>flush/finish for scratch only<br/>replace with per-slot event leases before promotion"]
+    PUB["Publish filled slot ONLY after full payload<br/>and all queue / reader ownership checks"]
+    GPU["Exact GPU MoE kernel / target decode<br/>C1 C2 C4, MTP or DFlash separately gated"]
+    TR["Counters: physical vs logical NVMe bytes<br/>TTFT, TPOT p95/p99, committed tok/s<br/>memory, hit/miss, I/O + load/copy/compute"]
+    REP["Replay actual complete trace<br/>placement identity/frequency/coaccess<br/>bounded grouped I/O only after proof"]
+    RT --> AD --> IR
+    IR -->|"NO / UNKNOWN"| NO
+    IR -->|"PROVEN eligible"| CH
+    CH --> PK --> MISS
+    MISS -->|"hit"| HIT --> GPU
+    MISS -->|"miss"| READ --> SELECT
+    SELECT -->|"default"| A --> PUB
+    SELECT -.->|"opt in, scratch"| B --> VF --> PUB
+    PUB --> GPU --> TR --> REP
+    REP -.->|"candidate layout only; never changes router"| CH
+
+    classDef fixed fill:#eaf2fd,stroke:#3269a8,color:#152f52
+    classDef experimental fill:#fff0d7,stroke:#bd7414,color:#5a380c
+    classDef proof fill:#e9f6ea,stroke:#3a803f,color:#195520
+    classDef blocked fill:#f5ecec,stroke:#9f6060,color:#5c2525
+    class RT,AD,IR,PK,CH,MISS,READ,A,PUB,GPU,TR,REP fixed
+    class B,VF,SELECT experimental
+    class HIT proof
+    class NO blocked
+```
+
 ### 11.1 Two real datapaths, one pack format, one physical LPDDR pool
 
 | Step | A — production-control target, §usm_device§ | B — experiment only, §OTD_RESIDENT_USM_HOST=1§ |
