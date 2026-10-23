@@ -2,7 +2,7 @@
 """CIB2 RC3B provenance preflight. Standard library only; does not run inference.
 
 Exit 0: no failures (NOT_RUN checks may remain); exit 2: failure;
-exit 3: --strict with incomplete checks. JSON stdout or --output file.
+exit 3: --strict with unverified mandatory static gates. JSON stdout or --output file.
 """
 from __future__ import annotations
 
@@ -88,7 +88,7 @@ def check_file(checks: list[Check], name: str, path: Path | None, expected: tupl
         checks.append(Check(name, "NOT_RUN", "Binary path not supplied; recorded hash is not live verification"))
         return
     if not path.is_file():
-        checks.append(Check(name, "FAIL", f"Not a file: {path}"))
+        checks.append(Check(name, "FAIL", f"Missing binary: {path.name}"))
         return
     actual_hash, actual_size = sha256(path), path.stat().st_size
     if actual_hash == expected[0] and actual_size == expected[1]:
@@ -105,7 +105,7 @@ def check_plugin_pair(checks: list[Check], sdk: Path | None, active: Path | None
         checks.append(Check("stock_gpu_plugin", "FAIL", "Both plugin paths must be supplied together"))
         return
     if not sdk.is_file() or not active.is_file():
-        checks.append(Check("stock_gpu_plugin", "FAIL", f"Missing SDK or active plugin: {sdk}, {active}"))
+        checks.append(Check("stock_gpu_plugin", "FAIL", "SDK or active plugin path is not a file"))
         return
     a, b = sha256(sdk), sha256(active)
     checks.append(Check("stock_gpu_plugin", "PASS" if a == b else "FAIL",
@@ -120,7 +120,7 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
         if top != repo:
             checks.append(Check("repo_root", "FAIL", f"Expected repo root {repo}; actual root {top}"))
         else:
-            checks.append(Check("repo_root", "PASS", str(top)))
+            checks.append(Check("repo_root", "PASS", "Repository root confirmed"))
         tag_sha = git(repo, "rev-parse", f"refs/tags/{TAG}^{{commit}}")
         parent_sha = git(repo, "rev-parse", f"refs/tags/{PARENT_TAG}^{{commit}}")
         checks.append(Check("rc3b_tag", "PASS" if tag_sha == BASE else "FAIL", f"{TAG} -> {tag_sha}"))
@@ -146,7 +146,7 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
         checks.append(Check("manifest_identity", "FAIL" if problems else "PASS",
                             "; ".join(problems) if problems else "All RC3B fields and recorded executable identities match"))
     except (RuntimeError, OSError, ValueError, json.JSONDecodeError) as exc:
-        checks.append(Check("source_verification", "FAIL", str(exc)))
+        checks.append(Check("source_verification", "FAIL", str(exc).replace(str(repo), "<repo>")))
 
     check_file(checks, "ovms_binary", args.ovms_exe, EXPECTED["ovms"])
     check_file(checks, "ovms_test_binary", args.ovms_test_exe, EXPECTED["ovms_test"])
@@ -166,7 +166,13 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
         "counts": {s: statuses.count(s) for s in ("PASS", "FAIL", "NOT_RUN")},
         "acceptance": "NOT_ACCEPTED",
     }
-    exit_code = 2 if verdict == "FAIL" else (3 if args.strict and verdict == "INCOMPLETE" else 0)
+    mandatory = {
+        "repo_root", "rc3b_tag", "rc3_parent_tag", "rc3b_direct_parent",
+        "head_ancestry", "preflight_scope", "manifest_immutable",
+        "manifest_identity", "ovms_binary", "ovms_test_binary", "stock_gpu_plugin",
+    }
+    mandatory_incomplete = any(c.status == "NOT_RUN" and c.id in mandatory for c in checks)
+    exit_code = 2 if verdict == "FAIL" else (3 if args.strict and mandatory_incomplete else 0)
     return report, exit_code
 
 
@@ -178,7 +184,7 @@ def main() -> int:
     p.add_argument("--sdk-gpu-plugin", type=Path)
     p.add_argument("--active-gpu-plugin", type=Path)
     p.add_argument("--output", type=Path, help="Write JSON report (no private paths should be committed)")
-    p.add_argument("--strict", action="store_true", help="Return nonzero when any gate is NOT_RUN")
+    p.add_argument("--strict", action="store_true", help="Return nonzero if any mandatory static gate is NOT_RUN")
     args = p.parse_args()
     report, code = run(args)
     payload = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
