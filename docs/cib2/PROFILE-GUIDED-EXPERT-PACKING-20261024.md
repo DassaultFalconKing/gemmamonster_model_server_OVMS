@@ -221,3 +221,41 @@ For *every* arm: same source+model+tokenizer+quant+GenAI+driver and data, 1 warm
 Next local agent should start at **PGP-00** and **PGP-02 dry-run** while other agents finish native RC1 Pack V1 and compiled eligibility. The user may keep normal serving while these read-only tasks run. GPU memory and I/O experiments must be serialized with the owner-authorized hardware test slot.
 
 **This spec is a design proposal, not a claim that hot/cold expert ordering, clustered reads or V2 shards are implemented.**
+
+
+## 10. Whole-model file organization: non-expert layers are not OTD expert records
+
+The requested long-term goal is **all model components**, but a native OpenVINO IR `openvino_language_model.bin` has Const offsets recorded in its XML graph. **Do not reorder or split that original .bin and leave the IR unmodified:** the compiled model would read the wrong byte ranges. Pack V1 sidecar is consumed only through the eligible MoE routed-expert provider. For dense/attention/vision, file organization needs its **own** importer/exporter or supported graph-level model-loading route and is intentionally a later gate.
+
+Proposed logical manifest and *conditional* future physical organization:
+
+| Component role in static CIB2 mapper | Natural access pattern | Runtime residency | Possible future file strategy |
+| --- | --- | --- | --- |
+| Embeddings, output head, norms, router, attention, shared/dense blocks | required each generated token | resident and source-pinned | keep original IR/`.bin` now; future immutable `core` segments only with exporter+IR offset rewrite and exact logits parity |
+| MoE routed `gate/up/down` weights+scales+ZP | conditional by router, per layer and token | bounded LRU or profile-admitted hot | **current Pack V1 per compiled layer** with logical-to-physical placement; optional future shards after measured clustered-read win |
+| Vision encoder and image merger | required only for image/video turns, may run once per visual input | compiled separate IR graphs or model-specific pipeline; conditional load only if GenAI supports it | potential `vision` file group and unload after prefill, **not** speculative unsupported dynamic unload of GPU compiled graphs |
+| Draft/MTP/EAGLE/DFlash head | used only in compatible speculative mode | separate weights/KV/headroom with its own source/quant identity | `draft` file group or existing draft IR; separate checkpoint from target; no cross-model expert-ID reuse |
+| KV U4, prefix/cache, state/activations | dynamic request and model state | RAM/USM runtime-owned | **not immutable weight pack files**; ordinary persistent prefix cache has separate privacy/invalidation gates |
+| Dense E4B or non-GEMM3 MoE layers | may be always-used even when weights are huge | CPU/GPU execution partition must be graph-and-kernel proven | optional layer-level immutable segments / supported HETERO+exporter after full architecture-specific feasibility gate |
+
+Illustrative *logical* organization, not current accepted on-disk layout:
+
+```text
+model-identity-<sha>/
+  manifest.json
+  original-ir/          # canonical exported XML+BIN remain unchanged
+  routed-packs-v1/      # existing compiled GEMM3 expert-provider sidecars
+    layer-00-<key>.pack
+    layer-01-<key>.pack
+  placement-profiles/   # versioned derived statistics and expert permutations
+    workload-<sha>.json
+  future-optional/
+    core/               # ONLY if exporter rewrites/validates IR Const maps
+    vision/             # ONLY if pipeline supports load/unload independently
+    draft/              # optional mode and separately pinned artifact
+    shards-v2/          # ONLY if grouped/async reader exists
+```
+
+**Never partition original weights into “hot/cold” physically unless the corresponding OpenVINO loader understands the new offsets.** For fixed layers executed each token, “cold” is normally a workload/conditional-component property (e.g. image branch absent from text requests), not popularity of a routed expert. File layout and quantization cannot substitute for proper compute placement and memory admission. Cross-layer adjacent physical storage is only an optional launch/read-ahead experiment, not a supported inference pager.
+
+This keeps the **unified model component manifest** useful immediately for measurements while leaving the proven expert V1 and canonical IR untouched.
