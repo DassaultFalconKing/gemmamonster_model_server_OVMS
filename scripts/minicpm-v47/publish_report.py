@@ -1,4 +1,4 @@
-"""Prepare sanitized documentation from measured evidence; never infer a runtime PASS."""
+"""Recreate the historical 2026-10-23 report; do not overwrite later live checkpoints."""
 import argparse
 import hashlib
 import json
