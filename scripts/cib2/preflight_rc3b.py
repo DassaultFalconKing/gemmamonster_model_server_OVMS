@@ -138,6 +138,14 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
         unexpected = safe_changed_paths(changed)
         checks.append(Check("preflight_scope", "FAIL" if unexpected else "PASS",
                             f"Changed {len(changed)} committed paths; outside preflight scope: {unexpected}"))
+        # Reject uncommitted source edits as well; this preflight must never bless
+        # a dirty runtime tree just because the committed diff was docs-only.
+        unstaged = git(repo, "diff", "--name-only").splitlines()
+        staged = git(repo, "diff", "--cached", "--name-only").splitlines()
+        untracked = git(repo, "ls-files", "--others", "--exclude-standard").splitlines()
+        dirty_outside = safe_changed_paths(sorted(set(unstaged + staged + untracked)))
+        checks.append(Check("worktree_scope", "FAIL" if dirty_outside else "PASS",
+                            f"Uncommitted/untracked paths outside preflight scope: {dirty_outside}"))
         original = git(repo, "show", f"{BASE}:{MANIFEST}")
         checked_in = (repo / MANIFEST).read_text(encoding="utf-8").strip()
         checks.append(Check("manifest_immutable", "PASS" if original == checked_in else "FAIL",
@@ -168,7 +176,7 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
     }
     mandatory = {
         "repo_root", "rc3b_tag", "rc3_parent_tag", "rc3b_direct_parent",
-        "head_ancestry", "preflight_scope", "manifest_immutable",
+        "head_ancestry", "preflight_scope", "worktree_scope", "manifest_immutable",
         "manifest_identity", "ovms_binary", "ovms_test_binary", "stock_gpu_plugin",
     }
     mandatory_incomplete = any(c.status == "NOT_RUN" and c.id in mandatory for c in checks)
