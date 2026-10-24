@@ -6,14 +6,14 @@
 
 OVMS dev PR #29 `dev/cib2-packv2-source-20261024` at **`b9ef9ce1a01139ae7fca1d13da5eb7514bfd477d`** before this documentation update. Includes Wave-01 PR #27, derived-metric hardening #28, static P1 audit #26, trace profile, CLI build-only, V2 envelopes, native placement/residency policies.
 
-OpenVINO target dev PR #10 `dev/cib2-packv2-ov2026.4-integration-20261024` at **`fbbfaa11d2f944947a5e26d77d5d37bfe3609d75`**, parent **`releases/2026/4` @ `60ba6ff015f8b511e1407678062878c5ca466d08`**. New C++17 slot-lease, UMA and prearm controls with a standalone host test. **No native GPU integration yet.**
+OpenVINO target dev PR #10 `dev/cib2-packv2-ov2026.4-integration-20261024` at **`d39aa73b8bd788c9b286fc1bcff6298b86827ecc`**, parent **`releases/2026/4` @ `60ba6ff015f8b511e1407678062878c5ca466d08`**. New C++17 slot-lease, UMA and prearm controls, native Pack V1 format/trace/placement core and verifier/negative tests staged on the actual 2026.4 branch. **GPU provider/compiled graph/build integration still NOT_DONE; no Windows/GPU runtime run.**
 
 OpenVINO 2026.5-derived source DONOR PR #9 `7e9fb22df7c76ed6be4334b8bb22ecb734eff430`; pack integrity donor PR #7 `74003278`; independent verifier PR #6 `986a0d4`. **Source only, never copy a donor DLL.** Path B PR #8 remains OFF. RC3B is read-only regression comparison.
 
 ## Execute, not re-plan
 
 **N1 PORT AND BUILD, first critical path**
-- On the 2026.4 *target* branch, port the minimum complete Pack V1 GPU writer+reader, tracing, provider, tests and Wave-01 transactional integrity fixes from source donor.
+- On the 2026.4 *target* branch, review the already staged Pack V1 codec/trace/verification sources and now port the GPU provider, native runtime, GEMM call-sites, test registration and Wave-01 transactional integrity fixes from source donor.
 - Integrate profile-driven physical placement, residency sidecars and native PackLayerSpec; retain existing 2026.4 GPU kernels and ABI; record every altered source file and dependency.
 - Assemble matching OpenVINO/GenAI/OVMS Windows runtime tuple; isolate outputs. Build GPU unit suite, `ovms.exe` and `ovms_test.exe`. Prove P0 actual loaded DLL hash and P1 compiled 9-slice eligibility.
 - A failing compile is a coding task: fix and repeat within the dev tree, not an invitation to declare source ready.
