@@ -1,0 +1,66 @@
+{
+  "schema": "cib2.p0-partial-diagnostic.v1",
+  "captured_utc": "2026-10-24T00:07:22.081654+00:00",
+  "current_source_head": "eb76a74f7aa39573d452d95443e189b1f5f4d9e8",
+  "components": [
+    {
+      "name": "openvino",
+      "sha256": "829c4642e287522f8a8e748a726d4ad3117a701e22ab46adc82771f98e5d2f7e",
+      "unchanged_from_prior_receipt": true,
+      "size": 16465168,
+      "mtime_utc": "2026-08-27T19:50:32+00:00"
+    },
+    {
+      "name": "openvino_genai",
+      "sha256": "5a2904f2564e4ce002db5ef5fe003a782e6f296f6377cd66df1b2db41d4c5e8d",
+      "unchanged_from_prior_receipt": true,
+      "size": 7425808,
+      "mtime_utc": "2026-08-27T19:50:28+00:00"
+    },
+    {
+      "name": "openvino_intel_gpu_plugin",
+      "sha256": "b90b57aecb9d8bbb7b0a1e945e45a088e94ea7baf61eaf5dd7d8fe5e06c9e55d",
+      "unchanged_from_prior_receipt": true,
+      "size": 34629896,
+      "mtime_utc": "2026-08-27T19:50:32+00:00"
+    },
+    {
+      "name": "openvino_tokenizers",
+      "sha256": "e96e02744f4cd9567e54065430aa609e97c48951299a21f30abc00fba6078d3c",
+      "unchanged_from_prior_receipt": true,
+      "size": 3483912,
+      "mtime_utc": "2026-08-27T19:50:32+00:00"
+    },
+    {
+      "name": "ovms",
+      "sha256": "f472d619097b3d64c3899a4628f219381941e99bb388d9c9c8a1d84956475397",
+      "unchanged_from_prior_receipt": true,
+      "size": 22596608,
+      "mtime_utc": "2026-10-23T11:30:59.700392+00:00"
+    },
+    {
+      "name": "ovms_test",
+      "sha256": "3ac79a92468f0de2582ae99133018c1d58eaa3f0584ef9184dabc13f93857df4",
+      "unchanged_from_prior_receipt": true,
+      "size": 40555520,
+      "mtime_utc": "2026-10-23T11:30:13.996108+00:00"
+    }
+  ],
+  "build_logs": [
+    {
+      "name": "command.log",
+      "sha256": "99b7ea3e8cb1b4767fcc50f47d8c6e67c97e488d9eec32550340dbce2971b396",
+      "mtime_utc": "2026-10-23T11:45:22.837562+00:00"
+    },
+    {
+      "name": "stable-status.txt",
+      "sha256": "d8b31ffccbb37b1a064ae7f3e024e26f4b35ce60116e89b35638c5658bfab4f2",
+      "mtime_utc": "2026-10-23T01:18:16.067298+00:00"
+    }
+  ],
+  "source_build_association": "UNVERIFIED",
+  "loaded_modules": "NOT_RUN",
+  "native_runtime": "NOT_RUN",
+  "acceptance": "NO",
+  "reason": "Current checkout SHA, file hashes and a successful/up-to-date Bazel log do not bind exact build inputs to these file bytes. stable-status has empty BUILD_EMBED_LABEL. No running OVMS was observed; no process started for loaded-module capture."
+}
