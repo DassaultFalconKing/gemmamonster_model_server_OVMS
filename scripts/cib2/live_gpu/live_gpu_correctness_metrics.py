@@ -18,6 +18,12 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+
+from moe_otd_trace import parse_moe_otd_trace  # noqa: E402
+
 ROOT = Path(r"C:\git\cib2-packv2-build-20261024")
 PORT = int(os.environ.get("OVMS_REST_PORT", "8000"))
 MODEL = os.environ.get("OVMS_MODEL_NAME", "qwen")
@@ -183,64 +189,6 @@ def pick_url() -> str | None:
             # unexpected but endpoint exists
             return url
     return None
-
-
-def parse_moe_otd_trace(path: Path) -> dict:
-    """Aggregate expert hit/miss from moe_otd_trace v1 E, lines."""
-    if not path.is_file():
-        return {"present": False, "path": str(path), "error": "missing"}
-    hits = misses = 0
-    bytes_miss = 0
-    read_ns_miss = 0
-    copy_ns_miss = 0
-    e_lines = 0
-    c_ok = c_overflow = 0
-    try:
-        text = path.read_text(encoding="utf-8", errors="replace")
-    except OSError as exc:
-        return {"present": False, "path": str(path), "error": str(exc)}
-    for line in text.splitlines():
-        if not line or line.startswith("#"):
-            continue
-        parts = line.split(",")
-        if not parts:
-            continue
-        kind = parts[0]
-        if kind == "C" and len(parts) >= 6:
-            status = parts[5]
-            if status == "ok":
-                c_ok += 1
-            elif status == "overflow":
-                c_overflow += 1
-        elif kind == "E" and len(parts) >= 12:
-            e_lines += 1
-            hit = parts[6] in ("1", "true", "True")
-            if hit:
-                hits += 1
-            else:
-                misses += 1
-                try:
-                    bytes_miss += int(parts[8])
-                    read_ns_miss += int(parts[10])
-                    copy_ns_miss += int(parts[11])
-                except ValueError:
-                    pass
-    total = hits + misses
-    return {
-        "present": True,
-        "path": str(path),
-        "e_records": e_lines,
-        "hits": hits,
-        "misses": misses,
-        "hit_rate": round(hits / total, 4) if total else None,
-        "miss_rate": round(misses / total, 4) if total else None,
-        "miss_bytes": bytes_miss,
-        "miss_read_s": round(read_ns_miss / 1e9, 4) if read_ns_miss else 0.0,
-        "miss_copy_s": round(copy_ns_miss / 1e9, 4) if copy_ns_miss else 0.0,
-        "calls_ok": c_ok,
-        "calls_overflow": c_overflow,
-        "bytes": path.stat().st_size,
-    }
 
 
 def sample_uma(label: str) -> dict:
@@ -457,6 +405,12 @@ def main() -> int:
             "miss_read_s": round(
                 float(trace_after.get("miss_read_s") or 0) - float(trace_before.get("miss_read_s") or 0), 4
             ),
+            "miss_transform_s": round(
+                float(trace_after.get("miss_transform_s") or 0) - float(trace_before.get("miss_transform_s") or 0), 4
+            ),
+            "miss_copy_s": round(
+                float(trace_after.get("miss_copy_s") or 0) - float(trace_before.get("miss_copy_s") or 0), 4
+            ),
         }
     elif trace_after.get("present"):
         expert_stats["delta"] = {
@@ -465,6 +419,8 @@ def main() -> int:
             "hit_rate": trace_after.get("hit_rate"),
             "miss_bytes": trace_after.get("miss_bytes"),
             "miss_read_s": trace_after.get("miss_read_s"),
+            "miss_transform_s": trace_after.get("miss_transform_s"),
+            "miss_copy_s": trace_after.get("miss_copy_s"),
         }
 
     uma = {

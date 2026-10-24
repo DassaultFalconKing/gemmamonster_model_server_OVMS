@@ -1,0 +1,3896 @@
+{
+  "schema": "cib2.trace_reanalysis.v1",
+  "runtime_acceptance": "NO",
+  "source": {
+    "commit": "6d5e4a5d5",
+    "runtime_label": "cib2-packv2-r20-busy",
+    "offload_ratio": "20",
+    "trace_basename": "moe-otd-trace-r20-busy.log",
+    "trace_bytes": 66282817,
+    "full_file_e_records": 1183151,
+    "receipt_window": {
+      "skip_e": 9418,
+      "take_e": 1173733
+    }
+  },
+  "receipt_checks": {
+    "hits": {
+      "expected": 1139305,
+      "got": 1139305,
+      "ok": true
+    },
+    "misses": {
+      "expected": 34428,
+      "got": 34428,
+      "ok": true
+    },
+    "miss_bytes": {
+      "expected": 56265818112,
+      "got": 56265818112,
+      "ok": true
+    },
+    "miss_read_s": {
+      "expected": 48.558,
+      "got": 48.558,
+      "ok": true
+    }
+  },
+  "analysis": {
+    "validation_status": "OK",
+    "window": {
+      "skip_e": 9418,
+      "take_e": 1173733,
+      "e_records_parsed": 1173733,
+      "first_t_ns": 36832303600,
+      "last_t_ns": 513854827200,
+      "wall_span_s": 477.0225
+    },
+    "cache": {
+      "hits": 1139305,
+      "misses": 34428,
+      "touches": 1173733,
+      "hit_rate": 0.9707
+    },
+    "memory_transfer": {
+      "miss_bytes": 56265818112,
+      "miss_read_s": 48.558,
+      "miss_transform_s": 0.0,
+      "miss_copy_s": 36.5708,
+      "miss_read_transform_copy_s": 85.1287,
+      "copy_us_per_miss": {
+        "mean": 1062.239,
+        "p50": 603.7,
+        "p95": 1815.0,
+        "p99": 5980.6,
+        "n": 34428
+      },
+      "read_us_per_miss": {
+        "mean": 1410.421,
+        "p50": 1347.3,
+        "p95": 2009.8,
+        "p99": 3196.7,
+        "n": 34428
+      },
+      "copy_bytes_per_miss": 1634304.0,
+      "read_bytes_per_miss": 1634304.0,
+      "logical_read_MiB_s": 1105.06,
+      "effective_copy_MiB_s": 1467.27,
+      "notes": [
+        "copy_ns is wall time of blocking copy_from(..., true); may include GPU queue wait, not pure DMA",
+        "logical_read_MiB_s uses miss_bytes / miss_read_s \u2014 not physical NVMe bandwidth",
+        "effective_copy_MiB_s uses miss_bytes / miss_copy_s \u2014 not physical GPU bandwidth"
+      ]
+    },
+    "layers_by_transfer_cost": [
+      {
+        "layer": 2,
+        "touches": 29591,
+        "hits": 27045,
+        "misses": 2546,
+        "hit_rate": 0.914,
+        "evictions": 2413,
+        "eviction_reloads": 1841,
+        "bytes_loaded": 4160937984,
+        "read_s": 3.5034,
+        "transform_s": 0.0,
+        "copy_s": 2.6906,
+        "top20_reloaded_experts": [
+          {
+            "expert": 7,
+            "misses": 19
+          },
+          {
+            "expert": 222,
+            "misses": 19
+          },
+          {
+            "expert": 132,
+            "misses": 18
+          },
+          {
+            "expert": 1,
+            "misses": 18
+          },
+          {
+            "expert": 236,
+            "misses": 17
+          },
+          {
+            "expert": 177,
+            "misses": 17
+          },
+          {
+            "expert": 246,
+            "misses": 17
+          },
+          {
+            "expert": 212,
+            "misses": 17
+          },
+          {
+            "expert": 119,
+            "misses": 17
+          },
+          {
+            "expert": 127,
+            "misses": 17
+          },
+          {
+            "expert": 242,
+            "misses": 17
+          },
+          {
+            "expert": 247,
+            "misses": 16
+          },
+          {
+            "expert": 221,
+            "misses": 16
+          },
+          {
+            "expert": 243,
+            "misses": 16
+          },
+          {
+            "expert": 98,
+            "misses": 16
+          },
+          {
+            "expert": 73,
+            "misses": 16
+          },
+          {
+            "expert": 211,
+            "misses": 16
+          },
+          {
+            "expert": 230,
+            "misses": 16
+          },
+          {
+            "expert": 101,
+            "misses": 16
+          },
+          {
+            "expert": 25,
+            "misses": 16
+          }
+        ]
+      },
+      {
+        "layer": 0,
+        "touches": 29692,
+        "hits": 27048,
+        "misses": 2644,
+        "hit_rate": 0.911,
+        "evictions": 2555,
+        "eviction_reloads": 2036,
+        "bytes_loaded": 4321099776,
+        "read_s": 3.4395,
+        "transform_s": 0.0,
+        "copy_s": 2.2281,
+        "top20_reloaded_experts": [
+          {
+            "expert": 12,
+            "misses": 21
+          },
+          {
+            "expert": 3,
+            "misses": 21
+          },
+          {
+            "expert": 6,
+            "misses": 21
+          },
+          {
+            "expert": 232,
+            "misses": 20
+          },
+          {
+            "expert": 77,
+            "misses": 20
+          },
+          {
+            "expert": 1,
+            "misses": 19
+          },
+          {
+            "expert": 56,
+            "misses": 19
+          },
+          {
+            "expert": 4,
+            "misses": 19
+          },
+          {
+            "expert": 55,
+            "misses": 19
+          },
+          {
+            "expert": 121,
+            "misses": 19
+          },
+          {
+            "expert": 16,
+            "misses": 19
+          },
+          {
+            "expert": 26,
+            "misses": 19
+          },
+          {
+            "expert": 8,
+            "misses": 19
+          },
+          {
+            "expert": 246,
+            "misses": 19
+          },
+          {
+            "expert": 169,
+            "misses": 18
+          },
+          {
+            "expert": 28,
+            "misses": 18
+          },
+          {
+            "expert": 132,
+            "misses": 18
+          },
+          {
+            "expert": 20,
+            "misses": 18
+          },
+          {
+            "expert": 131,
+            "misses": 18
+          },
+          {
+            "expert": 109,
+            "misses": 17
+          }
+        ]
+      },
+      {
+        "layer": 1,
+        "touches": 29492,
+        "hits": 27389,
+        "misses": 2103,
+        "hit_rate": 0.9287,
+        "evictions": 1982,
+        "eviction_reloads": 1588,
+        "bytes_loaded": 3436941312,
+        "read_s": 2.8981,
+        "transform_s": 0.0,
+        "copy_s": 2.0973,
+        "top20_reloaded_experts": [
+          {
+            "expert": 50,
+            "misses": 19
+          },
+          {
+            "expert": 235,
+            "misses": 16
+          },
+          {
+            "expert": 111,
+            "misses": 16
+          },
+          {
+            "expert": 117,
+            "misses": 16
+          },
+          {
+            "expert": 30,
+            "misses": 16
+          },
+          {
+            "expert": 24,
+            "misses": 16
+          },
+          {
+            "expert": 0,
+            "misses": 16
+          },
+          {
+            "expert": 246,
+            "misses": 16
+          },
+          {
+            "expert": 126,
+            "misses": 15
+          },
+          {
+            "expert": 130,
+            "misses": 15
+          },
+          {
+            "expert": 4,
+            "misses": 15
+          },
+          {
+            "expert": 180,
+            "misses": 15
+          },
+          {
+            "expert": 236,
+            "misses": 15
+          },
+          {
+            "expert": 226,
+            "misses": 15
+          },
+          {
+            "expert": 186,
+            "misses": 15
+          },
+          {
+            "expert": 239,
+            "misses": 15
+          },
+          {
+            "expert": 211,
+            "misses": 15
+          },
+          {
+            "expert": 189,
+            "misses": 15
+          },
+          {
+            "expert": 90,
+            "misses": 15
+          },
+          {
+            "expert": 148,
+            "misses": 15
+          }
+        ]
+      },
+      {
+        "layer": 26,
+        "touches": 29405,
+        "hits": 28484,
+        "misses": 921,
+        "hit_rate": 0.9687,
+        "evictions": 780,
+        "eviction_reloads": 677,
+        "bytes_loaded": 1505193984,
+        "read_s": 1.5113,
+        "transform_s": 0.0,
+        "copy_s": 3.1211,
+        "top20_reloaded_experts": [
+          {
+            "expert": 248,
+            "misses": 8
+          },
+          {
+            "expert": 6,
+            "misses": 8
+          },
+          {
+            "expert": 18,
+            "misses": 8
+          },
+          {
+            "expert": 43,
+            "misses": 8
+          },
+          {
+            "expert": 10,
+            "misses": 8
+          },
+          {
+            "expert": 9,
+            "misses": 8
+          },
+          {
+            "expert": 251,
+            "misses": 8
+          },
+          {
+            "expert": 241,
+            "misses": 8
+          },
+          {
+            "expert": 14,
+            "misses": 8
+          },
+          {
+            "expert": 93,
+            "misses": 8
+          },
+          {
+            "expert": 11,
+            "misses": 8
+          },
+          {
+            "expert": 247,
+            "misses": 8
+          },
+          {
+            "expert": 254,
+            "misses": 8
+          },
+          {
+            "expert": 228,
+            "misses": 8
+          },
+          {
+            "expert": 16,
+            "misses": 8
+          },
+          {
+            "expert": 250,
+            "misses": 8
+          },
+          {
+            "expert": 249,
+            "misses": 8
+          },
+          {
+            "expert": 7,
+            "misses": 8
+          },
+          {
+            "expert": 5,
+            "misses": 8
+          },
+          {
+            "expert": 204,
+            "misses": 8
+          }
+        ]
+      },
+      {
+        "layer": 3,
+        "touches": 29439,
+        "hits": 28119,
+        "misses": 1320,
+        "hit_rate": 0.9552,
+        "evictions": 1203,
+        "eviction_reloads": 984,
+        "bytes_loaded": 2157281280,
+        "read_s": 1.8705,
+        "transform_s": 0.0,
+        "copy_s": 1.5041,
+        "top20_reloaded_experts": [
+          {
+            "expert": 52,
+            "misses": 13
+          },
+          {
+            "expert": 162,
+            "misses": 13
+          },
+          {
+            "expert": 180,
+            "misses": 12
+          },
+          {
+            "expert": 242,
+            "misses": 11
+          },
+          {
+            "expert": 109,
+            "misses": 11
+          },
+          {
+            "expert": 33,
+            "misses": 11
+          },
+          {
+            "expert": 137,
+            "misses": 11
+          },
+          {
+            "expert": 210,
+            "misses": 11
+          },
+          {
+            "expert": 193,
+            "misses": 11
+          },
+          {
+            "expert": 254,
+            "misses": 11
+          },
+          {
+            "expert": 3,
+            "misses": 11
+          },
+          {
+            "expert": 185,
+            "misses": 11
+          },
+          {
+            "expert": 63,
+            "misses": 11
+          },
+          {
+            "expert": 5,
+            "misses": 11
+          },
+          {
+            "expert": 145,
+            "misses": 11
+          },
+          {
+            "expert": 149,
+            "misses": 11
+          },
+          {
+            "expert": 206,
+            "misses": 11
+          },
+          {
+            "expert": 79,
+            "misses": 11
+          },
+          {
+            "expert": 80,
+            "misses": 10
+          },
+          {
+            "expert": 9,
+            "misses": 10
+          }
+        ]
+      },
+      {
+        "layer": 23,
+        "touches": 29520,
+        "hits": 28467,
+        "misses": 1053,
+        "hit_rate": 0.9643,
+        "evictions": 933,
+        "eviction_reloads": 836,
+        "bytes_loaded": 1720922112,
+        "read_s": 1.7128,
+        "transform_s": 0.0,
+        "copy_s": 1.2125,
+        "top20_reloaded_experts": [
+          {
+            "expert": 58,
+            "misses": 9
+          },
+          {
+            "expert": 124,
+            "misses": 8
+          },
+          {
+            "expert": 249,
+            "misses": 8
+          },
+          {
+            "expert": 19,
+            "misses": 8
+          },
+          {
+            "expert": 251,
+            "misses": 8
+          },
+          {
+            "expert": 11,
+            "misses": 8
+          },
+          {
+            "expert": 241,
+            "misses": 8
+          },
+          {
+            "expert": 223,
+            "misses": 8
+          },
+          {
+            "expert": 236,
+            "misses": 8
+          },
+          {
+            "expert": 0,
+            "misses": 8
+          },
+          {
+            "expert": 228,
+            "misses": 8
+          },
+          {
+            "expert": 219,
+            "misses": 8
+          },
+          {
+            "expert": 181,
+            "misses": 8
+          },
+          {
+            "expert": 243,
+            "misses": 8
+          },
+          {
+            "expert": 229,
+            "misses": 8
+          },
+          {
+            "expert": 252,
+            "misses": 8
+          },
+          {
+            "expert": 7,
+            "misses": 8
+          },
+          {
+            "expert": 176,
+            "misses": 8
+          },
+          {
+            "expert": 247,
+            "misses": 8
+          },
+          {
+            "expert": 20,
+            "misses": 8
+          }
+        ]
+      },
+      {
+        "layer": 22,
+        "touches": 29453,
+        "hits": 28448,
+        "misses": 1005,
+        "hit_rate": 0.9659,
+        "evictions": 877,
+        "eviction_reloads": 783,
+        "bytes_loaded": 1642475520,
+        "read_s": 1.3566,
+        "transform_s": 0.0,
+        "copy_s": 1.2124,
+        "top20_reloaded_experts": [
+          {
+            "expert": 6,
+            "misses": 9
+          },
+          {
+            "expert": 47,
+            "misses": 9
+          },
+          {
+            "expert": 23,
+            "misses": 9
+          },
+          {
+            "expert": 21,
+            "misses": 8
+          },
+          {
+            "expert": 212,
+            "misses": 8
+          },
+          {
+            "expert": 244,
+            "misses": 8
+          },
+          {
+            "expert": 230,
+            "misses": 8
+          },
+          {
+            "expert": 249,
+            "misses": 8
+          },
+          {
+            "expert": 60,
+            "misses": 8
+          },
+          {
+            "expert": 22,
+            "misses": 8
+          },
+          {
+            "expert": 253,
+            "misses": 8
+          },
+          {
+            "expert": 1,
+            "misses": 8
+          },
+          {
+            "expert": 250,
+            "misses": 8
+          },
+          {
+            "expert": 27,
+            "misses": 8
+          },
+          {
+            "expert": 245,
+            "misses": 8
+          },
+          {
+            "expert": 9,
+            "misses": 8
+          },
+          {
+            "expert": 236,
+            "misses": 8
+          },
+          {
+            "expert": 240,
+            "misses": 8
+          },
+          {
+            "expert": 37,
+            "misses": 8
+          },
+          {
+            "expert": 13,
+            "misses": 8
+          }
+        ]
+      },
+      {
+        "layer": 31,
+        "touches": 29420,
+        "hits": 28472,
+        "misses": 948,
+        "hit_rate": 0.9678,
+        "evictions": 814,
+        "eviction_reloads": 714,
+        "bytes_loaded": 1549320192,
+        "read_s": 1.3077,
+        "transform_s": 0.0,
+        "copy_s": 1.0244,
+        "top20_reloaded_experts": [
+          {
+            "expert": 241,
+            "misses": 8
+          },
+          {
+            "expert": 2,
+            "misses": 8
+          },
+          {
+            "expert": 23,
+            "misses": 8
+          },
+          {
+            "expert": 45,
+            "misses": 8
+          },
+          {
+            "expert": 247,
+            "misses": 8
+          },
+          {
+            "expert": 56,
+            "misses": 8
+          },
+          {
+            "expert": 12,
+            "misses": 8
+          },
+          {
+            "expert": 243,
+            "misses": 8
+          },
+          {
+            "expert": 242,
+            "misses": 8
+          },
+          {
+            "expert": 255,
+            "misses": 8
+          },
+          {
+            "expert": 3,
+            "misses": 8
+          },
+          {
+            "expert": 53,
+            "misses": 8
+          },
+          {
+            "expert": 214,
+            "misses": 8
+          },
+          {
+            "expert": 187,
+            "misses": 8
+          },
+          {
+            "expert": 10,
+            "misses": 8
+          },
+          {
+            "expert": 244,
+            "misses": 8
+          },
+          {
+            "expert": 15,
+            "misses": 8
+          },
+          {
+            "expert": 174,
+            "misses": 8
+          },
+          {
+            "expert": 249,
+            "misses": 8
+          },
+          {
+            "expert": 246,
+            "misses": 8
+          }
+        ]
+      },
+      {
+        "layer": 12,
+        "touches": 29340,
+        "hits": 28407,
+        "misses": 933,
+        "hit_rate": 0.9682,
+        "evictions": 791,
+        "eviction_reloads": 666,
+        "bytes_loaded": 1524805632,
+        "read_s": 1.3,
+        "transform_s": 0.0,
+        "copy_s": 1.0309,
+        "top20_reloaded_experts": [
+          {
+            "expert": 70,
+            "misses": 8
+          },
+          {
+            "expert": 92,
+            "misses": 8
+          },
+          {
+            "expert": 154,
+            "misses": 8
+          },
+          {
+            "expert": 253,
+            "misses": 8
+          },
+          {
+            "expert": 165,
+            "misses": 7
+          },
+          {
+            "expert": 248,
+            "misses": 7
+          },
+          {
+            "expert": 58,
+            "misses": 7
+          },
+          {
+            "expert": 209,
+            "misses": 7
+          },
+          {
+            "expert": 18,
+            "misses": 7
+          },
+          {
+            "expert": 3,
+            "misses": 7
+          },
+          {
+            "expert": 41,
+            "misses": 7
+          },
+          {
+            "expert": 110,
+            "misses": 7
+          },
+          {
+            "expert": 69,
+            "misses": 7
+          },
+          {
+            "expert": 95,
+            "misses": 7
+          },
+          {
+            "expert": 49,
+            "misses": 7
+          },
+          {
+            "expert": 122,
+            "misses": 7
+          },
+          {
+            "expert": 28,
+            "misses": 7
+          },
+          {
+            "expert": 228,
+            "misses": 7
+          },
+          {
+            "expert": 57,
+            "misses": 7
+          },
+          {
+            "expert": 129,
+            "misses": 7
+          }
+        ]
+      },
+      {
+        "layer": 4,
+        "touches": 29342,
+        "hits": 28308,
+        "misses": 1034,
+        "hit_rate": 0.9648,
+        "evictions": 908,
+        "eviction_reloads": 738,
+        "bytes_loaded": 1689870336,
+        "read_s": 1.3912,
+        "transform_s": 0.0,
+        "copy_s": 0.9352,
+        "top20_reloaded_experts": [
+          {
+            "expert": 255,
+            "misses": 10
+          },
+          {
+            "expert": 75,
+            "misses": 9
+          },
+          {
+            "expert": 101,
+            "misses": 9
+          },
+          {
+            "expert": 217,
+            "misses": 9
+          },
+          {
+            "expert": 27,
+            "misses": 9
+          },
+          {
+            "expert": 83,
+            "misses": 9
+          },
+          {
+            "expert": 84,
+            "misses": 8
+          },
+          {
+            "expert": 226,
+            "misses": 8
+          },
+          {
+            "expert": 247,
+            "misses": 8
+          },
+          {
+            "expert": 251,
+            "misses": 8
+          },
+          {
+            "expert": 138,
+            "misses": 8
+          },
+          {
+            "expert": 59,
+            "misses": 8
+          },
+          {
+            "expert": 248,
+            "misses": 8
+          },
+          {
+            "expert": 39,
+            "misses": 8
+          },
+          {
+            "expert": 47,
+            "misses": 8
+          },
+          {
+            "expert": 16,
+            "misses": 8
+          },
+          {
+            "expert": 171,
+            "misses": 8
+          },
+          {
+            "expert": 1,
+            "misses": 8
+          },
+          {
+            "expert": 106,
+            "misses": 8
+          },
+          {
+            "expert": 49,
+            "misses": 8
+          }
+        ]
+      },
+      {
+        "layer": 24,
+        "touches": 29380,
+        "hits": 28408,
+        "misses": 972,
+        "hit_rate": 0.9669,
+        "evictions": 834,
+        "eviction_reloads": 756,
+        "bytes_loaded": 1588543488,
+        "read_s": 1.2413,
+        "transform_s": 0.0,
+        "copy_s": 0.9797,
+        "top20_reloaded_experts": [
+          {
+            "expert": 83,
+            "misses": 9
+          },
+          {
+            "expert": 127,
+            "misses": 8
+          },
+          {
+            "expert": 77,
+            "misses": 8
+          },
+          {
+            "expert": 229,
+            "misses": 8
+          },
+          {
+            "expert": 243,
+            "misses": 8
+          },
+          {
+            "expert": 248,
+            "misses": 8
+          },
+          {
+            "expert": 249,
+            "misses": 8
+          },
+          {
+            "expert": 75,
+            "misses": 8
+          },
+          {
+            "expert": 239,
+            "misses": 8
+          },
+          {
+            "expert": 7,
+            "misses": 8
+          },
+          {
+            "expert": 19,
+            "misses": 8
+          },
+          {
+            "expert": 214,
+            "misses": 8
+          },
+          {
+            "expert": 34,
+            "misses": 8
+          },
+          {
+            "expert": 154,
+            "misses": 8
+          },
+          {
+            "expert": 3,
+            "misses": 8
+          },
+          {
+            "expert": 253,
+            "misses": 8
+          },
+          {
+            "expert": 6,
+            "misses": 8
+          },
+          {
+            "expert": 27,
+            "misses": 8
+          },
+          {
+            "expert": 255,
+            "misses": 8
+          },
+          {
+            "expert": 195,
+            "misses": 8
+          }
+        ]
+      },
+      {
+        "layer": 17,
+        "touches": 29350,
+        "hits": 28432,
+        "misses": 918,
+        "hit_rate": 0.9687,
+        "evictions": 785,
+        "eviction_reloads": 695,
+        "bytes_loaded": 1500291072,
+        "read_s": 1.2932,
+        "transform_s": 0.0,
+        "copy_s": 0.9005,
+        "top20_reloaded_experts": [
+          {
+            "expert": 7,
+            "misses": 9
+          },
+          {
+            "expert": 24,
+            "misses": 9
+          },
+          {
+            "expert": 14,
+            "misses": 8
+          },
+          {
+            "expert": 2,
+            "misses": 8
+          },
+          {
+            "expert": 84,
+            "misses": 8
+          },
+          {
+            "expert": 1,
+            "misses": 8
+          },
+          {
+            "expert": 236,
+            "misses": 8
+          },
+          {
+            "expert": 30,
+            "misses": 8
+          },
+          {
+            "expert": 79,
+            "misses": 8
+          },
+          {
+            "expert": 132,
+            "misses": 8
+          },
+          {
+            "expert": 8,
+            "misses": 8
+          },
+          {
+            "expert": 235,
+            "misses": 8
+          },
+          {
+            "expert": 255,
+            "misses": 8
+          },
+          {
+            "expert": 251,
+            "misses": 8
+          },
+          {
+            "expert": 215,
+            "misses": 8
+          },
+          {
+            "expert": 237,
+            "misses": 8
+          },
+          {
+            "expert": 9,
+            "misses": 8
+          },
+          {
+            "expert": 4,
+            "misses": 8
+          },
+          {
+            "expert": 238,
+            "misses": 8
+          },
+          {
+            "expert": 80,
+            "misses": 8
+          }
+        ]
+      },
+      {
+        "layer": 29,
+        "touches": 29423,
+        "hits": 28471,
+        "misses": 952,
+        "hit_rate": 0.9676,
+        "evictions": 821,
+        "eviction_reloads": 730,
+        "bytes_loaded": 1555857408,
+        "read_s": 1.2629,
+        "transform_s": 0.0,
+        "copy_s": 0.8519,
+        "top20_reloaded_experts": [
+          {
+            "expert": 63,
+            "misses": 9
+          },
+          {
+            "expert": 251,
+            "misses": 9
+          },
+          {
+            "expert": 51,
+            "misses": 8
+          },
+          {
+            "expert": 14,
+            "misses": 8
+          },
+          {
+            "expert": 226,
+            "misses": 8
+          },
+          {
+            "expert": 253,
+            "misses": 8
+          },
+          {
+            "expert": 234,
+            "misses": 8
+          },
+          {
+            "expert": 242,
+            "misses": 8
+          },
+          {
+            "expert": 28,
+            "misses": 8
+          },
+          {
+            "expert": 232,
+            "misses": 8
+          },
+          {
+            "expert": 27,
+            "misses": 8
+          },
+          {
+            "expert": 9,
+            "misses": 8
+          },
+          {
+            "expert": 245,
+            "misses": 8
+          },
+          {
+            "expert": 11,
+            "misses": 8
+          },
+          {
+            "expert": 227,
+            "misses": 8
+          },
+          {
+            "expert": 45,
+            "misses": 8
+          },
+          {
+            "expert": 132,
+            "misses": 8
+          },
+          {
+            "expert": 166,
+            "misses": 8
+          },
+          {
+            "expert": 249,
+            "misses": 8
+          },
+          {
+            "expert": 41,
+            "misses": 8
+          }
+        ]
+      },
+      {
+        "layer": 27,
+        "touches": 29398,
+        "hits": 28523,
+        "misses": 875,
+        "hit_rate": 0.9702,
+        "evictions": 744,
+        "eviction_reloads": 670,
+        "bytes_loaded": 1430016000,
+        "read_s": 1.1343,
+        "transform_s": 0.0,
+        "copy_s": 0.9775,
+        "top20_reloaded_experts": [
+          {
+            "expert": 254,
+            "misses": 8
+          },
+          {
+            "expert": 248,
+            "misses": 8
+          },
+          {
+            "expert": 227,
+            "misses": 8
+          },
+          {
+            "expert": 9,
+            "misses": 8
+          },
+          {
+            "expert": 2,
+            "misses": 8
+          },
+          {
+            "expert": 37,
+            "misses": 8
+          },
+          {
+            "expert": 36,
+            "misses": 8
+          },
+          {
+            "expert": 213,
+            "misses": 8
+          },
+          {
+            "expert": 249,
+            "misses": 8
+          },
+          {
+            "expert": 6,
+            "misses": 8
+          },
+          {
+            "expert": 13,
+            "misses": 8
+          },
+          {
+            "expert": 3,
+            "misses": 8
+          },
+          {
+            "expert": 232,
+            "misses": 8
+          },
+          {
+            "expert": 209,
+            "misses": 8
+          },
+          {
+            "expert": 243,
+            "misses": 8
+          },
+          {
+            "expert": 167,
+            "misses": 8
+          },
+          {
+            "expert": 19,
+            "misses": 8
+          },
+          {
+            "expert": 251,
+            "misses": 8
+          },
+          {
+            "expert": 5,
+            "misses": 8
+          },
+          {
+            "expert": 138,
+            "misses": 7
+          }
+        ]
+      },
+      {
+        "layer": 6,
+        "touches": 29218,
+        "hits": 28420,
+        "misses": 798,
+        "hit_rate": 0.9727,
+        "evictions": 658,
+        "eviction_reloads": 553,
+        "bytes_loaded": 1304174592,
+        "read_s": 1.1912,
+        "transform_s": 0.0,
+        "copy_s": 0.9081,
+        "top20_reloaded_experts": [
+          {
+            "expert": 116,
+            "misses": 9
+          },
+          {
+            "expert": 250,
+            "misses": 8
+          },
+          {
+            "expert": 253,
+            "misses": 7
+          },
+          {
+            "expert": 28,
+            "misses": 7
+          },
+          {
+            "expert": 217,
+            "misses": 7
+          },
+          {
+            "expert": 47,
+            "misses": 7
+          },
+          {
+            "expert": 147,
+            "misses": 7
+          },
+          {
+            "expert": 180,
+            "misses": 7
+          },
+          {
+            "expert": 242,
+            "misses": 7
+          },
+          {
+            "expert": 249,
+            "misses": 7
+          },
+          {
+            "expert": 17,
+            "misses": 7
+          },
+          {
+            "expert": 48,
+            "misses": 7
+          },
+          {
+            "expert": 252,
+            "misses": 7
+          },
+          {
+            "expert": 27,
+            "misses": 6
+          },
+          {
+            "expert": 84,
+            "misses": 6
+          },
+          {
+            "expert": 121,
+            "misses": 6
+          },
+          {
+            "expert": 101,
+            "misses": 6
+          },
+          {
+            "expert": 11,
+            "misses": 6
+          },
+          {
+            "expert": 45,
+            "misses": 6
+          },
+          {
+            "expert": 61,
+            "misses": 6
+          }
+        ]
+      },
+      {
+        "layer": 10,
+        "touches": 29347,
+        "hits": 28465,
+        "misses": 882,
+        "hit_rate": 0.9699,
+        "evictions": 743,
+        "eviction_reloads": 653,
+        "bytes_loaded": 1441456128,
+        "read_s": 1.2978,
+        "transform_s": 0.0,
+        "copy_s": 0.6875,
+        "top20_reloaded_experts": [
+          {
+            "expert": 10,
+            "misses": 9
+          },
+          {
+            "expert": 46,
+            "misses": 8
+          },
+          {
+            "expert": 231,
+            "misses": 8
+          },
+          {
+            "expert": 152,
+            "misses": 8
+          },
+          {
+            "expert": 29,
+            "misses": 8
+          },
+          {
+            "expert": 114,
+            "misses": 8
+          },
+          {
+            "expert": 0,
+            "misses": 8
+          },
+          {
+            "expert": 141,
+            "misses": 8
+          },
+          {
+            "expert": 249,
+            "misses": 8
+          },
+          {
+            "expert": 3,
+            "misses": 8
+          },
+          {
+            "expert": 118,
+            "misses": 7
+          },
+          {
+            "expert": 32,
+            "misses": 7
+          },
+          {
+            "expert": 89,
+            "misses": 7
+          },
+          {
+            "expert": 74,
+            "misses": 7
+          },
+          {
+            "expert": 61,
+            "misses": 7
+          },
+          {
+            "expert": 13,
+            "misses": 7
+          },
+          {
+            "expert": 47,
+            "misses": 7
+          },
+          {
+            "expert": 189,
+            "misses": 7
+          },
+          {
+            "expert": 69,
+            "misses": 7
+          },
+          {
+            "expert": 41,
+            "misses": 7
+          }
+        ]
+      },
+      {
+        "layer": 11,
+        "touches": 29381,
+        "hits": 28523,
+        "misses": 858,
+        "hit_rate": 0.9708,
+        "evictions": 729,
+        "eviction_reloads": 646,
+        "bytes_loaded": 1402232832,
+        "read_s": 1.2353,
+        "transform_s": 0.0,
+        "copy_s": 0.706,
+        "top20_reloaded_experts": [
+          {
+            "expert": 81,
+            "misses": 9
+          },
+          {
+            "expert": 28,
+            "misses": 9
+          },
+          {
+            "expert": 76,
+            "misses": 8
+          },
+          {
+            "expert": 233,
+            "misses": 8
+          },
+          {
+            "expert": 243,
+            "misses": 8
+          },
+          {
+            "expert": 101,
+            "misses": 8
+          },
+          {
+            "expert": 236,
+            "misses": 8
+          },
+          {
+            "expert": 196,
+            "misses": 8
+          },
+          {
+            "expert": 252,
+            "misses": 8
+          },
+          {
+            "expert": 250,
+            "misses": 8
+          },
+          {
+            "expert": 125,
+            "misses": 7
+          },
+          {
+            "expert": 177,
+            "misses": 7
+          },
+          {
+            "expert": 90,
+            "misses": 7
+          },
+          {
+            "expert": 26,
+            "misses": 7
+          },
+          {
+            "expert": 193,
+            "misses": 7
+          },
+          {
+            "expert": 38,
+            "misses": 7
+          },
+          {
+            "expert": 87,
+            "misses": 7
+          },
+          {
+            "expert": 6,
+            "misses": 7
+          },
+          {
+            "expert": 16,
+            "misses": 7
+          },
+          {
+            "expert": 40,
+            "misses": 7
+          }
+        ]
+      },
+      {
+        "layer": 35,
+        "touches": 29403,
+        "hits": 28587,
+        "misses": 816,
+        "hit_rate": 0.9722,
+        "evictions": 679,
+        "eviction_reloads": 617,
+        "bytes_loaded": 1333592064,
+        "read_s": 1.1413,
+        "transform_s": 0.0,
+        "copy_s": 0.7635,
+        "top20_reloaded_experts": [
+          {
+            "expert": 252,
+            "misses": 8
+          },
+          {
+            "expert": 19,
+            "misses": 8
+          },
+          {
+            "expert": 51,
+            "misses": 8
+          },
+          {
+            "expert": 8,
+            "misses": 8
+          },
+          {
+            "expert": 13,
+            "misses": 8
+          },
+          {
+            "expert": 3,
+            "misses": 8
+          },
+          {
+            "expert": 244,
+            "misses": 8
+          },
+          {
+            "expert": 234,
+            "misses": 8
+          },
+          {
+            "expert": 250,
+            "misses": 8
+          },
+          {
+            "expert": 15,
+            "misses": 8
+          },
+          {
+            "expert": 245,
+            "misses": 8
+          },
+          {
+            "expert": 5,
+            "misses": 8
+          },
+          {
+            "expert": 2,
+            "misses": 8
+          },
+          {
+            "expert": 20,
+            "misses": 8
+          },
+          {
+            "expert": 0,
+            "misses": 8
+          },
+          {
+            "expert": 7,
+            "misses": 8
+          },
+          {
+            "expert": 253,
+            "misses": 8
+          },
+          {
+            "expert": 233,
+            "misses": 8
+          },
+          {
+            "expert": 17,
+            "misses": 8
+          },
+          {
+            "expert": 1,
+            "misses": 8
+          }
+        ]
+      },
+      {
+        "layer": 5,
+        "touches": 29282,
+        "hits": 28420,
+        "misses": 862,
+        "hit_rate": 0.9706,
+        "evictions": 711,
+        "eviction_reloads": 611,
+        "bytes_loaded": 1408770048,
+        "read_s": 1.2183,
+        "transform_s": 0.0,
+        "copy_s": 0.6834,
+        "top20_reloaded_experts": [
+          {
+            "expert": 40,
+            "misses": 8
+          },
+          {
+            "expert": 111,
+            "misses": 8
+          },
+          {
+            "expert": 17,
+            "misses": 8
+          },
+          {
+            "expert": 243,
+            "misses": 8
+          },
+          {
+            "expert": 183,
+            "misses": 8
+          },
+          {
+            "expert": 12,
+            "misses": 8
+          },
+          {
+            "expert": 225,
+            "misses": 8
+          },
+          {
+            "expert": 39,
+            "misses": 8
+          },
+          {
+            "expert": 38,
+            "misses": 8
+          },
+          {
+            "expert": 237,
+            "misses": 7
+          },
+          {
+            "expert": 33,
+            "misses": 7
+          },
+          {
+            "expert": 141,
+            "misses": 7
+          },
+          {
+            "expert": 162,
+            "misses": 7
+          },
+          {
+            "expert": 248,
+            "misses": 7
+          },
+          {
+            "expert": 207,
+            "misses": 7
+          },
+          {
+            "expert": 245,
+            "misses": 7
+          },
+          {
+            "expert": 66,
+            "misses": 7
+          },
+          {
+            "expert": 212,
+            "misses": 7
+          },
+          {
+            "expert": 75,
+            "misses": 7
+          },
+          {
+            "expert": 241,
+            "misses": 7
+          }
+        ]
+      },
+      {
+        "layer": 34,
+        "touches": 29428,
+        "hits": 28599,
+        "misses": 829,
+        "hit_rate": 0.9718,
+        "evictions": 699,
+        "eviction_reloads": 643,
+        "bytes_loaded": 1354838016,
+        "read_s": 1.1704,
+        "transform_s": 0.0,
+        "copy_s": 0.7167,
+        "top20_reloaded_experts": [
+          {
+            "expert": 225,
+            "misses": 8
+          },
+          {
+            "expert": 224,
+            "misses": 8
+          },
+          {
+            "expert": 4,
+            "misses": 8
+          },
+          {
+            "expert": 251,
+            "misses": 8
+          },
+          {
+            "expert": 28,
+            "misses": 8
+          },
+          {
+            "expert": 10,
+            "misses": 8
+          },
+          {
+            "expert": 247,
+            "misses": 8
+          },
+          {
+            "expert": 230,
+            "misses": 8
+          },
+          {
+            "expert": 5,
+            "misses": 8
+          },
+          {
+            "expert": 8,
+            "misses": 8
+          },
+          {
+            "expert": 228,
+            "misses": 8
+          },
+          {
+            "expert": 17,
+            "misses": 8
+          },
+          {
+            "expert": 245,
+            "misses": 8
+          },
+          {
+            "expert": 229,
+            "misses": 8
+          },
+          {
+            "expert": 13,
+            "misses": 8
+          },
+          {
+            "expert": 23,
+            "misses": 8
+          },
+          {
+            "expert": 254,
+            "misses": 8
+          },
+          {
+            "expert": 24,
+            "misses": 8
+          },
+          {
+            "expert": 248,
+            "misses": 8
+          },
+          {
+            "expert": 210,
+            "misses": 8
+          }
+        ]
+      },
+      {
+        "layer": 19,
+        "touches": 29314,
+        "hits": 28605,
+        "misses": 709,
+        "hit_rate": 0.9758,
+        "evictions": 566,
+        "eviction_reloads": 488,
+        "bytes_loaded": 1158721536,
+        "read_s": 1.0101,
+        "transform_s": 0.0,
+        "copy_s": 0.832,
+        "top20_reloaded_experts": [
+          {
+            "expert": 19,
+            "misses": 8
+          },
+          {
+            "expert": 233,
+            "misses": 8
+          },
+          {
+            "expert": 246,
+            "misses": 7
+          },
+          {
+            "expert": 242,
+            "misses": 7
+          },
+          {
+            "expert": 50,
+            "misses": 7
+          },
+          {
+            "expert": 1,
+            "misses": 7
+          },
+          {
+            "expert": 251,
+            "misses": 7
+          },
+          {
+            "expert": 32,
+            "misses": 6
+          },
+          {
+            "expert": 6,
+            "misses": 6
+          },
+          {
+            "expert": 244,
+            "misses": 6
+          },
+          {
+            "expert": 241,
+            "misses": 6
+          },
+          {
+            "expert": 158,
+            "misses": 6
+          },
+          {
+            "expert": 77,
+            "misses": 6
+          },
+          {
+            "expert": 64,
+            "misses": 6
+          },
+          {
+            "expert": 102,
+            "misses": 6
+          },
+          {
+            "expert": 104,
+            "misses": 6
+          },
+          {
+            "expert": 132,
+            "misses": 6
+          },
+          {
+            "expert": 198,
+            "misses": 6
+          },
+          {
+            "expert": 238,
+            "misses": 6
+          },
+          {
+            "expert": 239,
+            "misses": 6
+          }
+        ]
+      },
+      {
+        "layer": 32,
+        "touches": 29396,
+        "hits": 28631,
+        "misses": 765,
+        "hit_rate": 0.974,
+        "evictions": 632,
+        "eviction_reloads": 575,
+        "bytes_loaded": 1250242560,
+        "read_s": 1.0668,
+        "transform_s": 0.0,
+        "copy_s": 0.7388,
+        "top20_reloaded_experts": [
+          {
+            "expert": 5,
+            "misses": 9
+          },
+          {
+            "expert": 251,
+            "misses": 8
+          },
+          {
+            "expert": 6,
+            "misses": 8
+          },
+          {
+            "expert": 3,
+            "misses": 8
+          },
+          {
+            "expert": 254,
+            "misses": 8
+          },
+          {
+            "expert": 248,
+            "misses": 8
+          },
+          {
+            "expert": 152,
+            "misses": 8
+          },
+          {
+            "expert": 244,
+            "misses": 8
+          },
+          {
+            "expert": 253,
+            "misses": 8
+          },
+          {
+            "expert": 231,
+            "misses": 8
+          },
+          {
+            "expert": 82,
+            "misses": 7
+          },
+          {
+            "expert": 18,
+            "misses": 7
+          },
+          {
+            "expert": 240,
+            "misses": 7
+          },
+          {
+            "expert": 8,
+            "misses": 7
+          },
+          {
+            "expert": 44,
+            "misses": 7
+          },
+          {
+            "expert": 245,
+            "misses": 7
+          },
+          {
+            "expert": 218,
+            "misses": 7
+          },
+          {
+            "expert": 201,
+            "misses": 7
+          },
+          {
+            "expert": 21,
+            "misses": 7
+          },
+          {
+            "expert": 40,
+            "misses": 7
+          }
+        ]
+      },
+      {
+        "layer": 16,
+        "touches": 29303,
+        "hits": 28638,
+        "misses": 665,
+        "hit_rate": 0.9773,
+        "evictions": 517,
+        "eviction_reloads": 450,
+        "bytes_loaded": 1086812160,
+        "read_s": 0.9795,
+        "transform_s": 0.0,
+        "copy_s": 0.7687,
+        "top20_reloaded_experts": [
+          {
+            "expert": 231,
+            "misses": 8
+          },
+          {
+            "expert": 137,
+            "misses": 8
+          },
+          {
+            "expert": 13,
+            "misses": 8
+          },
+          {
+            "expert": 141,
+            "misses": 7
+          },
+          {
+            "expert": 237,
+            "misses": 7
+          },
+          {
+            "expert": 217,
+            "misses": 6
+          },
+          {
+            "expert": 204,
+            "misses": 6
+          },
+          {
+            "expert": 62,
+            "misses": 6
+          },
+          {
+            "expert": 79,
+            "misses": 6
+          },
+          {
+            "expert": 25,
+            "misses": 6
+          },
+          {
+            "expert": 244,
+            "misses": 6
+          },
+          {
+            "expert": 240,
+            "misses": 6
+          },
+          {
+            "expert": 71,
+            "misses": 6
+          },
+          {
+            "expert": 18,
+            "misses": 6
+          },
+          {
+            "expert": 41,
+            "misses": 6
+          },
+          {
+            "expert": 39,
+            "misses": 5
+          },
+          {
+            "expert": 246,
+            "misses": 5
+          },
+          {
+            "expert": 7,
+            "misses": 5
+          },
+          {
+            "expert": 194,
+            "misses": 5
+          },
+          {
+            "expert": 247,
+            "misses": 5
+          }
+        ]
+      },
+      {
+        "layer": 33,
+        "touches": 29408,
+        "hits": 28633,
+        "misses": 775,
+        "hit_rate": 0.9736,
+        "evictions": 638,
+        "eviction_reloads": 572,
+        "bytes_loaded": 1266585600,
+        "read_s": 1.0505,
+        "transform_s": 0.0,
+        "copy_s": 0.6658,
+        "top20_reloaded_experts": [
+          {
+            "expert": 2,
+            "misses": 9
+          },
+          {
+            "expert": 11,
+            "misses": 8
+          },
+          {
+            "expert": 240,
+            "misses": 8
+          },
+          {
+            "expert": 247,
+            "misses": 8
+          },
+          {
+            "expert": 253,
+            "misses": 8
+          },
+          {
+            "expert": 239,
+            "misses": 8
+          },
+          {
+            "expert": 252,
+            "misses": 8
+          },
+          {
+            "expert": 244,
+            "misses": 8
+          },
+          {
+            "expert": 28,
+            "misses": 8
+          },
+          {
+            "expert": 237,
+            "misses": 8
+          },
+          {
+            "expert": 250,
+            "misses": 8
+          },
+          {
+            "expert": 235,
+            "misses": 8
+          },
+          {
+            "expert": 13,
+            "misses": 8
+          },
+          {
+            "expert": 17,
+            "misses": 8
+          },
+          {
+            "expert": 145,
+            "misses": 8
+          },
+          {
+            "expert": 4,
+            "misses": 8
+          },
+          {
+            "expert": 249,
+            "misses": 8
+          },
+          {
+            "expert": 15,
+            "misses": 8
+          },
+          {
+            "expert": 254,
+            "misses": 8
+          },
+          {
+            "expert": 26,
+            "misses": 8
+          }
+        ]
+      },
+      {
+        "layer": 30,
+        "touches": 29405,
+        "hits": 28682,
+        "misses": 723,
+        "hit_rate": 0.9754,
+        "evictions": 590,
+        "eviction_reloads": 531,
+        "bytes_loaded": 1181601792,
+        "read_s": 1.0298,
+        "transform_s": 0.0,
+        "copy_s": 0.609,
+        "top20_reloaded_experts": [
+          {
+            "expert": 0,
+            "misses": 8
+          },
+          {
+            "expert": 14,
+            "misses": 8
+          },
+          {
+            "expert": 33,
+            "misses": 8
+          },
+          {
+            "expert": 2,
+            "misses": 8
+          },
+          {
+            "expert": 23,
+            "misses": 8
+          },
+          {
+            "expert": 102,
+            "misses": 8
+          },
+          {
+            "expert": 194,
+            "misses": 8
+          },
+          {
+            "expert": 16,
+            "misses": 8
+          },
+          {
+            "expert": 255,
+            "misses": 8
+          },
+          {
+            "expert": 240,
+            "misses": 8
+          },
+          {
+            "expert": 252,
+            "misses": 8
+          },
+          {
+            "expert": 5,
+            "misses": 8
+          },
+          {
+            "expert": 244,
+            "misses": 8
+          },
+          {
+            "expert": 238,
+            "misses": 8
+          },
+          {
+            "expert": 10,
+            "misses": 8
+          },
+          {
+            "expert": 250,
+            "misses": 7
+          },
+          {
+            "expert": 40,
+            "misses": 7
+          },
+          {
+            "expert": 6,
+            "misses": 7
+          },
+          {
+            "expert": 22,
+            "misses": 7
+          },
+          {
+            "expert": 11,
+            "misses": 7
+          }
+        ]
+      },
+      {
+        "layer": 9,
+        "touches": 29179,
+        "hits": 28488,
+        "misses": 691,
+        "hit_rate": 0.9763,
+        "evictions": 541,
+        "eviction_reloads": 464,
+        "bytes_loaded": 1129304064,
+        "read_s": 0.8855,
+        "transform_s": 0.0,
+        "copy_s": 0.7421,
+        "top20_reloaded_experts": [
+          {
+            "expert": 252,
+            "misses": 7
+          },
+          {
+            "expert": 141,
+            "misses": 7
+          },
+          {
+            "expert": 78,
+            "misses": 7
+          },
+          {
+            "expert": 1,
+            "misses": 7
+          },
+          {
+            "expert": 118,
+            "misses": 6
+          },
+          {
+            "expert": 247,
+            "misses": 6
+          },
+          {
+            "expert": 235,
+            "misses": 6
+          },
+          {
+            "expert": 23,
+            "misses": 6
+          },
+          {
+            "expert": 142,
+            "misses": 6
+          },
+          {
+            "expert": 66,
+            "misses": 6
+          },
+          {
+            "expert": 10,
+            "misses": 6
+          },
+          {
+            "expert": 50,
+            "misses": 6
+          },
+          {
+            "expert": 220,
+            "misses": 6
+          },
+          {
+            "expert": 45,
+            "misses": 6
+          },
+          {
+            "expert": 151,
+            "misses": 5
+          },
+          {
+            "expert": 174,
+            "misses": 5
+          },
+          {
+            "expert": 86,
+            "misses": 5
+          },
+          {
+            "expert": 9,
+            "misses": 5
+          },
+          {
+            "expert": 254,
+            "misses": 5
+          },
+          {
+            "expert": 31,
+            "misses": 5
+          }
+        ]
+      },
+      {
+        "layer": 37,
+        "touches": 29320,
+        "hits": 28664,
+        "misses": 656,
+        "hit_rate": 0.9776,
+        "evictions": 535,
+        "eviction_reloads": 475,
+        "bytes_loaded": 1072103424,
+        "read_s": 0.9569,
+        "transform_s": 0.0,
+        "copy_s": 0.6696,
+        "top20_reloaded_experts": [
+          {
+            "expert": 20,
+            "misses": 9
+          },
+          {
+            "expert": 115,
+            "misses": 8
+          },
+          {
+            "expert": 227,
+            "misses": 8
+          },
+          {
+            "expert": 17,
+            "misses": 8
+          },
+          {
+            "expert": 0,
+            "misses": 8
+          },
+          {
+            "expert": 248,
+            "misses": 7
+          },
+          {
+            "expert": 255,
+            "misses": 7
+          },
+          {
+            "expert": 3,
+            "misses": 7
+          },
+          {
+            "expert": 158,
+            "misses": 7
+          },
+          {
+            "expert": 153,
+            "misses": 7
+          },
+          {
+            "expert": 2,
+            "misses": 7
+          },
+          {
+            "expert": 178,
+            "misses": 7
+          },
+          {
+            "expert": 12,
+            "misses": 7
+          },
+          {
+            "expert": 241,
+            "misses": 7
+          },
+          {
+            "expert": 252,
+            "misses": 7
+          },
+          {
+            "expert": 222,
+            "misses": 7
+          },
+          {
+            "expert": 11,
+            "misses": 7
+          },
+          {
+            "expert": 29,
+            "misses": 7
+          },
+          {
+            "expert": 251,
+            "misses": 7
+          },
+          {
+            "expert": 53,
+            "misses": 7
+          }
+        ]
+      },
+      {
+        "layer": 25,
+        "touches": 29357,
+        "hits": 28594,
+        "misses": 763,
+        "hit_rate": 0.974,
+        "evictions": 623,
+        "eviction_reloads": 556,
+        "bytes_loaded": 1246973952,
+        "read_s": 1.0095,
+        "transform_s": 0.0,
+        "copy_s": 0.602,
+        "top20_reloaded_experts": [
+          {
+            "expert": 19,
+            "misses": 8
+          },
+          {
+            "expert": 29,
+            "misses": 8
+          },
+          {
+            "expert": 160,
+            "misses": 8
+          },
+          {
+            "expert": 235,
+            "misses": 8
+          },
+          {
+            "expert": 25,
+            "misses": 8
+          },
+          {
+            "expert": 69,
+            "misses": 8
+          },
+          {
+            "expert": 3,
+            "misses": 7
+          },
+          {
+            "expert": 2,
+            "misses": 7
+          },
+          {
+            "expert": 82,
+            "misses": 7
+          },
+          {
+            "expert": 1,
+            "misses": 7
+          },
+          {
+            "expert": 65,
+            "misses": 7
+          },
+          {
+            "expert": 21,
+            "misses": 7
+          },
+          {
+            "expert": 253,
+            "misses": 7
+          },
+          {
+            "expert": 5,
+            "misses": 7
+          },
+          {
+            "expert": 15,
+            "misses": 7
+          },
+          {
+            "expert": 27,
+            "misses": 7
+          },
+          {
+            "expert": 102,
+            "misses": 7
+          },
+          {
+            "expert": 254,
+            "misses": 7
+          },
+          {
+            "expert": 241,
+            "misses": 7
+          },
+          {
+            "expert": 248,
+            "misses": 7
+          }
+        ]
+      },
+      {
+        "layer": 28,
+        "touches": 29318,
+        "hits": 28597,
+        "misses": 721,
+        "hit_rate": 0.9754,
+        "evictions": 577,
+        "eviction_reloads": 510,
+        "bytes_loaded": 1178333184,
+        "read_s": 0.9691,
+        "transform_s": 0.0,
+        "copy_s": 0.5445,
+        "top20_reloaded_experts": [
+          {
+            "expert": 196,
+            "misses": 8
+          },
+          {
+            "expert": 224,
+            "misses": 8
+          },
+          {
+            "expert": 127,
+            "misses": 8
+          },
+          {
+            "expert": 2,
+            "misses": 7
+          },
+          {
+            "expert": 246,
+            "misses": 7
+          },
+          {
+            "expert": 215,
+            "misses": 7
+          },
+          {
+            "expert": 5,
+            "misses": 7
+          },
+          {
+            "expert": 216,
+            "misses": 7
+          },
+          {
+            "expert": 237,
+            "misses": 7
+          },
+          {
+            "expert": 231,
+            "misses": 7
+          },
+          {
+            "expert": 120,
+            "misses": 7
+          },
+          {
+            "expert": 206,
+            "misses": 7
+          },
+          {
+            "expert": 21,
+            "misses": 7
+          },
+          {
+            "expert": 0,
+            "misses": 7
+          },
+          {
+            "expert": 248,
+            "misses": 7
+          },
+          {
+            "expert": 245,
+            "misses": 7
+          },
+          {
+            "expert": 254,
+            "misses": 7
+          },
+          {
+            "expert": 79,
+            "misses": 7
+          },
+          {
+            "expert": 253,
+            "misses": 7
+          },
+          {
+            "expert": 255,
+            "misses": 7
+          }
+        ]
+      },
+      {
+        "layer": 7,
+        "touches": 29136,
+        "hits": 28521,
+        "misses": 615,
+        "hit_rate": 0.9789,
+        "evictions": 473,
+        "eviction_reloads": 403,
+        "bytes_loaded": 1005096960,
+        "read_s": 0.8686,
+        "transform_s": 0.0,
+        "copy_s": 0.6035,
+        "top20_reloaded_experts": [
+          {
+            "expert": 77,
+            "misses": 7
+          },
+          {
+            "expert": 68,
+            "misses": 7
+          },
+          {
+            "expert": 33,
+            "misses": 7
+          },
+          {
+            "expert": 149,
+            "misses": 7
+          },
+          {
+            "expert": 226,
+            "misses": 6
+          },
+          {
+            "expert": 15,
+            "misses": 6
+          },
+          {
+            "expert": 85,
+            "misses": 6
+          },
+          {
+            "expert": 43,
+            "misses": 6
+          },
+          {
+            "expert": 242,
+            "misses": 6
+          },
+          {
+            "expert": 55,
+            "misses": 6
+          },
+          {
+            "expert": 210,
+            "misses": 6
+          },
+          {
+            "expert": 124,
+            "misses": 6
+          },
+          {
+            "expert": 57,
+            "misses": 5
+          },
+          {
+            "expert": 169,
+            "misses": 5
+          },
+          {
+            "expert": 178,
+            "misses": 5
+          },
+          {
+            "expert": 95,
+            "misses": 5
+          },
+          {
+            "expert": 150,
+            "misses": 5
+          },
+          {
+            "expert": 161,
+            "misses": 5
+          },
+          {
+            "expert": 222,
+            "misses": 5
+          },
+          {
+            "expert": 47,
+            "misses": 5
+          }
+        ]
+      },
+      {
+        "layer": 39,
+        "touches": 29362,
+        "hits": 28754,
+        "misses": 608,
+        "hit_rate": 0.9793,
+        "evictions": 489,
+        "eviction_reloads": 424,
+        "bytes_loaded": 993656832,
+        "read_s": 0.9275,
+        "transform_s": 0.0,
+        "copy_s": 0.5112,
+        "top20_reloaded_experts": [
+          {
+            "expert": 68,
+            "misses": 8
+          },
+          {
+            "expert": 203,
+            "misses": 8
+          },
+          {
+            "expert": 252,
+            "misses": 8
+          },
+          {
+            "expert": 26,
+            "misses": 8
+          },
+          {
+            "expert": 6,
+            "misses": 7
+          },
+          {
+            "expert": 245,
+            "misses": 7
+          },
+          {
+            "expert": 233,
+            "misses": 7
+          },
+          {
+            "expert": 104,
+            "misses": 7
+          },
+          {
+            "expert": 33,
+            "misses": 7
+          },
+          {
+            "expert": 14,
+            "misses": 7
+          },
+          {
+            "expert": 27,
+            "misses": 6
+          },
+          {
+            "expert": 254,
+            "misses": 6
+          },
+          {
+            "expert": 202,
+            "misses": 6
+          },
+          {
+            "expert": 174,
+            "misses": 6
+          },
+          {
+            "expert": 86,
+            "misses": 6
+          },
+          {
+            "expert": 20,
+            "misses": 6
+          },
+          {
+            "expert": 9,
+            "misses": 6
+          },
+          {
+            "expert": 212,
+            "misses": 6
+          },
+          {
+            "expert": 52,
+            "misses": 6
+          },
+          {
+            "expert": 57,
+            "misses": 6
+          }
+        ]
+      },
+      {
+        "layer": 8,
+        "touches": 29161,
+        "hits": 28599,
+        "misses": 562,
+        "hit_rate": 0.9807,
+        "evictions": 423,
+        "eviction_reloads": 344,
+        "bytes_loaded": 918478848,
+        "read_s": 0.8667,
+        "transform_s": 0.0,
+        "copy_s": 0.4663,
+        "top20_reloaded_experts": [
+          {
+            "expert": 125,
+            "misses": 7
+          },
+          {
+            "expert": 50,
+            "misses": 6
+          },
+          {
+            "expert": 17,
+            "misses": 6
+          },
+          {
+            "expert": 63,
+            "misses": 6
+          },
+          {
+            "expert": 120,
+            "misses": 5
+          },
+          {
+            "expert": 25,
+            "misses": 5
+          },
+          {
+            "expert": 40,
+            "misses": 5
+          },
+          {
+            "expert": 213,
+            "misses": 5
+          },
+          {
+            "expert": 73,
+            "misses": 5
+          },
+          {
+            "expert": 44,
+            "misses": 5
+          },
+          {
+            "expert": 68,
+            "misses": 5
+          },
+          {
+            "expert": 122,
+            "misses": 5
+          },
+          {
+            "expert": 216,
+            "misses": 5
+          },
+          {
+            "expert": 137,
+            "misses": 5
+          },
+          {
+            "expert": 198,
+            "misses": 5
+          },
+          {
+            "expert": 140,
+            "misses": 5
+          },
+          {
+            "expert": 28,
+            "misses": 5
+          },
+          {
+            "expert": 168,
+            "misses": 5
+          },
+          {
+            "expert": 207,
+            "misses": 5
+          },
+          {
+            "expert": 219,
+            "misses": 5
+          }
+        ]
+      },
+      {
+        "layer": 18,
+        "touches": 29237,
+        "hits": 28858,
+        "misses": 379,
+        "hit_rate": 0.987,
+        "evictions": 237,
+        "eviction_reloads": 190,
+        "bytes_loaded": 619401216,
+        "read_s": 0.5862,
+        "transform_s": 0.0,
+        "copy_s": 0.7426,
+        "top20_reloaded_experts": [
+          {
+            "expert": 76,
+            "misses": 6
+          },
+          {
+            "expert": 20,
+            "misses": 6
+          },
+          {
+            "expert": 90,
+            "misses": 6
+          },
+          {
+            "expert": 82,
+            "misses": 6
+          },
+          {
+            "expert": 55,
+            "misses": 5
+          },
+          {
+            "expert": 31,
+            "misses": 5
+          },
+          {
+            "expert": 103,
+            "misses": 4
+          },
+          {
+            "expert": 58,
+            "misses": 4
+          },
+          {
+            "expert": 151,
+            "misses": 4
+          },
+          {
+            "expert": 158,
+            "misses": 4
+          },
+          {
+            "expert": 21,
+            "misses": 4
+          },
+          {
+            "expert": 28,
+            "misses": 4
+          },
+          {
+            "expert": 244,
+            "misses": 4
+          },
+          {
+            "expert": 254,
+            "misses": 4
+          },
+          {
+            "expert": 114,
+            "misses": 4
+          },
+          {
+            "expert": 3,
+            "misses": 4
+          },
+          {
+            "expert": 172,
+            "misses": 4
+          },
+          {
+            "expert": 211,
+            "misses": 4
+          },
+          {
+            "expert": 230,
+            "misses": 3
+          },
+          {
+            "expert": 0,
+            "misses": 3
+          }
+        ]
+      },
+      {
+        "layer": 36,
+        "touches": 29325,
+        "hits": 28799,
+        "misses": 526,
+        "hit_rate": 0.9821,
+        "evictions": 388,
+        "eviction_reloads": 331,
+        "bytes_loaded": 859643904,
+        "read_s": 0.7511,
+        "transform_s": 0.0,
+        "copy_s": 0.5045,
+        "top20_reloaded_experts": [
+          {
+            "expert": 117,
+            "misses": 7
+          },
+          {
+            "expert": 38,
+            "misses": 7
+          },
+          {
+            "expert": 68,
+            "misses": 7
+          },
+          {
+            "expert": 53,
+            "misses": 7
+          },
+          {
+            "expert": 23,
+            "misses": 6
+          },
+          {
+            "expert": 25,
+            "misses": 6
+          },
+          {
+            "expert": 16,
+            "misses": 6
+          },
+          {
+            "expert": 89,
+            "misses": 6
+          },
+          {
+            "expert": 18,
+            "misses": 5
+          },
+          {
+            "expert": 254,
+            "misses": 5
+          },
+          {
+            "expert": 4,
+            "misses": 5
+          },
+          {
+            "expert": 255,
+            "misses": 5
+          },
+          {
+            "expert": 193,
+            "misses": 5
+          },
+          {
+            "expert": 32,
+            "misses": 5
+          },
+          {
+            "expert": 8,
+            "misses": 5
+          },
+          {
+            "expert": 246,
+            "misses": 5
+          },
+          {
+            "expert": 195,
+            "misses": 5
+          },
+          {
+            "expert": 202,
+            "misses": 5
+          },
+          {
+            "expert": 3,
+            "misses": 5
+          },
+          {
+            "expert": 62,
+            "misses": 5
+          }
+        ]
+      },
+      {
+        "layer": 14,
+        "touches": 29191,
+        "hits": 28814,
+        "misses": 377,
+        "hit_rate": 0.9871,
+        "evictions": 232,
+        "eviction_reloads": 180,
+        "bytes_loaded": 616132608,
+        "read_s": 0.6359,
+        "transform_s": 0.0,
+        "copy_s": 0.4845,
+        "top20_reloaded_experts": [
+          {
+            "expert": 116,
+            "misses": 7
+          },
+          {
+            "expert": 46,
+            "misses": 7
+          },
+          {
+            "expert": 127,
+            "misses": 7
+          },
+          {
+            "expert": 213,
+            "misses": 6
+          },
+          {
+            "expert": 241,
+            "misses": 6
+          },
+          {
+            "expert": 173,
+            "misses": 6
+          },
+          {
+            "expert": 123,
+            "misses": 6
+          },
+          {
+            "expert": 197,
+            "misses": 6
+          },
+          {
+            "expert": 93,
+            "misses": 5
+          },
+          {
+            "expert": 43,
+            "misses": 5
+          },
+          {
+            "expert": 83,
+            "misses": 5
+          },
+          {
+            "expert": 146,
+            "misses": 5
+          },
+          {
+            "expert": 205,
+            "misses": 5
+          },
+          {
+            "expert": 207,
+            "misses": 4
+          },
+          {
+            "expert": 75,
+            "misses": 4
+          },
+          {
+            "expert": 49,
+            "misses": 4
+          },
+          {
+            "expert": 109,
+            "misses": 4
+          },
+          {
+            "expert": 234,
+            "misses": 4
+          },
+          {
+            "expert": 94,
+            "misses": 4
+          },
+          {
+            "expert": 4,
+            "misses": 4
+          }
+        ]
+      },
+      {
+        "layer": 13,
+        "touches": 29201,
+        "hits": 28809,
+        "misses": 392,
+        "hit_rate": 0.9866,
+        "evictions": 249,
+        "eviction_reloads": 201,
+        "bytes_loaded": 640647168,
+        "read_s": 0.6144,
+        "transform_s": 0.0,
+        "copy_s": 0.4357,
+        "top20_reloaded_experts": [
+          {
+            "expert": 235,
+            "misses": 7
+          },
+          {
+            "expert": 91,
+            "misses": 6
+          },
+          {
+            "expert": 51,
+            "misses": 6
+          },
+          {
+            "expert": 230,
+            "misses": 5
+          },
+          {
+            "expert": 211,
+            "misses": 5
+          },
+          {
+            "expert": 111,
+            "misses": 5
+          },
+          {
+            "expert": 81,
+            "misses": 5
+          },
+          {
+            "expert": 72,
+            "misses": 5
+          },
+          {
+            "expert": 1,
+            "misses": 5
+          },
+          {
+            "expert": 11,
+            "misses": 5
+          },
+          {
+            "expert": 245,
+            "misses": 5
+          },
+          {
+            "expert": 241,
+            "misses": 5
+          },
+          {
+            "expert": 48,
+            "misses": 4
+          },
+          {
+            "expert": 156,
+            "misses": 4
+          },
+          {
+            "expert": 67,
+            "misses": 4
+          },
+          {
+            "expert": 157,
+            "misses": 4
+          },
+          {
+            "expert": 5,
+            "misses": 4
+          },
+          {
+            "expert": 143,
+            "misses": 4
+          },
+          {
+            "expert": 161,
+            "misses": 4
+          },
+          {
+            "expert": 172,
+            "misses": 4
+          }
+        ]
+      },
+      {
+        "layer": 15,
+        "touches": 29194,
+        "hits": 28916,
+        "misses": 278,
+        "hit_rate": 0.9905,
+        "evictions": 144,
+        "eviction_reloads": 103,
+        "bytes_loaded": 454336512,
+        "read_s": 0.451,
+        "transform_s": 0.0,
+        "copy_s": 0.4764,
+        "top20_reloaded_experts": [
+          {
+            "expert": 163,
+            "misses": 5
+          },
+          {
+            "expert": 86,
+            "misses": 5
+          },
+          {
+            "expert": 137,
+            "misses": 5
+          },
+          {
+            "expert": 160,
+            "misses": 4
+          },
+          {
+            "expert": 57,
+            "misses": 4
+          },
+          {
+            "expert": 75,
+            "misses": 4
+          },
+          {
+            "expert": 212,
+            "misses": 4
+          },
+          {
+            "expert": 8,
+            "misses": 4
+          },
+          {
+            "expert": 13,
+            "misses": 4
+          },
+          {
+            "expert": 157,
+            "misses": 3
+          },
+          {
+            "expert": 16,
+            "misses": 3
+          },
+          {
+            "expert": 32,
+            "misses": 3
+          },
+          {
+            "expert": 135,
+            "misses": 3
+          },
+          {
+            "expert": 201,
+            "misses": 3
+          },
+          {
+            "expert": 104,
+            "misses": 3
+          },
+          {
+            "expert": 52,
+            "misses": 3
+          },
+          {
+            "expert": 132,
+            "misses": 3
+          },
+          {
+            "expert": 255,
+            "misses": 3
+          },
+          {
+            "expert": 26,
+            "misses": 3
+          },
+          {
+            "expert": 149,
+            "misses": 3
+          }
+        ]
+      },
+      {
+        "layer": 38,
+        "touches": 29186,
+        "hits": 28862,
+        "misses": 324,
+        "hit_rate": 0.9889,
+        "evictions": 199,
+        "eviction_reloads": 154,
+        "bytes_loaded": 529514496,
+        "read_s": 0.5024,
+        "transform_s": 0.0,
+        "copy_s": 0.3941,
+        "top20_reloaded_experts": [
+          {
+            "expert": 75,
+            "misses": 6
+          },
+          {
+            "expert": 244,
+            "misses": 6
+          },
+          {
+            "expert": 39,
+            "misses": 6
+          },
+          {
+            "expert": 160,
+            "misses": 6
+          },
+          {
+            "expert": 109,
+            "misses": 6
+          },
+          {
+            "expert": 188,
+            "misses": 5
+          },
+          {
+            "expert": 216,
+            "misses": 5
+          },
+          {
+            "expert": 58,
+            "misses": 5
+          },
+          {
+            "expert": 174,
+            "misses": 5
+          },
+          {
+            "expert": 114,
+            "misses": 5
+          },
+          {
+            "expert": 238,
+            "misses": 5
+          },
+          {
+            "expert": 48,
+            "misses": 4
+          },
+          {
+            "expert": 100,
+            "misses": 4
+          },
+          {
+            "expert": 230,
+            "misses": 4
+          },
+          {
+            "expert": 138,
+            "misses": 4
+          },
+          {
+            "expert": 187,
+            "misses": 4
+          },
+          {
+            "expert": 11,
+            "misses": 4
+          },
+          {
+            "expert": 133,
+            "misses": 4
+          },
+          {
+            "expert": 162,
+            "misses": 4
+          },
+          {
+            "expert": 211,
+            "misses": 4
+          }
+        ]
+      },
+      {
+        "layer": 21,
+        "touches": 29209,
+        "hits": 28869,
+        "misses": 340,
+        "hit_rate": 0.9884,
+        "evictions": 200,
+        "eviction_reloads": 155,
+        "bytes_loaded": 555663360,
+        "read_s": 0.5015,
+        "transform_s": 0.0,
+        "copy_s": 0.3192,
+        "top20_reloaded_experts": [
+          {
+            "expert": 148,
+            "misses": 5
+          },
+          {
+            "expert": 8,
+            "misses": 5
+          },
+          {
+            "expert": 152,
+            "misses": 5
+          },
+          {
+            "expert": 98,
+            "misses": 5
+          },
+          {
+            "expert": 215,
+            "misses": 5
+          },
+          {
+            "expert": 4,
+            "misses": 5
+          },
+          {
+            "expert": 37,
+            "misses": 5
+          },
+          {
+            "expert": 114,
+            "misses": 4
+          },
+          {
+            "expert": 59,
+            "misses": 4
+          },
+          {
+            "expert": 14,
+            "misses": 4
+          },
+          {
+            "expert": 48,
+            "misses": 4
+          },
+          {
+            "expert": 221,
+            "misses": 4
+          },
+          {
+            "expert": 237,
+            "misses": 4
+          },
+          {
+            "expert": 204,
+            "misses": 4
+          },
+          {
+            "expert": 20,
+            "misses": 3
+          },
+          {
+            "expert": 65,
+            "misses": 3
+          },
+          {
+            "expert": 27,
+            "misses": 3
+          },
+          {
+            "expert": 77,
+            "misses": 3
+          },
+          {
+            "expert": 28,
+            "misses": 3
+          },
+          {
+            "expert": 24,
+            "misses": 3
+          }
+        ]
+      },
+      {
+        "layer": 20,
+        "touches": 29227,
+        "hits": 28937,
+        "misses": 290,
+        "hit_rate": 0.9901,
+        "evictions": 149,
+        "eviction_reloads": 112,
+        "bytes_loaded": 473948160,
+        "read_s": 0.4178,
+        "transform_s": 0.0,
+        "copy_s": 0.2287,
+        "top20_reloaded_experts": [
+          {
+            "expert": 122,
+            "misses": 5
+          },
+          {
+            "expert": 137,
+            "misses": 4
+          },
+          {
+            "expert": 130,
+            "misses": 4
+          },
+          {
+            "expert": 29,
+            "misses": 4
+          },
+          {
+            "expert": 230,
+            "misses": 3
+          },
+          {
+            "expert": 156,
+            "misses": 3
+          },
+          {
+            "expert": 201,
+            "misses": 3
+          },
+          {
+            "expert": 215,
+            "misses": 3
+          },
+          {
+            "expert": 253,
+            "misses": 3
+          },
+          {
+            "expert": 15,
+            "misses": 3
+          },
+          {
+            "expert": 113,
+            "misses": 3
+          },
+          {
+            "expert": 96,
+            "misses": 3
+          },
+          {
+            "expert": 190,
+            "misses": 3
+          },
+          {
+            "expert": 136,
+            "misses": 3
+          },
+          {
+            "expert": 231,
+            "misses": 3
+          },
+          {
+            "expert": 9,
+            "misses": 3
+          },
+          {
+            "expert": 62,
+            "misses": 3
+          },
+          {
+            "expert": 51,
+            "misses": 3
+          },
+          {
+            "expert": 84,
+            "misses": 3
+          },
+          {
+            "expert": 197,
+            "misses": 3
+          }
+        ]
+      }
+    ],
+    "eviction_reload_window": 64,
+    "total_eviction_reloads": 24655
+  },
+  "not_measured": {
+    "pack_verify_ns": "NOT_MEASURED \u2014 MOE_OTD_PERF_LOG / [OTD_PERF] absent in busy serve logs",
+    "synchronous_execution_gate_wait_s": "NOT_MEASURED \u2014 no trace field",
+    "onednn_ocl_drain_wait_s": "NOT_MEASURED \u2014 no trace field",
+    "moe_otd_trace_overhead_s": "NOT_MEASURED \u2014 no control without MOE_OTD_TRACE",
+    "seal_verify_cpu_contention": "NOT_MEASURED quantitatively \u2014 receipt contention.seal_verify_pid_alive=true only"
+  }
+}
