@@ -254,6 +254,20 @@ std::variant<bool, std::pair<int, std::string>> CLIParser::parse(int argc, char*
                 cxxopts::value<std::string>(),
                 "EXTRA_QUANTIZATION_PARAMS");
 
+        options->add_options("cib2 routed experts")
+            ("build_moe_experts_pack",
+             "Compile eligible MoE servables, build native expert pack files, and exit without HTTP/gRPC listeners.",
+             cxxopts::value<bool>()->default_value("false"), "BUILD_MOE_EXPERTS_PACK")
+            ("moe_experts_pack_dir",
+             "Native Pack V1 files or V2 immutable generation directory. Implies 'require' in serve mode.",
+             cxxopts::value<std::string>(), "MOE_EXPERTS_PACK_DIR")
+            ("moe_experts_placement_dir",
+             "Read-only profile-derived native placement plans, required for profile-guided pack build.",
+             cxxopts::value<std::string>(), "MOE_EXPERTS_PLACEMENT_DIR")
+            ("moe_experts_residency_dir",
+             "Read-only profile-derived native soft-residency policies (hot/warm/cold tiers).",
+             cxxopts::value<std::string>(), "MOE_EXPERTS_RESIDENCY_DIR");
+
         options->add_options("single model")
             ("model_name",
                 "Name of the model",
@@ -569,6 +583,13 @@ void CLIParser::prepareServer(ServerSettingsImpl& serverSettings) {
     serverSettings.filesystemPollWaitMilliseconds = result->operator[]("file_system_poll_wait_seconds").as<uint32_t>() * 1000;
 
     serverSettings.resourcesCleanerPollWaitSeconds = result->operator[]("custom_node_resources_cleaner_interval_seconds").as<uint32_t>();
+    serverSettings.buildMoeExpertsPack = result->operator[]("build_moe_experts_pack").as<bool>();
+    if (result->count("moe_experts_pack_dir"))
+        serverSettings.moeExpertsPackDir = result->operator[]("moe_experts_pack_dir").as<std::string>();
+    if (result->count("moe_experts_placement_dir"))
+        serverSettings.moeExpertsPlacementDir = result->operator[]("moe_experts_placement_dir").as<std::string>();
+    if (result->count("moe_experts_residency_dir"))
+        serverSettings.moeExpertsResidencyDir = result->operator[]("moe_experts_residency_dir").as<std::string>();
     serverSettings.grpcWorkers = result->operator[]("grpc_workers").as<uint32_t>();
 
     if (result->count("log_level"))

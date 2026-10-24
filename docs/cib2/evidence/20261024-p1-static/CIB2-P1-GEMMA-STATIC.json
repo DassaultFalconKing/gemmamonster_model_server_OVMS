@@ -1,0 +1,108 @@
+{
+  "analysis": "CIB2-P1-GEMMA static name/offset co-occurrence",
+  "generated": "2026-10-24",
+  "method": "Static scan of openvino_language_model.xml only (Python xml.etree). No model load, no .bin access, no compilation. All layer elements in document order; ordinal is the 0-based index among all layer elements; only Const layers are considered slots. offset/size are read from the layer data element and stored as null when absent (never substituted with 0). Routed slot = gate|up|down x weight|scale|zp, counted only when: type=Const; name contains '.mlp.experts.'; name does not contain 'shared_expert'; weight ends with gate_proj|up_proj|down_proj; scale ends with /scale; zp ends with /zero_point. fq_weights, subtract, convert, MatMul, and shared_expert consts ignored. Block index from 'layers.<digits>.' in the name.",
+  "compiled_kind": "UNKNOWN",
+  "runtime_acceptance": "NO",
+  "eligibility_statement": "This is a static name/offset co-occurrence scan. It is NOT compiled eligibility and no ELIGIBLE verdict is claimed.",
+  "models": [
+    {
+      "directory": "C:\\llm\\models\\OpenVINO\\Wondernutts\\gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov-new",
+      "xml_file": "openvino_language_model.xml",
+      "xml_status": "FOUND",
+      "layer_elements": 10687,
+      "const_layers": 4450,
+      "slot_counts": {
+        "gate_weight": 0,
+        "gate_scale": 0,
+        "gate_zp": 0,
+        "up_weight": 0,
+        "up_scale": 0,
+        "up_zp": 0,
+        "down_weight": 0,
+        "down_scale": 0,
+        "down_zp": 0
+      },
+      "matched_slot_total": 0,
+      "blocks_with_all_nine": 0,
+      "distinct_blocks_with_any_matched_slot": 0,
+      "block_0": [],
+      "naming_diagnostics": {
+        "const_layers_containing_mlp_experts": 0,
+        "const_layers_containing_experts": 90,
+        "const_layers_containing_shared_expert": 0,
+        "note": "No Const layer name contains '.mlp.experts.'. The routed-expert storage in these IRs is named self.model.language_model.layers.<L>.mlp.{gate,up,down}_proj.weight[/scale|/zero_point] and an extra self.model.language_model.layers.<L>.experts.down_proj[/scale|/zero_point] trio, plus packed __module...experts/prim::ListUnpack/VariadicSplit.* gate/up blobs (no proj-suffixed scale/zp names). Under the literal protocol these are not counted anywhere."
+      },
+      "reference_only": {
+        "label": "Provenance only -- NOT counted under the CIB2-P1 protocol and NOT part of any eligibility statement.",
+        "adapted_mlp_named_slot_counts": {
+          "gate_weight": 30,
+          "gate_scale": 30,
+          "gate_zp": 30,
+          "up_weight": 30,
+          "up_scale": 30,
+          "up_zp": 30,
+          "down_weight": 30,
+          "down_scale": 30,
+          "down_zp": 30
+        },
+        "adapted_experts_down_slot_counts": {
+          "down_weight": 30,
+          "down_scale": 30,
+          "down_zp": 30
+        },
+        "adapted_blocks_with_all_nine_mlp_named": 30,
+        "adapted_blocks_with_down_trio_experts_named": 30
+      }
+    },
+    {
+      "directory": "C:\\llm\\models\\runtime\\gemma4-26-heretic-google-current",
+      "xml_file": "openvino_language_model.xml",
+      "xml_status": "FOUND",
+      "layer_elements": 10687,
+      "const_layers": 4450,
+      "slot_counts": {
+        "gate_weight": 0,
+        "gate_scale": 0,
+        "gate_zp": 0,
+        "up_weight": 0,
+        "up_scale": 0,
+        "up_zp": 0,
+        "down_weight": 0,
+        "down_scale": 0,
+        "down_zp": 0
+      },
+      "matched_slot_total": 0,
+      "blocks_with_all_nine": 0,
+      "distinct_blocks_with_any_matched_slot": 0,
+      "block_0": [],
+      "naming_diagnostics": {
+        "const_layers_containing_mlp_experts": 0,
+        "const_layers_containing_experts": 90,
+        "const_layers_containing_shared_expert": 0,
+        "note": "No Const layer name contains '.mlp.experts.'. The routed-expert storage in these IRs is named self.model.language_model.layers.<L>.mlp.{gate,up,down}_proj.weight[/scale|/zero_point] and an extra self.model.language_model.layers.<L>.experts.down_proj[/scale|/zero_point] trio, plus packed __module...experts/prim::ListUnpack/VariadicSplit.* gate/up blobs (no proj-suffixed scale/zp names). Under the literal protocol these are not counted anywhere."
+      },
+      "reference_only": {
+        "label": "Provenance only -- NOT counted under the CIB2-P1 protocol and NOT part of any eligibility statement.",
+        "adapted_mlp_named_slot_counts": {
+          "gate_weight": 30,
+          "gate_scale": 30,
+          "gate_zp": 30,
+          "up_weight": 30,
+          "up_scale": 30,
+          "up_zp": 30,
+          "down_weight": 30,
+          "down_scale": 30,
+          "down_zp": 30
+        },
+        "adapted_experts_down_slot_counts": {
+          "down_weight": 30,
+          "down_scale": 30,
+          "down_zp": 30
+        },
+        "adapted_blocks_with_all_nine_mlp_named": 30,
+        "adapted_blocks_with_down_trio_experts_named": 30
+      }
+    }
+  ]
+}

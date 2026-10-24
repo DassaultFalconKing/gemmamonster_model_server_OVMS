@@ -17,6 +17,8 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <filesystem>
+#include <system_error>
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -60,8 +62,13 @@
 #include "kfs_frontend/kfs_grpc_inference_service.hpp"
 #include "logging.hpp"
 #include "metrics/metric_module.hpp"
+#include "model.hpp"
+#include "modelinstance.hpp"
 #include "modelmanager.hpp"
 #include "ovms_exit_codes.hpp"
+#if (MEDIAPIPE_DISABLE == 0)
+#include "mediapipe_internal/mediapipefactory.hpp"
+#endif
 #include "profiler.hpp"
 #include "profilermodule.hpp"
 #include "pull_module/hf_pull_model_module.hpp"
@@ -378,6 +385,102 @@ std::unique_ptr<Module> Server::createModule(const std::string& name) {
         }                                                                                             \
     }
 
+// CIB2 build-only and serving controls, adapted from the tested 2026.5 pack
+// CLI donor. Do not import donor 2026.5 dependency or parser changes.
+// These environment settings are scoped to THIS isolated process.
+static Status setPackRuntimeSetting(const char* key, const std::string& value) {
+    if (const char* prior = std::getenv(key)) {
+        if (std::string(prior) != value) {
+            return Status(StatusCode::OPTIONS_USAGE_ERROR, std::string("Conflicting existing ") + key);
+        }
+        return StatusCode::OK;
+    }
+#ifdef _WIN32
+    if (_putenv_s(key, value.c_str()) != 0)
+#else
+    if (setenv(key, value.c_str(), 0) != 0)
+#endif
+        return Status(StatusCode::INTERNAL_ERROR, std::string("Cannot set ") + key);
+    return StatusCode::OK;
+}
+
+static Status configureCib2Pack(const ServerSettingsImpl& settings) {
+    if (settings.moeExpertsPackDir.empty()) return StatusCode::OK;
+    auto normalize = [](const std::string& text) -> std::filesystem::path {
+        std::error_code ec;
+        const auto result = std::filesystem::absolute(text, ec).lexically_normal();
+        if (ec || result.empty()) throw std::runtime_error("Invalid CIB2 path");
+        return result;
+    };
+    try {
+        const auto pack = normalize(settings.moeExpertsPackDir);
+        std::error_code ec;
+        if (settings.buildMoeExpertsPack) {
+            std::filesystem::create_directories(pack, ec);
+            if (ec) return Status(StatusCode::PATH_INVALID, "Cannot create pack directory");
+        } else if (!std::filesystem::is_directory(pack, ec)) {
+            return Status(StatusCode::PATH_INVALID, "Missing pack generation directory");
+        }
+        for (const auto& option : {
+                 std::make_pair("OV_GPU_MOE_OTD_PACK_MODE",
+                                std::string(settings.buildMoeExpertsPack ? "build" : "require")),
+                 std::make_pair("OV_GPU_MOE_OTD_PACK_DIR", pack.string())}) {
+            const auto status = setPackRuntimeSetting(option.first, option.second);
+            if (!status.ok()) return status;
+        }
+        if (!settings.moeExpertsPlacementDir.empty()) {
+            const auto plans = normalize(settings.moeExpertsPlacementDir);
+            if (!std::filesystem::is_directory(plans, ec))
+                return Status(StatusCode::PATH_INVALID, "Missing profile placement directory");
+            const auto status = setPackRuntimeSetting("OV_GPU_MOE_OTD_PLACEMENT_DIR", plans.string());
+            if (!status.ok()) return status;
+        }
+        if (!settings.moeExpertsResidencyDir.empty()) {
+            const auto plans = normalize(settings.moeExpertsResidencyDir);
+            if (!std::filesystem::is_directory(plans, ec))
+                return Status(StatusCode::PATH_INVALID, "Missing profile residency directory");
+            const auto status = setPackRuntimeSetting("OV_GPU_MOE_OTD_RESIDENCY_DIR", plans.string());
+            if (!status.ok()) return status;
+        }
+    } catch (const std::exception& e) {
+        return Status(StatusCode::PATH_INVALID, e.what());
+    }
+    return StatusCode::OK;
+}
+
+static Status checkCib2PackBuild(ModelManager& manager, const std::string& pack_dir) {
+    size_t unavailable = 0;
+    for (const auto& [name, model] : manager.getModels()) {
+        const auto instance = model->getDefaultModelInstance();
+        if (!instance || instance->getStatus().getState() != ModelVersionState::AVAILABLE) {
+            SPDLOG_ERROR("CIB2 pack build: servable unavailable: {}", name);
+            unavailable++;
+        }
+    }
+#if (MEDIAPIPE_DISABLE == 0)
+    const auto& mediapipe = manager.getMediapipeFactory();
+    const auto availableGraphs = mediapipe.getNamesOfAvailableMediapipePipelines();
+    for (const auto& name : mediapipe.getMediapipePipelinesNames()) {
+        if (std::find(availableGraphs.begin(), availableGraphs.end(), name) == availableGraphs.end()) {
+            SPDLOG_ERROR("CIB2 pack build: graph unavailable: {}", name);
+            unavailable++;
+        }
+    }
+#endif
+    if (unavailable) return Status(StatusCode::INTERNAL_ERROR, "CIB2 pack builder: one or more servables unavailable");
+    size_t pack_count = 0;
+    std::error_code ec;
+    for (const auto& file : std::filesystem::directory_iterator(pack_dir, ec)) {
+        if (file.is_regular_file() && file.path().extension() == ".pack") pack_count++;
+    }
+    if (ec || pack_count == 0) {
+        return Status(StatusCode::INTERNAL_ERROR, "CIB2 build produced zero native pack files");
+    }
+    SPDLOG_INFO("CIB2 build produced or reused {} native expert layer packs", pack_count);
+    std::cout << "CIB2 packs: " << pack_count << " (not V2 sealed until offline verifier succeeds)" << std::endl;
+    return StatusCode::OK;
+}
+
 Status Server::startModules(ovms::Config& config) {
     // The order of starting modules is slightly different from inserting modules
     // due to dependency of modules on each other during runtime
@@ -443,12 +546,15 @@ Status Server::startModules(ovms::Config& config) {
     INSERT_MODULE(SERVABLE_MANAGER_MODULE_NAME, it);
     INSERT_MODULE(CAPI_MODULE_NAME, it);
     START_MODULE(it);
-    INSERT_MODULE(GRPC_SERVER_MODULE_NAME, it);
-    START_MODULE(it);
-    // if we ever decide not to start GRPC module then we need to implement HTTP responses without using grpc implementations
-    if (config.restPort() != 0) {
-        INSERT_MODULE(HTTP_SERVER_MODULE_NAME, it);
+    const bool buildCib2Pack = config.getServerSettings().buildMoeExpertsPack;
+    if (!buildCib2Pack) {
+        INSERT_MODULE(GRPC_SERVER_MODULE_NAME, it);
         START_MODULE(it);
+        // Build-only intentionally binds neither REST nor gRPC listeners.
+        if (config.restPort() != 0) {
+            INSERT_MODULE(HTTP_SERVER_MODULE_NAME, it);
+            START_MODULE(it);
+        }
     }
     if (config.getServerSettings().serverMode == HF_PULL_AND_START_MODE) {
         INSERT_MODULE(HF_MODEL_PULL_MODULE_NAME, it);
@@ -471,8 +577,16 @@ Status Server::startModules(ovms::Config& config) {
         }
         SPDLOG_INFO("Graph config created in memory from model_path: {}", config.modelPath());
     }
+    // GPU plugin reads the candidate's environment on compile_model.
+    status = configureCib2Pack(config.getServerSettings());
+    if (!status.ok()) return status;
     GET_MODULE(SERVABLE_MANAGER_MODULE_NAME, it);
     START_MODULE(it);
+    if (buildCib2Pack) {
+        auto& manager = dynamic_cast<const ServableManagerModule*>(it->second.get())->getServableManager();
+        status = checkCib2PackBuild(manager, config.getServerSettings().moeExpertsPackDir);
+        if (!status.ok()) return status;
+    }
 #if (PYTHON_DISABLE == 0)
     if (config.getServerSettings().withPython) {
         GET_MODULE(PYTHON_INTERPRETER_MODULE_NAME, it);
@@ -581,7 +695,7 @@ int Server::startServerFromSettings(ServerSettingsImpl& serverSettings, ModelsSe
         if (!ret.ok()) {
             return statusToExitCode(ret);
         }
-        while (!getShutdownStatus() &&
+        while (!getShutdownStatus() && !serverSettings.buildMoeExpertsPack &&
                (serverSettings.serverMode == HF_PULL_AND_START_MODE || serverSettings.serverMode == SERVING_MODELS_MODE || serverSettings.serverMode == IN_MEMORY_GRAPH_MODE)) {
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }

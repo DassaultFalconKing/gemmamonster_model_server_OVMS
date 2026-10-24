@@ -1,3 +1,11 @@
+## Active CIB2 Pack V2 Full execution (2026-10-24)
+
+- [Master plan: new OVMS 2026.4 / Pack V2 / UMA](MASTER-PLAN-NATIVE-PACKV2-20261024.md)
+- [Orchestrator: execute N1 → N4, native build + live Arc140V](ORCHESTRATOR-EXEC-N1-N4-20261024.md)
+- [Previous Cursor source-build handoff](CURSOR-HANDOFF-PACKV2-BUILD-20261024.md)
+- OVMS code: [Draft PR #29](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/pull/29); OpenVINO 2026.4 target N2/N3/N4 code: [Draft PR #10](https://github.com/DassaultFalconKing/openvino/pull/10); 2026.5-derived native source DONOR: [PR #9](https://github.com/DassaultFalconKing/openvino/pull/9).
+- N1 runtime port / Windows compilation / GPU tests **NOT_RUN**. N2/N3/N4 helper code **WRITTEN, NOT WIRED to hardware events or OS/WDDM**. Prefetch OFF until lease+admission gates are green; Path B OFF.
+
 # CIB2 layer/expert offload — current programme and evidence index
 
 **2026-10-24. PROGRAMME CURRENT; GPU/production acceptance NOT_GRANTED.**
