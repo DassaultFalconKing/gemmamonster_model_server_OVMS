@@ -535,7 +535,7 @@ def validate_layout(layout: Any) -> bool:
     placement = layout.get("placement")
     order = layout.get("order")
     count = layout.get("expert_count")
-    if isinstance(count, bool) or not isinstance(count, int) or count < 1:
+    if isinstance(count, bool) or not isinstance(count, int) or not 1 <= count <= MAX_EXPERTS:
         raise LayoutError("layout.expert_count: invalid")
     if not isinstance(placement, list) or len(placement) != count:
         raise LayoutError("layout.placement: must contain exactly expert_count positions")
@@ -557,6 +557,38 @@ def validate_layout(layout: Any) -> bool:
         raise LayoutError("layout.runtime_acceptance: must remain NO")
     if layout.get("offline_only") is not True:
         raise LayoutError("layout.offline_only: must remain true")
+    if any(layout.get(key) != "NO" for key in ("pack_acceptance", "profile_acceptance")):
+        raise LayoutError("layout acceptance flags must remain NO")
+    if layout.get("policy") != POLICY_BLOCK:
+        raise LayoutError("layout.policy: offline placement cannot alter runtime policy")
+    source = layout.get("source_profile")
+    if not isinstance(source, dict) or not isinstance(source.get("supplied"), bool):
+        raise LayoutError("layout.source_profile: missing explicit supplied flag")
+    scope = layout.get("scope")
+    if not source["supplied"]:
+        if scope is not None or source.get("sha256") is not None:
+            raise LayoutError("unprofiled layout must not claim source identity or scope")
+        if placement != list(range(count)):
+            raise LayoutError("unprofiled layout must remain identity")
+    else:
+        try:
+            _require_sha256(source.get("sha256"), "layout.source_profile.sha256")
+            if source.get("schema") != PROFILE_SCHEMA or source.get("complete") is not True:
+                raise ProfileError("layout.source_profile: incomplete or unsupported profile")
+            if not isinstance(scope, dict):
+                raise ProfileError("layout.scope: required for supplied profile")
+            required = ("model_key", "logical_layer_id", "checkpoint_sha", "export_sha",
+                        "compiled_layer_key", "quant_profile_sha", "profile_key")
+            _require_present(scope, required, "layout.scope")
+            _reject_unknown(scope, required, "layout.scope")
+            for key in ("checkpoint_sha", "export_sha", "quant_profile_sha"):
+                _require_sha256(scope[key], "layout.scope." + key)
+            _require_key(scope["model_key"], "layout.scope.model_key", MODEL_KEY_RE)
+            _require_key(scope["compiled_layer_key"], "layout.scope.compiled_layer_key", COMPILED_LAYER_KEY_RE)
+            _require_key(scope["profile_key"], "layout.scope.profile_key", PROFILE_KEY_RE)
+            _require_int(scope["logical_layer_id"], "layout.scope.logical_layer_id", 0, MAX_LAYER_ID)
+        except ProfileError as exc:
+            raise LayoutError(str(exc)) from exc
     return True
 
 
@@ -732,6 +764,8 @@ def write_layout(path: str, layout: dict) -> None:
     """Write a validated layout atomically; do not create a partial JSON file."""
     validate_layout(layout)
     target = Path(path)
+    if target.suffix.lower() != ".json":
+        raise LayoutError("output must be a .json layout, never a weight or pack file")
     if not target.parent.exists():
         raise LayoutError(f"output directory does not exist: {target.parent}")
     text = json.dumps(layout, indent=2, allow_nan=False) + "\n"
@@ -792,6 +826,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             raise LayoutError("--expert-count is only valid when --profile is omitted")
         if args.profile:
             profile_path = Path(args.profile)
+            if profile_path.resolve() == Path(args.output).resolve():
+                raise LayoutError("output must not overwrite its source profile")
             if profile_path.suffix.lower() == ".bin":
                 raise ProfileError("profile: refusing .bin input; only sanitized JSON profiles are accepted")
             if not profile_path.is_file():

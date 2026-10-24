@@ -1,5 +1,7 @@
 # CIB2 PGP-02: offline Pack V1 layout optimizer — input contract and handoff
 
+Coordinator review hardening: output files must end in `.json` and cannot replace the source profile. The layout validator checks offline-only acceptance/policy invariants and complete scoped identity fields as well as permutation/inverse correctness. This is structural validation, not authentication of caller-supplied provenance or proof of a captured runtime trace. Consumers still need an independently pinned source profile and exact native PackLayerSpec.
+
 **Date:** 2026-10-24. **Status:** OFFLINE FOUNDATION IMPLEMENTED; NOT RUNTIME/PROFILE/PACK ACCEPTED.
 
 **Scope:** `scripts/cib2/pack_layout.py`, focused tests and synthetic fixtures only. This
