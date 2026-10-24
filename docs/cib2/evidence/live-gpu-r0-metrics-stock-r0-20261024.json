@@ -1,0 +1,424 @@
+{
+  "scope": "Live GPU pack-serve medium/long speed+TTFT+expert-hit+UMA; NOT runtime_acceptance",
+  "runtime_acceptance": "NO",
+  "offload_ratio": "0",
+  "load_label": "stock-r0",
+  "contention": {
+    "load_label": "stock-r0",
+    "seal_verify_pid_alive": true,
+    "note": "Set LIVE_LOAD_LABEL=busy while packv2 seal extra-verify still runs; free after it exits",
+    "seal_verify_pids": [
+      16180
+    ]
+  },
+  "endpoint": "http://127.0.0.1:8000/v3/chat/completions",
+  "model": "qwen36-35b-a3b-int4-baseline",
+  "correctness": [
+    {
+      "kind": "correctness",
+      "name": "math",
+      "http": 200,
+      "latency_s": 9.567,
+      "expect_substr": "42",
+      "got": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - Question: \"What is 17+25?\"\n   - Constraint: \"Reply with only the number 42 at the end.\"\n\n2.  **Calculate the Math:**\n   - 17 + 25 = 42\n\n3.  **Check Constraint:**\n   - The constraint says \"Reply with only the number 42 at the end.\"\n   - This is a bit ambiguous. Does it mean:\n     a) The entire reply should just be \"42\"?\n     b) The reply ",
+      "pass": true,
+      "usage": {
+        "prompt_tokens": 31,
+        "completion_tokens": 256,
+        "total_tokens": 287
+      }
+    },
+    {
+      "kind": "correctness",
+      "name": "identity",
+      "http": 200,
+      "latency_s": 12.828,
+      "expect_substr": "PACKED",
+      "got": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - The user says: \"Eventually reply with exactly the word PACKED on its own line.\"\n   - This is a direct instruction about the final output format.\n   - It doesn't ask a question or provide a complex task, just a formatting constraint for the response.\n\n2.  **Identify Key Constraints:**\n   - Must eventually reply with exactly the word \"PACK",
+      "pass": true,
+      "usage": {
+        "prompt_tokens": 23,
+        "completion_tokens": 256,
+        "total_tokens": 279
+      }
+    }
+  ],
+  "expert_cache": {
+    "trace_env": "C:\\git\\cib2-packv2-build-20261024\\evidence-live-gpu-busy-vs-free\\moe-otd-trace-r0-stock.log",
+    "before": {
+      "present": false,
+      "path": "C:\\git\\cib2-packv2-build-20261024\\evidence-live-gpu-busy-vs-free\\moe-otd-trace-r0-stock.log",
+      "error": "missing"
+    },
+    "after": {
+      "present": false,
+      "path": "C:\\git\\cib2-packv2-build-20261024\\evidence-live-gpu-busy-vs-free\\moe-otd-trace-r0-stock.log",
+      "error": "missing"
+    },
+    "delta": null,
+    "note": "Enable with MOE_OTD_TRACE before starting ovms; E lines carry hit=0/1 per expert touch"
+  },
+  "uma": {
+    "samples": [
+      {
+        "luid_high": 0,
+        "luid_low": 162259294,
+        "device_id": 25760,
+        "system_total_bytes": 33866633216,
+        "system_available_bytes": 707715072,
+        "wddm_budget_bytes": 28658664529,
+        "wddm_process_usage_bytes": 0,
+        "wddm_remaining_bytes": 28658664529,
+        "label": "before_speed",
+        "present": true,
+        "ts": 1792859169.0706944,
+        "system_used_bytes": 33158918144,
+        "system_used_GB": 30.882,
+        "system_available_GB": 0.659,
+        "wddm_process_usage_GB": 0.0,
+        "wddm_remaining_GB": 26.69
+      },
+      {
+        "luid_high": 0,
+        "luid_low": 162259294,
+        "device_id": 25760,
+        "system_total_bytes": 33866633216,
+        "system_available_bytes": 419942400,
+        "wddm_budget_bytes": 28658664529,
+        "wddm_process_usage_bytes": 0,
+        "wddm_remaining_bytes": 28658664529,
+        "label": "after_long_0",
+        "present": true,
+        "ts": 1792859299.5089123,
+        "system_used_bytes": 33446690816,
+        "system_used_GB": 31.15,
+        "system_available_GB": 0.391,
+        "wddm_process_usage_GB": 0.0,
+        "wddm_remaining_GB": 26.69
+      },
+      {
+        "luid_high": 0,
+        "luid_low": 162259294,
+        "device_id": 25760,
+        "system_total_bytes": 33866633216,
+        "system_available_bytes": 429051904,
+        "wddm_budget_bytes": 28658664529,
+        "wddm_process_usage_bytes": 0,
+        "wddm_remaining_bytes": 28658664529,
+        "label": "after_speed",
+        "present": true,
+        "ts": 1792859326.5027342,
+        "system_used_bytes": 33437581312,
+        "system_used_GB": 31.141,
+        "system_available_GB": 0.4,
+        "wddm_process_usage_GB": 0.0,
+        "wddm_remaining_GB": 26.69
+      }
+    ],
+    "note": "N3 probe (GlobalMemoryStatusEx + DXGI WDDM). Global OTD reservation still OFF/NOT_DONE.",
+    "delta_system_available_GB": -0.259,
+    "delta_wddm_process_usage_GB": 0.0
+  },
+  "speed": {
+    "warmup_http": 200,
+    "warmup_s": 5.574,
+    "cells": {
+      "medium": {
+        "non_stream_tps": {
+          "mean": 24.5415,
+          "stdev": 3.3765,
+          "min": 21.165,
+          "max": 27.918
+        },
+        "non_stream_wall_s": {
+          "mean": 13.291,
+          "stdev": 1.829,
+          "min": 11.462,
+          "max": 15.12
+        },
+        "ttft_s": {
+          "mean": 1.4296,
+          "stdev": 0.104,
+          "min": 1.3256,
+          "max": 1.5336
+        },
+        "decode_tps": {
+          "mean": 30.4105,
+          "stdev": 0.1465,
+          "min": 30.264,
+          "max": 30.557
+        },
+        "prompt_tokens_mean": {
+          "mean": 817.0,
+          "stdev": 0.0,
+          "min": 817.0,
+          "max": 817.0
+        },
+        "completion_tokens_mean": {
+          "mean": 320.0,
+          "stdev": 0.0,
+          "min": 320.0,
+          "max": 320.0
+        }
+      },
+      "long": {
+        "non_stream_tps": {
+          "mean": 19.344,
+          "stdev": 0.0,
+          "min": 19.344,
+          "max": 19.344
+        },
+        "non_stream_wall_s": {
+          "mean": 26.468,
+          "stdev": 0.0,
+          "min": 26.468,
+          "max": 26.468
+        },
+        "ttft_s": {
+          "mean": 1.4733,
+          "stdev": 0.0858,
+          "min": 1.3875,
+          "max": 1.5591
+        },
+        "decode_tps": {
+          "mean": 22.2125,
+          "stdev": 2.1935,
+          "min": 20.019,
+          "max": 24.406
+        },
+        "prompt_tokens_mean": {
+          "mean": 840.0,
+          "stdev": 0.0,
+          "min": 840.0,
+          "max": 840.0
+        },
+        "completion_tokens_mean": {
+          "mean": 512.0,
+          "stdev": 0.0,
+          "min": 512.0,
+          "max": 512.0
+        }
+      }
+    },
+    "non_stream_runs": [
+      {
+        "cell": "medium",
+        "run": 0,
+        "mode": "non_stream",
+        "http": 200,
+        "wall_s": 15.12,
+        "prompt_chars": 3551,
+        "prompt_tokens": 817,
+        "completion_tokens": 320,
+        "max_tokens": 320,
+        "completion_tokens_per_s": 21.165,
+        "pass": true,
+        "preview": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - **Background:** Pack V2 / OTDPACK1 for MoE expert offload. Each layer stores 256 experts with nine-slice records, placement permutation, an"
+      },
+      {
+        "cell": "medium",
+        "run": 1,
+        "mode": "non_stream",
+        "http": 200,
+        "wall_s": 11.462,
+        "prompt_chars": 3551,
+        "prompt_tokens": 817,
+        "completion_tokens": 320,
+        "max_tokens": 320,
+        "completion_tokens_per_s": 27.918,
+        "pass": true,
+        "preview": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - **Background:** Pack V2 / OTDPACK1 for MoE expert offload. Each layer stores 256 experts with nine-slice records, placement permutation, an"
+      },
+      {
+        "cell": "long",
+        "run": 0,
+        "mode": "non_stream",
+        "http": 200,
+        "wall_s": 26.468,
+        "prompt_chars": 3695,
+        "prompt_tokens": 840,
+        "completion_tokens": 512,
+        "max_tokens": 512,
+        "completion_tokens_per_s": 19.344,
+        "pass": true,
+        "preview": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - **Context:** \"Extended context for prefill stress. Logical expert ids map to physical slots; miss stalls, UMA pressure, and decode batching"
+      }
+    ],
+    "non_stream_completion_tps": {
+      "mean": 22.809,
+      "stdev": 3.6883,
+      "min": 19.344,
+      "max": 27.918
+    },
+    "non_stream_wall_s": {
+      "mean": 17.6833,
+      "stdev": 6.3887,
+      "min": 11.462,
+      "max": 26.468
+    },
+    "stream_ttft_runs": [
+      {
+        "http": 200,
+        "ttft_s": 1.5336,
+        "wall_s": 12.0059,
+        "decode_s": 10.4723,
+        "prompt_tokens": 821,
+        "completion_tokens": 320,
+        "decode_tokens_per_s": 30.557,
+        "e2e_tokens_per_s": 26.654,
+        "chars": 1296,
+        "preview": "Thinking Process:\n\n1.  **Deconstruct the Request:**\n    *   Topic: Pack V2 / OTDPACK1 for MoE expert offload.\n    *   Key details: 256 experts per layer, nine-slice records, placement permutation, res",
+        "pass": true,
+        "error": null,
+        "usage": {
+          "prompt_tokens": 821,
+          "completion_tokens": 320,
+          "total_tokens": 1141
+        },
+        "cell": "medium",
+        "run": 0,
+        "mode": "stream",
+        "prompt_chars": 3572,
+        "max_tokens": 320
+      },
+      {
+        "http": 200,
+        "ttft_s": 1.3256,
+        "wall_s": 11.899,
+        "decode_s": 10.5735,
+        "prompt_tokens": 821,
+        "completion_tokens": 320,
+        "decode_tokens_per_s": 30.264,
+        "e2e_tokens_per_s": 26.893,
+        "chars": 1310,
+        "preview": "Thinking Process:\n\n1.  **Deconstruct the Request:**\n    *   Topic: Pack V2 / OTDPACK1 for MoE expert offload.\n    *   Key details: 256 experts per layer, nine-slice records, placement permutation, res",
+        "pass": true,
+        "error": null,
+        "usage": {
+          "prompt_tokens": 821,
+          "completion_tokens": 320,
+          "total_tokens": 1141
+        },
+        "cell": "medium",
+        "run": 1,
+        "mode": "stream",
+        "prompt_chars": 3572,
+        "max_tokens": 320
+      },
+      {
+        "http": 200,
+        "ttft_s": 1.5591,
+        "wall_s": 22.5373,
+        "decode_s": 20.9782,
+        "prompt_tokens": 844,
+        "completion_tokens": 512,
+        "decode_tokens_per_s": 24.406,
+        "e2e_tokens_per_s": 22.718,
+        "chars": 2241,
+        "preview": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - **Context:** \"Extended context for prefill stress. Logical expert ids map to physical slots; miss stalls, UMA pressure, and decode batching",
+        "pass": true,
+        "error": null,
+        "usage": {
+          "prompt_tokens": 844,
+          "completion_tokens": 512,
+          "total_tokens": 1356
+        },
+        "cell": "long",
+        "run": 0,
+        "mode": "stream",
+        "prompt_chars": 3716,
+        "max_tokens": 512
+      },
+      {
+        "http": 200,
+        "ttft_s": 1.3875,
+        "wall_s": 26.9631,
+        "decode_s": 25.5756,
+        "prompt_tokens": 844,
+        "completion_tokens": 512,
+        "decode_tokens_per_s": 20.019,
+        "e2e_tokens_per_s": 18.989,
+        "chars": 2222,
+        "preview": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - **Context:** \"Extended context for prefill stress. Logical expert ids map to physical slots; miss stalls, UMA pressure, and decode batching",
+        "pass": true,
+        "error": null,
+        "usage": {
+          "prompt_tokens": 844,
+          "completion_tokens": 512,
+          "total_tokens": 1356
+        },
+        "cell": "long",
+        "run": 1,
+        "mode": "stream",
+        "prompt_chars": 3716,
+        "max_tokens": 512
+      }
+    ],
+    "ttft_s": {
+      "mean": 1.4514,
+      "stdev": 0.0978,
+      "min": 1.3256,
+      "max": 1.5591
+    },
+    "stream_decode_tps": {
+      "mean": 26.3115,
+      "stdev": 4.3839,
+      "min": 20.019,
+      "max": 30.557
+    },
+    "runs": [
+      {
+        "cell": "medium",
+        "run": 0,
+        "mode": "non_stream",
+        "http": 200,
+        "wall_s": 15.12,
+        "prompt_chars": 3551,
+        "prompt_tokens": 817,
+        "completion_tokens": 320,
+        "max_tokens": 320,
+        "completion_tokens_per_s": 21.165,
+        "pass": true,
+        "preview": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - **Background:** Pack V2 / OTDPACK1 for MoE expert offload. Each layer stores 256 experts with nine-slice records, placement permutation, an"
+      },
+      {
+        "cell": "medium",
+        "run": 1,
+        "mode": "non_stream",
+        "http": 200,
+        "wall_s": 11.462,
+        "prompt_chars": 3551,
+        "prompt_tokens": 817,
+        "completion_tokens": 320,
+        "max_tokens": 320,
+        "completion_tokens_per_s": 27.918,
+        "pass": true,
+        "preview": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - **Background:** Pack V2 / OTDPACK1 for MoE expert offload. Each layer stores 256 experts with nine-slice records, placement permutation, an"
+      },
+      {
+        "cell": "long",
+        "run": 0,
+        "mode": "non_stream",
+        "http": 200,
+        "wall_s": 26.468,
+        "prompt_chars": 3695,
+        "prompt_tokens": 840,
+        "completion_tokens": 512,
+        "max_tokens": 512,
+        "completion_tokens_per_s": 19.344,
+        "pass": true,
+        "preview": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - **Context:** \"Extended context for prefill stress. Logical expert ids map to physical slots; miss stalls, UMA pressure, and decode batching"
+      }
+    ],
+    "completion_tps_mean": 22.809,
+    "completion_tps_stdev": 3.6883,
+    "wall_s_mean": 17.6833,
+    "ttft_s_mean": 1.4514,
+    "decode_tps_mean": 26.3115
+  },
+  "verdict": "PASS",
+  "correctness_pass": true,
+  "speed_pass": true,
+  "ttft_pass": true,
+  "expert_trace_present": false
+}

@@ -35,8 +35,9 @@ Earlier short-prompt busy smoke (attempt1): TTFT ~1.09 s, decode ~12.2 tok/s, 
 
 ### Expert cache (`MOE_OTD_TRACE`)
 
-- hit_rate **0.971** (≈1.14M hits / 34k misses in delta window)
-- miss_bytes ~52 GiB logical, miss_read_s ~48.6 s accumulated in trace stats
+- hit_rate **0.9685** (1 145 930 hits / 37 221 misses on full busy trace)
+- miss_bytes ≈56.6 GiB logical; miss_read_s **52.37 s**; miss_transform_s **0.0**; **miss_copy_s 39.38 s**
+- Parser bug (fixed 2026-10-24): harness previously took `copy_ns` from `parts[11]` (`transform_ns`); real `copy_ns` is `parts[12]`. Published `miss_copy_s=0.0` was false — copy cost was lost.
 
 ### UMA (N3 probe)
 
@@ -52,8 +53,20 @@ Earlier short-prompt busy smoke (attempt1): TTFT ~1.09 s, decode ~12.2 tok/s, 
 
 Prefill 32K stock (~583 tok/s) **not** re-measured in this busy cohort.
 
+## Same-day stock r0 control (after miss_copy fix)
+
+Runtime `C:\llm\ovms` 2026.4.0, OFFLOAD omit, batching 16384 — receipt [evidence/live-gpu-r0-metrics-stock-r0-20261024.json](evidence/live-gpu-r0-metrics-stock-r0-20261024.json).
+
+| Cell | TTFT | Decode TPS | E2E non-stream TPS |
+|------|------|------------|--------------------|
+| medium | 1.43 s | **30.4** | 24.5 |
+| long | 1.47 s | 22.2 | 19.3 |
+| overall | 1.45 s | **26.3** | 22.8 |
+
+Note: seal/verify PID still alive during this run (`contention.seal_verify_pid_alive=true`) — medium decode below canonical **32.65** peak; treat as busy-host control, not a new ceiling.
+
 ## Next (search / free cohort)
 
 1. Free-CPU re-run same harness (`LIVE_LOAD_LABEL=free`) after seal/verify idle and RAM headroom.
-2. Stock r0 control relaunch from `C:\llm\ovms` for same-day A/B if needed.
-3. Keep hunting decode regression on Pack/OTD head path (see `orchestration/decode-regression-20261022`).
+2. Re-measure stock r0 once host is free to reconfirm 32.65.
+3. Keep hunting decode regression on Pack/OTD head path (see `orchestration/decode-regression-20261022`) — **miss_copy_s ≈39 s** on Pack V2 busy is now a real signal.
