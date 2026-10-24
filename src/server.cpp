@@ -531,11 +531,13 @@ static Status checkCib2PackBuild(ModelManager& manager, const std::string& pack_
             std::filesystem::file_size(file, ec) == 0 || ec) {
             return Status(StatusCode::INTERNAL_ERROR, "CIB2 compiled-layer receipt references a missing or invalid pack");
         }
-        if (!eligible_keys.insert(key).second) {
-            return Status(StatusCode::INTERNAL_ERROR, "Duplicate CIB2 compiled-layer key in build receipt");
+        // The same compiled layer can be visited more than once (e.g. model
+        // aliases). Count each native key once; both built and reused records
+        // are emitted only after the plugin has verified its serving handle.
+        if (eligible_keys.insert(key).second) {
+            if (outcome == "built") ++built;
+            else ++reused;
         }
-        if (outcome == "built") ++built;
-        else ++reused;
     }
     if (in.bad() || eligible_keys.empty()) {
         return Status(StatusCode::INTERNAL_ERROR,
