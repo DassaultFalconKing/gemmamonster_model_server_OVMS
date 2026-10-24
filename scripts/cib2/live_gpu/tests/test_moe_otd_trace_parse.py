@@ -7,7 +7,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 LIVE_GPU = HERE.parent
-FIXTURE = HERE / "fixtures" / "sample_moe_otd_trace.log"
+FIXTURE = HERE / "fixtures" / "sample_moe_otd_trace.txt"
 sys.path.insert(0, str(LIVE_GPU))
 
 from moe_otd_trace import (  # noqa: E402
