@@ -693,6 +693,11 @@ def build_layout(
         else:
             order = candidate
 
+    if fallback_used:
+        # Placement is identity; do not leave the requested strategy name as
+        # strategy_effective — consumers must not mis-record which table applied.
+        effective_strategy = "identity"
+
     placement = _inverse(order)
     layout = {
         "schema": LAYOUT_SCHEMA,
