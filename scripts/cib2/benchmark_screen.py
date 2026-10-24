@@ -200,6 +200,13 @@ def validate_receipt(data):
             raise ScreenError(f"{key}: sample count differs from A0")
     if "A1" in by_id and "B1" in by_id and by_id["A1"]["profile_sha"] != by_id["B1"]["profile_sha"]:
         raise ScreenError("A1/B1 optimized placement must use the same profile SHA")
+    # Same layout must share pack identity so resident-mode contrasts are not
+    # confounded by different pack files (A0↔B0 identity, A1↔B1 optimized).
+    if "B0" in by_id and by_id["B0"]["pack_manifest_sha"] != by_id["A0"]["pack_manifest_sha"]:
+        raise ScreenError("A0/B0 identity packs must share pack_manifest_sha")
+    if "A1" in by_id and "B1" in by_id and (
+            by_id["A1"]["pack_manifest_sha"] != by_id["B1"]["pack_manifest_sha"]):
+        raise ScreenError("A1/B1 optimized packs must share pack_manifest_sha")
     return by_id
 
 

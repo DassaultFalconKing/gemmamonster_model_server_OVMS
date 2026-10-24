@@ -23,9 +23,11 @@ def fixture(ids=("A0", "A1", "B0", "B1"), io_exposed=False):
     arms = []
     for n, key in enumerate(ids):
         layout, resident = s.ARMS[key]
+        # Same layout shares pack identity (A0≡B0, A1≡B1); optimized differs.
+        pack_manifest_sha = ("a" * 64) if layout == "identity" else ("b" * 64)
         arms.append({"id": key, "layout": layout, "resident_mode": resident,
                      "profile_sha": "b"*64 if layout == "optimized" else None,
-                     "pack_manifest_sha": chr(ord("a") + n)*64,
+                     "pack_manifest_sha": pack_manifest_sha,
                      "cohort": copy.deepcopy(cohort), "scenario": copy.deepcopy(scenario),
                      "gates": {k: True for k in s.GATE_KEYS}, "warmups": 1,
                      "samples": [{"index": i, "accepted_target_tokens": 100,
@@ -128,6 +130,17 @@ class PGP05ScreenTests(unittest.TestCase):
         data["arms"][0]["samples"][-1]["index"] = 3
         with self.assertRaises(s.ScreenError):
             s.screen_receipt(data, "e"*64)
+
+    def test_same_layout_pack_manifest_mismatch_rejected(self):
+        data = fixture()
+        # B0 must share A0 identity pack; A1 must share B1 optimized pack.
+        data["arms"][2]["pack_manifest_sha"] = "c" * 64  # B0
+        with self.assertRaisesRegex(s.ScreenError, "A0/B0 identity packs"):
+            s.screen_receipt(data, "e" * 64)
+        data = fixture()
+        data["arms"][3]["pack_manifest_sha"] = "d" * 64  # B1
+        with self.assertRaisesRegex(s.ScreenError, "A1/B1 optimized packs"):
+            s.screen_receipt(data, "e" * 64)
 
     def test_cli_success_and_reject_code2(self):
         data = fixture()
