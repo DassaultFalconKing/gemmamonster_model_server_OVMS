@@ -38,3 +38,10 @@ This is the current entry point for semantic-refit 2026.4 RC3B-postfix family-ma
 - Old routed-expert research [docs/moe-nvme-experts-research-20261021](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/tree/docs/moe-nvme-experts-research-20261021/docs/research/routed-experts-nvme-20261021): original work preserved in its **own branch**, not moved/deleted in this working tree.
 
 **Policy:** Pack V1 and `usm_device` Path A are the baseline. `usm_host` Path B remains experimental/off until exact RC1 same-cohort resource, safety, model, agentic and performance gates are passed. The pack file layout and memory resident mode are independent optimization axes.
+
+## Independent PGP-05 evidence screening (candidate)
+
+- [PGP-05 read-only A0/A1/B0/B1 screen](PGP05-BENCHMARK-SCREEN-20261024.md):
+  strict same-cohort validation, source/pack/gate flags, paired sample metrics,
+  physical-device-counter separation and synthetic negative tests.
+  This offline reviewer cannot authorize runtime/pack/GPU acceptance; Path B stays OFF.
