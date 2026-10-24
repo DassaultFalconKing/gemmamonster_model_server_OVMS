@@ -1,0 +1,1225 @@
+{
+  "schema": "cib2.static-nine-slice.v1",
+  "graph": "openvino_language_model.xml",
+  "compiled_kind": "UNKNOWN",
+  "runtime_acceptance": "NO",
+  "bin_opened": false,
+  "layer_count": 15765,
+  "matched_const_count": 120,
+  "slot_counts": {
+    "gate/weight": 0,
+    "gate/scale": 0,
+    "gate/zp": 0,
+    "up/weight": 0,
+    "up/scale": 0,
+    "up/zp": 0,
+    "down/weight": 40,
+    "down/scale": 40,
+    "down/zp": 40
+  },
+  "block_count": 40,
+  "blocks_with_all_nine": 0,
+  "complete_blocks": [],
+  "records": [
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 379,
+      "layer_id": "344",
+      "name": "self.model.model.language_model.layers.0.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 0,
+      "offset": 309329201,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 381,
+      "layer_id": "346",
+      "name": "self.model.model.language_model.layers.0.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 0,
+      "offset": 443546929,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 384,
+      "layer_id": "349",
+      "name": "self.model.model.language_model.layers.0.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 0,
+      "offset": 445644081,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 780,
+      "layer_id": "710",
+      "name": "self.model.model.language_model.layers.1.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 1,
+      "offset": 763644113,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 782,
+      "layer_id": "712",
+      "name": "self.model.model.language_model.layers.1.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 1,
+      "offset": 897861841,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 785,
+      "layer_id": "715",
+      "name": "self.model.model.language_model.layers.1.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 1,
+      "offset": 899958993,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 1167,
+      "layer_id": "1062",
+      "name": "self.model.model.language_model.layers.2.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 2,
+      "offset": 1217958945,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 1169,
+      "layer_id": "1064",
+      "name": "self.model.model.language_model.layers.2.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 2,
+      "offset": 1352176673,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 1172,
+      "layer_id": "1067",
+      "name": "self.model.model.language_model.layers.2.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 2,
+      "offset": 1354273825,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 1676,
+      "layer_id": "1571",
+      "name": "self.model.model.language_model.layers.3.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 3,
+      "offset": 1668764138,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 1678,
+      "layer_id": "1573",
+      "name": "self.model.model.language_model.layers.3.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 3,
+      "offset": 1802981866,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 1681,
+      "layer_id": "1576",
+      "name": "self.model.model.language_model.layers.3.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 3,
+      "offset": 1805079018,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 2063,
+      "layer_id": "1923",
+      "name": "self.model.model.language_model.layers.4.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 4,
+      "offset": 2123078970,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 2065,
+      "layer_id": "1925",
+      "name": "self.model.model.language_model.layers.4.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 4,
+      "offset": 2257296698,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 2068,
+      "layer_id": "1928",
+      "name": "self.model.model.language_model.layers.4.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 4,
+      "offset": 2259393850,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 2450,
+      "layer_id": "2275",
+      "name": "self.model.model.language_model.layers.5.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 5,
+      "offset": 2577393802,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 2452,
+      "layer_id": "2277",
+      "name": "self.model.model.language_model.layers.5.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 5,
+      "offset": 2711611530,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 2455,
+      "layer_id": "2280",
+      "name": "self.model.model.language_model.layers.5.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 5,
+      "offset": 2713708682,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 2837,
+      "layer_id": "2627",
+      "name": "self.model.model.language_model.layers.6.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 6,
+      "offset": 3031708634,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 2839,
+      "layer_id": "2629",
+      "name": "self.model.model.language_model.layers.6.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 6,
+      "offset": 3165926362,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 2842,
+      "layer_id": "2632",
+      "name": "self.model.model.language_model.layers.6.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 6,
+      "offset": 3168023514,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 3163,
+      "layer_id": "2953",
+      "name": "self.model.model.language_model.layers.7.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 7,
+      "offset": 3482513450,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 3165,
+      "layer_id": "2955",
+      "name": "self.model.model.language_model.layers.7.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 7,
+      "offset": 3616731178,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 3168,
+      "layer_id": "2958",
+      "name": "self.model.model.language_model.layers.7.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 7,
+      "offset": 3618828330,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 3550,
+      "layer_id": "3305",
+      "name": "self.model.model.language_model.layers.8.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 8,
+      "offset": 3936828282,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 3552,
+      "layer_id": "3307",
+      "name": "self.model.model.language_model.layers.8.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 8,
+      "offset": 4071046010,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 3555,
+      "layer_id": "3310",
+      "name": "self.model.model.language_model.layers.8.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 8,
+      "offset": 4073143162,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 3937,
+      "layer_id": "3657",
+      "name": "self.model.model.language_model.layers.9.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 9,
+      "offset": 4391143114,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 3939,
+      "layer_id": "3659",
+      "name": "self.model.model.language_model.layers.9.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 9,
+      "offset": 4525360842,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 3942,
+      "layer_id": "3662",
+      "name": "self.model.model.language_model.layers.9.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 9,
+      "offset": 4527457994,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 4324,
+      "layer_id": "4009",
+      "name": "self.model.model.language_model.layers.10.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 10,
+      "offset": 4845457946,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 4326,
+      "layer_id": "4011",
+      "name": "self.model.model.language_model.layers.10.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 10,
+      "offset": 4979675674,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 4329,
+      "layer_id": "4014",
+      "name": "self.model.model.language_model.layers.10.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 10,
+      "offset": 4981772826,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 4650,
+      "layer_id": "4335",
+      "name": "self.model.model.language_model.layers.11.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 11,
+      "offset": 5296262762,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 4652,
+      "layer_id": "4337",
+      "name": "self.model.model.language_model.layers.11.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 11,
+      "offset": 5430480490,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 4655,
+      "layer_id": "4340",
+      "name": "self.model.model.language_model.layers.11.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 11,
+      "offset": 5432577642,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 5037,
+      "layer_id": "4687",
+      "name": "self.model.model.language_model.layers.12.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 12,
+      "offset": 5750577594,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 5039,
+      "layer_id": "4689",
+      "name": "self.model.model.language_model.layers.12.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 12,
+      "offset": 5884795322,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 5042,
+      "layer_id": "4692",
+      "name": "self.model.model.language_model.layers.12.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 12,
+      "offset": 5886892474,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 5424,
+      "layer_id": "5039",
+      "name": "self.model.model.language_model.layers.13.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 13,
+      "offset": 6204892426,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 5426,
+      "layer_id": "5041",
+      "name": "self.model.model.language_model.layers.13.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 13,
+      "offset": 6339110154,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 5429,
+      "layer_id": "5044",
+      "name": "self.model.model.language_model.layers.13.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 13,
+      "offset": 6341207306,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 5811,
+      "layer_id": "5391",
+      "name": "self.model.model.language_model.layers.14.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 14,
+      "offset": 6659207258,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 5813,
+      "layer_id": "5393",
+      "name": "self.model.model.language_model.layers.14.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 14,
+      "offset": 6793424986,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 5816,
+      "layer_id": "5396",
+      "name": "self.model.model.language_model.layers.14.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 14,
+      "offset": 6795522138,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 6137,
+      "layer_id": "5717",
+      "name": "self.model.model.language_model.layers.15.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 15,
+      "offset": 7110012074,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 6139,
+      "layer_id": "5719",
+      "name": "self.model.model.language_model.layers.15.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 15,
+      "offset": 7244229802,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 6142,
+      "layer_id": "5722",
+      "name": "self.model.model.language_model.layers.15.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 15,
+      "offset": 7246326954,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 6524,
+      "layer_id": "6069",
+      "name": "self.model.model.language_model.layers.16.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 16,
+      "offset": 7564326906,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 6526,
+      "layer_id": "6071",
+      "name": "self.model.model.language_model.layers.16.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 16,
+      "offset": 7698544634,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 6529,
+      "layer_id": "6074",
+      "name": "self.model.model.language_model.layers.16.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 16,
+      "offset": 7700641786,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 6911,
+      "layer_id": "6421",
+      "name": "self.model.model.language_model.layers.17.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 17,
+      "offset": 8018641738,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 6913,
+      "layer_id": "6423",
+      "name": "self.model.model.language_model.layers.17.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 17,
+      "offset": 8152859466,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 6916,
+      "layer_id": "6426",
+      "name": "self.model.model.language_model.layers.17.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 17,
+      "offset": 8154956618,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 7298,
+      "layer_id": "6773",
+      "name": "self.model.model.language_model.layers.18.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 18,
+      "offset": 8472956570,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 7300,
+      "layer_id": "6775",
+      "name": "self.model.model.language_model.layers.18.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 18,
+      "offset": 8607174298,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 7303,
+      "layer_id": "6778",
+      "name": "self.model.model.language_model.layers.18.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 18,
+      "offset": 8609271450,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 7624,
+      "layer_id": "7099",
+      "name": "self.model.model.language_model.layers.19.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 19,
+      "offset": 8923761386,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 7626,
+      "layer_id": "7101",
+      "name": "self.model.model.language_model.layers.19.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 19,
+      "offset": 9057979114,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 7629,
+      "layer_id": "7104",
+      "name": "self.model.model.language_model.layers.19.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 19,
+      "offset": 9060076266,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 8011,
+      "layer_id": "7451",
+      "name": "self.model.model.language_model.layers.20.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 20,
+      "offset": 9378076218,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 8013,
+      "layer_id": "7453",
+      "name": "self.model.model.language_model.layers.20.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 20,
+      "offset": 9512293946,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 8016,
+      "layer_id": "7456",
+      "name": "self.model.model.language_model.layers.20.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 20,
+      "offset": 9514391098,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 8398,
+      "layer_id": "7803",
+      "name": "self.model.model.language_model.layers.21.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 21,
+      "offset": 9832391050,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 8400,
+      "layer_id": "7805",
+      "name": "self.model.model.language_model.layers.21.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 21,
+      "offset": 9966608778,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 8403,
+      "layer_id": "7808",
+      "name": "self.model.model.language_model.layers.21.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 21,
+      "offset": 9968705930,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 8785,
+      "layer_id": "8155",
+      "name": "self.model.model.language_model.layers.22.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 22,
+      "offset": 10286705882,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 8787,
+      "layer_id": "8157",
+      "name": "self.model.model.language_model.layers.22.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 22,
+      "offset": 10420923610,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 8790,
+      "layer_id": "8160",
+      "name": "self.model.model.language_model.layers.22.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 22,
+      "offset": 10423020762,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 9111,
+      "layer_id": "8481",
+      "name": "self.model.model.language_model.layers.23.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 23,
+      "offset": 10737510698,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 9113,
+      "layer_id": "8483",
+      "name": "self.model.model.language_model.layers.23.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 23,
+      "offset": 10871728426,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 9116,
+      "layer_id": "8486",
+      "name": "self.model.model.language_model.layers.23.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 23,
+      "offset": 10873825578,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 9498,
+      "layer_id": "8833",
+      "name": "self.model.model.language_model.layers.24.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 24,
+      "offset": 11191825530,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 9500,
+      "layer_id": "8835",
+      "name": "self.model.model.language_model.layers.24.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 24,
+      "offset": 11326043258,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 9503,
+      "layer_id": "8838",
+      "name": "self.model.model.language_model.layers.24.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 24,
+      "offset": 11328140410,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 9885,
+      "layer_id": "9185",
+      "name": "self.model.model.language_model.layers.25.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 25,
+      "offset": 11646140362,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 9887,
+      "layer_id": "9187",
+      "name": "self.model.model.language_model.layers.25.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 25,
+      "offset": 11780358090,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 9890,
+      "layer_id": "9190",
+      "name": "self.model.model.language_model.layers.25.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 25,
+      "offset": 11782455242,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 10272,
+      "layer_id": "9537",
+      "name": "self.model.model.language_model.layers.26.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 26,
+      "offset": 12100455194,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 10274,
+      "layer_id": "9539",
+      "name": "self.model.model.language_model.layers.26.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 26,
+      "offset": 12234672922,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 10277,
+      "layer_id": "9542",
+      "name": "self.model.model.language_model.layers.26.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 26,
+      "offset": 12236770074,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 10598,
+      "layer_id": "9863",
+      "name": "self.model.model.language_model.layers.27.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 27,
+      "offset": 12551260010,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 10600,
+      "layer_id": "9865",
+      "name": "self.model.model.language_model.layers.27.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 27,
+      "offset": 12685477738,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 10603,
+      "layer_id": "9868",
+      "name": "self.model.model.language_model.layers.27.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 27,
+      "offset": 12687574890,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 10985,
+      "layer_id": "10215",
+      "name": "self.model.model.language_model.layers.28.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 28,
+      "offset": 13005574842,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 10987,
+      "layer_id": "10217",
+      "name": "self.model.model.language_model.layers.28.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 28,
+      "offset": 13139792570,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 10990,
+      "layer_id": "10220",
+      "name": "self.model.model.language_model.layers.28.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 28,
+      "offset": 13141889722,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 11372,
+      "layer_id": "10567",
+      "name": "self.model.model.language_model.layers.29.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 29,
+      "offset": 13459889674,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 11374,
+      "layer_id": "10569",
+      "name": "self.model.model.language_model.layers.29.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 29,
+      "offset": 13594107402,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 11377,
+      "layer_id": "10572",
+      "name": "self.model.model.language_model.layers.29.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 29,
+      "offset": 13596204554,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 11759,
+      "layer_id": "10919",
+      "name": "self.model.model.language_model.layers.30.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 30,
+      "offset": 13914204506,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 11761,
+      "layer_id": "10921",
+      "name": "self.model.model.language_model.layers.30.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 30,
+      "offset": 14048422234,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 11764,
+      "layer_id": "10924",
+      "name": "self.model.model.language_model.layers.30.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 30,
+      "offset": 14050519386,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 12085,
+      "layer_id": "11245",
+      "name": "self.model.model.language_model.layers.31.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 31,
+      "offset": 14365009322,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 12087,
+      "layer_id": "11247",
+      "name": "self.model.model.language_model.layers.31.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 31,
+      "offset": 14499227050,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 12090,
+      "layer_id": "11250",
+      "name": "self.model.model.language_model.layers.31.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 31,
+      "offset": 14501324202,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 12472,
+      "layer_id": "11597",
+      "name": "self.model.model.language_model.layers.32.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 32,
+      "offset": 14819324154,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 12474,
+      "layer_id": "11599",
+      "name": "self.model.model.language_model.layers.32.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 32,
+      "offset": 14953541882,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 12477,
+      "layer_id": "11602",
+      "name": "self.model.model.language_model.layers.32.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 32,
+      "offset": 14955639034,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 12859,
+      "layer_id": "11949",
+      "name": "self.model.model.language_model.layers.33.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 33,
+      "offset": 15273638986,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 12861,
+      "layer_id": "11951",
+      "name": "self.model.model.language_model.layers.33.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 33,
+      "offset": 15407856714,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 12864,
+      "layer_id": "11954",
+      "name": "self.model.model.language_model.layers.33.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 33,
+      "offset": 15409953866,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 13246,
+      "layer_id": "12301",
+      "name": "self.model.model.language_model.layers.34.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 34,
+      "offset": 15727953818,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 13248,
+      "layer_id": "12303",
+      "name": "self.model.model.language_model.layers.34.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 34,
+      "offset": 15862171546,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 13251,
+      "layer_id": "12306",
+      "name": "self.model.model.language_model.layers.34.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 34,
+      "offset": 15864268698,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 13572,
+      "layer_id": "12627",
+      "name": "self.model.model.language_model.layers.35.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 35,
+      "offset": 16178758634,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 13574,
+      "layer_id": "12629",
+      "name": "self.model.model.language_model.layers.35.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 35,
+      "offset": 16312976362,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 13577,
+      "layer_id": "12632",
+      "name": "self.model.model.language_model.layers.35.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 35,
+      "offset": 16315073514,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 13959,
+      "layer_id": "12979",
+      "name": "self.model.model.language_model.layers.36.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 36,
+      "offset": 16633073466,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 13961,
+      "layer_id": "12981",
+      "name": "self.model.model.language_model.layers.36.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 36,
+      "offset": 16767291194,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 13964,
+      "layer_id": "12984",
+      "name": "self.model.model.language_model.layers.36.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 36,
+      "offset": 16769388346,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 14346,
+      "layer_id": "13331",
+      "name": "self.model.model.language_model.layers.37.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 37,
+      "offset": 17087388298,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 14348,
+      "layer_id": "13333",
+      "name": "self.model.model.language_model.layers.37.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 37,
+      "offset": 17221606026,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 14351,
+      "layer_id": "13336",
+      "name": "self.model.model.language_model.layers.37.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 37,
+      "offset": 17223703178,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 14733,
+      "layer_id": "13683",
+      "name": "self.model.model.language_model.layers.38.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 38,
+      "offset": 17541703130,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 14735,
+      "layer_id": "13685",
+      "name": "self.model.model.language_model.layers.38.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 38,
+      "offset": 17675920858,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 14738,
+      "layer_id": "13688",
+      "name": "self.model.model.language_model.layers.38.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 38,
+      "offset": 17678018010,
+      "size": 8388608
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 15620,
+      "layer_id": "14570",
+      "name": "self.model.model.language_model.layers.39.mlp.experts.down_proj",
+      "slot": "down/weight",
+      "block": 39,
+      "offset": 17992507946,
+      "size": 134217728
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 15622,
+      "layer_id": "14572",
+      "name": "self.model.model.language_model.layers.39.mlp.experts.down_proj/zero_point",
+      "slot": "down/zp",
+      "block": 39,
+      "offset": 18126725674,
+      "size": 2097152
+    },
+    {
+      "graph": "openvino_language_model.xml",
+      "ordinal": 15625,
+      "layer_id": "14575",
+      "name": "self.model.model.language_model.layers.39.mlp.experts.down_proj/scale",
+      "slot": "down/scale",
+      "block": 39,
+      "offset": 18128822826,
+      "size": 8388608
+    }
+  ]
+}
