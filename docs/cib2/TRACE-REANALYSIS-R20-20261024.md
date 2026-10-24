@@ -107,9 +107,12 @@ Do **not** disable checksums or safety drains for speed.
 
 ## 8. Next minimal A/B plan (measurement only)
 
-1. **Free Pack r20** — no seal/verify; `MOE_OTD_PERF_LOG=1` + `MOE_OTD_TRACE`; same prompts/seed as busy receipt.  
-2. **Stock 2026.4 r20** — same prompts; OFFLOAD_RATIO=20; no packs.  
-3. **Pack r20 PERF-only** — no trace file; compare tok/s vs (1) for trace overhead bound.  
-4. **Optional micro-patch (diag only):** gate/drain timers → new counters; no policy/pack/binary freeze break for production RC3B.
+Canonical matrix (P0/P1): [MEASUREMENT-SCENARIO-P0-P1-20261024.md](MEASUREMENT-SCENARIO-P0-P1-20261024.md).
+
+1. **P0** Instrument gate / `onednn.wait` / `stream.finish` (hit-path capable).  
+2. **P0** Free-host Pack r20 **without** trace; then with PERF+trace.  
+3. **P0** CIB2 r20 unpacked vs packed (PackV2 price).  
+4. **P1** `MOE_OTD_PERF_LOG` checksum cost; layer-id → name map for PGP.  
+5. Same harness on Ornith family control (`LIVE_LOAD_LABEL=ornith-control`) — lag vs vanilla Qwen treated as constant offset.
 
 Acceptance for a later phase: attribute tok/s delta with measured verify + drain + miss I/O on a free host before any architectural optimization.
