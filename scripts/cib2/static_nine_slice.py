@@ -21,25 +21,24 @@ KINDS = ("weight", "scale", "zp")
 NINE_SLOTS = tuple("%s/%s" % (proj, kind) for proj in PROJECTIONS for kind in KINDS)
 _BLOCK_RE = re.compile(r"layers\.(\d+)\.")
 _PROJ_TOKEN = {"gate": "gate_proj", "up": "up_proj", "down": "down_proj"}
+# Match a complete routed projection segment; substring matching would accept
+# misleading names such as "other_down_proj/scale".
+_ROUTED_CONST_RE = re.compile(
+    r"\.mlp\.experts\.(gate_proj|up_proj|down_proj)(?:/(scale|zero_point))?$"
+)
 
 
 def classify_routed_const(name: str) -> Optional[str]:
     """Return a nine-slot key, or None when the Const is not one of those slots."""
-    if "shared_expert" in name or ".mlp.experts." not in name:
+    if "shared_expert" in name:
         return None
-    if name.endswith("/zero_point"):
-        kind = "zp"
-    elif name.endswith("/scale"):
-        kind = "scale"
-    else:
-        for proj, token in _PROJ_TOKEN.items():
-            if name.endswith(token):
-                return "%s/weight" % proj
+    match = _ROUTED_CONST_RE.search(name)
+    if match is None:
         return None
-    for proj, token in _PROJ_TOKEN.items():
-        if token in name:
-            return "%s/%s" % (proj, kind)
-    return None
+    token, marker = match.groups()
+    projection = token.removesuffix("_proj")
+    kind = {"scale": "scale", "zero_point": "zp", None: "weight"}[marker]
+    return "%s/%s" % (projection, kind)
 
 
 def _local(tag: str) -> str:
@@ -172,15 +171,24 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         raise SystemExit("output must be a .json file")
     if output == xml_path or xml_path.parent in output.parents:
         raise SystemExit("refusing to write the report inside the XML directory")
+    # Validate *all* destinations before any write. In particular, arbitrary
+    # --markdown paths must never overwrite a different model's .bin weights
+    # or the JSON report. Only .md is an accepted Markdown destination.
+    md = args.markdown.resolve() if args.markdown is not None else None
+    if md is not None:
+        if md.suffix.lower() != ".md":
+            raise SystemExit("markdown output must be a .md file")
+        if md == output:
+            raise SystemExit("markdown output must differ from JSON output")
+        if xml_path.parent in md.parents:
+            raise SystemExit("refusing to write markdown inside the XML directory")
     report = analyze_xml(xml_path)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2), encoding="utf-8")
-    if args.markdown is not None:
-        md = args.markdown.resolve()
-        if xml_path.parent in md.parents:
-            raise SystemExit("refusing to write markdown inside the XML directory")
+    if md is not None:
         md.parent.mkdir(parents=True, exist_ok=True)
-        md.write_text(render_markdown(report, str(xml_path)), encoding="utf-8")
+        # Do not leak operator-local absolute paths to versioned Markdown.
+        md.write_text(render_markdown(report, xml_path.name), encoding="utf-8")
     summary = {
         "graph": report["graph"],
         "compiled_kind": report["compiled_kind"],
