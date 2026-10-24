@@ -113,5 +113,83 @@ class StaticNineSliceTest(unittest.TestCase):
             self.assertIn("UNKNOWN", (out_dir / "report.md").read_text(encoding="utf-8"))
 
 
+class StaticNineSliceIndependentReviewTest(unittest.TestCase):
+    def test_projection_substrings_do_not_become_nine_slots(self):
+        invalid = (
+            "model.layers.0.mlp.experts.not_down_proj/scale",
+            "model.layers.0.mlp.experts.down_proj_extra/zero_point",
+            "model.layers.0.mlp.experts.gate_proj/up_proj/scale",
+            "model.layers.0.mlp.experts.a_up_proj/scale",
+            "model.layers.0.mlp.experts.down_proj/scale/matmul",
+        )
+        for name in invalid:
+            with self.subTest(name=name):
+                self.assertIsNone(nine.classify_routed_const(name))
+        self.assertEqual(
+            nine.classify_routed_const("model.layers.0.mlp.experts.down_proj/scale"),
+            "down/scale",
+        )
+
+    def test_other_projection_substrings_cannot_make_complete_block(self):
+        entries = []
+        i = 0
+        for projection in ("gate", "up", "down"):
+            base = "model.layers.1.mlp.experts.fake_%s_proj" % projection
+            for suffix in ("", "/scale", "/zero_point"):
+                entries.append((i, base + suffix, 1, 1))
+                i += 1
+        report = nine.analyze_root(_xml(entries), "adversarial.xml")
+        self.assertEqual(report["matched_const_count"], 0)
+        self.assertEqual(report["blocks_with_all_nine"], 0)
+
+    def test_markdown_must_not_overwrite_bin_or_write_partial_json(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            source = folder / "model"
+            target = folder / "other_model"
+            source.mkdir()
+            target.mkdir()
+            xml = source / "openvino_language_model.xml"
+            xml.write_text("<net><layers /></net>", encoding="utf-8")
+            protected = target / "weights.bin"
+            protected.write_bytes(b"untouched-weight-sentinel")
+            output = folder / "reports" / "summary.json"
+            with self.assertRaisesRegex(SystemExit, "markdown output must be a .md"):
+                nine.main(["--xml", str(xml), "--output", str(output),
+                           "--markdown", str(protected)])
+            self.assertEqual(protected.read_bytes(), b"untouched-weight-sentinel")
+            self.assertFalse(output.exists())
+
+    def test_invalid_markdown_in_source_dir_leaves_no_partial_json(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            model = root / "model"
+            model.mkdir()
+            xml = model / "openvino_language_model.xml"
+            xml.write_text("<net><layers /></net>", encoding="utf-8")
+            output = root / "report.json"
+            with self.assertRaisesRegex(SystemExit, "XML directory"):
+                nine.main(["--xml", str(xml), "--output", str(output),
+                           "--markdown", str(model / "inside.md")])
+            self.assertFalse(output.exists())
+            self.assertEqual(xml.read_text(encoding="utf-8"), "<net><layers /></net>")
+
+    def test_markdown_does_not_export_absolute_host_path(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            model = root / "private_model"
+            out = root / "reports"
+            model.mkdir()
+            xml = model / "openvino_language_model.xml"
+            xml.write_text("<net><layers /></net>", encoding="utf-8")
+            self.assertEqual(
+                nine.main(["--xml", str(xml), "--output", str(out / "report.json"),
+                           "--markdown", str(out / "report.md")]), 0,
+            )
+            text = (out / "report.md").read_text(encoding="utf-8")
+            self.assertNotIn(str(model), text)
+            self.assertIn("openvino_language_model.xml", text)
+
+
 if __name__ == "__main__":
     unittest.main()
