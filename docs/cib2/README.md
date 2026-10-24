@@ -14,7 +14,7 @@ This is the current entry point for semantic-refit 2026.4 RC3B-postfix family-ma
 
 ## PGP wave-01 integration QA
 
-- [Cursor Wave-01 integration receipt](INTEGRATION-PGP-WAVE01-20261024.md) aggregates PR #24 + PR #25 on `feature/cib2-pgp-wave01-cursor-integration-20261024` (**HOST_READY** offline tooling; 173/173 host tests).
+- [Cursor Wave-01 integration receipt](INTEGRATION-PGP-WAVE01-20261024.md) aggregates PR #24 + PR #25 on `feature/cib2-pgp-wave01-cursor-integration-20261024` (**HOST_READY** offline tooling; 174/174 host tests).
 - [Wave-01 dispatch + independent review](ORCHESTRATION-PGP-WAVE01-20261024.md) records the three branches and acceptance limitations.
 - [PGP-00 storage/UMA geometry diagnostics](STORAGE-GEOMETRY-USAGE-20261024.md) with standalone `storage_geometry.py` and independent mocked Windows safety tests.
 - [PGP-02 offline Pack V1 placement](PACK-LAYOUT-USAGE-20261024.md) was already part of coordinator lineage and independently hardened; no re-import of the older worker version.
