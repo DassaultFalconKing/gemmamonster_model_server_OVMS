@@ -234,7 +234,7 @@ def _summarize(arm):
             )
         tps_vals.append(tps)
     io = [_io(s["physical_io"]) for s in samples]
-    return {
+    summary = {
         "median_accepted_target_tps": _median(tps_vals),
         "median_ttft_ms": _median([s["ttft_ms"] for s in samples]),
         "median_tpot_p95_ms": _median([s["tpot_p95_ms"] for s in samples]),
@@ -246,6 +246,12 @@ def _summarize(arm):
         ),
         "physical_io_status": "EXPOSED" if all(x is not None for x in io) else "NOT_EXPOSED",
     }
+    # A finite per-sample TPS is not enough: median() on an even-sized
+    # sample set can overflow when it averages two very large finite floats.
+    for name, value in summary.items():
+        if type(value) is float and not math.isfinite(value):
+            raise ScreenError("derived %s is nonfinite" % name)
+    return summary
 
 
 def _comparison(a0, candidate):
@@ -254,9 +260,12 @@ def _comparison(a0, candidate):
                 "median_tpot_p99_ms", "median_startup_ms", "max_unique_memory_bytes",
                 "physical_device_bytes_per_accepted_token"):
         baseline, proposed = a0[key], candidate[key]
-        result[key + "_delta_pct"] = (
+        delta = (
             (proposed / baseline - 1) * 100 if baseline is not None and proposed is not None and baseline > 0 else None
         )
+        if delta is not None and not math.isfinite(delta):
+            raise ScreenError("derived %s delta is nonfinite" % key)
+        result[key + "_delta_pct"] = delta
     return result
 
 
@@ -310,13 +319,15 @@ def main(argv=None):
         sys.stderr.write("\n")
         return 2
     try:
-        json.dump(result, sys.stdout, indent=2, allow_nan=False)
+        # Validate serialization before writing to stdout. json.dump() can
+        # otherwise emit a partial object before rejecting an invalid value.
+        encoded = json.dumps(result, indent=2, allow_nan=False)
     except (ValueError, OverflowError) as exc:
         json.dump({"schema": OUTPUT_SCHEMA, "status": "REJECTED", "error": str(exc),
                    "runtime_acceptance": "NO", "promotion_authorized": False}, sys.stderr)
         sys.stderr.write("\n")
         return 2
-    sys.stdout.write("\n")
+    sys.stdout.write(encoded + "\n")
     return 0
 
 

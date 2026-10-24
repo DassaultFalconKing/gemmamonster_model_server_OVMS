@@ -180,6 +180,58 @@ class PGP05ScreenTests(unittest.TestCase):
         with self.assertRaisesRegex(s.ScreenError, "accepted_target_tokens mismatch"):
             s.screen_receipt(data, "e" * 64)
 
+    def test_even_sample_median_cannot_overflow_into_json(self):
+        data = fixture()
+        # Four accepted samples of individually finite 1e308 TPS each.
+        # Python statistics.median averages the two central finite floats
+        # and can yield inf. All arms need the same sample count.
+        for arm in data["arms"]:
+            fourth = copy.deepcopy(arm["samples"][-1])
+            fourth["index"] = 3
+            arm["samples"].append(fourth)
+        for sample in data["arms"][0]["samples"]:
+            sample["wall_seconds"] = 1e-306
+        with self.assertRaisesRegex(s.ScreenError, "derived median_accepted_target_tps is nonfinite"):
+            s.screen_receipt(data, "e" * 64)
+
+    def test_finite_tps_can_overflow_percentage_delta(self):
+        data = fixture()
+        for sample in data["arms"][0]["samples"]:
+            sample["wall_seconds"] = 1e18
+        for sample in data["arms"][1]["samples"]:
+            sample["wall_seconds"] = 1e-306
+        with self.assertRaisesRegex(s.ScreenError, "derived median_accepted_target_tps delta is nonfinite"):
+            s.screen_receipt(data, "e" * 64)
+
+    def test_derived_overflow_cli_rejects_without_partial_stdout(self):
+        data = fixture()
+        for sample in data["arms"][0]["samples"]:
+            sample["wall_seconds"] = 1e18
+        for sample in data["arms"][1]["samples"]:
+            sample["wall_seconds"] = 1e-306
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "huge_delta.json"
+            path.write_text(json.dumps(data), encoding="utf-8")
+            stdout, stderr = StringIO(), StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                self.assertEqual(s.main(["--input", str(path)]), 2)
+            self.assertEqual(stdout.getvalue(), "")
+            rejection = json.loads(stderr.getvalue())
+            self.assertEqual(rejection["status"], "REJECTED")
+            self.assertFalse(rejection["promotion_authorized"])
+            self.assertEqual(rejection["runtime_acceptance"], "NO")
+
+    def test_historical_ratio_values_remain_allowed_as_offline_scenarios(self):
+        # PGP-05 is a receipt reviewer, not a hard-coded benchmark scheduler.
+        # A future execution matrix may restrict ratios separately.
+        for ratio in (10, 30, 50):
+            data = fixture(ids=("A0", "A1"))
+            for arm in data["arms"]:
+                arm["scenario"]["offload_ratio"] = ratio
+            report = s.screen_receipt(data, "e" * 64)
+            self.assertEqual(report["runtime_acceptance"], "NO")
+            self.assertFalse(report["promotion_authorized"])
+
 
 if __name__ == '__main__':
     unittest.main()
