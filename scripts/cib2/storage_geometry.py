@@ -168,6 +168,19 @@ def resolve_path_context(path_text: str) -> Dict[str, Any]:
             f"path {str(resolved)!r} is neither an existing directory nor a file"
         )
     anchor = resolved.anchor or str(resolved.drive)
+    if _IS_WINDOWS:
+        # Path.anchor identifies the path's syntactic drive, not necessarily the
+        # hosting volume. An NTFS mounted folder may live on another volume.
+        # Ask Windows for the nearest volume mount point instead.
+        volume_path = ctypes.create_unicode_buffer(32768)
+        if not _win32_tools().kernel32.GetVolumePathNameW(
+            str(resolved), volume_path, len(volume_path)
+        ):
+            raise PathResolutionError(
+                f"GetVolumePathNameW failed for the resolved path "
+                f"(Win32 error {ctypes.get_last_error()}); refusing a drive-root guess"
+            )
+        anchor = volume_path.value
     if not anchor:
         raise PathResolutionError(f"path {str(resolved)!r} has no filesystem volume root")
     return {
@@ -194,9 +207,9 @@ def probe_volume_information(root: str) -> Dict[str, Any]:
         max_component = wintypes.DWORD()
         flags = wintypes.DWORD()
         if not tools.kernel32.GetVolumeInformationW(
-            root, label_buf, ctypes.sizeof(label_buf), ctypes.byref(serial),
+            root, label_buf, len(label_buf), ctypes.byref(serial),
             ctypes.byref(max_component), ctypes.byref(flags), fs_buf,
-            ctypes.sizeof(fs_buf),
+            len(fs_buf),
         ):
             raise OSError(ctypes.get_last_error(), "GetVolumeInformationW failed")
         serial_value = serial.value
@@ -375,6 +388,9 @@ class _Tools:
                                             wintypes.LPDWORD, wintypes.LPDWORD,
                                             wintypes.LPWSTR, wintypes.DWORD]
         k.GetVolumeInformationW.restype = wintypes.BOOL
+        k.GetVolumePathNameW.argtypes = [wintypes.LPCWSTR, wintypes.LPWSTR,
+                                        wintypes.DWORD]
+        k.GetVolumePathNameW.restype = wintypes.BOOL
         k.GlobalMemoryStatusEx.argtypes = [ctypes.c_void_p]
         k.GlobalMemoryStatusEx.restype = wintypes.BOOL
         k.GetCurrentProcess.restype = wintypes.HANDLE
@@ -446,8 +462,11 @@ def _device_io_control_read_only(handle: Any, ioctl: int, in_buffer: bytes,
 def _clean_root(root: str) -> str:
     """Normalize a volume anchor to ``X:`` for ``\\\\.\\X:`` device paths."""
     text = (root or "").strip()
-    if len(text) >= 2 and text[1] == ":" and text[0].isalpha():
-        return text[0] + ":"
+    # A mounted folder such as C:\\MountD\\ is NOT C:'s root. Mapping it
+    # to PhysicalDrive(C:) would publish an incorrect disk identity.
+    match = re.fullmatch(r"([A-Za-z]):[\\\\/]*", text)
+    if match:
+        return match.group(1).upper() + ":"
     raise StorageGeometryError(
         f"volume root {root!r} is not a drive-letter volume; read-only device mapping "
         "for non-drive-letter (UNC/mounted) roots is not implemented, so the probe joins "
@@ -465,6 +484,12 @@ def parse_volume_disk_extents(buffer: bytes) -> Dict[str, Any]:
     if len(buffer) < 4:
         raise StorageGeometryError("disk-extents output shorter than the count field")
     count = struct.unpack_from("<I", buffer, 0)[0]
+    if count > _MAX_EXTENT_ENTRIES:
+        raise StorageGeometryError(
+            f"volume has {count} disk extents, exceeding the "
+            f"{_MAX_EXTENT_ENTRIES}-extent read-only safety bound; refusing "
+            "a partial physical-device mapping"
+        )
     # VOLUME_DISK_EXTENTS has 4 bytes of padding after NumberOfDiskExtents so
     # the DISK_EXTENT array starts at offset 8. Each DISK_EXTENT is 24 bytes:
     # DWORD DiskNumber, 4 bytes padding, two 8-byte LARGE_INTEGER fields.
