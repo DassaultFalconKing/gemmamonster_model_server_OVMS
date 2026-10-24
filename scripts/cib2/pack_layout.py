@@ -607,6 +607,30 @@ def validate_layout(layout: Any) -> bool:
             _require_key(scope["compiled_layer_key"], "layout.scope.compiled_layer_key", COMPILED_LAYER_KEY_RE)
             _require_key(scope["profile_key"], "layout.scope.profile_key", PROFILE_KEY_RE)
             _require_int(scope["logical_layer_id"], "layout.scope.logical_layer_id", 0, MAX_LAYER_ID)
+            synthetic = source.get("synthetic")
+            provenance_source = source.get("provenance_source")
+            if not isinstance(synthetic, bool):
+                raise LayoutError("layout.source_profile.synthetic: must be a boolean")
+            if provenance_source not in PROVENANCE_SOURCES:
+                raise LayoutError(
+                    "layout.source_profile.provenance_source: expected one of "
+                    f"{PROVENANCE_SOURCES}, got {provenance_source!r}"
+                )
+            if synthetic != (provenance_source == "synthetic"):
+                raise LayoutError(
+                    "layout.source_profile: synthetic must be true exactly when "
+                    "provenance_source is 'synthetic'"
+                )
+            if synthetic:
+                warnings = layout.get("warnings")
+                if not isinstance(warnings, list) or not any(
+                    isinstance(item, str) and "synthetic profile fixture" in item
+                    for item in warnings
+                ):
+                    raise LayoutError(
+                        "layout.warnings: synthetic layouts must retain the "
+                        "synthetic profile fixture warning"
+                    )
         except ProfileError as exc:
             raise LayoutError(str(exc)) from exc
     return True
