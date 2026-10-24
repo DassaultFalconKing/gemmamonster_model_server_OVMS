@@ -1,0 +1,29 @@
+{
+  "schema": "cib2.pack_layout_profile.v1",
+  "kind": "cib2_pack_layout_profile",
+  "complete": true,
+  "synthetic": true,
+  "provenance": {
+    "checkpoint_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "export_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "compiled_layer_key": "synthetic:layer-07:gemm3-swiglu",
+    "quant_profile_sha": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "profile_key": "synthetic-frequency-ties",
+    "source": "synthetic",
+    "sanitized": true
+  },
+  "scope": {
+    "model_key": "synthetic-model-b",
+    "logical_layer_id": 7
+  },
+  "expert_count": 6,
+  "experts": [
+    {"logical_expert_id": 0, "miss_count": 10, "read_cost_us": 2.0},
+    {"logical_expert_id": 1, "miss_count": 5, "read_cost_us": 4.0},
+    {"logical_expert_id": 2, "miss_count": 10, "read_cost_us": 1.0},
+    {"logical_expert_id": 3, "miss_count": 10, "read_cost_us": 2.0},
+    {"logical_expert_id": 4, "miss_count": 0, "read_cost_us": 0.0},
+    {"logical_expert_id": 5, "miss_count": 2, "read_cost_us": 0.0}
+  ],
+  "coaccess": []
+}

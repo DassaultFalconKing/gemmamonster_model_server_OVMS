@@ -1,0 +1,22 @@
+{
+  "schema": "cib2.pack_layout_profile.v1",
+  "kind": "cib2_pack_layout_profile",
+  "complete": false,
+  "synthetic": true,
+  "provenance": {
+    "checkpoint_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "export_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "compiled_layer_key": "synthetic:layer-00:gemm3-swiglu",
+    "quant_profile_sha": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "profile_key": "synthetic-incomplete",
+    "source": "synthetic",
+    "sanitized": true
+  },
+  "scope": {
+    "model_key": "synthetic-model-a",
+    "logical_layer_id": 0
+  },
+  "expert_count": 4,
+  "experts": [],
+  "coaccess": []
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "cib2.pack_layout_profile.v1",
+  "kind": "cib2_pack_layout_profile",
+  "complete": true,
+  "synthetic": true,
+  "provenance": {
+    "checkpoint_sha": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "export_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "compiled_layer_key": "synthetic:layer-03:gemm3-swiglu",
+    "quant_profile_sha": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "profile_key": "synthetic-coaccess-cluster",
+    "source": "synthetic",
+    "sanitized": true
+  },
+  "scope": {
+    "model_key": "synthetic-model-c",
+    "logical_layer_id": 3
+  },
+  "expert_count": 5,
+  "experts": [
+    {"logical_expert_id": 0, "miss_count": 1, "read_cost_us": 1.0},
+    {"logical_expert_id": 1, "miss_count": 1, "read_cost_us": 1.0},
+    {"logical_expert_id": 2, "miss_count": 1, "read_cost_us": 1.0},
+    {"logical_expert_id": 3, "miss_count": 1, "read_cost_us": 1.0},
+    {"logical_expert_id": 4, "miss_count": 1, "read_cost_us": 1.0}
+  ],
+  "coaccess": [
+    {"expert_a": 0, "expert_b": 2, "weight": 10.0},
+    {"expert_a": 1, "expert_b": 3, "weight": 10.0},
+    {"expert_a": 0, "expert_b": 1, "weight": 1.0}
+  ]
+}
