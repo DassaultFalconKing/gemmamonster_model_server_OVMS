@@ -32,9 +32,10 @@ Baseline ~15.6 GiB / 40 packs ≈ **час**: multi-pass `inspect` + `sha256` 
 ## 2. Цель программы
 
 1. **Drop-in seal:** `packv2_pipeline.py seal --plans-dir … --native-packs … --output-root …` без новых обязательных аргументов → быстрее, тот же артефакт, тот же JSON-статус на stdout (совместимый контракт).
-2. Опциональные флаги для power users / MANUAL (verify mode, materialize, fsync, hardlink-policy) — defaults не ломают скрипты агентов.
+2. Опциональные флаги для power users / MANUAL (verify mode, materialize, fsync, hardlink-policy, workers, progress, log) — defaults не ломают скрипты агентов.
 3. `verify` без флагов остаётся **`full`** (старое поведение для явного аудита); post-seal внутри `seal` по умолчанию делает **`fast`**, а не второй полный час.
-4. Зафиксировать карту всей offline-цепочки и **рекомендации** по mapper / packer / verify (не обязательно кодить в том же PR).
+4. **Прогрессбары + многопоточность + логирование + метрики** — must в реализации seal/verify (см. §6.4–6.7).
+5. Зафиксировать карту всей offline-цепочки и **рекомендации** по mapper / packer / verify (не обязательно кодить в том же PR).
 
 ---
 
@@ -73,13 +74,18 @@ python packv2_pipeline.py plans --bundle … --output-dir … --strategy …
 --materialize copy|hardlink           # default copy
 --hardlink-policy require-readonly|chmod-readonly|allow-shared
 --fsync dir|each|none                 # default dir
+--workers N                           # default min(8, cpu_count); 1 = serial
+--progress auto|tty|jsonl|off         # default auto
+--log-file PATH                       # optional; JSONL events
+--metrics-file PATH                   # optional; final metrics JSON (else receipts/)
 ```
 
 ```text
-packv2_pipeline.py verify --generation-dir DIR [--mode full|fast]   # default full
+packv2_pipeline.py verify --generation-dir DIR [--mode full|fast]
+  [--workers N] [--progress auto|tty|jsonl|off] [--log-file PATH] [--metrics-file PATH]
 ```
 
-Без флагов поведение «как привыкли по CLI shape»; быстрее за счёт алгоритма, не за счёт новых обязательных шагов у оператора.
+Без флагов поведение «как привыкли по CLI shape»; быстрее за счёт алгоритма + разумного default `--workers`; прогресс на TTY не ломает JSON stdout (см. §6.4).
 
 ### 4.3 Что нельзя
 
@@ -139,18 +145,21 @@ packv2_pipeline.py verify --generation-dir DIR [--mode full|fast]   # default fu
 2. Default materialize=`copy`, fsync=`dir`, post-seal-verify=`fast`.
 3. Hardlink только с `--materialize=hardlink` + policy flag.
 4. `verify --mode=full` = сегодняшний полный аудит.
-5. Цели perf: copy ≤8 мин; hardlink ≤30 с на 15.6 GiB/40 (must).
-6. Receipt metrics рядом с generation root, не внутри identity dir.
+5. Цели perf: copy ≤8 мин; hardlink ≤30 с на 15.6 GiB/40 (must) — с workers.
+6. **Progress + workers + structured log + metrics** (§6.4–6.7) — must.
+7. Receipt/metrics рядом с generation root, не внутри identity dir.
 
 ### 6.1 Алгоритм seal (target)
 
 ```
-for each pack:
+queue packs (stable order for logs; manifest still sorted by pack_layer_key)
+workers (N) each:
   stream once → inspect/structural as needed + sha256 + materialize
-build manifest → generation_sha256
-write manifest; post-seal verify (fast default)
+  emit progress event
+barrier → build manifest → generation_sha256
+write manifest; post-seal verify (fast default; may use workers for full)
 rename .generation-* → generation-<digest>
-write active.v2.json
+write active.v2.json + metrics receipt
 ```
 
 Запрет по умолчанию: 3–4 независимых full-file прохода + `fsync` на каждый файл.
@@ -170,6 +179,125 @@ write active.v2.json
 | `fast` | default **после** seal |
 | `full` | default явного `verify`; release gate |
 | `none` | только dev; не в release scripts |
+
+### 6.4 Прогрессбары (must)
+
+Оператор и агент сейчас **не видят**, на каком pack застрял seal (baseline: час молчания). Это дефект UX/ops.
+
+| `--progress` | Поведение |
+|--------------|-----------|
+| `auto` (default) | Если stderr isatty → `tty`; иначе `jsonl` на stderr (агенты/CI) |
+| `tty` | Однострочный/многострочный бар: `seal 12/40 packs \| 4.2/15.6 GiB \| 180 MB/s \| ETA 1m20s \| workers=8` |
+| `jsonl` | По одной JSON-строке на событие в stderr (не смешивать с финальным JSON **stdout**) |
+| `off` | Тихо; только финальный stdout JSON + files |
+
+**Правила:**
+
+- **Stdout** = только финальный machine JSON (как сейчас) — агенты парсят одну строку/один объект.
+- **Stderr** = progress + human logs.
+- Обновление не чаще ~10 Hz; обязательно событие на **каждый завершённый pack** и каждые ~64 MiB внутри крупного pack (если stream позволяет).
+- ETA = по `bytes_done/bytes_total` (предсказуемо), не по wall/pack count alone (packs почти равны, но byte-ETA точнее при stragglers).
+- При `workers>1` бар показывает aggregate + optionally `in_flight` count; не флудить побайтно с каждого worker без throttle.
+- Windows: не ломать cp1251/UTF-8 консоль; ASCII fallback (`#`/`-`) если Unicode box drawing глючит.
+- `verify` — тот же механизм (`verify 8/40 …`).
+
+**JSONL event schema (минимум):**
+
+```json
+{"ts":"...Z","event":"pack_done","op":"seal","pack":"otd-….pack","i":12,"n":40,
+ "bytes_done":4509715660,"bytes_total":16735400640,"rate_bps":188743680,
+ "eta_s":64,"workers":8,"phase":"materialize"}
+```
+
+Фазы: `materialize` | `post_seal_verify` | `verify`.
+
+### 6.5 Многопоточность (must)
+
+Baseline seal = **1 поток**. Packs независимы → параллелить **по файлам**, не резать один pack на куски (проще корректность SHA/inspect).
+
+| Параметр | Default | Смысл |
+|----------|---------|--------|
+| `--workers N` | `min(8, os.cpu_count() or 4)` | Число worker’ов для pack jobs |
+| `N=1` | — | Полностью serial (отладка / диск еле живой) |
+
+**Модель:**
+
+- Thread pool **или** process pool: рекомендация **threads** для I/O+hashlib (GIL отпускается в OpenSSL `hashlib`); если на практике SHA упирается в GIL — `ProcessPoolExecutor` как fallback за тем же флагом (деталь реализации).
+- Один pack = одна задача: open → single-pass → close → результат `(entry, error)`.
+- Запись в shared temp dir: **уникальные имена файлов** (уже `otd-<key>.pack`) → без lock на write path; lock только на shared counters/progress.
+- Manifest / rename / `active.v2.json` — **только main thread** после barrier.
+- Ошибка в любом worker → cancel outstanding (best-effort), cleanup temp, exit 2, в log `event=error` с pack id.
+- Hardlink mode: тоже параллелится (link+hash source); chmod-readonly policy — сначала serial policy pass, потом parallel link.
+- Post-seal `full` verify и CLI `verify --mode=full` — **те же workers**.
+- Не параллелить через разные volumes без отдельного ТЗ; same-volume NTFS ok.
+- Disk saturation: если `rate` падает при N=8 vs N=4, MANUAL советует снизить `--workers` (SSD/antivirus). Целевой default 8 — empirically ok на NVMe; не hardcode «чем больше тем лучше».
+
+**Инварианты параллельности:**
+
+- Итог `generation_sha256` / набор digests **бит-идентичен** serial при тех же inputs (порядок в manifest по `pack_layer_key`, не по finish time).
+- Никаких partial packs в финальном `generation-*`.
+
+### 6.6 Логирование (must)
+
+| Канал | Содержание |
+|-------|------------|
+| stderr (human) | Краткий start line: op, n packs, bytes_total, workers, materialize, verify mode |
+| stderr JSONL / `--log-file` | События: `start`, `pack_start`, `pack_done`, `pack_error`, `phase`, `done`, `reject` |
+| stdout | Финальный результат (без progress spam) |
+
+**Требования к log-file:**
+
+- Append JSONL, UTF-8.
+- Каждый event: `ts` (UTC ISO), `event`, `op`, `run_id` (uuid4 на запуск).
+- Ошибки: `error` string + `pack` + необязательный `exc_type`; без секретов/абсолютных путей модели если не нужны (pack paths ok — уже local build).
+- `--log-file` по умолчанию **выкл**; для агентов рекомендовать в MANUAL:  
+  `--progress jsonl --log-file …\seal.jsonl`.
+- Не писать log внутрь `generation-*`.
+
+### 6.7 Метрики (must)
+
+Писать **один** JSON metrics document в конце (success или fail):
+
+- Default path: `output-root/receipts/seal-<run_id>.json` (или `verify-<run_id>.json`).
+- Override: `--metrics-file PATH`.
+- **Не** входит в generation identity / inventory.
+
+**Обязательные поля:**
+
+```json
+{
+  "schema": "cib2.packv2_seal_metrics.v1",
+  "run_id": "…",
+  "op": "seal",
+  "status": "OK|REJECTED",
+  "wall_s": 0,
+  "cpu_s": 0,
+  "workers": 8,
+  "workers_used_max": 8,
+  "materialize": "copy",
+  "hardlink_policy": null,
+  "fsync_policy": "dir",
+  "post_seal_verify": "fast",
+  "pack_count": 40,
+  "bytes_total": 0,
+  "bytes_read": 0,
+  "bytes_written": 0,
+  "packs_ok": 40,
+  "packs_failed": 0,
+  "phase_timings_s": {"materialize": 0, "post_seal_verify": 0, "rename": 0},
+  "rate_bps_avg": 0,
+  "rate_bps_peak": 0,
+  "eta_last_s": 0,
+  "generation": "generation-…|null",
+  "generation_sha256": "…|null",
+  "progress_mode": "tty|jsonl|off",
+  "host": {"python": "…", "platform": "win32", "cpu_count": 0}
+}
+```
+
+Агрегаты доступны агенту без парсинга барa. При reject — тот же файл со `status=REJECTED` и `error`.
+
+Рекомендация later для pack-verify / pack-build launchers: **тот же** schema family (`cib2.packv2_*_metrics.v1`) и JSONL events — единообразие для оркестратора.
 
 ---
 
@@ -253,9 +381,10 @@ Receipt: `bytes_read`, `bytes_written`, `materialize`, `wall_s`, `cpu_s`, …
 Один MANUAL (или раздел ATLAS + `docs/cib2/MANUAL-PACKV2-SEAL.md`):
 
 - Drop-in: старые три команды без сюрпризов.
-- Таблица флагов: verify / materialize / hardlink-policy / fsync.
+- Таблица флагов: verify / materialize / hardlink-policy / fsync / **workers / progress / log-file / metrics-file**.
+- Прогресс: stdout = JSON результат, stderr = бар/JSONL; примеры для TTY и агента.
 - Когда нужен `full` (релиз), когда хватает `fast` (итерации).
-- Риски hardlink.
+- Риски hardlink; как выбрать `--workers` если диск упёрся.
 - Карта цепочки §5 (mapper → packer → seal → serve).
 - Что **не** делает identity seal.
 
@@ -271,6 +400,9 @@ Help CLI = краткая копия таблицы флагов.
 - Corrupt mid-file → no published generation.
 - Idempotent re-seal.
 - JSON stdout keys additive-only.
+- Workers: `N=4` vs `N=1` same digests/manifest; error in one pack fails run cleanly.
+- Progress: `jsonl` emits `pack_done` with monotonic `bytes_done`; stdout remains single final JSON.
+- Metrics file written on OK and REJECTED; schema fields present.
 
 ---
 
