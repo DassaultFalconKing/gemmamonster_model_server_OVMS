@@ -76,8 +76,15 @@ def inspect_config(config: dict, model_id: str = "") -> dict:
     wrapper = config.get("model_type", "")
     if type(wrapper) is not str:
         raise ModelLayoutError("invalid wrapper type")
-    if wrapper == "minicpmv4_7" and kind != "qwen3_5_moe_text":
-        raise ModelLayoutError("MiniCPM 4.7 backbone mismatch")
+    allowed_wrappers = {
+        "qwen3_5_moe": {"qwen3_5_moe_text"},
+        "qwen3_5": {"qwen3_5_text"},
+        "gemma4": {"gemma4_text"},
+        "minicpmv4_7": {"qwen3_5_moe_text", "qwen3_5_text"},
+        "qwen4_exp": {"qwen4_exp_text"},
+    }
+    if wrapper in allowed_wrappers and kind not in allowed_wrappers[wrapper]:
+        raise ModelLayoutError("decoder type mismatches declared model wrapper")
     return {
         "schema": "cib2.model_layout_audit.v1",
         "model_id_claim": model_id,
