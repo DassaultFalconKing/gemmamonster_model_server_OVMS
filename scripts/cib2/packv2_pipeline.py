@@ -20,10 +20,11 @@ import sys
 import tempfile
 
 try:
-    from . import pack_layout, verify_pack_v1
+    from . import pack_layout, verify_pack_v1, packv2_fast
 except ImportError:
     import pack_layout
     import verify_pack_v1
+    import packv2_fast
 
 BUNDLE_SCHEMA = "cib2.trace_profile_bundle.v1"
 PLANS_SCHEMA = "cib2.pack_placement_plans.v2"
@@ -269,111 +270,29 @@ def _verify_one_pack(path, entry):
     return details
 
 
-def seal_generation(plans_dir: Path, native_packs: Path, output_root: Path):
-    plan = _read_plans(plans_dir)
-    if not output_root.is_dir() or not native_packs.is_dir() or output_root.is_symlink() or native_packs.is_symlink():
-        raise GenerationError("generation output root and native pack source must be real directories")
-    if native_packs.resolve() == output_root.resolve():
-        raise GenerationError("native input packs must be outside generation root")
-    entries = []
-    for e in plan["layers"]:
-        name = "otd-" + e["pack_layer_key"] + ".pack"
-        path = native_packs / name
-        details = _verify_one_pack(path, e)
-        entries.append({"file": name, "pack_layer_key": e["pack_layer_key"],
-                        "pack_sha256": _sha256_file(path), "pack_bytes": path.stat().st_size,
-                        "expert_count": e["expert_count"], "profile_sha256": e["profile_sha256"],
-                        "native_plan_sha256": e["native_plan_sha256"],
-                        "native_residency_sha256": e["native_residency_sha256"],
-                        "resident_tiers": e["resident_tiers"],
-                        "placement": e["placement"], "native_payload_format": "OTDPACK1",
-                        "record_stride": details["record_stride"]})
-    inner = {"schema": MANIFEST_SCHEMA, "pack_format": "OTDPACK1",
-             "v2_features": ["immutable_generation", "profile_placement", "full_pack_digest"],
-             "runtime_acceptance": "NO", "source": plan["source"],
-             "trace_sha256": plan["trace_sha256"], "plan_sha256": hashlib.sha256(_canonical(plan)).hexdigest(),
-             "packs": sorted(entries, key=lambda e: e["pack_layer_key"])}
-    digest = hashlib.sha256(_canonical(inner)).hexdigest()
-    generation = "generation-" + digest
-    manifest = {**inner, "generation_sha256": digest}
-    target = output_root / generation
-    if target.exists():
-        verify_generation(target)
-        if _read_json(target / "manifest.v2.json") != manifest:
-            raise GenerationError("existing generation has different manifest")
-    else:
-        temporary = Path(tempfile.mkdtemp(prefix=".generation-", dir=output_root))
-        try:
-            for entry in entries:
-                source_path = native_packs / entry["file"]
-                with source_path.open("rb") as src, (temporary / entry["file"]).open("xb") as dst:
-                    shutil.copyfileobj(src, dst, READ_BYTES)
-                    dst.flush()
-                    os.fsync(dst.fileno())
-                if _sha256_file(temporary / entry["file"]) != entry["pack_sha256"]:
-                    raise GenerationError("source pack changed while sealing")
-                _verify_one_pack(temporary / entry["file"], next(e for e in plan["layers"] if e["pack_layer_key"] == entry["pack_layer_key"]))
-            _atomic_json(temporary / "manifest.v2.json", manifest)
-            verify_generation(temporary)
-            os.rename(temporary, target)
-        finally:
-            if temporary.exists():
-                shutil.rmtree(temporary)
-    pointer = {"schema": ACTIVE_SCHEMA, "generation": generation, "generation_sha256": digest,
-               "pack_format": "OTDPACK1", "runtime_acceptance": "NO"}
-    _atomic_json(output_root / "active.v2.json", pointer)
-    return target
+
+def seal_generation(plans_dir: Path, native_packs: Path, output_root: Path, *,
+                    post_seal_verify="fast", materialize="copy",
+                    hardlink_policy="require-readonly", fsync="dir", workers=None,
+                    progress="auto", log_file=None, metrics_file=None):
+    """Drop-in native OTDPACK1 seal. Default post-seal verification is structural-only.
+
+    Actual runtime acceptance still requires a separate explicit full verify and
+    GPU reader acceptance. The V2 generation manifest/ABI remain unchanged.
+    """
+    return packv2_fast.seal_generation(
+        sys.modules[__name__], plans_dir, native_packs, output_root,
+        post_seal_verify=post_seal_verify, materialize=materialize,
+        hardlink_policy=hardlink_policy, fsync=fsync, workers=workers,
+        progress=progress, log_file=log_file, metrics_file=metrics_file)
 
 
-def verify_generation(generation_dir: Path):
-    if generation_dir.is_symlink() or not generation_dir.is_dir():
-        raise GenerationError("generation directory missing or symlinked")
-    manifest = _read_json(generation_dir / "manifest.v2.json")
-    if type(manifest) is not dict or set(manifest) != {
-        "schema", "pack_format", "v2_features", "runtime_acceptance",
-        "source", "trace_sha256", "plan_sha256", "packs", "generation_sha256"
-    } or manifest.get("schema") != MANIFEST_SCHEMA or manifest.get("pack_format") != "OTDPACK1":
-        raise GenerationError("wrong V2 manifest schema/format")
-    identity = dict(manifest)
-    generation_sha = identity.pop("generation_sha256", None)
-    digest = hashlib.sha256(_canonical(identity)).hexdigest()
-    if generation_sha != digest:
-        raise GenerationError("V2 manifest generation checksum mismatch")
-    if generation_dir.name not in ("generation-" + digest,) and not generation_dir.name.startswith(".generation-"):
-        raise GenerationError("V2 directory name mismatch")
-    entries = manifest.get("packs")
-    if type(entries) is not list or not 1 <= len(entries) <= MAX_PACKS:
-        raise GenerationError("invalid manifest pack list")
-    expected_files = {"manifest.v2.json"}
-    seen = set()
-    for e in entries:
-        if type(e) is not dict or set(e) != {
-            "file", "pack_layer_key", "pack_sha256", "pack_bytes",
-            "expert_count", "profile_sha256", "native_plan_sha256",
-            "native_residency_sha256", "resident_tiers", "placement",
-            "native_payload_format", "record_stride"
-        }:
-            raise GenerationError("invalid V2 manifest pack entry")
-        key, name = e["pack_layer_key"], e["file"]
-        if type(key) is not str or len(key) != 16 or any(c not in "0123456789abcdef" for c in key):
-            raise GenerationError("invalid native pack identity")
-        if name != "otd-" + key + ".pack" or name in seen:
-            raise GenerationError("unexpected or repeated pack path")
-        seen.add(name)
-        expected_files.add(name)
-        file = generation_dir / name
-        if not file.is_file() or file.is_symlink():
-            raise GenerationError("missing/unsafe generated pack")
-        if _sha256_file(file) != e["pack_sha256"] or file.stat().st_size != e["pack_bytes"]:
-            raise GenerationError("V2 full-file SHA256 mismatch")
-        _verify_one_pack(file, e)
-    actual_files = {p.name for p in generation_dir.iterdir()}
-    if actual_files != expected_files:
-        raise GenerationError("unexpected files in sealed generation")
-    return {"status": "VERIFIED_OFFLINE", "generation": generation_sha,
-            "pack_count": len(entries), "native_payload_format": "OTDPACK1",
-            "runtime_acceptance": "NO", "promotion_authorized": False,
-            "pack_dir": str(generation_dir.resolve())}
+def verify_generation(generation_dir: Path, *, mode="full", workers=None,
+                      progress="auto", log_file=None, metrics_file=None):
+    """Default explicit verify retains FULL per-record payload integrity audit."""
+    return packv2_fast.verify_generation(
+        sys.modules[__name__], generation_dir, mode=mode, workers=workers,
+        progress=progress, log_file=log_file, metrics_file=metrics_file)
 
 
 def main(argv=None):
@@ -388,8 +307,21 @@ def main(argv=None):
     seal.add_argument("--plans-dir", required=True, type=Path)
     seal.add_argument("--native-packs", required=True, type=Path)
     seal.add_argument("--output-root", required=True, type=Path)
+    seal.add_argument("--post-seal-verify", choices=("fast", "full", "none"), default="fast")
+    seal.add_argument("--materialize", choices=("copy", "hardlink"), default="copy")
+    seal.add_argument("--hardlink-policy", choices=("require-readonly", "chmod-readonly", "allow-shared"), default="require-readonly")
+    seal.add_argument("--fsync", choices=("dir", "each", "none"), default="dir")
+    seal.add_argument("--workers", type=int)
+    seal.add_argument("--progress", choices=("auto", "tty", "jsonl", "off"), default="auto")
+    seal.add_argument("--log-file", type=Path)
+    seal.add_argument("--metrics-file", type=Path)
     verify = sub.add_parser("verify")
     verify.add_argument("--generation-dir", required=True, type=Path)
+    verify.add_argument("--mode", choices=("full", "fast"), default="full")
+    verify.add_argument("--workers", type=int)
+    verify.add_argument("--progress", choices=("auto", "tty", "jsonl", "off"), default="auto")
+    verify.add_argument("--log-file", type=Path)
+    verify.add_argument("--metrics-file", type=Path)
     args = parser.parse_args(argv)
     try:
         if args.command == "plans":
@@ -397,12 +329,20 @@ def main(argv=None):
             result = {"status": result["status"], "plan_dir": str(args.output_dir),
                       "layers": len(result["layers"]), "runtime_acceptance": "NO"}
         elif args.command == "seal":
-            target = seal_generation(args.plans_dir, args.native_packs, args.output_root)
-            result = verify_generation(target)
+            target = seal_generation(
+                args.plans_dir, args.native_packs, args.output_root,
+                post_seal_verify=args.post_seal_verify, materialize=args.materialize,
+                hardlink_policy=args.hardlink_policy, fsync=args.fsync,
+                workers=args.workers, progress=args.progress,
+                log_file=args.log_file, metrics_file=args.metrics_file)
+            result = packv2_fast.seal_result(sys.modules[__name__], target, post_seal_verify=args.post_seal_verify)
         else:
-            result = verify_generation(args.generation_dir)
+            result = verify_generation(
+                args.generation_dir, mode=args.mode, workers=args.workers,
+                progress=args.progress, log_file=args.log_file,
+                metrics_file=args.metrics_file)
         print(json.dumps(result, sort_keys=True))
-    except (GenerationError, pack_layout.ProfileError, pack_layout.LayoutError,
+    except (GenerationError, packv2_fast.SealError, pack_layout.ProfileError, pack_layout.LayoutError,
             verify_pack_v1.PackError, OSError, ValueError, OverflowError) as exc:
         print(json.dumps({"status": "REJECTED", "error": str(exc),
                           "runtime_acceptance": "NO", "promotion_authorized": False}), file=sys.stderr)
