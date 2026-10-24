@@ -447,7 +447,7 @@ static Status configureCib2Pack(const ServerSettingsImpl& settings, std::string*
             const auto receipt = session / "compiled-layers.receipt";
             {
                 std::ofstream out(receipt, std::ios::binary | std::ios::trunc);
-                out << "CIB2_COMPILED_PACKS_V1\\n";
+                out << "CIB2_COMPILED_PACKS_V1\n";
                 out.flush();
                 if (!out) return Status(StatusCode::PATH_INVALID, "Cannot initialize CIB2 build receipt");
             }
