@@ -181,7 +181,14 @@ def _require_int(value: Any, where: str, minimum: int, maximum: int) -> int:
 def _require_number(value: Any, where: str, minimum: float, maximum: float) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise ProfileError(f"{where}: expected a finite number")
-    number = float(value)
+    # Check integer bounds before converting: an enormous but valid JSON
+    # integer could overflow float(), or round into the permitted range.
+    if isinstance(value, int) and (value < minimum or value > maximum):
+        raise ProfileError(f"{where}: integer outside {minimum}..{maximum}")
+    try:
+        number = float(value)
+    except (OverflowError, ValueError) as exc:
+        raise ProfileError(f"{where}: number cannot be represented as a finite float") from exc
     if not math.isfinite(number):
         raise ProfileError(f"{where}: non-finite number is not allowed")
     if number < minimum or number > maximum:

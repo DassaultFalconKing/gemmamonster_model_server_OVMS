@@ -1,7 +1,7 @@
 ## PGP wave-01 integration QA checkpoint (2026-10-24)
 
 - **QA_BRANCH:** `feature/cib2-pgp-wave01-integration-qa-20261024`, based on the coordinator's `279f4097` without touching frozen source or either worker branch.
-- **PGP-02:** already integrated and independently hardened in the coordinator lineage at `a2ccb127`. No backport from the older PGP-02 worker snapshot.
+- **PGP-02:** already integrated and independently hardened in the coordinator lineage at `a2ccb127`. No backport from the older PGP-02 worker snapshot. Additional QA closes huge-integer numeric overflow / float-boundary rounding with a separate regression suite.
 - **PGP-00:** worker source/tests/docs imported by exact Git blobs; Win32 WCHAR lengths, actual NTFS mounted-volume root and incomplete disk extents hardened with additional mock tests.
 - **QA STATUS:** code review and offline test additions only; tests and Windows hardware execution **NOT_RUN** in this cloud session. Build/source association and runtime/GPU/pack acceptance **NOT_GRANTED**.
 - **NEXT:** operator-host test receipt, Windows API/NTFS geometry and ACL-denied validation, then isolate the native P0/P1/P2/P3/P5 gates. Path A default, Path B OFF.
