@@ -22,6 +22,15 @@ Workers started from the same exact design commit in separate feature worktrees.
 5. Path A is the reference: verified staging, nine device copies, `usm_device`, safe slot publication. Path B remains OFF. UMA-PGP-03 must independently establish pre-write reader ownership and post-write GPU visibility on a compatible RC1 candidate before B0/B1.
 6. Grouped I/O, prefetch, V2, typed per-slot A/B allocation and dense/non-GEMM3 placement stay separately gated. No automatic B/hybrid or hot/cold switch.
 
+## PGP-00 / PGP-02 independent integration review (2026-10-24)
+
+- Integration QA branch: `feature/cib2-pgp-wave01-integration-qa-20261024`, based on `279f4097`; original worker branches remain untouched. PGP-00 imported exactly from worker `6b843045` then hardened independently.
+- PGP-02 is **already present and hardened** in coordinator lineage (follow-up commit `a2ccb127`, preceding this wave's `279f4097`). Do **not** cherry-pick the original `038d5591` onto it: that would revert the source-profile output protection and structural validation. Source worker remains an immutable reference.
+- PGP-00 corrections: `GetVolumeInformationW` receives TCHAR counts, mounted-folder roots are resolved via `GetVolumePathNameW`, physical disk device mapping refuses mounted-folder aliases, and oversized/partial extents fail closed. Separate mock-only regression tests cover these exact hazards.
+- PGP-02 additional review: numeric JSON overflow/round-to-limit edge case fixed in `_require_number`; malformed oversized weights/costs must be rejected with exit 2, never silently accepted or crash. Algorithm/placement contract unchanged.
+- Probe remains *diagnostic only*. No real Arc 140V Windows process, GPU, NVMe, WDDM ledger, model weights or pack runtime was exercised by cloud QA. Output and acceptance stay `NO`. Full native Pack V1 P3/P5 and source-build identity gates are still separate.
+- Verification gate: `python -m unittest discover -s tests/cib2 -p 'test_*.py' -v` on operator host, then captured Windows drive-root/mount-point/ACL-denied snapshots. No synthetic report can be promoted to real PGP-00 acceptance.
+
 ## Baseline observation in this wave
 
 The coordinator reran the existing 67 host tests at the design commit: PASS. A fresh physical-file rehash found all six previously recorded EXE/DLL identities unchanged and the source checkout still at frozen `eb76a74f7aa39573d452d95443e189b1f5f4d9e8`.

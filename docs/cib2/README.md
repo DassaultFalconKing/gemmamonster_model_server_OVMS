@@ -12,6 +12,13 @@ This is the current entry point for semantic-refit 2026.4 RC3B-postfix family-ma
 4. [Editable A/B memory and pack flow](PGP-UMA-PATH-AB-20261024.mermaid) — solid Path A, dotted experimental Path B, single physical LPDDR ledger.
 5. [STATE.md](STATE.md) — tracked baseline, missing hardware gates, current operator handoff.
 
+## PGP wave-01 integration QA
+
+- [Wave-01 dispatch + independent review](ORCHESTRATION-PGP-WAVE01-20261024.md) records the three branches and acceptance limitations.
+- [PGP-00 storage/UMA geometry diagnostics](STORAGE-GEOMETRY-USAGE-20261024.md) with standalone `storage_geometry.py` and independent mocked Windows safety tests.
+- [PGP-02 offline Pack V1 placement](PACK-LAYOUT-USAGE-20261024.md) was already part of coordinator lineage and independently hardened; no re-import of the older worker version.
+- **Status:** offline tooling, not native Pack V1 or 2026.4 GPU acceptance.
+
 ## Current measured/static evidence (DO NOT archive)
 
 - [RESULTS-20261024.md](RESULTS-20261024.md): current host wave, 67/67 tests, source/binary limitations, no 2026.4 GPU inference in this wave.
