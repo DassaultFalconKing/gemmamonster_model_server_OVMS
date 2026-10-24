@@ -590,10 +590,10 @@ def parse_access_alignment_descriptor(buffer: bytes) -> Dict[str, Any]:
     version, size, cache_line, cache_offset, logical, physical, logical_start = (
         struct.unpack_from("<7I", buffer, 0)
     )
-    # Observed Windows returns Version == Size == 28 for this descriptor;
-    # accept the documented legacy version 1 as well, but reject anything else
-    # rather than misparse a different property payload.
-    if version not in (1, 28) or size < 28 or size > len(buffer):
+    # Microsoft documents Version as the structure size in bytes. Observed
+    # Windows returns Version == Size == 28 for this descriptor; reject anything
+    # else (including soft legacy Version==1) rather than misparse.
+    if version != 28 or size < 28 or size > len(buffer):
         raise StorageGeometryError(
             "access-alignment descriptor version/size validation failed; refusing to "
             "report because offsets could not be verified"

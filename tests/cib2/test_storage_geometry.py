@@ -184,7 +184,7 @@ class StorageDeviceDescriptorParsingTest(unittest.TestCase):
 class AccessAlignmentParsingTest(unittest.TestCase):
     """Access-alignment descriptor validates version/size before reporting sectors."""
 
-    def buffer(self, version=1, size=28, logical=512, physical=4096) -> bytes:
+    def buffer(self, version=28, size=28, logical=512, physical=4096) -> bytes:
         return struct.pack("<7I", version, size, 0, 0, logical, physical, 0)
 
     def test_valid_descriptor_parses_both_sector_units(self):
@@ -193,10 +193,11 @@ class AccessAlignmentParsingTest(unittest.TestCase):
         self.assertEqual(parsed["device_physical_sector_size_bytes"], 4096)
 
     def test_wrong_version_is_never_reported_as_fact(self):
-        # Windows commonly returns Version==Size==28; that is accepted.
-        # A foreign version must still fail closed rather than misparse.
+        # Windows returns Version==Size==28; that is the only accepted value.
         parsed = sg.parse_access_alignment_descriptor(self.buffer(version=28))
         self.assertEqual(parsed["descriptor_version"], 28)
+        with self.assertRaises(sg.StorageGeometryError):
+            sg.parse_access_alignment_descriptor(self.buffer(version=1))
         with self.assertRaises(sg.StorageGeometryError):
             sg.parse_access_alignment_descriptor(self.buffer(version=99))
 
