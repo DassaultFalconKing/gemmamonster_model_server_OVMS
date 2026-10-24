@@ -62,6 +62,8 @@ Every arm has exactly `id`, `layout`, `resident_mode`,
   `startup_ms`, `unique_memory_bytes`, `physical_io`.
 - `profile_sha` is null for identity arms and a 64-hex digest for
   optimized arms. A1 and B1 must use the same optimized profile digest.
+- Same-layout arms must share `pack_manifest_sha` (A0≡B0 identity pack,
+  A1≡B1 optimized pack) so resident-mode contrasts are not confounded.
 - The pack manifest digest is a claim, **not** full Pack V1 verification;
   native payload parity and immutable generation checks are independent.
 

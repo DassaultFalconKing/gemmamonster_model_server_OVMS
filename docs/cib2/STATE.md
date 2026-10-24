@@ -2,10 +2,12 @@
 
 - **INTEGRATION_BRANCH:** `feature/cib2-pgp-wave01-cursor-integration-20261024` on coordinator base `279f4097`, aggregating PR #24 and PR #25. Receipt: [INTEGRATION-PGP-WAVE01-20261024.md](INTEGRATION-PGP-WAVE01-20261024.md).
 - **INCLUDED:** PGP-00 (import + Win32/WCHAR/extents hardening), PGP-02 numeric fail-closed (coordinator `a2ccb127` retained; worker PGP-02 not re-imported), PGP-05 offline A0/A1/B0/B1 screen.
-- **HOST TESTS:** Python 3.14.6; targeted geometry/pack/benchmark PASS; full `tests/cib2` **168/168 PASS**. Host fixes include fixtures/privacy, volume-root snapshot path, sibling-file output guard, `strategy_effective` fallback identity, and A0/B0–A1/B1 pack identity.
-- **WINDOWS PGP-00:** read-only probe RUN (temp path); `fsutil` ACL-denied and WDDM ledger preserved as NOT_EXPOSED; `runtime_acceptance=NO`. Mounted-folder live case NOT_RUN. Private snapshot outside repo.
+- **HOST TESTS:** Python 3.14.6; targeted 41 + 44 + 16 PASS; full `tests/cib2` **168/168 PASS**.
+- **HOST FIXES:** fixture/privacy `f1b056009`; volume-root output `85533a507`; file-sibling protection `7432937a3`; PGP-05 same-layout pack identity `5783f3c57`; layout `strategy_effective` fallback `703ff6faf`.
+- **WINDOWS PGP-00:** read-only probe RUN (drive root + worktree); `fsutil` ACL-denied and WDDM ledger preserved as NOT_EXPOSED; `runtime_acceptance=NO`. Mounted-folder live case NOT_RUN. Private snapshot outside repo.
 - **ACCEPTANCE:** `HOST_READY` for offline tooling only. Native Pack V1 / GPU / production **NOT_GRANTED**. Path A default, Path B OFF.
-- **NEXT:** hardware agent re-runs full suite on Arc 140V slot, captures sanitized drive-root/mount/ACL snapshots, then P0/P1/P2/P3/P5 native gates.
+- **NEXT:** hardware agent re-runs full suite on Arc 140V slot, captures sanitized drive-root/mount/ACL snapshots, then P0/P1/P2/P3/P5 native gates. Keep PR #24/#25 open until integration PR is accepted.
+
 
 ## PGP wave-01 integration QA checkpoint (2026-10-24) — superseded by Cursor integration above
 
@@ -14,8 +16,6 @@
 - **PGP-00:** worker source/tests/docs imported by exact Git blobs; Win32 WCHAR lengths, actual NTFS mounted-volume root and incomplete disk extents hardened with additional mock tests.
 - **QA STATUS:** cloud session was review/offline only; host execution and integration receipt now live on the Cursor integration branch.
 - **NEXT:** keep PR #24/#25 open until the integration PR is accepted and contents confirmed included.
-
-# CIB2 current execution state
 
 
 ## Documentation consolidation (2026-10-24; docs-only)
