@@ -1,3 +1,11 @@
+## ACTIVE PROGRAMME: CIB2 Pack V2 Full execution (2026-10-24)
+
+- **ORCHESTRATOR:** [ORCHESTRATOR-EXEC-N1-N4-20261024.md](ORCHESTRATOR-EXEC-N1-N4-20261024.md); mandatory N1/N2/N3/N4, exact target 2026.4 OpenVINO branch.
+- **OVMS:** dev/cib2-packv2-source-20261024 / Draft PR #29, source-only pack CLI, trace/profile/placement, sealed V2 generation; not compiled or GPU-tested.
+- **GPU 2026.4 TARGET:** dev/cib2-packv2-ov2026.4-integration-20261024 / Draft PR #10, initial GPU slot lifetime/UMA/prearm C++17 helper code at fbbfaa11d2f9; plugin runtime callsites NOT WIRED.
+- **GPU 2026.5 SOURCE DONOR:** dev/cib2-packv2-native-20261024 / Draft PR #9, NEVER reuse binary DLLs for 2026.4.
+- **GATES:** N1 port, N2 real consumer events, N3 OS/WDDM reconciliation, N4 prefetch dispatcher and ON/OFF GPU A/B OPEN. Existing Wave-01 174/174 host test receipt is historical; new integrated suite NOT_RUN. Production/runtime acceptance NO. Path A default, Path B OFF.
+
 ## PGP wave-01 Cursor integration checkpoint (2026-10-24)
 
 - **INTEGRATION_BRANCH:** `feature/cib2-pgp-wave01-cursor-integration-20261024` on coordinator base `279f4097`, aggregating PR #24 and PR #25. Receipt: [INTEGRATION-PGP-WAVE01-20261024.md](INTEGRATION-PGP-WAVE01-20261024.md).

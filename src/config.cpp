@@ -174,6 +174,28 @@ bool Config::validateUserSettingsInConfigAddRemoveModel(const ModelsSettingsImpl
 }
 
 bool Config::validate() {
+    const auto& settings = this->serverSettings;
+    if (settings.buildMoeExpertsPack) {
+        if (settings.moeExpertsPackDir.empty()) {
+            std::cerr << "--build_moe_experts_pack requires --moe_experts_pack_dir" << std::endl;
+            return false;
+        }
+        const auto mode = settings.serverMode;
+        if (mode == HF_PULL_MODE || mode == CONFIGURE_MODE ||
+            mode == LIST_MODELS_MODE || mode == MODIFY_CONFIG_MODE) {
+            std::cerr << "build_moe_experts_pack conflicts with selected non-serving mode" << std::endl;
+            return false;
+        }
+    }
+    if ((!settings.moeExpertsPlacementDir.empty() || !settings.moeExpertsResidencyDir.empty()) &&
+        settings.moeExpertsPackDir.empty()) {
+        std::cerr << "CIB2 profile policy requires --moe_experts_pack_dir" << std::endl;
+        return false;
+    }
+    if (!settings.moeExpertsPlacementDir.empty() && !settings.buildMoeExpertsPack) {
+        std::cerr << "--moe_experts_placement_dir is only valid for --build_moe_experts_pack" << std::endl;
+        return false;
+    }
     if (!this->serverSettings.hfSettings.sourceModel.empty() && this->serverSettings.hfSettings.task == UNKNOWN_GRAPH) {
         std::cerr << "--source_model should be used combined with --task" << std::endl;
         return false;
@@ -300,7 +322,7 @@ bool Config::validate() {
             return false;
         }
         // both ports cannot be unset
-        if (startedFromCLI() && ((restPort() == 0) && (port() == 0))) {
+        if (startedFromCLI() && !this->serverSettings.buildMoeExpertsPack && ((restPort() == 0) && (port() == 0))) {
             std::cerr << "port and rest_port cannot both be unset" << std::endl;
             return false;
         }

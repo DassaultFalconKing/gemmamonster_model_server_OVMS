@@ -243,6 +243,11 @@ struct ServerSettingsImpl {
     uint32_t filesystemPollWaitMilliseconds = 1000;
     uint32_t resourcesCleanerPollWaitSeconds = 300;
     std::string cacheDir;
+    // CIB2 experimental native pack integration (process-scoped).
+    std::string moeExpertsPackDir;
+    std::string moeExpertsPlacementDir;
+    std::string moeExpertsResidencyDir;
+    bool buildMoeExpertsPack = false;
     bool withPython = false;
     bool startedWithCLI = false;
     ConfigExportType exportConfigType = UNKNOWN_MODEL;
