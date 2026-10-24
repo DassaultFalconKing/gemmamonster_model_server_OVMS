@@ -12,6 +12,15 @@ This is the current entry point for semantic-refit 2026.4 RC3B-postfix family-ma
 4. [Editable A/B memory and pack flow](PGP-UMA-PATH-AB-20261024.mermaid) — solid Path A, dotted experimental Path B, single physical LPDDR ledger.
 5. [STATE.md](STATE.md) — tracked baseline, missing hardware gates, current operator handoff.
 
+## PGP wave-01 integration QA
+
+- [Cursor Wave-01 integration receipt](INTEGRATION-PGP-WAVE01-20261024.md) aggregates PR #24 + PR #25 on `feature/cib2-pgp-wave01-cursor-integration-20261024` (**HOST_READY** offline tooling; 174/174 host tests).
+- [Wave-01 dispatch + independent review](ORCHESTRATION-PGP-WAVE01-20261024.md) records the three branches and acceptance limitations.
+- [PGP-00 storage/UMA geometry diagnostics](STORAGE-GEOMETRY-USAGE-20261024.md) with standalone `storage_geometry.py` and independent mocked Windows safety tests.
+- [PGP-02 offline Pack V1 placement](PACK-LAYOUT-USAGE-20261024.md) was already part of coordinator lineage and independently hardened; no re-import of the older worker version.
+- [PGP-05 offline benchmark evidence screen](PGP05-BENCHMARK-SCREEN-20261024.md) — A0/A1/B0/B1 same-cohort reviewer; never auto-promotes runtime.
+- **Status:** offline tooling `HOST_READY`; not native Pack V1 or 2026.4 GPU acceptance.
+
 ## Current measured/static evidence (DO NOT archive)
 
 - [RESULTS-20261024.md](RESULTS-20261024.md): current host wave, 67/67 tests, source/binary limitations, no 2026.4 GPU inference in this wave.
@@ -31,3 +40,10 @@ This is the current entry point for semantic-refit 2026.4 RC3B-postfix family-ma
 - Old routed-expert research [docs/moe-nvme-experts-research-20261021](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/tree/docs/moe-nvme-experts-research-20261021/docs/research/routed-experts-nvme-20261021): original work preserved in its **own branch**, not moved/deleted in this working tree.
 
 **Policy:** Pack V1 and `usm_device` Path A are the baseline. `usm_host` Path B remains experimental/off until exact RC1 same-cohort resource, safety, model, agentic and performance gates are passed. The pack file layout and memory resident mode are independent optimization axes.
+
+## Independent PGP-05 evidence screening (candidate)
+
+- [PGP-05 read-only A0/A1/B0/B1 screen](PGP05-BENCHMARK-SCREEN-20261024.md):
+  strict same-cohort validation, source/pack/gate flags, paired sample metrics,
+  physical-device-counter separation and synthetic negative tests.
+  This offline reviewer cannot authorize runtime/pack/GPU acceptance; Path B stays OFF.

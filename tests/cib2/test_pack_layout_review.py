@@ -48,5 +48,43 @@ class IndependentHandoffTest(unittest.TestCase):
             with redirect_stderr(io.StringIO()):code=pl.main(['--profile',str(target),'--output',str(target),'--strategy','frequency'])
             self.assertEqual(code,2);self.assertEqual(target.read_bytes(),data)
 
+    def test_bound_profile_bytes_reject_forged_source_sha(self):
+        data=(ROOT/'tests/cib2/fixtures/pack_layout/frequency_ties.json').read_bytes()
+        profile=pl.load_profile_bytes(data)
+        self.assertEqual(profile.source_sha256,pl.profile_sha256(data))
+        with self.assertRaisesRegex(pl.LayoutError,'does not match the exact profile bytes'):
+            pl.build_layout(profile,'frequency',source_sha256='0'*64)
+
+    def test_cli_hardlink_alias_cannot_overwrite_source_profile(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source=Path(folder)/'profile.json'
+            alias=Path(folder)/'alias.json'
+            data=(ROOT/'tests/cib2/fixtures/pack_layout/frequency_ties.json').read_bytes()
+            source.write_bytes(data)
+            try:
+                alias.hardlink_to(source)
+            except OSError:
+                self.skipTest('hardlinks unavailable on this filesystem')
+            with redirect_stderr(io.StringIO()):
+                code=pl.main(['--profile',str(source),'--output',str(alias),'--strategy','frequency'])
+            self.assertEqual(code,2)
+            self.assertEqual(source.read_bytes(),data)
+
+    def test_validate_layout_binds_synthetic_label_to_provenance(self):
+        data=(ROOT/'tests/cib2/fixtures/pack_layout/frequency_ties.json').read_bytes()
+        layout=pl.build_layout(pl.load_profile_bytes(data),'frequency',source_sha256=pl.profile_sha256(data))
+        stripped=copy.deepcopy(layout)
+        stripped['source_profile']['synthetic']=False
+        with self.assertRaisesRegex(pl.LayoutError,'synthetic'):
+            pl.validate_layout(stripped)
+        flipped=copy.deepcopy(layout)
+        flipped['source_profile']['provenance_source']='offline_trace_derived'
+        with self.assertRaisesRegex(pl.LayoutError,'synthetic'):
+            pl.validate_layout(flipped)
+        no_warning=copy.deepcopy(layout)
+        no_warning['warnings']=[w for w in no_warning['warnings'] if 'synthetic profile fixture' not in w]
+        with self.assertRaisesRegex(pl.LayoutError,'synthetic'):
+            pl.validate_layout(no_warning)
+
 
 if __name__=='__main__':unittest.main()

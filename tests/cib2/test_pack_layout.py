@@ -253,6 +253,8 @@ class DeterministicLayoutTest(unittest.TestCase):
         self.assertEqual(layout["order"], list(range(8)))
         self.assertTrue(layout["fallback"]["used"])
         self.assertEqual(layout["fallback"]["reason"], "no_coaccess_evidence")
+        self.assertEqual(layout["strategy_requested"], "coaccess")
+        self.assertEqual(layout["strategy_effective"], "identity")
         self.assertEqual(layout["placement"], list(range(8)))
 
     def test_coaccess_without_improvement_retains_identity(self):
@@ -269,6 +271,7 @@ class DeterministicLayoutTest(unittest.TestCase):
         self.assertEqual(layout["order"], [0, 1, 2])
         self.assertTrue(layout["fallback"]["used"])
         self.assertEqual(layout["fallback"]["reason"], "coaccess_no_offline_improvement")
+        self.assertEqual(layout["strategy_effective"], "identity")
 
     def test_frequency_without_positive_evidence_falls_back_to_identity(self):
         _data, profile, sha = _load("identity_empty.json")
@@ -276,6 +279,7 @@ class DeterministicLayoutTest(unittest.TestCase):
         self.assertEqual(layout["order"], list(range(8)))
         self.assertTrue(layout["fallback"]["used"])
         self.assertEqual(layout["fallback"]["reason"], "no_observed_frequency_evidence")
+        self.assertEqual(layout["strategy_effective"], "identity")
 
     def test_no_profile_uses_explicit_identity_fallback(self):
         layout = pl.build_layout(None, "frequency", expert_count=4)

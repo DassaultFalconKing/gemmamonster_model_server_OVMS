@@ -1,5 +1,7 @@
 # CIB2 PGP-02: offline Pack V1 layout optimizer — input contract and handoff
 
+Coordinator review hardening: numeric JSON integer costs/weights are checked against bounds *before* conversion to float; enormous integer inputs fail closed as `REJECTED`/exit 2 rather than throwing `OverflowError` or rounding into range. Regression: `tests/cib2/test_pack_layout_numeric_review.py`.
+
 Coordinator review hardening: output files must end in `.json` and cannot replace the source profile. The layout validator checks offline-only acceptance/policy invariants and complete scoped identity fields as well as permutation/inverse correctness. This is structural validation, not authentication of caller-supplied provenance or proof of a captured runtime trace. Consumers still need an independently pinned source profile and exact native PackLayerSpec.
 
 **Date:** 2026-10-24. **Status:** OFFLINE FOUNDATION IMPLEMENTED; NOT RUNTIME/PROFILE/PACK ACCEPTED.
@@ -211,9 +213,9 @@ reason `no_coaccess_evidence`.
     "coaccess_pairs": 3
   },
   "fallback": {"used": false, "reason": null, "identity_used": false},
-  "placement": [0, 1, 3, 2, 4, 5, 6, 7],
-  "order": [0, 1, 3, 2, 4, 5, 6, 7],
-  "placement_contract": "placement[logical_expert_id] = physical_position; order is its exact inverse",
+  "placement": [1, 2, 0, 3, 4],
+  "order": [2, 0, 1, 3, 4],
+  "placement_contract": "placement[logical_expert_id] = physical_position; order[physical_position] = logical_expert_id; both are full permutations",
   "validation": {
     "permutation": true,
     "logical_ids_preserved": true,
@@ -242,8 +244,10 @@ reason `no_coaccess_evidence`.
 ```
 
 `placement[logical] = physical` and `order[physical] = logical` must both be complete
-permutations and exact inverses. The tool re-validates this before writing. Output is
-written atomically (temporary file plus replace); on rejection no output is produced.
+permutations and exact inverses. They are not always equal arrays — only `placement` is
+the handoff vector for `PackLayout::set_placement`. The tool re-validates inverse
+parity before writing. Output is written atomically (temporary file plus replace); on
+rejection no output is produced.
 Source paths are not echoed into output; only the source profile SHA and sanitized keys
 are reported.
 
