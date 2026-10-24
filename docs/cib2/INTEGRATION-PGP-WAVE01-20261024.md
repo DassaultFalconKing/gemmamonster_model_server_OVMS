@@ -29,7 +29,7 @@ No drift against pinned SHAs at fetch. Older worker `feature/cib2-pgp02-20261024
 | File-sibling output protection | `7432937a3` |
 | PGP-05 same-layout pack identity | `5783f3c57` |
 | PGP-02 `strategy_effective` on fallback | `703ff6faf` |
-| Final HEAD | `86725df2ef6c0feca7944518fa52532ed5d075af` |
+| Final HEAD | `3083770a8d0edd67297c0d9cb8daa285ae19a51b` |
 
 ## 3. Changed files (vs coordinator base)
 
