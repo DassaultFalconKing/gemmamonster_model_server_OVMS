@@ -1072,7 +1072,7 @@ def summarize_report(report: Dict[str, Any]) -> Dict[str, Any]:
         "probe_statuses": statuses,
         "runtime_acceptance": report["runtime_acceptance"],
         "read_only": True,
-        "note": "full detail (including device serials) is only in the private output file",
+        "note": "full detail (including device identity strings) is only in the private output file",
     }
 
 

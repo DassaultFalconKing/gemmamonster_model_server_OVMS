@@ -99,8 +99,9 @@ class VolumeDiskExtentsParsingTest(unittest.TestCase):
     """Extent parsing matches the 24-byte DISK_EXTENT stride used by Windows."""
 
     def _buffer(self, extents):
+        # VOLUME_DISK_EXTENTS: NumberOfDiskExtents (4) + pad (4) + DISK_EXTENT[N] (24 each).
         count = len(extents)
-        parts = [struct.pack("<I", count)]
+        parts = [struct.pack("<I", count), b"\0" * 4]
         for disk, start, length in extents:
             parts.append(struct.pack("<I4xqq", disk, start, length))
         return b"".join(parts)
@@ -138,15 +139,19 @@ class StorageDeviceDescriptorParsingTest(unittest.TestCase):
         struct.pack_into("<IIII", raw, 12, 36, 47, 60, serial_offset)
         raw[28] = 17           # STORAGE_BUS_TYPE NVMe
         struct.pack_into("<I", raw, 32, 0)
-        raw[36:47] = b"VendorA\x00"
-        raw[47:60] = b"ProductB\x00\x00"
-        raw[60:66] = b"ASXA01\x00"
+        # Fixed-size writes only: never expand the bytearray (slice assign of a
+        # longer sequence would shift later fields and glue revision+serial).
+        raw[36:47] = b"VendorA\x00\x00\x00\x00"
+        raw[47:60] = b"ProductB\x00\x00\x00\x00\x00"
+        raw[60:67] = b"ASXA01\x00"
         if serial_offset:
-            raw[serial_offset: serial_offset + 6] = b"S12345\x00"
+            serial = b"S12345\x00"
+            raw[serial_offset: serial_offset + len(serial)] = serial
         return bytes(raw[:396])
 
     def test_fields_and_offsets_parse(self):
-        parsed = sg.parse_storage_device_descriptor(self.buffer(serial_offset=66))
+        # serial starts after revision's terminating NUL at offset 66
+        parsed = sg.parse_storage_device_descriptor(self.buffer(serial_offset=67))
         self.assertEqual(parsed["product_id"], "ProductB")
         self.assertEqual(parsed["product_revision"], "ASXA01")
         self.assertEqual(parsed["serial_number"], "S12345")
@@ -179,8 +184,12 @@ class AccessAlignmentParsingTest(unittest.TestCase):
         self.assertEqual(parsed["device_physical_sector_size_bytes"], 4096)
 
     def test_wrong_version_is_never_reported_as_fact(self):
+        # Windows commonly returns Version==Size==28; that is accepted.
+        # A foreign version must still fail closed rather than misparse.
+        parsed = sg.parse_access_alignment_descriptor(self.buffer(version=28))
+        self.assertEqual(parsed["descriptor_version"], 28)
         with self.assertRaises(sg.StorageGeometryError):
-            sg.parse_access_alignment_descriptor(self.buffer(version=28))
+            sg.parse_access_alignment_descriptor(self.buffer(version=99))
 
     def test_non_pow2_or_tiny_values_are_never_reported(self):
         with self.assertRaises(sg.StorageGeometryError):
@@ -345,8 +354,17 @@ class CliEndToEndTest(unittest.TestCase):
             summary = json.loads(out_text.getvalue())
             self.assertEqual(summary["schema"], sg.SCHEMA_VERSION)
             self.assertEqual(summary["runtime_acceptance"], sg.RUNTIME_ACCEPTANCE_NO)
-            self.assertNotIn("serial", out_text.getvalue().lower())
+            # Public stdout may mention that serials stay private; it must not
+            # emit serial_number fields or concrete serial values.
+            summary_text = out_text.getvalue()
+            self.assertNotIn("serial_number", summary_text)
             snapshot = json.loads(out.read_text(encoding="utf-8"))
+            device = snapshot.get("device", {})
+            for disk in device.get("disks", []) or []:
+                identity = disk.get("identity", {}) or {}
+                serial = identity.get("serial_number")
+                if serial:
+                    self.assertNotIn(str(serial), summary_text)
             self.assertEqual(sg.validate_report(snapshot), [])
             self.assertEqual(snapshot["path"]["requested_path"], tmp)
             self.assertEqual(snapshot["path"]["volume_root"], summary["volume_root"])
