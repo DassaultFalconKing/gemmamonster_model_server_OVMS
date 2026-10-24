@@ -154,6 +154,41 @@ class EndToEnd(unittest.TestCase):
         self.assertNotEqual(v1.fnv_update(v1.FNV_OFFSET, bad[:-8]),
                             struct.unpack("<Q", bad[-8:])[0])
 
+    def test_synthetic_profile_never_authorizes_native_pack_plan(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            data = tp.derive(trace(), identity())
+            for profile in data["profiles"]:
+                profile["profile"]["synthetic"] = True
+                profile["profile"]["provenance"]["source"] = "synthetic"
+            raw = root / "bundle.json"
+            raw.write_text(json.dumps(data), encoding="utf-8")
+            with self.assertRaisesRegex(v2.GenerationError, "synthetic"):
+                v2.make_plans(raw, root / "plans", "frequency")
+            self.assertFalse((root / "plans").exists())
+
+    def test_verifier_never_follows_symlink_to_external_pack(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            bundle = root / "bundle.json"
+            bundle.write_text(json.dumps(tp.derive(trace(), identity())), encoding="utf-8")
+            plans = root / "plans"
+            v2.make_plans(bundle, plans, "frequency")
+            external = root / ("external-otd-" + KEY + ".pack")
+            write_native_pack(external, [1, 0])
+            source = root / "native"
+            source.mkdir()
+            link = source / ("otd-" + KEY + ".pack")
+            try:
+                link.symlink_to(external)
+            except (OSError, NotImplementedError):
+                self.skipTest("symlink privileges unavailable")
+            destination = root / "out"
+            destination.mkdir()
+            with self.assertRaisesRegex(v2.GenerationError, "unsafe"):
+                v2.seal_generation(plans, source, destination)
+            self.assertFalse((destination / "active.v2.json").exists())
+
     def test_bad_bundle_rejected_without_partial_output(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

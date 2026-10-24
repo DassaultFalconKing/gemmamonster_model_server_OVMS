@@ -47,6 +47,8 @@ def _canonical(value):
 
 
 def _read_json(path, limit=MAX_PLAN_BYTES):
+    if path.is_symlink() or not path.is_file():
+        raise GenerationError("unsafe or missing JSON input")
     if path.stat().st_size > limit:
         raise GenerationError("JSON input exceeds limit")
     def pairs_unique(pairs):
@@ -148,6 +150,11 @@ def make_plans(bundle_path: Path, target_dir: Path, strategy: str, seed=0):
         seen_keys.add(key)
         raw = _canonical(e["profile"])
         profile = pack_layout.load_profile_bytes(raw)
+        # Only complete, trace-derived evidence may select real native
+        # placement/priority files. Synthetic fixtures remain useful to
+        # test the pure PGP-02 optimizer, not to configure GPU residency.
+        if profile.synthetic or profile.provenance["source"] != "offline_trace_derived":
+            raise GenerationError("synthetic/non-trace profile cannot drive native pack build")
         ident = (profile.provenance["checkpoint_sha"], profile.provenance["export_sha"],
                  profile.provenance["quant_profile_sha"], profile.scope["model_key"])
         if identity_tuple is None:
@@ -253,8 +260,8 @@ def _verify_one_pack(path, entry):
 
 def seal_generation(plans_dir: Path, native_packs: Path, output_root: Path):
     plan = _read_plans(plans_dir)
-    if not output_root.is_dir() or not native_packs.is_dir():
-        raise GenerationError("generation output root and native pack source must exist")
+    if not output_root.is_dir() or not native_packs.is_dir() or output_root.is_symlink() or native_packs.is_symlink():
+        raise GenerationError("generation output root and native pack source must be real directories")
     if native_packs.resolve() == output_root.resolve():
         raise GenerationError("native input packs must be outside generation root")
     entries = []
@@ -308,6 +315,8 @@ def seal_generation(plans_dir: Path, native_packs: Path, output_root: Path):
 
 
 def verify_generation(generation_dir: Path):
+    if generation_dir.is_symlink() or not generation_dir.is_dir():
+        raise GenerationError("generation directory missing or symlinked")
     manifest = _read_json(generation_dir / "manifest.v2.json")
     if type(manifest) is not dict or manifest.get("schema") != MANIFEST_SCHEMA:
         raise GenerationError("wrong V2 manifest schema")
