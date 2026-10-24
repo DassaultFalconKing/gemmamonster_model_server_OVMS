@@ -1,5 +1,7 @@
 ## Active CIB2 Pack V2 Full execution (2026-10-24)
 
+- [Model layouts and N2/N3 safe-source implementation delta, incl. Ornith correction](MODEL-LAYOUT-AND-SAFETY-DELTA-20261024.md)
+
 - [Master plan: new OVMS 2026.4 / Pack V2 / UMA](MASTER-PLAN-NATIVE-PACKV2-20261024.md)
 - [Orchestrator: execute N1 → N4, native build + live Arc140V](ORCHESTRATOR-EXEC-N1-N4-20261024.md)
 - [Previous Cursor source-build handoff](CURSOR-HANDOFF-PACKV2-BUILD-20261024.md)
