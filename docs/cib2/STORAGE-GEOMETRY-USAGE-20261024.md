@@ -23,6 +23,7 @@ stay in the private JSON file. `runtime_acceptance` is always `NO`.
 
 | Section | Source | Notes |
 |---|---|---|
+| volume mount root | `GetVolumePathNameW` | honors NTFS mounted folders; no syntactic-drive inference |
 | volume filesystem | `GetVolumeInformationW` | filesystem name, label, serial, flags |
 | allocation geometry | `GetDiskFreeSpaceW/ExW` | logical sector, sectors/cluster, cluster bytes, logical capacity |
 | fsutil sectors | fixed `fsutil fsinfo sectorinfo C:` | access denial stays `NOT_EXPOSED` |
@@ -33,6 +34,8 @@ stay in the private JSON file. `runtime_acceptance` is always `NO`.
 | system commit | `GetPerformanceInfo` | pages converted to bytes; whole-system counters |
 | process commit | `GetProcessMemoryInfo` | this probe process only |
 | WDDM video memory | intentionally disabled | `NOT_EXPOSED` until reviewed DXGI bindings exist |
+
+Physical-device mapping deliberately refuses mounted-folder and UNC roots rather than substituting the parent drive letter. Volume metadata can still be queried independently. Partial disk-extent maps beyond the bounded parser limit are rejected, not presented as complete. The `GetVolumeInformationW` buffer lengths are passed as WCHAR counts, not byte counts.
 
 All device handles use access 0. No admin escalation, I/O benchmark, write,
 format, resize, service, driver, listener, model load, or BIN read is performed.
@@ -59,10 +62,10 @@ format, resize, service, driver, listener, model load, or BIN read is performed.
 
 ```text
 rtk C:/gm/minicpm-v47-eval/venv-pinned/Scripts/python.exe -c "import py_compile; py_compile.compile(r'scripts/cib2/storage_geometry.py',doraise=True)"
-rtk C:/gm/minicpm-v47-eval/venv-pinned/Scripts/python.exe -m unittest discover -s tests/cib2 -p test_storage_geometry.py -v
+rtk C:/gm/minicpm-v47-eval/venv-pinned/Scripts/python.exe -m unittest discover -s tests/cib2 -p 'test_storage_geometry*.py' -v
 ```
 
-The focused suite covers unit separation, malformed/denied result handling,
+The original and independent review suites cover unit separation, malformed/denied result handling,
 non-Windows behavior, Win32 struct ABI sizes, invariant rejection of fabricated
 aggregate memory, and output-path protection.
 
@@ -75,4 +78,6 @@ aggregate memory, and output-path protection.
   the live path rather than risk an unsafe call.
 - Non-drive-letter roots (UNC/mounted volumes) are not mapped to a physical disk;
   the device mapping joins `NOT_EXPOSED` instead of guessing.
+- Multi-extent `IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS` can produce `ERROR_MORE_DATA`; the current probe fails closed rather than publishing a partial result. Bounded retry may be added in a later worker step.
+- Real Windows mounted-folder and API-ABI behavior requires operator-host validation; mock tests alone are not hardware acceptance.
 - Values are point-in-time diagnostic metadata and may change between runs.
