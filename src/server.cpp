@@ -18,6 +18,10 @@
 #include <algorithm>
 #include <cstdlib>
 #include <filesystem>
+#include <fstream>
+#include <iomanip>
+#include <random>
+#include <set>
 #include <system_error>
 #include <iostream>
 #include <memory>
@@ -404,7 +408,10 @@ static Status setPackRuntimeSetting(const char* key, const std::string& value) {
     return StatusCode::OK;
 }
 
-static Status configureCib2Pack(const ServerSettingsImpl& settings) {
+// A unique per-invocation receipt is populated by the matching GPU plugin only
+// after a compiled MOECompressed layer has opened and validated its native pack.
+// A directory scan is not evidence that this compilation produced/reused packs.
+static Status configureCib2Pack(const ServerSettingsImpl& settings, std::string* build_receipt) {
     if (settings.moeExpertsPackDir.empty()) return StatusCode::OK;
     auto normalize = [](const std::string& text) -> std::filesystem::path {
         std::error_code ec;
@@ -420,6 +427,33 @@ static Status configureCib2Pack(const ServerSettingsImpl& settings) {
             if (ec) return Status(StatusCode::PATH_INVALID, "Cannot create pack directory");
         } else if (!std::filesystem::is_directory(pack, ec)) {
             return Status(StatusCode::PATH_INVALID, "Missing pack generation directory");
+        }
+        if (settings.buildMoeExpertsPack) {
+            if (!build_receipt) return Status(StatusCode::INTERNAL_ERROR, "CIB2 build receipt output missing");
+            // create_directory is exclusive, unlike checking an existing pack
+            // directory or truncating a potentially stale receipt.
+            std::random_device random;
+            std::filesystem::path session;
+            bool created = false;
+            for (unsigned attempt = 0; attempt < 8 && !created; ++attempt) {
+                std::ostringstream nonce;
+                nonce << std::hex << std::setfill('0');
+                for (int i = 0; i < 4; ++i) nonce << std::setw(8) << random();
+                session = pack / (".cib2-build-" + nonce.str());
+                created = std::filesystem::create_directory(session, ec);
+                if (ec) return Status(StatusCode::PATH_INVALID, "Cannot create CIB2 build session");
+            }
+            if (!created) return Status(StatusCode::INTERNAL_ERROR, "Cannot allocate unique CIB2 build session");
+            const auto receipt = session / "compiled-layers.receipt";
+            {
+                std::ofstream out(receipt, std::ios::binary | std::ios::trunc);
+                out << "CIB2_COMPILED_PACKS_V1\n";
+                out.flush();
+                if (!out) return Status(StatusCode::PATH_INVALID, "Cannot initialize CIB2 build receipt");
+            }
+            const auto status = setPackRuntimeSetting("OV_GPU_MOE_OTD_BUILD_RECEIPT", receipt.string());
+            if (!status.ok()) return status;
+            *build_receipt = receipt.string();
         }
         for (const auto& option : {
                  std::make_pair("OV_GPU_MOE_OTD_PACK_MODE",
@@ -448,7 +482,7 @@ static Status configureCib2Pack(const ServerSettingsImpl& settings) {
     return StatusCode::OK;
 }
 
-static Status checkCib2PackBuild(ModelManager& manager, const std::string& pack_dir) {
+static Status checkCib2PackBuild(ModelManager& manager, const std::string& pack_dir, const std::string& receipt_path) {
     size_t unavailable = 0;
     for (const auto& [name, model] : manager.getModels()) {
         const auto instance = model->getDefaultModelInstance();
@@ -468,16 +502,52 @@ static Status checkCib2PackBuild(ModelManager& manager, const std::string& pack_
     }
 #endif
     if (unavailable) return Status(StatusCode::INTERNAL_ERROR, "CIB2 pack builder: one or more servables unavailable");
-    size_t pack_count = 0;
+    if (receipt_path.empty()) return Status(StatusCode::INTERNAL_ERROR, "CIB2 pack build session was not initialized");
+
+    // The plugin writes one line for each compiled, eligible native MoE layer
+    // AFTER PackLayout::open + serving-handle snapshot verification. Old packs
+    // without a current-compile receipt cannot satisfy this check.
+    std::ifstream in(receipt_path, std::ios::binary);
+    std::string line;
+    if (!in || !std::getline(in, line) || line != "CIB2_COMPILED_PACKS_V1") {
+        return Status(StatusCode::INTERNAL_ERROR, "CIB2 native GPU plugin did not provide a valid build receipt");
+    }
+    size_t built = 0, reused = 0;
+    std::set<std::string> eligible_keys;
+    const auto dir = std::filesystem::path(pack_dir);
     std::error_code ec;
-    for (const auto& file : std::filesystem::directory_iterator(pack_dir, ec)) {
-        if (file.is_regular_file() && file.path().extension() == ".pack") pack_count++;
+    while (std::getline(in, line)) {
+        std::istringstream row(line);
+        std::string marker, key, outcome, extra;
+        if (!(row >> marker >> key >> outcome) || (row >> extra) || marker != "LAYER" ||
+            key.size() != 16 ||
+            !std::all_of(key.begin(), key.end(), [](char c) {
+                return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f');
+            }) || (outcome != "built" && outcome != "reused")) {
+            return Status(StatusCode::INTERNAL_ERROR, "Malformed CIB2 compiled-layer receipt");
+        }
+        const auto file = dir / ("otd-" + key + ".pack");
+        if (!std::filesystem::is_regular_file(file, ec) || std::filesystem::is_symlink(file, ec) ||
+            std::filesystem::file_size(file, ec) == 0 || ec) {
+            return Status(StatusCode::INTERNAL_ERROR, "CIB2 compiled-layer receipt references a missing or invalid pack");
+        }
+        // The same compiled layer can be visited more than once (e.g. model
+        // aliases). Count each native key once; both built and reused records
+        // are emitted only after the plugin has verified its serving handle.
+        if (eligible_keys.insert(key).second) {
+            if (outcome == "built") ++built;
+            else ++reused;
+        }
     }
-    if (ec || pack_count == 0) {
-        return Status(StatusCode::INTERNAL_ERROR, "CIB2 build produced zero native pack files");
+    if (in.bad() || eligible_keys.empty()) {
+        return Status(StatusCode::INTERNAL_ERROR,
+                      "CIB2 native build compiled zero eligible MOECompressed/GEMM3 layers; stale packs do not count");
     }
-    SPDLOG_INFO("CIB2 build produced or reused {} native expert layer packs", pack_count);
-    std::cout << "CIB2 packs: " << pack_count << " (not V2 sealed until offline verifier succeeds)" << std::endl;
+    SPDLOG_INFO("CIB2 compiled native MoE layers={} built={} verified_reuse={} receipt={}",
+                eligible_keys.size(), built, reused, receipt_path);
+    std::cout << "CIB2 eligible compiled layers: " << eligible_keys.size()
+              << ", built: " << built << ", reused: " << reused
+              << " (native payload; V2 seal/verification still required)" << std::endl;
     return StatusCode::OK;
 }
 
@@ -578,13 +648,14 @@ Status Server::startModules(ovms::Config& config) {
         SPDLOG_INFO("Graph config created in memory from model_path: {}", config.modelPath());
     }
     // GPU plugin reads the candidate's environment on compile_model.
-    status = configureCib2Pack(config.getServerSettings());
+    std::string cib2_build_receipt;
+    status = configureCib2Pack(config.getServerSettings(), &cib2_build_receipt);
     if (!status.ok()) return status;
     GET_MODULE(SERVABLE_MANAGER_MODULE_NAME, it);
     START_MODULE(it);
     if (buildCib2Pack) {
         auto& manager = dynamic_cast<const ServableManagerModule*>(it->second.get())->getServableManager();
-        status = checkCib2PackBuild(manager, config.getServerSettings().moeExpertsPackDir);
+        status = checkCib2PackBuild(manager, config.getServerSettings().moeExpertsPackDir, cib2_build_receipt);
         if (!status.ok()) return status;
     }
 #if (PYTHON_DISABLE == 0)
