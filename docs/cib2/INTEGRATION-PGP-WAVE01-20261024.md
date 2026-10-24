@@ -31,7 +31,7 @@ No drift against pinned SHAs at fetch. Older worker `feature/cib2-pgp02-20261024
 | PGP-02 `strategy_effective` on fallback | `703ff6faf` |
 | Follow-up: alignment Version==28 only | `bd19ccf` |
 | Follow-up: synthetic bind + placement docs | `70aa528` |
-| Final HEAD | `dd73d3e3494b9e8aed4a5e095bca06b2b0b1dff0` |
+| Final HEAD | `c8f54988d993da1d71150ea6738e334a0b8e7abb` |
 
 ## 3. Changed files (vs coordinator base)
 
