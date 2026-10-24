@@ -40,7 +40,7 @@ import os
 import re
 import sys
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
@@ -150,6 +150,8 @@ class ValidatedProfile:
     expert_count: int
     experts: Tuple[ExpertEvidence, ...]
     coaccess: Tuple[CoaccessPair, ...]
+    # Set only when validated from exact profile bytes (CLI / load_profile_bytes).
+    source_sha256: Optional[str] = None
 
 
 def _reject_unknown(obj: Mapping[str, Any], allowed: Sequence[str], where: str) -> None:
@@ -368,12 +370,23 @@ def load_profile_bytes(data: bytes) -> ValidatedProfile:
         raise
     except (json.JSONDecodeError, ValueError) as exc:
         raise ProfileError(f"profile: invalid JSON: {exc}") from exc
-    return validate_profile(parsed)
+    validated = validate_profile(parsed)
+    return replace(validated, source_sha256=profile_sha256(data))
 
 
 def profile_sha256(data: bytes) -> str:
     """SHA-256 over the exact supplied profile bytes."""
     return hashlib.sha256(bytes(data)).hexdigest()
+
+
+def _paths_collide(left: Path, right: Path) -> bool:
+    """True when two paths name the same file, including hardlink/junction aliases."""
+    try:
+        if left.exists() and right.exists():
+            return left.resolve().samefile(right.resolve())
+    except OSError:
+        pass
+    return left.resolve() == right.resolve()
 
 
 def _tie_key(seed: int, expert_id: int) -> bytes:
@@ -628,6 +641,10 @@ def build_layout(
         count = profile.expert_count
         if source_sha256 is None or not SHA256_RE.fullmatch(source_sha256):
             raise LayoutError("a supplied profile requires its exact 64-hex source SHA-256")
+        if profile.source_sha256 is not None and profile.source_sha256 != source_sha256:
+            raise LayoutError(
+                "source_sha256 does not match the exact profile bytes used to validate"
+            )
 
     fallback_used = False
     fallback_reason: Optional[str] = None
@@ -838,7 +855,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             raise LayoutError("--expert-count is only valid when --profile is omitted")
         if args.profile:
             profile_path = Path(args.profile)
-            if profile_path.resolve() == Path(args.output).resolve():
+            if _paths_collide(profile_path, Path(args.output)):
                 raise LayoutError("output must not overwrite its source profile")
             if profile_path.suffix.lower() == ".bin":
                 raise ProfileError("profile: refusing .bin input; only sanitized JSON profiles are accepted")

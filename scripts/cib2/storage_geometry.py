@@ -217,8 +217,9 @@ def probe_volume_information(root: str) -> Dict[str, Any]:
             "filesystem_name": fs_buf.value,
             "volume_label": label_buf.value,
             "volume_serial_number_raw": serial_value,
+            # Windows vol/dir display is HIWORD-LOWORD (high word first).
             "volume_serial_number_formatted": "%04X-%04X" % (
-                serial_value & 0xFFFF, (serial_value >> 16) & 0xFFFF,
+                (serial_value >> 16) & 0xFFFF, serial_value & 0xFFFF,
             ),
             "max_component_length": max_component.value,
             "filesystem_flags": flags.value,
@@ -539,20 +540,26 @@ def parse_storage_device_descriptor(buffer: bytes) -> Dict[str, Any]:
     bus_raw = buffer[28]
     raw_length = struct.unpack_from("<I", buffer, 32)[0]
 
-    def _string(offset: int) -> Optional[str]:
-        if offset <= 0 or offset >= len(buffer):
-            return None
-        end = buffer.find(b"\x00", offset)
-        piece = buffer[offset: end if end != -1 else len(buffer)]
-        value = piece.decode("ascii", "replace").strip()
-        return value or None
-
     # Version/Size sanity: reject values that could indicate a mid-parse layout change.
     if version < 36 or size < 36 or size > len(buffer):
         raise StorageGeometryError(
             f"storage descriptor validation failed (version={version}, size={size}, "
             f"buffer={len(buffer)}); NOT_EXPOSED rather than misparse"
         )
+
+    def _string(offset: int) -> Optional[str]:
+        # Bound by the declared Size so a missing NUL cannot glue adjacent fields.
+        if offset <= 0 or offset >= size or offset >= len(buffer):
+            return None
+        limit = min(len(buffer), size)
+        end = buffer.find(b"\x00", offset, limit)
+        if end == -1:
+            raise StorageGeometryError(
+                "storage descriptor string missing NUL within Size; refusing glued fields"
+            )
+        value = buffer[offset:end].decode("ascii", "replace").strip()
+        return value or None
+
     return {
         "descriptor_version": version,
         "descriptor_size": size,

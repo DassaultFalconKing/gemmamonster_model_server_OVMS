@@ -171,6 +171,15 @@ class StorageDeviceDescriptorParsingTest(unittest.TestCase):
         with self.assertRaises(sg.StorageGeometryError):
             sg.parse_storage_device_descriptor(truncated)
 
+    def test_missing_nul_in_descriptor_string_is_refused(self):
+        raw = bytearray(self.buffer(serial_offset=0))
+        # Wipe NULs between product and end-of-Size so fields would glue.
+        for index in range(47, 396):
+            if raw[index] == 0:
+                raw[index] = ord("X")
+        with self.assertRaisesRegex(sg.StorageGeometryError, "missing NUL"):
+            sg.parse_storage_device_descriptor(bytes(raw))
+
 
 class AccessAlignmentParsingTest(unittest.TestCase):
     """Access-alignment descriptor validates version/size before reporting sectors."""

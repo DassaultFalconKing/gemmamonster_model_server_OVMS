@@ -196,8 +196,15 @@ def validate_receipt(data):
     for key, arm in by_id.items():
         if arm["cohort"] != a0["cohort"] or arm["scenario"] != a0["scenario"]:
             raise ScreenError(f"{key}: cohort/scenario mismatch, refusing comparison")
+        if arm["warmups"] != a0["warmups"]:
+            raise ScreenError(f"{key}: warmups differ from A0")
         if len(arm["samples"]) != len(a0["samples"]):
             raise ScreenError(f"{key}: sample count differs from A0")
+        for index, sample in enumerate(arm["samples"]):
+            if sample["accepted_target_tokens"] != a0["samples"][index]["accepted_target_tokens"]:
+                raise ScreenError(
+                    f"{key}: accepted_target_tokens mismatch vs A0 at sample {index}"
+                )
     if "A1" in by_id and "B1" in by_id and by_id["A1"]["profile_sha"] != by_id["B1"]["profile_sha"]:
         raise ScreenError("A1/B1 optimized placement must use the same profile SHA")
     # Same layout must share pack identity so resident-mode contrasts are not
@@ -217,9 +224,18 @@ def _median(vals):
 def _summarize(arm):
     samples = arm["samples"]
     tokens = [s["accepted_target_tokens"] for s in samples]
+    tps_vals = []
+    for sample in samples:
+        tps = sample["accepted_target_tokens"] / sample["wall_seconds"]
+        if not math.isfinite(tps):
+            raise ScreenError(
+                "derived accepted_target_tps is nonfinite; wall_seconds too small "
+                "relative to accepted_target_tokens"
+            )
+        tps_vals.append(tps)
     io = [_io(s["physical_io"]) for s in samples]
     return {
-        "median_accepted_target_tps": _median([s["accepted_target_tokens"] / s["wall_seconds"] for s in samples]),
+        "median_accepted_target_tps": _median(tps_vals),
         "median_ttft_ms": _median([s["ttft_ms"] for s in samples]),
         "median_tpot_p95_ms": _median([s["tpot_p95_ms"] for s in samples]),
         "median_tpot_p99_ms": _median([s["tpot_p99_ms"] for s in samples]),
@@ -288,12 +304,18 @@ def main(argv=None):
             raise ScreenError("input must be a readable <=4 MiB JSON file")
         raw = p.read_bytes()
         result = screen_receipt(_load(raw), hashlib.sha256(raw).hexdigest())
-    except (OSError, ScreenError) as exc:
+    except (OSError, ScreenError, ValueError, OverflowError) as exc:
         json.dump({"schema": OUTPUT_SCHEMA, "status": "REJECTED", "error": str(exc),
                    "runtime_acceptance": "NO", "promotion_authorized": False}, sys.stderr)
         sys.stderr.write("\n")
         return 2
-    json.dump(result, sys.stdout, indent=2, allow_nan=False)
+    try:
+        json.dump(result, sys.stdout, indent=2, allow_nan=False)
+    except (ValueError, OverflowError) as exc:
+        json.dump({"schema": OUTPUT_SCHEMA, "status": "REJECTED", "error": str(exc),
+                   "runtime_acceptance": "NO", "promotion_authorized": False}, sys.stderr)
+        sys.stderr.write("\n")
+        return 2
     sys.stdout.write("\n")
     return 0
 

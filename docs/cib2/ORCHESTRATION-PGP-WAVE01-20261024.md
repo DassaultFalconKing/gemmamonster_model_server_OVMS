@@ -33,9 +33,9 @@ Workers started from the same exact design commit in separate feature worktrees.
 
 ## Cursor integration handoff (2026-10-24)
 
-- Integration branch: `feature/cib2-pgp-wave01-cursor-integration-20261024` cherry-picks PR #24 (`bb0e23e7`, `550f7254`, `17421f52`) and PR #25 (`df086dc8`) onto coordinator `279f4097`, plus host fixture fix `f1b056009`.
-- Host receipt: [INTEGRATION-PGP-WAVE01-20261024.md](INTEGRATION-PGP-WAVE01-20261024.md). Full CIB2 suite **168/168 PASS** on Python 3.14.6. Read-only PGP-00 probe preserved `fsutil` ACL denial and WDDM NOT_EXPOSED; `runtime_acceptance=NO`.
-- Do not close PR #24 / #25 until the integration PR into `feature/cib2-offload-family-map-20261024` is accepted and contents confirmed. Native P0/P1/P2/P3/P5 and GPU acceptance remain open. Path B stays OFF.
+- Integration branch: `feature/cib2-pgp-wave01-cursor-integration-20261024` cherry-picks PR #24 (`bb0e23e7`, `550f7254`, `17421f52`) and PR #25 (`df086dc8`) onto coordinator `279f4097`, plus host fixes `f1b056009` / `85533a507` / `7432937a3` / `5783f3c57` / `703ff6faf`.
+- Host receipt: [INTEGRATION-PGP-WAVE01-20261024.md](INTEGRATION-PGP-WAVE01-20261024.md). Full CIB2 suite **173/173 PASS** on Python 3.14.6. Read-only PGP-00 probe preserved `fsutil` ACL denial and WDDM NOT_EXPOSED; drive-root → `%TEMP%` snapshots work; `runtime_acceptance=NO`.
+- Draft integration PR: [#27](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/pull/27). Do not close PR #24 / #25 until #27 is accepted and contents confirmed. Native P0/P1/P2/P3/P5 and GPU acceptance remain open. Path B stays OFF.
 
 ## Baseline observation in this wave
 

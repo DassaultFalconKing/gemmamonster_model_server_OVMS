@@ -2,8 +2,8 @@
 
 - **INTEGRATION_BRANCH:** `feature/cib2-pgp-wave01-cursor-integration-20261024` on coordinator base `279f4097`, aggregating PR #24 and PR #25. Receipt: [INTEGRATION-PGP-WAVE01-20261024.md](INTEGRATION-PGP-WAVE01-20261024.md).
 - **INCLUDED:** PGP-00 (import + Win32/WCHAR/extents hardening), PGP-02 numeric fail-closed (coordinator `a2ccb127` retained; worker PGP-02 not re-imported), PGP-05 offline A0/A1/B0/B1 screen.
-- **HOST TESTS:** Python 3.14.6; targeted 41 + 44 + 16 PASS; full `tests/cib2` **168/168 PASS**.
-- **HOST FIXES:** fixture/privacy `f1b056009`; volume-root output `85533a507`; file-sibling protection `7432937a3`; PGP-05 same-layout pack identity `5783f3c57`; layout `strategy_effective` fallback `703ff6faf`.
+- **HOST TESTS:** Python 3.14.6; targeted 42 + 46 + 18 PASS; full `tests/cib2` **173/173 PASS**.
+- **HOST FIXES:** fixture/privacy `f1b056009`; volume-root output `85533a507`; file-sibling protection `7432937a3`; PGP-05 same-layout pack identity `5783f3c57`; layout `strategy_effective` fallback `703ff6faf`; post-audit follow-up (serial HIWORD, descriptor NUL bounds, bound profile SHA/`samefile`, nonfinite TPS + matched warmups/tokens).
 - **WINDOWS PGP-00:** read-only probe RUN (drive root + worktree); `fsutil` ACL-denied and WDDM ledger preserved as NOT_EXPOSED; `runtime_acceptance=NO`. Mounted-folder live case NOT_RUN. Private snapshot outside repo.
 - **ACCEPTANCE:** `HOST_READY` for offline tooling only. Native Pack V1 / GPU / production **NOT_GRANTED**. Path A default, Path B OFF.
 - **NEXT:** hardware agent re-runs full suite on Arc 140V slot, captures sanitized drive-root/mount/ACL snapshots, then P0/P1/P2/P3/P5 native gates. Keep PR #24/#25 open until integration PR is accepted.

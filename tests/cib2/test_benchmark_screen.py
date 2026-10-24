@@ -157,6 +157,29 @@ class PGP05ScreenTests(unittest.TestCase):
                 self.assertEqual(s.main(["--input", str(path)]), 2)
             self.assertEqual(json.loads(stderr.getvalue())["status"], "REJECTED")
 
+    def test_tiny_wall_seconds_yields_structured_reject_not_crash(self):
+        data = fixture()
+        data["arms"][0]["samples"][0]["wall_seconds"] = 1e-320
+        with self.assertRaisesRegex(s.ScreenError, "nonfinite"):
+            s.screen_receipt(data, "e" * 64)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "tiny_wall.json"
+            path.write_text(json.dumps(data), encoding="utf-8")
+            stderr = StringIO()
+            with redirect_stderr(stderr):
+                self.assertEqual(s.main(["--input", str(path)]), 2)
+            self.assertEqual(json.loads(stderr.getvalue())["status"], "REJECTED")
+
+    def test_warmup_and_token_workload_must_match_a0(self):
+        data = fixture()
+        data["arms"][1]["warmups"] = 2
+        with self.assertRaisesRegex(s.ScreenError, "warmups differ"):
+            s.screen_receipt(data, "e" * 64)
+        data = fixture()
+        data["arms"][2]["samples"][1]["accepted_target_tokens"] = 101
+        with self.assertRaisesRegex(s.ScreenError, "accepted_target_tokens mismatch"):
+            s.screen_receipt(data, "e" * 64)
+
 
 if __name__ == '__main__':
     unittest.main()

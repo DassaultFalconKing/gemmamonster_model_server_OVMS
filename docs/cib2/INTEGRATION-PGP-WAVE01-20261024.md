@@ -29,7 +29,7 @@ No drift against pinned SHAs at fetch. Older worker `feature/cib2-pgp02-20261024
 | File-sibling output protection | `7432937a3` |
 | PGP-05 same-layout pack identity | `5783f3c57` |
 | PGP-02 `strategy_effective` on fallback | `703ff6faf` |
-| Final HEAD |  |
+| Final HEAD | `86725df2ef6c0feca7944518fa52532ed5d075af` |
 
 ## 3. Changed files (vs coordinator base)
 
@@ -84,17 +84,17 @@ Solid: WCHAR lengths, `GetVolumePathNameW`, zero-access handles, truncated exten
 
 Solid: determinism, permutation/inverse parity, numeric fail-closed (`a8f405074`), scoped provenance, CLI SHA binding, acceptance flags locked `NO`, synthetic warnings.
 
-MEDIUM addressed on branch: `strategy_effective` now becomes `identity` whenever fallback is used (`703ff6faf`). Residual notes (library SHA footgun, post-hoc synthetic strip, docs example `placement==order`) remain documentation/API hygiene, not host blockers.
+MEDIUM addressed on branch: `strategy_effective` now becomes `identity` whenever fallback is used (`703ff6faf`). Follow-up: `load_profile_bytes` binds exact SHA; forged `source_sha256` rejected; CLI overwrite uses `Path.samefile` (hardlink/junction). Residual: post-hoc synthetic strip / docs `placement==order` example — hygiene only.
 
 Native Pack V1 untouched.
 
 ### Agent C — PGP-05 / Benchmark screening
 
-**Overall risk:** LOW for promotion misuse; was MODERATE for matched-pair integrity until pack identity fix.
+**Overall risk:** LOW for promotion misuse after follow-up.
 
 Solid: never `PASS`; `promotion_authorized=false`; `runtime_acceptance=NO`; cohort/scenario lock; device_counter-only physical bytes; NaN/overflow fail-closed; synthetic BLOCKED.
 
-HIGH fixed: A0≡B0 and A1≡B1 must share `pack_manifest_sha` (`5783f3c57`). Residual MEDIUM (offload ratio enum, warmup authenticity, extra negatives) do not block `HOST_READY`.
+HIGH fixed: A0≡B0 and A1≡B1 must share `pack_manifest_sha` (`5783f3c57`). Follow-up HIGH: schema-valid tiny `wall_seconds` no longer produces `inf` TPS / uncaught `ValueError` — derived nonfinite metrics and serialization errors become structured `REJECTED`. Follow-up MEDIUM: warmups and per-index `accepted_target_tokens` must match A0.
 
 ## 6. Defects fixed on the integration branch
 
@@ -105,6 +105,7 @@ HIGH fixed: A0≡B0 and A1≡B1 must share `pack_manifest_sha` (`5783f3c57`). Re
 | `7432937a3` | Refuse sibling writes beside a probed file |
 | `5783f3c57` | Enforce same-layout `pack_manifest_sha` in PGP-05 |
 | `703ff6faf` | Record `strategy_effective=identity` on layout fallback |
+| (this follow-up) | PGP-00 HIWORD serial format + NUL-bounded descriptor strings; PGP-02 bound SHA + `samefile` overwrite; PGP-05 nonfinite TPS / matched warmups+tokens |
 
 ## 7. Targeted test results
 
@@ -113,19 +114,19 @@ Interpreter: **Python 3.14.6** (`py -3`).
 | Suite | Result |
 |---|---|
 | `py_compile` storage/pack/benchmark | PASS |
-| `test_storage_geometry*.py` | **41/41 PASS** |
-| `test_pack_layout*.py` | **44/44 PASS** |
-| `test_benchmark_screen.py` | **16/16 PASS** |
+| `test_storage_geometry*.py` | **42/42 PASS** |
+| `test_pack_layout*.py` | **46/46 PASS** |
+| `test_benchmark_screen.py` | **18/18 PASS** |
 
 ## 8. Full host suite
 
 ```text
 py -3 -m unittest discover -s tests/cib2 -p "test_*.py" -v
-Ran 168 tests in ~0.5s
+Ran 173 tests in ~0.5s
 OK
 ```
 
-Do **not** treat historical “67/67” as this run. Actual: **168 PASS / 0 FAIL / 0 SKIP**.
+Do **not** treat historical “67/67” as this run. Actual: **173 PASS / 0 FAIL / 0 SKIP**.
 
 ## 9. Windows hardware status
 

@@ -48,5 +48,27 @@ class IndependentHandoffTest(unittest.TestCase):
             with redirect_stderr(io.StringIO()):code=pl.main(['--profile',str(target),'--output',str(target),'--strategy','frequency'])
             self.assertEqual(code,2);self.assertEqual(target.read_bytes(),data)
 
+    def test_bound_profile_bytes_reject_forged_source_sha(self):
+        data=(ROOT/'tests/cib2/fixtures/pack_layout/frequency_ties.json').read_bytes()
+        profile=pl.load_profile_bytes(data)
+        self.assertEqual(profile.source_sha256,pl.profile_sha256(data))
+        with self.assertRaisesRegex(pl.LayoutError,'does not match the exact profile bytes'):
+            pl.build_layout(profile,'frequency',source_sha256='0'*64)
+
+    def test_cli_hardlink_alias_cannot_overwrite_source_profile(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source=Path(folder)/'profile.json'
+            alias=Path(folder)/'alias.json'
+            data=(ROOT/'tests/cib2/fixtures/pack_layout/frequency_ties.json').read_bytes()
+            source.write_bytes(data)
+            try:
+                alias.hardlink_to(source)
+            except OSError:
+                self.skipTest('hardlinks unavailable on this filesystem')
+            with redirect_stderr(io.StringIO()):
+                code=pl.main(['--profile',str(source),'--output',str(alias),'--strategy','frequency'])
+            self.assertEqual(code,2)
+            self.assertEqual(source.read_bytes(),data)
+
 
 if __name__=='__main__':unittest.main()
