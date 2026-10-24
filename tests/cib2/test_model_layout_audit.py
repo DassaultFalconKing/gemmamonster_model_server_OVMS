@@ -33,6 +33,7 @@ class ModelLayoutAuditTest(unittest.TestCase):
 
     def test_dense_rejected_for_moe_packing(self):
         a = copy.deepcopy(self.q)
+        a["model_type"] = "qwen3_5"
         a["text_config"] = {"model_type": "qwen3_5_text", "num_hidden_layers": 64,
                             "hidden_size": 5120, "num_experts": 0}
         self.assertEqual(audit.inspect_config(a)["status"], "DENSE_NO_ROUTED_MOE")
@@ -43,6 +44,12 @@ class ModelLayoutAuditTest(unittest.TestCase):
             "num_hidden_layers": 30, "hidden_size": 2816,
             "num_experts": 128, "top_k_experts": 8, "moe_intermediate_size": 704}}
         self.assertEqual(audit.inspect_config(a)["routed_experts_per_moe_layer"], 128)
+
+    def test_contradictory_wrapper_rejected(self):
+        a = copy.deepcopy(self.q)
+        a["model_type"] = "gemma4"
+        with self.assertRaises(audit.ModelLayoutError):
+            audit.inspect_config(a)
 
     def test_invalid_or_ambiguous_fail_closed(self):
         for change in [
