@@ -413,6 +413,20 @@ class CliEndToEndTest(unittest.TestCase):
             self.assertEqual(code, 2)
             self.assertIn("inside the probed source directory", err.getvalue())
 
+    def test_volume_root_probe_may_write_elsewhere_on_same_volume(self):
+        # Drive-root containment would otherwise refuse every same-drive TEMP path.
+        root = Path("C:/").resolve()
+        if not root.exists():
+            self.skipTest("C: volume root unavailable")
+        out = Path(tempfile.gettempdir()) / "cib2_pgp00_volume_root_out.json"
+        try:
+            target = sg.validate_output_target(root, str(out))
+            self.assertEqual(target.suffix.lower(), ".json")
+            with self.assertRaises(sg.StorageGeometryError):
+                sg.validate_output_target(root, str(root))
+        finally:
+            out.unlink(missing_ok=True)
+
     def test_non_json_output_suffix_refused(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tempfile.gettempdir()) / "cib2_pgp00_test_snapshot.bin"

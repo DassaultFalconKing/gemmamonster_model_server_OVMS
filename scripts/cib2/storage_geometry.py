@@ -1076,8 +1076,23 @@ def summarize_report(report: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def _is_volume_root(path: Path) -> bool:
+    """True for drive roots such as ``C:\\`` where containment spans the volume."""
+    resolved = path.resolve()
+    try:
+        return resolved == Path(resolved.anchor)
+    except (OSError, RuntimeError, ValueError):
+        return False
+
+
 def validate_output_target(source_path: Path, output: str) -> Path:
-    """Refuse non-JSON or in-tree outputs so weights/profiles cannot be overwritten."""
+    """Refuse non-JSON or in-tree outputs so weights/profiles cannot be overwritten.
+
+    Ordinary directories (model trees, pack dirs) cannot host the snapshot.
+    Volume roots are an exception: nearly every same-drive path is "inside" them,
+    so containment would make drive-root diagnostics impossible. Overwriting the
+    exact probed path is still refused.
+    """
     target = Path(output)
     if target.suffix.lower() != ".json":
         raise StorageGeometryError("output must be a .json diagnostic file")
@@ -1085,7 +1100,7 @@ def validate_output_target(source_path: Path, output: str) -> Path:
     resolved_target = target.resolve()
     if resolved_target == source:
         raise StorageGeometryError("output must not overwrite the probed source path")
-    if source.is_dir():
+    if source.is_dir() and not _is_volume_root(source):
         try:
             resolved_target.relative_to(source)
         except ValueError:

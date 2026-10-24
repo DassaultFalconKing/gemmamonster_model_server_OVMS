@@ -12,9 +12,11 @@ C:/gm/minicpm-v47-eval/venv-pinned/Scripts/python.exe scripts/cib2/storage_geome
   --output C:/gm/orchestration/offload-family-20261024/reports/PGP-00-hardware.json
 ```
 
-`--output` must end in `.json`. The tool refuses to write to the probed source
-path or anywhere inside the probed source directory, so model weights and profile
-files cannot be overwritten by the snapshot.
+`--output` must end in `.json`. The tool refuses to overwrite the probed source
+path, and refuses writes inside an ordinary probed directory (model/pack trees).
+Probing a volume root such as `C:\` is allowed to write elsewhere on the same
+volume (for example under `%TEMP%`), because containment would otherwise block
+all same-drive diagnostics.
 
 stdout is a sanitized summary (statuses/path only). Device serials and full detail
 stay in the private JSON file. `runtime_acceptance` is always `NO`.
