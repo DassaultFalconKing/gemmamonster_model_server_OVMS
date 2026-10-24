@@ -427,6 +427,20 @@ class CliEndToEndTest(unittest.TestCase):
         finally:
             out.unlink(missing_ok=True)
 
+    def test_output_beside_probed_file_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            probed = Path(tmp) / "model.bin"
+            probed.write_bytes(b"x")
+            sibling = Path(tmp) / "profile.json"
+            with self.assertRaisesRegex(sg.StorageGeometryError, "beside the probed source file"):
+                sg.validate_output_target(probed, str(sibling))
+            outside = Path(tempfile.gettempdir()) / "cib2_pgp00_file_probe_out.json"
+            try:
+                target = sg.validate_output_target(probed, str(outside))
+                self.assertEqual(target.name, outside.name)
+            finally:
+                outside.unlink(missing_ok=True)
+
     def test_non_json_output_suffix_refused(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tempfile.gettempdir()) / "cib2_pgp00_test_snapshot.bin"

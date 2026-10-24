@@ -13,10 +13,11 @@ C:/gm/minicpm-v47-eval/venv-pinned/Scripts/python.exe scripts/cib2/storage_geome
 ```
 
 `--output` must end in `.json`. The tool refuses to overwrite the probed source
-path, and refuses writes inside an ordinary probed directory (model/pack trees).
-Probing a volume root such as `C:\` is allowed to write elsewhere on the same
-volume (for example under `%TEMP%`), because containment would otherwise block
-all same-drive diagnostics.
+path, refuses writes inside an ordinary probed directory (model/pack trees), and
+refuses sibling writes beside a probed file (so a profile next to weights cannot
+be truncated). Probing a volume root such as `C:\` is allowed to write elsewhere
+on the same volume (for example under `%TEMP%`), because containment would
+otherwise block all same-drive diagnostics.
 
 stdout is a sanitized summary (statuses/path only). Device serials and full detail
 stay in the private JSON file. `runtime_acceptance` is always `NO`.

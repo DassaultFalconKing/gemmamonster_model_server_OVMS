@@ -1109,6 +1109,17 @@ def validate_output_target(source_path: Path, output: str) -> Path:
             raise StorageGeometryError(
                 "output must not be written inside the probed source directory"
             )
+    elif source.is_file():
+        # Probing a weight/profile file must not allow overwriting a sibling JSON
+        # in the same directory (documented model-tree protection).
+        try:
+            resolved_target.relative_to(source.parent.resolve())
+        except ValueError:
+            pass
+        else:
+            raise StorageGeometryError(
+                "output must not be written beside the probed source file"
+            )
     return target
 
 
