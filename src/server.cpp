@@ -62,8 +62,13 @@
 #include "kfs_frontend/kfs_grpc_inference_service.hpp"
 #include "logging.hpp"
 #include "metrics/metric_module.hpp"
+#include "model.hpp"
+#include "modelinstance.hpp"
 #include "modelmanager.hpp"
 #include "ovms_exit_codes.hpp"
+#if (MEDIAPIPE_DISABLE == 0)
+#include "mediapipe_internal/mediapipefactory.hpp"
+#endif
 #include "profiler.hpp"
 #include "profilermodule.hpp"
 #include "pull_module/hf_pull_model_module.hpp"
@@ -447,15 +452,16 @@ static Status checkCib2PackBuild(ModelManager& manager, const std::string& pack_
     size_t unavailable = 0;
     for (const auto& [name, model] : manager.getModels()) {
         const auto instance = model->getDefaultModelInstance();
-        if (!instance || !instance->getStatus().appearsAvailable()) {
+        if (!instance || instance->getStatus().getState() != ModelVersionState::AVAILABLE) {
             SPDLOG_ERROR("CIB2 pack build: servable unavailable: {}", name);
             unavailable++;
         }
     }
 #if (MEDIAPIPE_DISABLE == 0)
     const auto& mediapipe = manager.getMediapipeFactory();
+    const auto availableGraphs = mediapipe.getNamesOfAvailableMediapipePipelines();
     for (const auto& name : mediapipe.getMediapipePipelinesNames()) {
-        if (!mediapipe.isDefinitionAvailable(name)) {
+        if (std::find(availableGraphs.begin(), availableGraphs.end(), name) == availableGraphs.end()) {
             SPDLOG_ERROR("CIB2 pack build: graph unavailable: {}", name);
             unavailable++;
         }
