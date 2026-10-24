@@ -31,6 +31,12 @@ Workers started from the same exact design commit in separate feature worktrees.
 - Probe remains *diagnostic only*. No real Arc 140V Windows process, GPU, NVMe, WDDM ledger, model weights or pack runtime was exercised by cloud QA. Output and acceptance stay `NO`. Full native Pack V1 P3/P5 and source-build identity gates are still separate.
 - Verification gate: `python -m unittest discover -s tests/cib2 -p 'test_*.py' -v` on operator host, then captured Windows drive-root/mount-point/ACL-denied snapshots. No synthetic report can be promoted to real PGP-00 acceptance.
 
+## Cursor integration handoff (2026-10-24)
+
+- Integration branch: `feature/cib2-pgp-wave01-cursor-integration-20261024` cherry-picks PR #24 (`bb0e23e7`, `550f7254`, `17421f52`) and PR #25 (`df086dc8`) onto coordinator `279f4097`, plus host fixture fix `f1b056009`.
+- Host receipt: [INTEGRATION-PGP-WAVE01-20261024.md](INTEGRATION-PGP-WAVE01-20261024.md). Full CIB2 suite **168/168 PASS** on Python 3.14.6. Read-only PGP-00 probe preserved `fsutil` ACL denial and WDDM NOT_EXPOSED; `runtime_acceptance=NO`.
+- Do not close PR #24 / #25 until the integration PR into `feature/cib2-offload-family-map-20261024` is accepted and contents confirmed. Native P0/P1/P2/P3/P5 and GPU acceptance remain open. Path B stays OFF.
+
 ## Baseline observation in this wave
 
 The coordinator reran the existing 67 host tests at the design commit: PASS. A fresh physical-file rehash found all six previously recorded EXE/DLL identities unchanged and the source checkout still at frozen `eb76a74f7aa39573d452d95443e189b1f5f4d9e8`.
