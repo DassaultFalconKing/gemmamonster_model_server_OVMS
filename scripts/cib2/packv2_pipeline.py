@@ -71,8 +71,12 @@ def _sha256_file(path):
 
 
 def _native_placement(key, placement):
-    if len(placement) > pack_layout.MAX_EXPERTS or not placement:
-        raise GenerationError("invalid native expert count")
+    if type(key) is not str or len(key) != 16 or any(c not in "0123456789abcdef" for c in key):
+        raise GenerationError("invalid 16-hex native layer key")
+    if type(placement) is not list or not 1 <= len(placement) <= pack_layout.MAX_EXPERTS or (
+        any(type(x) is not int for x in placement) or sorted(placement) != list(range(len(placement)))
+    ):
+        raise GenerationError("native placement must be an exact permutation")
     header = HEADER.pack(MAGIC, 2, len(placement), int(key, 16))
     data = header + struct.pack("<" + "I" * len(placement), *placement)
     hash_value = verify_pack_v1.fnv_update(verify_pack_v1.FNV_OFFSET, data)
@@ -99,7 +103,9 @@ def _resident_tiers(profile):
 
 
 def _native_residency(key, tiers):
-    if not 1 <= len(tiers) <= pack_layout.MAX_EXPERTS or any(type(x) is not int or x not in (0, 1, 2) for x in tiers):
+    if type(key) is not str or len(key) != 16 or any(c not in "0123456789abcdef" for c in key):
+        raise GenerationError("invalid 16-hex native resident policy key")
+    if type(tiers) is not list or not 1 <= len(tiers) <= pack_layout.MAX_EXPERTS or any(type(x) is not int or x not in (0, 1, 2) for x in tiers):
         raise GenerationError("invalid priority tiers")
     raw = HEADER.pack(RESIDENT_MAGIC, 2, len(tiers), int(key, 16)) + bytes(tiers)
     return raw + CHECKSUM.pack(verify_pack_v1.fnv_update(verify_pack_v1.FNV_OFFSET, raw))
@@ -131,8 +137,10 @@ def make_plans(bundle_path: Path, target_dir: Path, strategy: str, seed=0):
     } or bundle["schema"] != BUNDLE_SCHEMA or bundle["runtime_acceptance"] != "NO":
         raise GenerationError("not a valid offline trace profile bundle")
     entries = bundle["profiles"]
-    if type(entries) is not list or not 1 <= len(entries) <= MAX_PACKS:
-        raise GenerationError("invalid layer count")
+    if type(entries) is not list or not 1 <= len(entries) <= MAX_PACKS or (
+        not pack_layout.SHA256_RE.fullmatch(str(bundle["trace_sha256"]))
+    ):
+        raise GenerationError("invalid layer count or trace digest")
     if target_dir.exists() or not target_dir.parent.is_dir():
         raise GenerationError("placement destination must be a new directory under an existing parent")
     plans = []
@@ -203,7 +211,10 @@ def make_plans(bundle_path: Path, target_dir: Path, strategy: str, seed=0):
 
 def _read_plans(plan_dir: Path):
     plan = _read_json(plan_dir / "plans.v2.json")
-    if type(plan) is not dict or plan.get("schema") != PLANS_SCHEMA or plan.get("runtime_acceptance") != "NO":
+    if type(plan) is not dict or set(plan) != {
+        "schema", "status", "runtime_acceptance", "pack_acceptance", "source", "trace_sha256",
+        "strategy", "seed", "layers"
+    } or plan.get("schema") != PLANS_SCHEMA or plan.get("runtime_acceptance") != "NO" or plan.get("pack_acceptance") != "NO":
         raise GenerationError("invalid placement plan contract")
     entries = plan.get("layers")
     if type(entries) is not list or not 1 <= len(entries) <= MAX_PACKS:
@@ -318,8 +329,11 @@ def verify_generation(generation_dir: Path):
     if generation_dir.is_symlink() or not generation_dir.is_dir():
         raise GenerationError("generation directory missing or symlinked")
     manifest = _read_json(generation_dir / "manifest.v2.json")
-    if type(manifest) is not dict or manifest.get("schema") != MANIFEST_SCHEMA:
-        raise GenerationError("wrong V2 manifest schema")
+    if type(manifest) is not dict or set(manifest) != {
+        "schema", "pack_format", "v2_features", "runtime_acceptance",
+        "source", "trace_sha256", "plan_sha256", "packs", "generation_sha256"
+    } or manifest.get("schema") != MANIFEST_SCHEMA or manifest.get("pack_format") != "OTDPACK1":
+        raise GenerationError("wrong V2 manifest schema/format")
     identity = dict(manifest)
     generation_sha = identity.pop("generation_sha256", None)
     digest = hashlib.sha256(_canonical(identity)).hexdigest()
@@ -333,7 +347,16 @@ def verify_generation(generation_dir: Path):
     expected_files = {"manifest.v2.json"}
     seen = set()
     for e in entries:
+        if type(e) is not dict or set(e) != {
+            "file", "pack_layer_key", "pack_sha256", "pack_bytes",
+            "expert_count", "profile_sha256", "native_plan_sha256",
+            "native_residency_sha256", "resident_tiers", "placement",
+            "native_payload_format", "record_stride"
+        }:
+            raise GenerationError("invalid V2 manifest pack entry")
         key, name = e["pack_layer_key"], e["file"]
+        if type(key) is not str or len(key) != 16 or any(c not in "0123456789abcdef" for c in key):
+            raise GenerationError("invalid native pack identity")
         if name != "otd-" + key + ".pack" or name in seen:
             raise GenerationError("unexpected or repeated pack path")
         seen.add(name)
