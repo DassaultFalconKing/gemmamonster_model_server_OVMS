@@ -83,3 +83,22 @@ This host also loads `openvino_intel_npu_compiler_loader.dll` from Windows Drive
 The original speed comparison applies to its recorded measured binaries, not automatically to these version-stamped rebuilds. RC4 package-specific receipts and per-file manifests are stored under [testing/rc4-release](testing/rc4-release). Full OVMS regression, long-context pressure, prolonged soak, agent loops and renewed Gemma parser acceptance are outside these focused release checks. Do not turn package smoke success into those acceptance claims.
 
 The previous RC3B release and measured original EXE are retained for recovery. Local obsolete branch/build labels are maintained in the private release directory; no research branch, dirty worktree or deployment installation is deleted.
+
+## Additional tested working combination — 2026-10-26
+
+The operator designated the current Qwen3.6 / Arc 140V Python Off tuple as
+a working baseline for sequential requests. The [configuration, exact loaded
+module lock and measured results](testing/rc4-release/qwen36-arc140v-20261026/README.md)
+record VLM_CB, u4, offload 20%, batch 4096, prefix interval 256, dynamic KV,
+two scheduler slots and one HTTP worker. New RC4-specific measurements give
+28.04 tok/s median on a short input; an 8236-token request had 15.59 s TTFT,
+falling to 0.67 s on exact repeat. These measurements do not belong to the
+stock OVMS Fast reference or historical benchmark EXE.
+
+This dated addendum does not broaden the original tag's acceptance:
+simultaneous long contexts, 128K input, 32K output, agentic correctness,
+Python On performance and long soak remain outside the recorded working
+profile's acceptance. The 41006-token capacity result is separately
+qualified as a precursor using eight HTTP workers; the final one-worker
+profile mitigates reproduced concurrent VLM input corruption. Release ZIPs,
+the tagged product source and the retained custom GPU binary are unchanged.

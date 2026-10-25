@@ -1,0 +1,193 @@
+{
+    "schema":  "rc4-tested-working-combination-v1",
+    "designation":  "User-accepted working baseline for sequential requests; qualification below is bounded.",
+    "captured_utc":  "2026-10-25T23:42:12.7246866Z",
+    "release":  {
+                    "variant":  "python_off",
+                    "source_commit":  "b7812066afb35377ec9da2f3bc06fb3f1d261460",
+                    "custom_gpu_source_attestation":  "NOT_REESTABLISHED; retained measured binary 21a2fd9f",
+                    "tag":  "gemmamonster-2026.4-rc4",
+                    "zip_sha256":  "75d9b677d5b7435f3057f92cea5e9d0b79e99549df70a98358d50d09eff5246a"
+                },
+    "model":  {
+                  "revision_qualification":  "Recorded by local download manifest; no new download or revision verification.",
+                  "repository":  "OpenVINO/Qwen3.6-35B-A3B-int4-ov",
+                  "file_hashes":  [
+                                      {
+                                          "file":  "config.json",
+                                          "bytes":  3187,
+                                          "sha256":  "a859aceb5c6c8651c3d49238af21ed36ea6242f0d914f4a2b3f451eb0f1db961"
+                                      },
+                                      {
+                                          "file":  "generation_config.json",
+                                          "bytes":  213,
+                                          "sha256":  "07f857aba5260b2ea2513f80de8062d086661f00eada0a3794964e665ba680f5"
+                                      },
+                                      {
+                                          "file":  "chat_template.jinja",
+                                          "bytes":  7764,
+                                          "sha256":  "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259"
+                                      },
+                                      {
+                                          "file":  "openvino_language_model.xml",
+                                          "bytes":  7980097,
+                                          "sha256":  "5cc542f8d68cde8bd774939c84077c33d5f3377208e86451fe5a4651f485c4b7"
+                                      },
+                                      {
+                                          "file":  "openvino_tokenizer.xml",
+                                          "bytes":  34218,
+                                          "sha256":  "708d0b51c91059109fa9659a44ca45ed8f3089fa211c6cf3dadeb48986550af6"
+                                      },
+                                      {
+                                          "file":  "openvino_tokenizer.bin",
+                                          "bytes":  9631159,
+                                          "sha256":  "7f883a0f82b46da4e794729c429e38193411392d21faefd549cdac956631ea97"
+                                      },
+                                      {
+                                          "file":  "openvino_detokenizer.xml",
+                                          "bytes":  15631,
+                                          "sha256":  "12d653107d0f1372a4a03f8e6044365eb098fd01f8284fe056ce19669eef870a"
+                                      },
+                                      {
+                                          "file":  "openvino_detokenizer.bin",
+                                          "bytes":  3828184,
+                                          "sha256":  "48fc2c6a7a1056994982911eb9695826acef933c3d742364c56d16317a0b2a79"
+                                      }
+                                  ],
+                  "api_id":  "qwen36-35b-a3b-int4-baseline",
+                  "recorded_download_revision":  "33648de852df51faf681ec3930ba72b58fa0eae5",
+                  "language_weights":  {
+                                           "qualification":  "Large weight hash not recomputed to avoid production disk pressure.",
+                                           "sha256":  null,
+                                           "file":  "openvino_language_model.bin",
+                                           "bytes":  17989975530
+                                       }
+              },
+    "host":  {
+                 "observed_pagefile":  [
+                                           {
+                                               "Name":  "C:\\pagefile.sys",
+                                               "AllocatedBaseSize":  98304,
+                                               "CurrentUsage":  2646,
+                                               "PeakUsage":  25445
+                                           }
+                                       ],
+                 "gpu_driver":  "32.0.101.9150",
+                 "gpu":  "Intel(R) Arc(TM) 140V GPU (16GB)",
+                 "windows_version":  "10.0.26300",
+                 "physical_ram_gib":  31.540760040283203,
+                 "pagefile_qualification":  "Observed host configuration, not a proven minimum requirement or fully resident-memory guarantee.",
+                 "cpu":  "Intel(R) Core(TM) Ultra 7 258V"
+             },
+    "runtime":  {
+                    "use_cache_eviction":  false,
+                    "max_num_batched_tokens":  4096,
+                    "pipeline_type":  "VLM_CB",
+                    "kv_cache_precision":  "u4",
+                    "reasoning_parser":  "qwen3",
+                    "device":  "GPU",
+                    "explicit_max_tokens_limit":  null,
+                    "cache_interval_multiplier":  256,
+                    "tool_parser":  "qwen3coder",
+                    "offload_ratio":  20,
+                    "max_num_seqs":  2,
+                    "enable_prefix_caching":  true,
+                    "cache_size":  0,
+                    "enable_tool_guided_generation":  true,
+                    "dynamic_split_fuse":  true,
+                    "rest_workers":  1,
+                    "mtp":  false
+                },
+    "loaded_modules":  [
+                           {
+                               "file":  "ovms.exe",
+                               "scope":  "release_package",
+                               "sha256":  "f5eef01c9173d066ac25084b9f206dbf5d4ed00d695868e2f43d7d75e9de1acd",
+                               "release_manifest_match":  true
+                           },
+                           {
+                               "file":  "openvino_genai.dll",
+                               "scope":  "release_package",
+                               "sha256":  "5a2904f2564e4ce002db5ef5fe003a782e6f296f6377cd66df1b2db41d4c5e8d",
+                               "release_manifest_match":  true
+                           },
+                           {
+                               "file":  "openvino.dll",
+                               "scope":  "release_package",
+                               "sha256":  "829c4642e287522f8a8e748a726d4ad3117a701e22ab46adc82771f98e5d2f7e",
+                               "release_manifest_match":  true
+                           },
+                           {
+                               "file":  "openvino_tokenizers.dll",
+                               "scope":  "release_package",
+                               "sha256":  "e96e02744f4cd9567e54065430aa609e97c48951299a21f30abc00fba6078d3c",
+                               "release_manifest_match":  true
+                           },
+                           {
+                               "file":  "openvino_auto_plugin.dll",
+                               "scope":  "release_package",
+                               "sha256":  "ed1492fe3f901d2b882ea89c8909d8ce35eb52986a3559353a44917ee3fb3e47",
+                               "release_manifest_match":  true
+                           },
+                           {
+                               "file":  "openvino_auto_batch_plugin.dll",
+                               "scope":  "release_package",
+                               "sha256":  "d21dc67bee39d3af3fbda6720198a6b025eda297680d5d747996730bc75496dd",
+                               "release_manifest_match":  true
+                           },
+                           {
+                               "file":  "openvino_intel_cpu_plugin.dll",
+                               "scope":  "release_package",
+                               "sha256":  "ce9c65b551e36139b62e28f2c8c7b9fc2a5c02c82e1dfd01e578dac30695e78b",
+                               "release_manifest_match":  true
+                           },
+                           {
+                               "file":  "openvino_intel_gpu_plugin.dll",
+                               "scope":  "release_package",
+                               "sha256":  "21a2fd9f5d856c297416059325832f0f902c84a4e78b840f859ca508f5aea66d",
+                               "release_manifest_match":  true
+                           },
+                           {
+                               "file":  "openvino_hetero_plugin.dll",
+                               "scope":  "release_package",
+                               "sha256":  "c21be45cea174c79163394e4cfe3a782ebef7a7a64b4ee43dfcf3828d558de16",
+                               "release_manifest_match":  true
+                           },
+                           {
+                               "file":  "openvino_intel_npu_plugin.dll",
+                               "scope":  "release_package",
+                               "sha256":  "e27a466c9690e079b82d453a93a583d9008cb08e9965a6f459c56bccde965198",
+                               "release_manifest_match":  true
+                           },
+                           {
+                               "file":  "openvino_intel_npu_compiler_loader.dll",
+                               "scope":  "host_driver",
+                               "sha256":  "8df6d149c80841d6eaeb78acb526530823992f1fd7916451da40f480b9cb5162",
+                               "release_manifest_match":  false
+                           },
+                           {
+                               "file":  "openvino_intel_npu_compiler_loader.dll",
+                               "scope":  "release_package",
+                               "sha256":  "ea3a6b018a40e1a57c3d982a5e661ba12e6c3ada09ffe77a5eb9af58930f0fe1",
+                               "release_manifest_match":  true
+                           },
+                           {
+                               "file":  "openvino_ir_frontend.dll",
+                               "scope":  "release_package",
+                               "sha256":  "44604b39cbafcf4d8aa27697cee639038bdfcf24f5245f0be07abcf30609d4cd",
+                               "release_manifest_match":  true
+                           }
+                       ],
+    "qualification":  {
+                          "long_input_note":  "41006-token precursor capacity probe used the same model/pipeline/KV/batch/interval but 8 HTTP workers; final 1-worker profile was validated separately with short unary/SSE requests.",
+                          "not_accepted":  [
+                                               "Simultaneous long-context use of two slots",
+                                               "128K input",
+                                               "32K output",
+                                               "Agentic correctness",
+                                               "Long-duration soak",
+                                               "Python On performance"
+                                           ],
+                          "working":  "Sequential single-request GPU serving and measured speed"
+                      }
+}

@@ -1,0 +1,83 @@
+{
+    "model":  "qwen36-35b-a3b-int4-baseline",
+    "sampling":  {
+                     "seed":  1234,
+                     "enable_thinking":  false,
+                     "temperature":  0
+                 },
+    "method":  "Client-observed SSE timing on the live warm worker; one request at a time; post-first-token throughput is an estimate.",
+    "runs":  [
+                 {
+                     "name":  "warmup",
+                     "http_status":  200,
+                     "prompt_tokens":  42,
+                     "completion_tokens":  32,
+                     "finish_reason":  "length",
+                     "ttft_seconds":  2.4706439000000002,
+                     "elapsed_seconds":  3.8607130000000005,
+                     "decode_tokens_per_second":  22.314529191507184,
+                     "end_to_end_tokens_per_second":  8.288624406942446,
+                     "reasoning_chars":  0
+                 },
+                 {
+                     "name":  "short-1",
+                     "http_status":  200,
+                     "prompt_tokens":  42,
+                     "completion_tokens":  256,
+                     "finish_reason":  "length",
+                     "ttft_seconds":  0.45242459999999995,
+                     "elapsed_seconds":  11.3416444,
+                     "decode_tokens_per_second":  23.41905921285952,
+                     "end_to_end_tokens_per_second":  22.571682815236212,
+                     "reasoning_chars":  0
+                 },
+                 {
+                     "name":  "short-2",
+                     "http_status":  200,
+                     "prompt_tokens":  42,
+                     "completion_tokens":  256,
+                     "finish_reason":  "length",
+                     "ttft_seconds":  0.6139148999999997,
+                     "elapsed_seconds":  9.7099393,
+                     "decode_tokens_per_second":  28.03757060849841,
+                     "end_to_end_tokens_per_second":  26.364737419110334,
+                     "reasoning_chars":  0
+                 },
+                 {
+                     "name":  "short-3",
+                     "http_status":  200,
+                     "prompt_tokens":  42,
+                     "completion_tokens":  256,
+                     "finish_reason":  "length",
+                     "ttft_seconds":  0.5159791000000005,
+                     "elapsed_seconds":  9.5413687,
+                     "decode_tokens_per_second":  28.256007315801636,
+                     "end_to_end_tokens_per_second":  26.83053218559723,
+                     "reasoning_chars":  0
+                 },
+                 {
+                     "name":  "8k-first",
+                     "http_status":  200,
+                     "prompt_tokens":  8236,
+                     "completion_tokens":  128,
+                     "finish_reason":  "length",
+                     "ttft_seconds":  15.588966399999997,
+                     "elapsed_seconds":  21.634133900000002,
+                     "decode_tokens_per_second":  21.011659452553285,
+                     "end_to_end_tokens_per_second":  5.916576119555217,
+                     "reasoning_chars":  0
+                 },
+                 {
+                     "name":  "8k-repeat",
+                     "http_status":  200,
+                     "prompt_tokens":  8236,
+                     "completion_tokens":  128,
+                     "finish_reason":  "length",
+                     "ttft_seconds":  0.6697530999999944,
+                     "elapsed_seconds":  5.432045299999998,
+                     "decode_tokens_per_second":  26.67238533809316,
+                     "end_to_end_tokens_per_second":  23.563868291010028,
+                     "reasoning_chars":  0
+                 }
+             ]
+}

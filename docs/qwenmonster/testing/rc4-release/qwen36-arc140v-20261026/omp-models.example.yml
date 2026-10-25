@@ -1,0 +1,35 @@
+# Merge into models.yml on the OMP CLIENT. Use the client's local SSH tunnel port.
+providers:
+  openvino-server-ornith:
+    baseUrl: "http://127.0.0.1:18137/v3"
+    api: openai-completions
+    auth: none
+    discovery:
+      type: openai-models-list
+      injectV1: false
+    modelOverrides:
+      qwen36-35b-a3b-int4-baseline:
+        # Client context accounting; not a guarantee of 128K runtime capacity.
+        contextWindow: 131072
+        # Output budget, independent from the size of the input prompt.
+        maxTokens: 32768
+        input: [text]
+        reasoning: true
+        supportsTools: true
+        compat:
+          supportsDeveloperRole: false
+          supportsReasoningEffort: false
+          supportsToolChoice: true
+          supportsForcedToolChoice: true
+          supportsStrictMode: false
+          toolStrictMode: none
+          reasoningContentField: reasoning_content
+          maxTokensField: max_tokens
+          alwaysSendMaxTokens: true
+          streamIdleTimeoutMs: 900000
+          extraBody:
+            temperature: 0
+            seed: 1234
+            parallel_tool_calls: false
+            chat_template_kwargs:
+              enable_thinking: true

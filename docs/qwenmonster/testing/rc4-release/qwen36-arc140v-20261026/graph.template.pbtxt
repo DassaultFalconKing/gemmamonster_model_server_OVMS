@@ -1,0 +1,38 @@
+input_stream: "HTTP_REQUEST_PAYLOAD:input"
+output_stream: "HTTP_RESPONSE_PAYLOAD:output"
+node {
+  name: "LLMExecutor"
+  calculator: "HttpLLMCalculator"
+  input_stream: "LOOPBACK:loopback"
+  input_stream: "HTTP_REQUEST_PAYLOAD:input"
+  input_side_packet: "LLM_NODE_RESOURCES:llm"
+  input_side_packet: "LLM_NODE_EXECUTION_CONTEXTS:llm_ctx"
+  output_stream: "LOOPBACK:loopback"
+  output_stream: "HTTP_RESPONSE_PAYLOAD:output"
+  input_stream_info { tag_index: "LOOPBACK:0" back_edge: true }
+  node_options {
+    [type.googleapis.com/mediapipe.LLMCalculatorOptions] {
+      models_path: "__MODEL_PATH__"
+      plugin_config: '{"KV_CACHE_PRECISION":"u4","OFFLOAD_RATIO":20,"WEIGHTS_PATH":"__WEIGHTS_PATH__","CACHE_DIR":"__CACHE_DIR__"}'
+      device: "GPU"
+      pipeline_type: VLM_CB
+      tool_parser: "qwen3coder"
+      reasoning_parser: "qwen3"
+      enable_tool_guided_generation: true
+      max_num_seqs: 2
+      max_num_batched_tokens: 4096
+      dynamic_split_fuse: true
+      cache_size: 0
+      enable_prefix_caching: true
+      cache_interval_multiplier: 256
+    }
+  }
+  input_stream_handler {
+    input_stream_handler: "SyncSetInputStreamHandler"
+    options {
+      [mediapipe.SyncSetInputStreamHandlerOptions.ext] {
+        sync_set { tag_index: "LOOPBACK:0" }
+      }
+    }
+  }
+}
