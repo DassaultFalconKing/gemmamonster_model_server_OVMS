@@ -116,19 +116,59 @@ TEST_P(LfmStrictOutputParserTest, TerminalChunkDrainsMultipleEnvelopesAndContent
     EXPECT_EQ(result.toolCalls[1].arguments, "{}");
 }
 
-TEST_P(LfmStrictOutputParserTest, HybridPseudoPlanDemotedOnlyForLfm25ReasoningProfile) {
+TEST_P(LfmStrictOutputParserTest, HybridValidJsonPlanRemainsVisibleForBothModels) {
     const std::string plan = R"({"explanation":"draft","plan":[{"command":"bash /workspace"}]})";
     for (size_t split = 0; split <= plan.size(); ++split) {
         SCOPED_TRACE(split);
         const auto result = run({plan.substr(0, split), plan.substr(split)});
         EXPECT_TRUE(result.toolCalls.empty());
-        if (GetParam()) {
-            EXPECT_EQ(result.reasoning, plan);
-            EXPECT_TRUE(result.content.empty());
-        } else {
-            EXPECT_TRUE(result.reasoning.empty());
-            EXPECT_EQ(result.content, plan);
-        }
+        EXPECT_TRUE(result.reasoning.empty());
+        EXPECT_EQ(result.content, plan);
+    }
+}
+
+
+TEST_P(LfmStrictOutputParserTest, HybridMalformedPseudoPlanMayStillDemote) {
+    const std::string broken = R"({"explanation":"internal","plan":[unfinished})";
+    const auto result = run({broken.substr(0, 13), broken.substr(13)});
+    EXPECT_TRUE(result.toolCalls.empty());
+    EXPECT_EQ(result.reasoning, GetParam() ? broken : "");
+    EXPECT_EQ(result.content, GetParam() ? "" : broken);
+}
+
+TEST_P(LfmStrictOutputParserTest, HybridPlanOnlyExactJsonIsVisibleWithTools) {
+    const std::string text = R"({"plan":[]})";
+    const auto result = run({text.substr(0, 3), text.substr(3)});
+    EXPECT_EQ(result.content, text);
+    EXPECT_TRUE(result.reasoning.empty());
+    EXPECT_TRUE(result.toolCalls.empty());
+}
+
+TEST_P(LfmStrictOutputParserTest, HybridNormalProseDoesNotWaitForFinish) {
+    ovms::OutputParser parser(*tokenizer, "lfm2", GetParam() ? "lfm2" : "",
+        ovms::ToolsSchemas_t{{"f", {nullptr, R"({"type":"object"})"}}});
+    const auto delta = parser.parseChunk("Hello, user.", {}, true,
+        ov::genai::GenerationFinishReason::NONE);
+    ASSERT_TRUE(delta.has_value());
+    ASSERT_TRUE(std::holds_alternative<ovms::ContentDelta>(*delta));
+    EXPECT_EQ(std::get<ovms::ContentDelta>(*delta).text, "Hello, user.");
+    // A follow-up chunk in the same phase must not be reclassified in isolation.
+    const auto next = parser.parseChunk(" More text.", {}, true,
+        ov::genai::GenerationFinishReason::NONE);
+    ASSERT_TRUE(next.has_value());
+    ASSERT_TRUE(std::holds_alternative<ovms::ContentDelta>(*next));
+    EXPECT_EQ(std::get<ovms::ContentDelta>(*next).text, " More text.");
+}
+
+TEST_P(LfmStrictOutputParserTest, HybridStandaloneJsonSyntaxPreserved) {
+    for (const auto& text : {
+            R"({"plan":[]})",
+            R"({"commands":["echo"]})",
+            R"({"explanation":"ok","steps":[1,2]})"}) {
+        const auto output = run({text});
+        EXPECT_EQ(output.content, text);
+        EXPECT_TRUE(output.reasoning.empty());
+        EXPECT_TRUE(output.toolCalls.empty());
     }
 }
 
@@ -153,8 +193,8 @@ TEST_P(LfmStrictOutputParserTest, HybridPlanBeforeNativeToolPreservesDeltaOwners
         ASSERT_EQ(result.toolCalls.size(), 1);
         EXPECT_EQ(result.toolCalls[0].name, "f");
         EXPECT_EQ(result.toolCalls[0].arguments, R"({"a":1})");
-        EXPECT_EQ(result.reasoning, GetParam() ? plan : "");
-        EXPECT_EQ(result.content, GetParam() ? "" : plan);
+        EXPECT_TRUE(result.reasoning.empty());
+        EXPECT_EQ(result.content, plan);
     }
 }
 
@@ -179,8 +219,8 @@ TEST_P(LfmStrictOutputParserTest, HybridMixedTerminalChunkPreservesNativeTools) 
     const std::string plan = R"({"commands":["not executable"]})";
     const auto result = run({plan + "<|tool_call_start|>[f(a=1),g()]<|tool_call_end|>answer"},
         ov::genai::GenerationFinishReason::STOP, true);
-    EXPECT_EQ(result.reasoning, GetParam() ? plan : "");
-    EXPECT_EQ(result.content, GetParam() ? "answer" : plan + "answer");
+    EXPECT_TRUE(result.reasoning.empty());
+    EXPECT_EQ(result.content, plan + "answer");
     ASSERT_EQ(result.toolCalls.size(), 2);
     EXPECT_EQ(result.toolCalls[0].arguments, R"({"a":1})");
     EXPECT_EQ(result.toolCalls[1].arguments, "{}");
@@ -229,7 +269,7 @@ TEST_P(LfmStrictOutputParserTest, HybridLfm25PendingContentIsBounded) {
     if (!GetParam()) GTEST_SKIP() << "Demotion disabled on LFM2-24B tool-only";
     ovms::OutputParser parser(*tokenizer, "lfm2", "lfm2",
         ovms::ToolsSchemas_t{{"f", {nullptr, R"({"type":"object"})"}}});
-    EXPECT_THROW((void)parser.parseChunk(std::string(1024 * 1024 + 1, 'x'), {},
+    EXPECT_THROW((void)parser.parseChunk("{" + std::string(1024 * 1024 + 1, 'x'), {},
         true, ov::genai::GenerationFinishReason::NONE), std::invalid_argument);
 }
 
