@@ -4,7 +4,6 @@
 #include <string_view>
 
 namespace ovms::lfm2 {
-inline constexpr std::size_t kDemotionLeadingProseLimit = 200;
 namespace thought_detail {
 inline bool space(char c) {
     return c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v';
@@ -91,9 +90,10 @@ inline bool shouldDemoteSegment(std::string_view segment) {
     segment = thought_detail::trim(segment);
     if (segment.empty()) return false;
     if (thought_detail::pseudoToolLines(segment)) return true;
-    const auto brace = segment.find('{');
-    if (brace == std::string_view::npos || brace > kDemotionLeadingProseLimit || segment.back() != '}')
+    // Arbitrary leading prose is always visible; a later JSON object must
+    // not retroactively turn already-streamed explanatory text into thought.
+    if (segment.front() != '{' || segment.back() != '}')
         return false;
-    return thought_detail::topLevelPlanKey(segment.substr(brace));
+    return thought_detail::topLevelPlanKey(segment);
 }
 }  // namespace ovms::lfm2
