@@ -16,6 +16,8 @@
 
 #include <algorithm>
 #include <cctype>
+#include <stdexcept>
+#include <utility>
 #include <unordered_set>
 
 #include "src/logging.hpp"
@@ -36,6 +38,7 @@
 #include "gemma4/rendered_prompt_state.hpp"
 #include "gptoss/reasoning_parser.hpp"
 #include "lfm2/lfm2_tool_parser.hpp"
+#include "lfm2/thought_demotion.hpp"
 #include "lfm2/lfm25_reasoning_parser.hpp"
 #include "gemma4/gemma4_tool_parser.hpp"
 #include "onyx/onyx_tool_parser.hpp"
@@ -330,6 +333,7 @@ OutputParser::OutputParser(ov::genai::Tokenizer& tokenizer, const std::string to
         contentParser = std::make_unique<DefaultContentParser>(tokenizer);
 
     gemma4ToolHandoff = toolParserName == "gemma4" && reasoningParserName == "gemma4";
+    lfm25ThoughtDemotion = toolParserName == "lfm2" && reasoningParserName == "lfm2";
     if (toolParserName == "gemma4")
         contentTokensToHide = {"<|tool_call>", "<tool_call|>", "<|\"|>"};
     defaultDecodingWithSpecialTokens = gemma4ToolHandoff ||
@@ -365,6 +369,8 @@ std::string OutputParser::getToolParserStartTag() const {
 void OutputParser::resetStreamingState() {
     processingPhase = UNKNOWN;
     streamOutputCache.clear();
+    lfm25PendingContent.clear();
+    lfm25ReadyDeltas.clear();
     pendingGemma4ToolHandoff = false;
     gemma4LogicalBoundary = true;
     gemma4ReasoningClosed = false;
@@ -451,7 +457,59 @@ void OutputParser::detectAndSetImplicitReasoningStart(const std::string& rendere
     return;
 }
 
+std::optional<Delta> OutputParser::popLfm25ReadyDelta() {
+    if (lfm25ReadyDeltas.empty()) return std::nullopt;
+    Delta ready = std::move(lfm25ReadyDeltas.front());
+    lfm25ReadyDeltas.pop_front();
+    return ready;
+}
+
+std::optional<Delta> OutputParser::finishLfm25PendingContent() {
+    if (lfm25PendingContent.empty()) return std::nullopt;
+    std::string text = std::move(lfm25PendingContent);
+    lfm25PendingContent.clear();
+    if (lfm2::shouldDemoteSegment(text)) return ReasoningDelta{std::move(text)};
+    return ContentDelta{std::move(text)};
+}
+
+std::optional<Delta> OutputParser::stageLfm25Delta(std::optional<Delta> value) {
+    // The ordinary CONTENT phase does not visit Lfm2ToolParser. Classify
+    // *emitted* content deltas here, regardless of whether content was owned
+    // by DefaultContentParser or the post-envelope tool retainer.
+    if (!lfm25ThoughtDemotion || !toolsEnabledForChunk) return value;
+    if (value.has_value()) {
+        if (auto* content = std::get_if<ContentDelta>(&*value)) {
+            constexpr size_t cap = 1024 * 1024;
+            if (content->text.size() > cap || lfm25PendingContent.size() > cap - content->text.size()) {
+                lfm25PendingContent.clear();
+                lfm25ReadyDeltas.clear();
+                throw std::invalid_argument("LFM hybrid pending content exceeds byte limit");
+            }
+            lfm25PendingContent += content->text;
+        } else {
+            // Preserve order: preceding content/reasoning must be observed
+            // before a native tool call or a distinct reasoning/finish delta.
+            if (auto preceding = finishLfm25PendingContent())
+                lfm25ReadyDeltas.push_back(std::move(*preceding));
+            lfm25ReadyDeltas.push_back(std::move(*value));
+        }
+    }
+    return popLfm25ReadyDelta();
+}
+
 std::optional<Delta> OutputParser::drainPendingDelta() {
+    if (auto ready = popLfm25ReadyDelta()) return ready;
+    auto staged = stageLfm25Delta(drainPendingDeltaImpl());
+    if (staged) return staged;
+    // Terminal flush only after the router cache and parser-owned deltas drain.
+    if (lfm25ThoughtDemotion && toolsEnabledForChunk &&
+        terminalContentFinish != ov::genai::GenerationFinishReason::NONE &&
+        streamOutputCache.getBuffer().empty())
+        return finishLfm25PendingContent();
+    return std::nullopt;
+}
+
+std::optional<Delta> OutputParser::drainPendingDeltaImpl() {
     if (pendingGemma4ToolHandoff) {
         pendingGemma4ToolHandoff = false;
         return parseToolCallChunk({}, ov::genai::GenerationFinishReason::NONE);
@@ -468,7 +526,20 @@ std::optional<Delta> OutputParser::drainPendingDelta() {
     return parseChunk("", {}, toolsEnabledForChunk, ov::genai::GenerationFinishReason::NONE);
 }
 
-std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, const std::vector<int64_t>& tokens, const bool toolsAvailable, ov::genai::GenerationFinishReason finishReason) {
+std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, const std::vector<int64_t>& tokens,
+    const bool toolsAvailable, ov::genai::GenerationFinishReason finishReason) {
+    auto result = parseChunkImpl(chunkResponse, tokens, toolsAvailable, finishReason);
+    auto staged = stageLfm25Delta(std::move(result));
+    if (staged) return staged;
+    if (lfm25ThoughtDemotion && toolsEnabledForChunk &&
+        terminalContentFinish != ov::genai::GenerationFinishReason::NONE &&
+        streamOutputCache.getBuffer().empty() && lfm25ReadyDeltas.empty())
+        return finishLfm25PendingContent();
+    return std::nullopt;
+}
+
+std::optional<Delta> OutputParser::parseChunkImpl(const std::string& chunkResponse, const std::vector<int64_t>& tokens,
+    const bool toolsAvailable, ov::genai::GenerationFinishReason finishReason) {
     toolsEnabledForChunk = toolsAvailable;
     pendingGemma4ToolHandoff = false;
     if (finishReason != ov::genai::GenerationFinishReason::NONE)
