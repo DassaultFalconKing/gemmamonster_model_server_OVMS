@@ -79,7 +79,7 @@ foreach ($row in $manifest.files) {
 }
 
 # Fail before changing files if the requested port is already occupied.
-if (-not $ConfigureOnly -and (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)) {
+if (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {
     throw ('Port ' + $Port + ' is occupied. No serving files were changed.')
 }
 if (Test-Path -LiteralPath $servingDir) {
