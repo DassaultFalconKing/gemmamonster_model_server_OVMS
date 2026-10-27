@@ -15,6 +15,7 @@
 //*****************************************************************************
 #pragma once
 
+#include <deque>
 #include <memory>
 #include <openvino/genai/tokenizer.hpp>
 #include <string>
@@ -94,6 +95,10 @@ private:
     StreamOutputCache streamOutputCache;
     bool implicitReasoningStart = false;
     bool gemma4ToolHandoff = false;
+    // Opt-in family-specific content classification; no changes to the native tool retainer.
+    bool lfm25ThoughtDemotion = false;
+    std::string lfm25PendingContent;
+    std::deque<Delta> lfm25ReadyDeltas;
     bool pendingGemma4ToolHandoff = false;
     bool toolsEnabledForChunk = false;
     bool gemma4LogicalBoundary = true;
@@ -108,6 +113,13 @@ private:
     // needs special tokens visible before any parser-owned phase becomes active.
     // Set once in the constructor from parser names.
     bool defaultDecodingWithSpecialTokens = false;
+
+    // Aggregate content across the CONTENT and tool-retainer paths, preserving delta order.
+    std::optional<Delta> stageLfm25Delta(std::optional<Delta> value);
+    std::optional<Delta> popLfm25ReadyDelta();
+    std::optional<Delta> finishLfm25PendingContent();
+    std::optional<Delta> parseChunkImpl(const std::string&, const std::vector<int64_t>&, bool, ov::genai::GenerationFinishReason);
+    std::optional<Delta> drainPendingDeltaImpl();
 
     // Parsing methods below read chunks from streamOutputCache hence no string argument is needed
 
