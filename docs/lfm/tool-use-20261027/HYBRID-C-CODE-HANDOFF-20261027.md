@@ -1,6 +1,6 @@
 # LFM2.5 Hybrid C source handoff — 2026-10-27
 
-Status: **CODE CANDIDATE, NOT GPU ACCEPTED**. Base `990174b4b`, separate review branch `review/lfm25-design-c-semantic-refit-20261027`, [PR #34](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/pull/34). Never overwrite RC4 or A9 candidate-final binaries.
+Status: **GPU ACCEPTED locally** (2026-10-27). Evidence: `HYBRID-C-LOCAL-VALIDATION-20261027.md`; EXE pin `d9663aa6…` under `C:\gm\lfm-2026.4\hybrid-c-review-20261027`. Branch `review/lfm25-design-c-semantic-refit-20261027`, [PR #34](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/pull/34). Never overwrite RC4 or A9 candidate-final binaries; start scripts default to the Hybrid-C pin + u4.
 
 ## Implementation
 
