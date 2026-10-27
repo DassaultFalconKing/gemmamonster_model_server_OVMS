@@ -1,5 +1,8 @@
 # LFM2.5 Hybrid C — thought / tool separation
 
+> **2026-10-27 post-acceptance semantic refit:** The approval below is a historical design decision, not a current implementation instruction. Retainer-only demotion is architecturally incorrect: ordinary prose flows through OutputParser's CONTENT owner. Current code stages CONTENT deltas at OutputParser; it preserves **all syntactically valid standalone JSON objects** in content (including plan/commands), and streams clearly ordinary prose without waiting for STOP. Heuristic demotion of valid JSON and guaranteed SSE hold in this original spec are superseded. Known native-tool, reasoning and false-positive acceptance gates are in `docs/lfm/tool-use-20261027/HANDOFF-LOCAL-CLEANUP-RETEST-20261027.md`.
+
+
 Date: 2026-10-27  
 Status: **APPROVED** (Design C / Hybrid) by user before product C++ changes  
 Repo: `C:\git\gemmamonster-lfm-2026.4`  
