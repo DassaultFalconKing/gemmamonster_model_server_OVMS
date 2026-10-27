@@ -9,7 +9,8 @@
    Скачанный C:\llm\models\* не изменяется. configs/logs создаются сами.
 4. Pipeline LM. tool_parser — lfm2. reasoning_parser для LFM2-24B не задаём.
    Штатный parallel_tool_calls=true на стороне API (поле можно не слать).
-5. KV_CACHE_PRECISION=u4 по умолчанию. -KvPrecision auto убирает свойство.
+5. KV_CACHE_PRECISION=auto по умолчанию. -KvPrecision u4 включает U4;
+   сравнительный A/B для 24B не завершён, скорость U4 не утверждается.
    Профиль ДЛИННОЙ генерации: 2 слота, batch 4096, cache_size=0 (динамический KV),
    prefix caching ON, interval 256, dynamic_split_fuse ON, rest_workers=1.
 6. Порт 8137 общий с Qwen/Gemma/Ornith: по очереди либо сменить порт.
@@ -21,7 +22,7 @@
 param(
     [switch]$ConfigureOnly,
     [ValidateRange(1,65535)][int]$Port = 8137,
-    [ValidateSet('u4','auto')][string]$KvPrecision = 'u4',
+    [ValidateSet('u4','auto')][string]$KvPrecision = 'auto',
     [string]$ExecutablePath = 'C:\gm\lfm-2026.4\hybrid-c-review-20261027\build-py_off\bin\ovms.exe',
     [ValidatePattern('^[A-Fa-f0-9]{64}$')][string]$ExecutableSha256 = 'd9663aa6ca29880ae6d3d85ff5f341a2461affd7bc539dd2c8cd3df9fa71136e'
 )
