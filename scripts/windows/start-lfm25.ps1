@@ -10,7 +10,9 @@
    C:\llm\models\* не изменяется. Каталоги configs/logs создаются сами.
 4. Pipeline LM (не VLM_CB). tool_parser и reasoning_parser — lfm2.
    Не переносите чужой chat_template. MTP/speculative не включается.
-5. Профиль как в GPU smoke Task 5: 4 слота, batch 1024, cache_size=1 GiB,
+5. KV_CACHE_PRECISION=u4 по умолчанию через plugin_config. Для прежнего профиля
+   укажите -KvPrecision auto (без свойства KV_CACHE_PRECISION).
+   Профиль smoke: 4 слота, batch 1024, cache_size=1 GiB,
    prefix caching выключен. cache_size — пул KV в гигабайтах, не вся RAM.
 6. Порт 8137 общий с Qwen/Gemma/Ornith: запускать по очереди либо сменить порт.
    Скрипт чужие процессы не останавливает. -ConfigureOnly только готовит serving.
@@ -18,7 +20,8 @@
 #>
 param(
     [switch]$ConfigureOnly,
-    [ValidateRange(1,65535)][int]$Port = 8137
+    [ValidateRange(1,65535)][int]$Port = 8137,
+    [ValidateSet('u4','auto')][string]$KvPrecision = 'u4'
 )
 $ErrorActionPreference = 'Stop'
 $package = 'C:\gm\qwenmonster\releases\gemmamonster-2026.4-rc4\extracted-py_off\ovms'
@@ -88,7 +91,11 @@ Write-Host ('Serving model: ' + $servingDir)
 $configDir = Join-Path $PSScriptRoot 'configs\lfm25'
 [void][IO.Directory]::CreateDirectory($configDir)
 $commandPath = Join-Path $configDir 'command.json'
-$gpuPluginConfig = '{"OFFLOAD_RATIO":0}'
+# Measured Arc 140V baseline: r0+U4 outperforms r0 automatic KV.
+# -KvPrecision auto restores the unchanged r0 plugin profile for A/B.
+$gpuOptions = [ordered]@{ OFFLOAD_RATIO = 0 }
+if ($KvPrecision -eq 'u4') { $gpuOptions.KV_CACHE_PRECISION = 'u4' }
+$gpuPluginConfig = $gpuOptions | ConvertTo-Json -Compress
 if ($PSVersionTable.PSVersion.Major -le 5 -or $PSNativeCommandArgumentPassing -eq 'Legacy') {
     $gpuPluginConfigEscaped = $gpuPluginConfig.Replace('"', '\"')
 } else {
@@ -116,6 +123,7 @@ $command = @(
 $utf8 = New-Object Text.UTF8Encoding($false)
 [IO.File]::WriteAllText($commandPath, ($command | ConvertTo-Json -Compress), $utf8)
 Write-Host ('Command receipt: ' + $commandPath)
+Write-Host ('LFM2.5 KV profile: ' + $KvPrecision + '; OFFLOAD_RATIO=0')
 if ($ConfigureOnly) { exit 0 }
 
 if (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {
