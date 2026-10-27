@@ -115,5 +115,96 @@ TEST_P(LfmStrictOutputParserTest, TerminalChunkDrainsMultipleEnvelopesAndContent
     EXPECT_EQ(result.toolCalls[1].name, "g");
     EXPECT_EQ(result.toolCalls[1].arguments, "{}");
 }
+
+TEST_P(LfmStrictOutputParserTest, HybridPseudoPlanDemotedOnlyForLfm25ReasoningProfile) {
+    const std::string plan = R"({"explanation":"draft","plan":[{"command":"bash /workspace"}]})";
+    for (size_t split = 0; split <= plan.size(); ++split) {
+        SCOPED_TRACE(split);
+        const auto result = run({plan.substr(0, split), plan.substr(split)});
+        EXPECT_TRUE(result.toolCalls.empty());
+        if (GetParam()) {
+            EXPECT_EQ(result.reasoning, plan);
+            EXPECT_TRUE(result.content.empty());
+        } else {
+            EXPECT_TRUE(result.reasoning.empty());
+            EXPECT_EQ(result.content, plan);
+        }
+    }
+}
+
+TEST_P(LfmStrictOutputParserTest, HybridToolProseNeverPromotedToExecutableCall) {
+    const std::string text = "[tool:cwd] /workspace\n[tool:write] demo.py";
+    const auto result = run({text.substr(0, 7), text.substr(7)});
+    EXPECT_TRUE(result.toolCalls.empty());
+    if (GetParam()) {
+        EXPECT_EQ(result.reasoning, text);
+        EXPECT_TRUE(result.content.empty());
+    } else {
+        EXPECT_EQ(result.content, text);
+    }
+}
+
+TEST_P(LfmStrictOutputParserTest, HybridPlanBeforeNativeToolPreservesDeltaOwnership) {
+    const std::string plan = R"({"plan":["open workspace"]})";
+    const std::string text = plan + "<|tool_call_start|>[f(a=1)]<|tool_call_end|>";
+    for (size_t split = 0; split <= text.size(); ++split) {
+        SCOPED_TRACE(split);
+        const auto result = run({text.substr(0, split), text.substr(split)});
+        ASSERT_EQ(result.toolCalls.size(), 1);
+        EXPECT_EQ(result.toolCalls[0].name, "f");
+        EXPECT_EQ(result.toolCalls[0].arguments, R"({"a":1})");
+        EXPECT_EQ(result.reasoning, GetParam() ? plan : "");
+        EXPECT_EQ(result.content, GetParam() ? "" : plan);
+    }
+}
+
+TEST_P(LfmStrictOutputParserTest, HybridTrailingPseudoToolsAreNotExecutable) {
+    const std::string fake = "[tool:cwd] /workspace";
+    const auto result = run({"before<|tool_call_start|>[f(a=1)]<|tool_call_end|>" + fake});
+    ASSERT_EQ(result.toolCalls.size(), 1);
+    EXPECT_EQ(result.toolCalls[0].arguments, R"({"a":1})");
+    EXPECT_EQ(result.content, GetParam() ? "before" : "before" + fake);
+    EXPECT_EQ(result.reasoning, GetParam() ? fake : "");
+}
+
+TEST_P(LfmStrictOutputParserTest, HybridNormalProseAndLengthFinishAreLossless) {
+    const std::string plain = "This is an answer without a native tool call.";
+    const auto result = run({plain}, ov::genai::GenerationFinishReason::LENGTH);
+    EXPECT_EQ(result.content, plain);
+    EXPECT_TRUE(result.reasoning.empty());
+    EXPECT_TRUE(result.toolCalls.empty());
+}
+
+TEST_P(LfmStrictOutputParserTest, HybridMixedTerminalChunkPreservesNativeTools) {
+    const std::string plan = R"({"commands":["not executable"]})";
+    const auto result = run({plan + "<|tool_call_start|>[f(a=1),g()]<|tool_call_end|>answer"},
+        ov::genai::GenerationFinishReason::STOP, true);
+    EXPECT_EQ(result.reasoning, GetParam() ? plan : "");
+    EXPECT_EQ(result.content, GetParam() ? "answer" : plan + "answer");
+    ASSERT_EQ(result.toolCalls.size(), 2);
+    EXPECT_EQ(result.toolCalls[0].arguments, R"({"a":1})");
+    EXPECT_EQ(result.toolCalls[1].arguments, "{}");
+}
+
+TEST_P(LfmStrictOutputParserTest, HybridReusedParserResetDropsUnpublishedPlan) {
+    ovms::OutputParser parser(*tokenizer, "lfm2", GetParam() ? "lfm2" : "",
+        ovms::ToolsSchemas_t{{"f", {nullptr, R"({"type":"object"})"}}});
+    const std::string unclosed = R"({"explanation":"still generating")";
+    (void)parser.parseChunk(unclosed, {}, true, ov::genai::GenerationFinishReason::NONE);
+    parser.resetStreamingState();
+    std::string visible;
+    auto take = [&](const std::optional<ovms::Delta>& d) {
+        if (d && std::holds_alternative<ovms::ContentDelta>(*d))
+            visible += std::get<ovms::ContentDelta>(*d).text;
+    };
+    take(parser.parseChunk("Clean reply.", {}, true, ov::genai::GenerationFinishReason::STOP));
+    for (int i = 0; i < 8; ++i) {
+        auto d = parser.drainPendingDelta();
+        if (!d) break;
+        take(d);
+    }
+    EXPECT_EQ(visible, "Clean reply.");
+}
+
 INSTANTIATE_TEST_SUITE_P(TargetTokenizers, LfmStrictOutputParserTest, ::testing::Values(false, true));
 }  // namespace
