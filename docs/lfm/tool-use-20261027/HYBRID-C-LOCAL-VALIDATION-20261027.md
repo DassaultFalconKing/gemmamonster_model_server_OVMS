@@ -45,3 +45,15 @@ Cursor Task subagents cannot select the local LFM as their *own* chat model (fix
 
 ## OVMS final state
 All owned listeners stopped after agent-chain pass; **8137/18147 free**.
+
+## Parity + Long Decode (2026-10-27 follow-up)
+Evidence: `parity-long-decode-20261027\PARITY-LONG-DECODE-REPORT.md`
+
+### Long decode (max_tokens=512, SSE median ×3, u4)
+| Model | short input | long input |
+|-------|-------------|------------|
+| LFM2.5-8B | **55.61** tok/s (TTFT 0.15s) | **53.26** (TTFT 0.87s) |
+| LFM2-24B | **37.79** tok/s (TTFT 0.24s) | **34.79** (TTFT 1.73s) |
+
+### Parity (identical harness)
+Both models: tool-probe **8/8**, agent deterministic **2/2**, ordinary JSON false-demotion **PASS**.
