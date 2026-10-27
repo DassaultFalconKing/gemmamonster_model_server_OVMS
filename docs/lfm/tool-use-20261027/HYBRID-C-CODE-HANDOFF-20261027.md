@@ -1,6 +1,6 @@
 # LFM2.5 Hybrid C source handoff — 2026-10-27
 
-Status: **GPU ACCEPTED locally** (2026-10-27). Evidence: `HYBRID-C-LOCAL-VALIDATION-20261027.md`; EXE pin `d9663aa6…` under `C:\gm\lfm-2026.4\hybrid-c-review-20261027`. Branch `review/lfm25-design-c-semantic-refit-20261027`, [PR #34](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/pull/34). Never overwrite RC4 or A9 candidate-final binaries; start scripts default to the Hybrid-C pin + u4.
+Status: **HISTORICAL GPU PROTOCOL PASS, SOURCE CLEANUP NEEDS REBUILD**. Local validation of EXE `d9663aa6…` is recorded in `HYBRID-C-LOCAL-VALIDATION-20261027.md` (LFM2.5 official agent 2/4 FAIL). New source in [PR #34](https://github.com/DassaultFalconKing/gemmamonster_model_server_OVMS/pull/34) protects valid JSON and streams ordinary prose early: **NOT YET COMPILED/SMOKED**. Start scripts still pin that historical EXE; defaults changed to KV auto. Do not overwrite known-good RC4 or A9 binaries.
 
 ## Implementation
 
@@ -8,11 +8,11 @@ Status: **GPU ACCEPTED locally** (2026-10-27). Evidence: `HYBRID-C-LOCAL-VALIDAT
 - `tool_parser=lfm2` + `reasoning_parser=lfm2` + `toolsAvailable=true` enables demotion; LFM2-24B tool-only, other parser families, and requests without tools are unchanged. The strict registry/schema retainer is untouched.
 - Native envelopes alone create executable tool deltas; pseudo-plan JSON and `[tool:...]` never do.
 - Pending content is bounded to 1 MiB and cleared on parser reset. Intercepting `drainPendingDelta` ensures an intentionally withheld `ContentDelta` does not stop subsequent tool/event draining. Events preserve original tool order.
-- Plain content with the LFM2.5 demotion profile and tools enabled is intentionally withheld until a delimiter or terminal response; do **not** claim incremental text SSE latency is unchanged.
-- The pure classifier uses a closed key set and pseudo-tool-lines-only D2 profile. A valid JSON user answer containing `plan` can still be demoted if tools are enabled: **known false-positive risk**. Do not promote to stable default before live UX review.
-- `start-lfm25.ps1`: r0+U4 by default through `plugin_config.KV_CACHE_PRECISION`, rollback `-KvPrecision auto`; no offload added. Candidate EXE override requires full SHA256. Model staging is per-port and the script checks port availability before replacing files.
+- Ordinary noncandidate prose is now streamed promptly; JSON-like and `[tool:` candidate segments can still be buffered until a boundary. Live SSE latency and parity must be remeasured.
+- The heuristic classifier remains closed-profile. The runtime now validates standalone JSON with RapidJSON and preserves it in `content` even when it contains `plan` or `commands`. This change is **source only** until rebuilt. Malformed pseudo-JSON and literal pseudo-tool documentation remain possible ambiguous cases; require live negative tests.
+- `start-lfm25.ps1`: r0 with KV auto by default (conservative; historical A/B u4 55.12 vs auto 56.24 tok/s at n=3), explicit `-KvPrecision u4` memory variant. Same auto default now on 24B pending comparative data. No offload added. EXE override requires SHA256, staging isolated per port.
 
-## Build (Windows target only, no live smoke yet)
+## New source cleanup: Windows rebuild and smoke required
 
 Use the existing locked SDK and Windows toolchain, from a clean checkout and with RTK proxy where configured:
 
@@ -20,7 +20,7 @@ Use the existing locked SDK and Windows toolchain, from a clean checkout and wit
 git fetch origin
 git switch review/lfm25-design-c-semantic-refit-20261027
 git status --porcelain=v1
-$root = 'C:\gm\lfm-2026.4\hybrid-c-review-20261027'
+$root = 'C:\gm\lfm-2026.4\hybrid-c-cleanup-20261027'
 pwsh -NoProfile -File .\scripts\windows\build-rc4.ps1 -Python off -Output $root -Jobs 4
 ```
 
@@ -48,14 +48,14 @@ Record exact filter, binary/DLL hashes, tests passed/failed/skipped and whether 
 6. A very large plain response fails closed at 1 MiB and is not partially published as an executable tool.
 7. False positives: deliberately ask for literal JSON `{"plan":[]}` with tools provided; record whether demotion is acceptable before any production promotion.
 
-## Isolated GPU smoke (operator controlled)
+## Isolated GPU smoke for NEW EXE (operator controlled)
 
 Do not stop the working listener on 8137; use 18147, one model and one owned process at a time. First hash the **newly built** EXE:
 
 ```powershell
 $exe = Join-Path $root 'build-py_off\bin\ovms.exe'
 $sha = (Get-FileHash -LiteralPath $exe -Algorithm SHA256).Hash.ToLowerInvariant()
-pwsh -NoProfile -File .\scripts\windows\start-lfm25.ps1 -Port 18147 -KvPrecision u4 -ExecutablePath $exe -ExecutableSha256 $sha
+pwsh -NoProfile -File .\scripts\windows\start-lfm25.ps1 -Port 18147 -KvPrecision auto -ExecutablePath $exe -ExecutableSha256 $sha
 ```
 
 The launcher checks the RC4 DLL manifest and candidate EXE checksum, uses a per-port serving clone, binds localhost only, and does not kill any existing OVMS. In another terminal, run the existing protocol and tool-use harness with a distinct output directory:
@@ -64,12 +64,12 @@ The launcher checks the RC4 DLL manifest and candidate EXE checksum, uses a per-
 python .\scripts\windows\lfm-tool-use-probe.py --url http://127.0.0.1:18147/v3/chat/completions --model lfm25-8b-a1b-int4 --output C:\gm\lfm-2026.4\hybrid-c-review-20261027\smoke-u4
 ```
 
-For the A/B baseline, terminate **only this owned 18147 process**, restart with `-KvPrecision auto` and archive separate logs. The existing 8137 control service must remain untouched. Test pseudo-plan fixture injection at unit level and actual `auto` model generation separately; do not claim agent auto success merely because malformed prose moved to reasoning.
+For optional U4 memory/speed A/B, terminate **only this owned 18147 process**, restart with `-KvPrecision u4` and archive separate logs. The historical U4 results do not prove a repeatable advantage. The existing 8137 control service must remain untouched. Test pseudo-plan fixture injection at unit level and actual `auto` model generation separately; do not claim agent auto success merely because malformed prose moved to reasoning.
 
 ## Residual blockers
 
-- Actual Windows build, focused/unit suites, raw unary/SSE and live GPU: NOT_RUN in cloud code session.
+- Historical Hybrid C candidate: Windows build/197P+2S/GPU protocol PASS. **Latest cleanup revision:** Windows build, focused/unit suites, raw unary/SSE and live GPU NOT_RUN.
 - `tool_choice=none` final-prose hang: separate generation/streamer/client problem; this patch does not fix it.
 - U4 measured speed numbers and offload cliff are taken from the handoff, not reproduced in this branch.
-- Full model/agent correctness and context-pressure tests remain local acceptance.
+- New source: valid-plan JSON and early normal-prose SSE must pass explicitly. Official-agent LFM2.5 remains conditional (2/4 on historical candidate); do not infer any improvement from demotion.
 - Do not merge PR #34 as stable until the local gate and false-positive decision are recorded.
