@@ -499,11 +499,20 @@ std::optional<Delta> OutputParser::stageLfm25Delta(std::optional<Delta> value) {
 
 std::optional<Delta> OutputParser::drainPendingDelta() {
     if (auto ready = popLfm25ReadyDelta()) return ready;
-    auto staged = stageLfm25Delta(drainPendingDeltaImpl());
-    if (staged) return staged;
-    // Terminal flush only after the router cache and parser-owned deltas drain.
-    if (lfm25ThoughtDemotion && toolsEnabledForChunk &&
-        terminalContentFinish != ov::genai::GenerationFinishReason::NONE &&
+    if (!lfm25ThoughtDemotion || !toolsEnabledForChunk) return drainPendingDeltaImpl();
+    // A raw ContentDelta is intentionally held. Keep draining the routing
+    // state machine instead of leaking a nullopt that would stop the streamer.
+    for (int step = 0; step < 512; ++step) {
+        const auto sizeBefore = streamOutputCache.getBuffer().size();
+        const auto phaseBefore = processingPhase;
+        auto raw = drainPendingDeltaImpl();
+        if (auto ready = stageLfm25Delta(std::move(raw))) return ready;
+        if (sizeBefore == streamOutputCache.getBuffer().size() && phaseBefore == processingPhase)
+            break;
+    }
+    // Terminal flush only after all router-owned content and native tool
+    // deltas have been consumed. No flush on incomplete nonterminal tags.
+    if (terminalContentFinish != ov::genai::GenerationFinishReason::NONE &&
         streamOutputCache.getBuffer().empty())
         return finishLfm25PendingContent();
     return std::nullopt;
