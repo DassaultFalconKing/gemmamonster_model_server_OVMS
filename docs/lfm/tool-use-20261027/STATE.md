@@ -7,6 +7,8 @@ LAST_GREEN_TESTS: HISTORICAL Hybrid C EXE d9663aa6...: 197P/2S, LFM25 det 4/4 + 
 CURRENT_FAILURE: historical EXE still demotes `{"plan":[]}`; source guarded valid JSON but NOT_RETESTED. LFM2.5 official agent 2/4, prose hang NOT_RESOLVED, offload cliff unchanged.
 STAFF_MODE: parallel_tool_calls=true (API default already; agent/probe harnesses aligned)
 NEXT_ACTION: clean Windows rebuild in distinct output root, source cleanup GTests, 18147 GPU smoke (JSON preservation + early SSE + LFM2.5 official chains). Do not replace d9663aa6 pin or touch 8137 before retest.
+MODEL_PORTFOLIO_ADR: docs/lfm/ADR-20261027-LFM-FAMILY-ROADMAP.md
+MODEL_PORTFOLIO_DECISION: LFM2.5-8B fast primary; LFM2.5-24B strategic export candidate (official OpenVINO IR NOT VERIFIED 2026-10-27); old LFM2-24B validated control/fallback. Not an authorization for Hybrid-C production changes.
 REVERT_POINT: BASELINE-LOCK.json (A9 serving); A9 candidate-final EXE `95fb62b5…` still available for rollback smoke
 EVIDENCE_PATH: C:/gm/lfm-2026.4/hybrid-c-review-20261027
 CLOUD_HANDOFF: docs/lfm/tool-use-20261027/HANDOFF-CLOUD-REVIEW.md
