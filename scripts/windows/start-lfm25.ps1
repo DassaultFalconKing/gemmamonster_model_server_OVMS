@@ -16,21 +16,26 @@
    prefix caching выключен. cache_size — пул KV в гигабайтах, не вся RAM.
 6. Порт 8137 общий с Qwen/Gemma/Ornith: запускать по очереди либо сменить порт.
    Скрипт чужие процессы не останавливает. -ConfigureOnly только готовит serving.
-7. Файл — UTF-8 с BOM для PS 5.1. Это запуск сервера, не автотест.
+7. Для smoke с новым EXE передайте -ExecutablePath и -ExecutableSha256.
+   По умолчанию остаётся pin проверенного candidate-final. Staging зависит от порта.
+8. Файл — UTF-8 с BOM для PS 5.1. Это запуск сервера, не автотест.
 #>
 param(
     [switch]$ConfigureOnly,
     [ValidateRange(1,65535)][int]$Port = 8137,
-    [ValidateSet('u4','auto')][string]$KvPrecision = 'u4'
+    [ValidateSet('u4','auto')][string]$KvPrecision = 'u4',
+    [string]$ExecutablePath = 'C:\gm\lfm-2026.4\tool-use-20261027\candidate-final\build-py_off\bin\ovms.exe',
+    [ValidatePattern('^[A-Fa-f0-9]{64}$')][string]$ExecutableSha256 = '95fb62b5df7d68a880457378a4d3503cc606b5f06a82c23e70010d96358272ba'
 )
 $ErrorActionPreference = 'Stop'
 $package = 'C:\gm\qwenmonster\releases\gemmamonster-2026.4-rc4\extracted-py_off\ovms'
-$exe = 'C:\gm\lfm-2026.4\tool-use-20261027\candidate-final\build-py_off\bin\ovms.exe'
-$expectedExeSha256 = '95fb62b5df7d68a880457378a4d3503cc606b5f06a82c23e70010d96358272ba'
+$exe = $ExecutablePath
+$expectedExeSha256 = $ExecutableSha256.ToLowerInvariant()
 $modelPath = 'C:\llm\models\LFM2.5-8B-A1B-int4-ov'
 $modelName = 'lfm25-8b-a1b-int4'
 $templatePath = 'C:\git\gemmamonster-lfm-2026.4\docs\lfm\templates\LFM2.5-8B-A1B-int4-ov.jinja'
-$servingDir = 'C:\gm\lfm-2026.4\serving-models\LFM2.5-8B-A1B-int4-ov'
+# Per-port staging: a test on 18147 never rewrites the 8137 model.
+$servingDir = Join-Path 'C:\gm\lfm-2026.4\serving-models' ('LFM2.5-8B-A1B-int4-ov-port' + $Port)
 
 foreach ($requiredFile in @(
     (Join-Path $modelPath 'openvino_model.bin'),
@@ -73,6 +78,10 @@ foreach ($row in $manifest.files) {
     }
 }
 
+# Fail before changing files if the requested port is already occupied.
+if (-not $ConfigureOnly -and (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)) {
+    throw ('Port ' + $Port + ' is occupied. No serving files were changed.')
+}
 if (Test-Path -LiteralPath $servingDir) {
     Remove-Item -LiteralPath $servingDir -Recurse -Force
 }
@@ -125,10 +134,6 @@ $utf8 = New-Object Text.UTF8Encoding($false)
 Write-Host ('Command receipt: ' + $commandPath)
 Write-Host ('LFM2.5 KV profile: ' + $KvPrecision + '; OFFLOAD_RATIO=0')
 if ($ConfigureOnly) { exit 0 }
-
-if (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {
-    throw ('Port ' + $Port + ' is occupied. Stop the current model before starting LFM2.5; no processes were stopped.')
-}
 
 $env:PYTHONHOME = $null
 $env:PYTHONPATH = $null
