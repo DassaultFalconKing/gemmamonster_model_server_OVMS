@@ -8,7 +8,7 @@ using ovms::lfm2::shouldDemoteSegment;
 TEST(LfmThoughtDemotionReview, WellFormedAndMalformedPlans) {
     EXPECT_TRUE(shouldDemoteSegment(R"({"explanation":"need cwd","plan":[1],"commands":["bash /workspace"]})"));
     EXPECT_TRUE(shouldDemoteSegment(R"({"explanation":"draft","plan":[unterminated})"));
-    EXPECT_TRUE(shouldDemoteSegment(R"(Before running commands: {"plan":[]})"));
+    EXPECT_FALSE(shouldDemoteSegment(R"(Before running commands: {"plan":[]})"));
     EXPECT_TRUE(shouldDemoteSegment(R"({'steps': ['one']})"));
 }
 
@@ -27,8 +27,9 @@ TEST(LfmThoughtDemotionReview, KeyPositionsNotNestedOrValues) {
     EXPECT_FALSE(shouldDemoteSegment(" "));
 }
 
-TEST(LfmThoughtDemotionReview, LeadingProseLimitIsInBytes) {
-    EXPECT_TRUE(shouldDemoteSegment(std::string(200, 'x') + R"({"plan":[]})"));
+TEST(LfmThoughtDemotionReview, LeadingProseIsAlwaysVisible) {
+    EXPECT_FALSE(shouldDemoteSegment(std::string(1, 'x') + R"({"plan":[]})"));
+    EXPECT_FALSE(shouldDemoteSegment(std::string(200, 'x') + R"({"plan":[]})"));
     EXPECT_FALSE(shouldDemoteSegment(std::string(201, 'x') + R"({"plan":[]})"));
 }
 
