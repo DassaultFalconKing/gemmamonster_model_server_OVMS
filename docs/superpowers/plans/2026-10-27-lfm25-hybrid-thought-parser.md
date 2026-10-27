@@ -1,5 +1,8 @@
 # LFM2.5 Hybrid C Thought / Tool Separation Implementation Plan
 
+> **SUPERSEDED IMPLEMENTATION INSTRUCTIONS (2026-10-27).** Do not carry out the old task list below: its proposed Lfm2ToolParser integration cannot see prose-only CONTENT; its valid-plan JSON demotion creates confirmed false positives; its unconditional SSE buffering hurts ordinary output. Current cleanup source is on PR #34 and the only active local tasks are in `docs/lfm/tool-use-20261027/HANDOFF-LOCAL-CLEANUP-RETEST-20261027.md`. Keep the following text as archival reasoning and fixtures, not as an instruction to rewrite production code.
+
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Demote LFM2.5 pseudo-plan JSON and pseudo-tool prose into `reasoning_content` while keeping `<think>` as the primary thought path and publishing `tool_calls` only from native Liquid envelopes.
