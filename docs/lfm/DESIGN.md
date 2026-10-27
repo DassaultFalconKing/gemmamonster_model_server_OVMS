@@ -1,5 +1,7 @@
 # LFM family hardening on RC4
 
+> **2026-10-27 family-roadmap update:** The two-model scope below is the pinned scope of the **existing hardening program**, not a permanent choice of LFM models. Architecture priority and evidence on the new LFM2.5-24B-A2B are maintained in [ADR-20261027-LFM-FAMILY-ROADMAP.md](ADR-20261027-LFM-FAMILY-ROADMAP.md). On this date, a published official OpenVINO IR for the new 24B was **not verified**; do not add it to acceptance or substitute the older LFM2-24B weights.
+
 Date: 2026-10-26. Status: APPROVED by user in this chat before product changes.
 
 ## Scope and source
