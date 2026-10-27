@@ -10,8 +10,9 @@
    C:\llm\models\* не изменяется. Каталоги configs/logs создаются сами.
 4. Pipeline LM (не VLM_CB). tool_parser и reasoning_parser — lfm2.
    Не переносите чужой chat_template. MTP/speculative не включается.
-5. KV_CACHE_PRECISION=u4 по умолчанию через plugin_config. Для прежнего профиля
-   укажите -KvPrecision auto (без свойства KV_CACHE_PRECISION).
+5. KV_CACHE_PRECISION=auto по умолчанию (без принудительного свойства).
+   -KvPrecision u4 включает memory-saving профиль; повторный A/B на Hybrid-C
+   показал 55.12 U4 против 56.24 auto tok/s (n=3), победа U4 не доказана.
    Профиль smoke: 4 слота, batch 1024, cache_size=1 GiB,
    prefix caching выключен. cache_size — пул KV в гигабайтах, не вся RAM.
 6. Порт 8137 общий с Qwen/Gemma/Ornith: запускать по очереди либо сменить порт.
@@ -23,7 +24,7 @@
 param(
     [switch]$ConfigureOnly,
     [ValidateRange(1,65535)][int]$Port = 8137,
-    [ValidateSet('u4','auto')][string]$KvPrecision = 'u4',
+    [ValidateSet('u4','auto')][string]$KvPrecision = 'auto',
     [string]$ExecutablePath = 'C:\gm\lfm-2026.4\hybrid-c-review-20261027\build-py_off\bin\ovms.exe',
     [ValidatePattern('^[A-Fa-f0-9]{64}$')][string]$ExecutableSha256 = 'd9663aa6ca29880ae6d3d85ff5f341a2461affd7bc539dd2c8cd3df9fa71136e'
 )
@@ -100,8 +101,8 @@ Write-Host ('Serving model: ' + $servingDir)
 $configDir = Join-Path $PSScriptRoot 'configs\lfm25'
 [void][IO.Directory]::CreateDirectory($configDir)
 $commandPath = Join-Path $configDir 'command.json'
-# Measured Arc 140V baseline: r0+U4 outperforms r0 automatic KV.
-# -KvPrecision auto restores the unchanged r0 plugin profile for A/B.
+# 2026-10-27 Hybrid-C A/B: auto 56.24 versus u4 55.12 tok/s (n=3).
+# Do not infer that U4 is fastest: use -KvPrecision u4 for an explicit KV-memory test.
 $gpuOptions = [ordered]@{ OFFLOAD_RATIO = 0 }
 if ($KvPrecision -eq 'u4') { $gpuOptions.KV_CACHE_PRECISION = 'u4' }
 $gpuPluginConfig = $gpuOptions | ConvertTo-Json -Compress
