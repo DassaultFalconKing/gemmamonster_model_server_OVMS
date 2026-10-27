@@ -1,5 +1,8 @@
 # LFM Design C: adversarial review / semantic refit, 2026-10-27
 
+> **Historical review snapshot** from before the Hybrid C implementation. Its "partial code / BLOCK production wiring" and U4/start-script statements are no longer current. As of this branch, CONTENT routing was implemented and a local binary passed 197 tests and GPU protocol smoke, but the latest cleanup of JSON false positives and SSE latency is **NOT RETESTED**. Refer to `STATE.md` and `HANDOFF-LOCAL-CLEANUP-RETEST-20261027.md` for active status. Do not delete historical findings.
+
+
 Source lock: [PR #4697](https://github.com/openvinotoolkit/model_server/pull/4697), HEAD 990174b4bfc21e0d623c4917ea860246e929bc06.
 Status: **partial code / BLOCK production wiring**. This review branch must not overwrite RC4, the candidate-final EXE, or active services.
 
