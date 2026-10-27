@@ -1,0 +1,35 @@
+# Standalone candidate configuration for OMP 18.12.6. Not installed globally.
+providers:
+  openvino-lfm25:
+    baseUrl: http://127.0.0.1:8137/v3
+    api: openai-completions
+    auth: none
+    models:
+      - id: lfm25-8b-a1b-int4
+        name: LFM2.5 8B A1B OpenVINO
+        reasoning: true
+        supportsTools: true
+        input: [text]
+        contextWindow: 32768
+        maxTokens: 4096
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }
+        compat:
+          supportsDeveloperRole: false
+          supportsStore: false
+          maxTokensField: max_tokens
+          reasoningContentField: reasoning_content
+          replayReasoningContent: true
+          supportsReasoningParams: false
+          supportsReasoningEffort: false
+          omitReasoningEffort: true
+          qwenPreserveThinking: false
+          supportsToolChoice: true
+          supportsForcedToolChoice: true
+          supportsNamedToolChoice: true
+          supportsStrictMode: false
+          toolSchemaFlavor: grammar
+          streamIdleTimeoutMs: 900000
+          extraBody:
+            temperature: 0.2
+            top_k: 80
+            repetition_penalty: 1.05
