@@ -523,19 +523,16 @@ std::optional<Delta> OutputParser::drainPendingDeltaImpl() {
     // ready phase. An incomplete tag returns nullopt and keeps the cache.
     if (streamOutputCache.getBuffer().empty())
         return std::nullopt;
-    return parseChunk("", {}, toolsEnabledForChunk, ov::genai::GenerationFinishReason::NONE);
+    // Internal drain must not invoke the public classifier wrapper twice.
+    return parseChunkImpl("", {}, toolsEnabledForChunk, ov::genai::GenerationFinishReason::NONE);
 }
 
 std::optional<Delta> OutputParser::parseChunk(const std::string& chunkResponse, const std::vector<int64_t>& tokens,
     const bool toolsAvailable, ov::genai::GenerationFinishReason finishReason) {
     auto result = parseChunkImpl(chunkResponse, tokens, toolsAvailable, finishReason);
-    auto staged = stageLfm25Delta(std::move(result));
-    if (staged) return staged;
-    if (lfm25ThoughtDemotion && toolsEnabledForChunk &&
-        terminalContentFinish != ov::genai::GenerationFinishReason::NONE &&
-        streamOutputCache.getBuffer().empty() && lfm25ReadyDeltas.empty())
-        return finishLfm25PendingContent();
-    return std::nullopt;
+    // Pending prose is flushed only by drainPendingDelta(), after all
+    // parser-owned deltas and any final envelope have been consumed.
+    return stageLfm25Delta(std::move(result));
 }
 
 std::optional<Delta> OutputParser::parseChunkImpl(const std::string& chunkResponse, const std::vector<int64_t>& tokens,
