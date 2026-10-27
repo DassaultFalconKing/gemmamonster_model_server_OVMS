@@ -1,12 +1,12 @@
 # LFM tool-use refit, 2026-10-27
 
-ACTIVE_STAGE: Hybrid C **GPU ACCEPTED** (local validation PASS); start scripts pin hybrid-c-review EXE + u4
+ACTIVE_STAGE: **SOURCE CLEANUP PUSHED / REBUILD REQUIRED**. Previous Hybrid C EXE is protocol-accepted only; current SOURCE fixes JSON false positives and SSE latency and has NOT been built or GPU tested. Startup scripts pin previous EXE, KV default now auto.
 BASE_SHA: a13dff47929bd40e38ecbb654ce7014e9a635704
 CURRENT_HEAD: see branch tip after start-script pin commit
-LAST_GREEN_TESTS: hybrid-c units 197P/2S; LFM25 agent det 4/4 + code PASS (official 2/4 FAIL); LFM2-24B agent 8/8 + code PASS; Cursor HTTP hammer PASS both
-CURRENT_FAILURE: known FP `{"plan":[]}` demotes to reasoning; offload cliff unchanged; A9 residuals
+LAST_GREEN_TESTS: HISTORICAL Hybrid C EXE d9663aa6...: 197P/2S, LFM25 det 4/4 + code PASS, official 2/4 FAIL; LFM2-24B 8/8 + code PASS; Cursor HTTP hammer PASS. **These results do not validate newer source cleanup.**
+CURRENT_FAILURE: historical EXE still demotes `{"plan":[]}`; source guarded valid JSON but NOT_RETESTED. LFM2.5 official agent 2/4, prose hang NOT_RESOLVED, offload cliff unchanged.
 STAFF_MODE: parallel_tool_calls=true (API default already; agent/probe harnesses aligned)
-NEXT_ACTION: cloud/PR review of Hybrid C; decide UX on plan-JSON FP; optional restore control 8137 with new pin
+NEXT_ACTION: clean Windows rebuild in distinct output root, source cleanup GTests, 18147 GPU smoke (JSON preservation + early SSE + LFM2.5 official chains). Do not replace d9663aa6 pin or touch 8137 before retest.
 REVERT_POINT: BASELINE-LOCK.json (A9 serving); A9 candidate-final EXE `95fb62b5…` still available for rollback smoke
 EVIDENCE_PATH: C:/gm/lfm-2026.4/hybrid-c-review-20261027
 CLOUD_HANDOFF: docs/lfm/tool-use-20261027/HANDOFF-CLOUD-REVIEW.md
@@ -23,13 +23,13 @@ Implemented and locally validated 2026-10-27 on `review/lfm25-design-c-semantic-
 - Plan: `docs/superpowers/plans/2026-10-27-lfm25-hybrid-thought-parser.md`
 - Default start pin: `C:\gm\lfm-2026.4\hybrid-c-review-20261027\build-py_off\bin\ovms.exe`
 - EXE SHA256: `d9663aa6ca29880ae6d3d85ff5f341a2461affd7bc539dd2c8cd3df9fa71136e`
-- KV default: `KV_CACHE_PRECISION=u4`, `OFFLOAD_RATIO=0`, lfm25 batch 1024
+- KV default in NEW start scripts: auto (no property) + `OFFLOAD_RATIO=0`, lfm25 batch 1024. Historical Hybrid C GPU evidence used U4.
 
 ## Speed / memory pressure (LFM2.5)
 
 - Cliff: r0≈55 → r20≈31.5 → r30≈24 tok/s
 - u4 matrix: r0+u4 helps resident; r20+u4 does not fix cliff
-- Local A/B on Hybrid-C EXE: u4 55.12 vs auto 56.24 tok/s (short decode)
+- Local A/B on historical Hybrid-C EXE: u4 55.12 vs auto 56.24 tok/s (short decode, n=3). Therefore no U4 speed claim; auto is the conservative new launcher default.
 
 ## Plan
 - [x] A0–A9 including commit/push and residual root-cause (read-only)
@@ -38,5 +38,7 @@ Implemented and locally validated 2026-10-27 on `review/lfm25-design-c-semantic-
 - [x] Cloud handoff docs
 - [x] Hybrid C implementation (plan tasks 1–4)
 - [x] Local Hybrid-C GPU validation (units + tool cycle + false-demotion + U4 A/B)
-- [x] Wire start-lfm25 / start-lfm2-24b to hybrid-c-review pin + u4
+- [x] Keep start scripts pinned to historical Hybrid C EXE with SHA verification; new source cleanup defaults KV to auto and supports explicit `-KvPrecision u4`
+- [x] Source fix: valid standalone JSON preserved, ordinary prose streamed incrementally; tests added
+- [ ] Build and locally accept this newer source commit (historical PASS not transferable)
 
