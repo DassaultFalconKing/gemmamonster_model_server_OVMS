@@ -1,7 +1,7 @@
 ﻿<#
 ИНСТРУКЦИЯ ПО АДАПТАЦИИ СКРИПТОВ ЗАПУСКА (LFM2.5)
 1. package — каталог RC4 extracted-py_off\ovms: DLL OpenVINO/GenAI и MANIFEST.
-   exe — отдельно candidate-final ovms.exe с LFM retainer/policy (не подменяйте DLL пакета).
+   exe — Hybrid-C review ovms.exe (parser + demotion); DLL пакета не подменять.
    modelPath — OpenVINO IR LFM2.5-8B; modelName — имя в API/карточке OMP.
 2. WEIGHTS_PATH не используется: OFFLOAD_RATIO=0 (Pack/offload отложены).
    Веса — openvino_model.bin (не openvino_language_model.bin).
@@ -16,16 +16,16 @@
    prefix caching выключен. cache_size — пул KV в гигабайтах, не вся RAM.
 6. Порт 8137 общий с Qwen/Gemma/Ornith: запускать по очереди либо сменить порт.
    Скрипт чужие процессы не останавливает. -ConfigureOnly только готовит serving.
-7. Для smoke с новым EXE передайте -ExecutablePath и -ExecutableSha256.
-   По умолчанию остаётся pin проверенного candidate-final. Staging зависит от порта.
+7. Default EXE pin = hybrid-c-review GPU-accepted build (SHA below). Override with
+   -ExecutablePath / -ExecutableSha256 for a newer isolated candidate. Staging by port.
 8. Файл — UTF-8 с BOM для PS 5.1. Это запуск сервера, не автотест.
 #>
 param(
     [switch]$ConfigureOnly,
     [ValidateRange(1,65535)][int]$Port = 8137,
     [ValidateSet('u4','auto')][string]$KvPrecision = 'u4',
-    [string]$ExecutablePath = 'C:\gm\lfm-2026.4\tool-use-20261027\candidate-final\build-py_off\bin\ovms.exe',
-    [ValidatePattern('^[A-Fa-f0-9]{64}$')][string]$ExecutableSha256 = '95fb62b5df7d68a880457378a4d3503cc606b5f06a82c23e70010d96358272ba'
+    [string]$ExecutablePath = 'C:\gm\lfm-2026.4\hybrid-c-review-20261027\build-py_off\bin\ovms.exe',
+    [ValidatePattern('^[A-Fa-f0-9]{64}$')][string]$ExecutableSha256 = 'd9663aa6ca29880ae6d3d85ff5f341a2461affd7bc539dd2c8cd3df9fa71136e'
 )
 $ErrorActionPreference = 'Stop'
 $package = 'C:\gm\qwenmonster\releases\gemmamonster-2026.4-rc4\extracted-py_off\ovms'
@@ -62,7 +62,7 @@ if ($actualExe -ne $expectedExeSha256) {
     throw ('Serving ovms.exe hash drift: expected ' + $expectedExeSha256 + ' got ' + $actualExe)
 }
 
-# Baseline DLLs: gemmamonster-2026.4-rc4; EXE: tool-use candidate-final.
+# Baseline DLLs: gemmamonster-2026.4-rc4; EXE: hybrid-c-review (default pin).
 $manifest = Get-Content (Join-Path $package 'MANIFEST.json') -Raw | ConvertFrom-Json
 foreach ($row in $manifest.files) {
     if ($row.path -match '\.dll$') {

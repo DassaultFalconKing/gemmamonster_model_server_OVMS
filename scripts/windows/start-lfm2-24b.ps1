@@ -1,35 +1,38 @@
 ﻿<#
 ИНСТРУКЦИЯ ПО АДАПТАЦИИ СКРИПТОВ ЗАПУСКА (LFM2-24B, long)
 1. package — каталог RC4 extracted-py_off\ovms: DLL OpenVINO/GenAI и MANIFEST.
-   exe — candidate-final ovms.exe с LFM retainer/policy (не подменяйте DLL пакета).
+   exe — Hybrid-C review ovms.exe (тот же pin, что LFM2.5); DLL пакета не подменять.
    modelPath — OpenVINO IR LFM2-24B-A2B; modelName — имя в API/карточке OMP.
 2. WEIGHTS_PATH не используется: OFFLOAD_RATIO=0 (Pack/offload отложены).
    Веса — openvino_model.bin. Нужен запас host RAM (admission ~ weights+2.5 GiB).
-3. servingDir — рабочая копия IR с override chat_template (экспорт без renderer).
+3. servingDir — per-port рабочая копия IR с override chat_template.
    Скачанный C:\llm\models\* не изменяется. configs/logs создаются сами.
 4. Pipeline LM. tool_parser — lfm2. reasoning_parser для LFM2-24B не задаём.
    Штатный parallel_tool_calls=true на стороне API (поле можно не слать).
-5. Профиль ДЛИННОЙ генерации (не smoke Task5): 2 слота, batch 4096,
-   cache_size=0 (динамический KV), prefix caching ON, interval 256,
-   dynamic_split_fuse ON, rest_workers=1. cache_size=0 не ограничивает всю RAM
-   процесса — следите за свободной памятью на Arc 140V / UMA.
-   После смены scheduler параметров считайте это новой конфигурацией.
+5. KV_CACHE_PRECISION=u4 по умолчанию. -KvPrecision auto убирает свойство.
+   Профиль ДЛИННОЙ генерации: 2 слота, batch 4096, cache_size=0 (динамический KV),
+   prefix caching ON, interval 256, dynamic_split_fuse ON, rest_workers=1.
 6. Порт 8137 общий с Qwen/Gemma/Ornith: по очереди либо сменить порт.
    Скрипт чужие процессы не останавливает. -ConfigureOnly только готовит serving.
-7. Файл — UTF-8 с BOM для PS 5.1. Это запуск сервера, не автотест.
+7. Default EXE pin = hybrid-c-review GPU-accepted build. Override via
+   -ExecutablePath / -ExecutableSha256.
+8. Файл — UTF-8 с BOM для PS 5.1. Это запуск сервера, не автотест.
 #>
 param(
     [switch]$ConfigureOnly,
-    [ValidateRange(1,65535)][int]$Port = 8137
+    [ValidateRange(1,65535)][int]$Port = 8137,
+    [ValidateSet('u4','auto')][string]$KvPrecision = 'u4',
+    [string]$ExecutablePath = 'C:\gm\lfm-2026.4\hybrid-c-review-20261027\build-py_off\bin\ovms.exe',
+    [ValidatePattern('^[A-Fa-f0-9]{64}$')][string]$ExecutableSha256 = 'd9663aa6ca29880ae6d3d85ff5f341a2461affd7bc539dd2c8cd3df9fa71136e'
 )
 $ErrorActionPreference = 'Stop'
 $package = 'C:\gm\qwenmonster\releases\gemmamonster-2026.4-rc4\extracted-py_off\ovms'
-$exe = 'C:\gm\lfm-2026.4\tool-use-20261027\candidate-final\build-py_off\bin\ovms.exe'
-$expectedExeSha256 = '95fb62b5df7d68a880457378a4d3503cc606b5f06a82c23e70010d96358272ba'
+$exe = $ExecutablePath
+$expectedExeSha256 = $ExecutableSha256.ToLowerInvariant()
 $modelPath = 'C:\llm\models\LFM2-24B-A2B-int4-ov'
 $modelName = 'lfm2-24b-a2b-int4'
 $templatePath = 'C:\git\gemmamonster-lfm-2026.4\docs\lfm\templates\LFM2-24B-A2B-int4-ov.jinja'
-$servingDir = 'C:\gm\lfm-2026.4\serving-models\LFM2-24B-A2B-int4-ov'
+$servingDir = Join-Path 'C:\gm\lfm-2026.4\serving-models' ('LFM2-24B-A2B-int4-ov-port' + $Port)
 
 foreach ($requiredFile in @(
     (Join-Path $modelPath 'openvino_model.bin'),
@@ -56,7 +59,7 @@ if ($actualExe -ne $expectedExeSha256) {
     throw ('Serving ovms.exe hash drift: expected ' + $expectedExeSha256 + ' got ' + $actualExe)
 }
 
-# Baseline DLLs: gemmamonster-2026.4-rc4; EXE: tool-use candidate-final.
+# Baseline DLLs: gemmamonster-2026.4-rc4; EXE: hybrid-c-review (default pin).
 $manifest = Get-Content (Join-Path $package 'MANIFEST.json') -Raw | ConvertFrom-Json
 foreach ($row in $manifest.files) {
     if ($row.path -match '\.dll$') {
@@ -72,6 +75,9 @@ foreach ($row in $manifest.files) {
     }
 }
 
+if (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {
+    throw ('Port ' + $Port + ' is occupied. No serving files were changed.')
+}
 if (Test-Path -LiteralPath $servingDir) {
     Remove-Item -LiteralPath $servingDir -Recurse -Force
 }
@@ -90,7 +96,9 @@ Write-Host ('Serving model: ' + $servingDir)
 $configDir = Join-Path $PSScriptRoot 'configs\lfm2-24b-long'
 [void][IO.Directory]::CreateDirectory($configDir)
 $commandPath = Join-Path $configDir 'command.json'
-$gpuPluginConfig = '{"OFFLOAD_RATIO":0}'
+$gpuOptions = [ordered]@{ OFFLOAD_RATIO = 0 }
+if ($KvPrecision -eq 'u4') { $gpuOptions.KV_CACHE_PRECISION = 'u4' }
+$gpuPluginConfig = $gpuOptions | ConvertTo-Json -Compress
 if ($PSVersionTable.PSVersion.Major -le 5 -or $PSNativeCommandArgumentPassing -eq 'Legacy') {
     $gpuPluginConfigEscaped = $gpuPluginConfig.Replace('"', '\"')
 } else {
@@ -121,12 +129,8 @@ $command = @(
 $utf8 = New-Object Text.UTF8Encoding($false)
 [IO.File]::WriteAllText($commandPath, ($command | ConvertTo-Json -Compress), $utf8)
 Write-Host ('Command receipt: ' + $commandPath)
-Write-Host 'Profile: LFM2-24B long (seqs=2 batch=4096 cache_size=0 prefix=on interval=256)'
+Write-Host ('LFM2-24B long KV profile: ' + $KvPrecision + '; OFFLOAD_RATIO=0; seqs=2 batch=4096 cache_size=0 prefix=on')
 if ($ConfigureOnly) { exit 0 }
-
-if (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {
-    throw ('Port ' + $Port + ' is occupied. Stop the current model before starting LFM2-24B; no processes were stopped.')
-}
 
 $env:PYTHONHOME = $null
 $env:PYTHONPATH = $null
