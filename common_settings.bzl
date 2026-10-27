@@ -187,6 +187,7 @@ WINDOWS_COMMON_STATIC_LIBS_COPTS = [
                         "/wd4267",
                         "/wd4996",
                         "/wd6240", 
+                        "/wd6313",  # rapidjson reader.h bitwise-flag analyze false positive
                         "/wd6326",
                         "/wd6385",
                         "/wd6386",
