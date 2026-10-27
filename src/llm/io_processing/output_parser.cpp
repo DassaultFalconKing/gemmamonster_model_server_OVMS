@@ -506,7 +506,9 @@ std::optional<Delta> OutputParser::drainPendingDelta() {
         const auto sizeBefore = streamOutputCache.getBuffer().size();
         const auto phaseBefore = processingPhase;
         auto raw = drainPendingDeltaImpl();
+        const bool emitted = raw.has_value();
         if (auto ready = stageLfm25Delta(std::move(raw))) return ready;
+        if (emitted) continue;  // swallowed content is still forward progress
         if (sizeBefore == streamOutputCache.getBuffer().size() && phaseBefore == processingPhase)
             break;
     }
