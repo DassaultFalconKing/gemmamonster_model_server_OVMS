@@ -206,5 +206,32 @@ TEST_P(LfmStrictOutputParserTest, HybridReusedParserResetDropsUnpublishedPlan) {
     EXPECT_EQ(visible, "Clean reply.");
 }
 
+
+TEST_P(LfmStrictOutputParserTest, HybridDemotionDisabledForToolChoiceNoneRouting) {
+    ovms::OutputParser parser(*tokenizer, "lfm2", GetParam() ? "lfm2" : "",
+        ovms::ToolsSchemas_t{{"f", {nullptr, R"({"type":"object"})"}}});
+    const std::string text = R"({"plan":["return requested JSON"]})";
+    std::string visible;
+    auto accept = [&](const std::optional<ovms::Delta>& delta) {
+        if (delta && std::holds_alternative<ovms::ContentDelta>(*delta))
+            visible += std::get<ovms::ContentDelta>(*delta).text;
+    };
+    accept(parser.parseChunk(text, {}, false, ov::genai::GenerationFinishReason::STOP));
+    for (int i = 0; i < 16; ++i) {
+        auto delta = parser.drainPendingDelta();
+        if (!delta) break;
+        accept(delta);
+    }
+    EXPECT_EQ(visible, text);
+}
+
+TEST_P(LfmStrictOutputParserTest, HybridLfm25PendingContentIsBounded) {
+    if (!GetParam()) GTEST_SKIP() << "Demotion disabled on LFM2-24B tool-only";
+    ovms::OutputParser parser(*tokenizer, "lfm2", "lfm2",
+        ovms::ToolsSchemas_t{{"f", {nullptr, R"({"type":"object"})"}}});
+    EXPECT_THROW((void)parser.parseChunk(std::string(1024 * 1024 + 1, 'x'), {},
+        true, ov::genai::GenerationFinishReason::NONE), std::invalid_argument);
+}
+
 INSTANTIATE_TEST_SUITE_P(TargetTokenizers, LfmStrictOutputParserTest, ::testing::Values(false, true));
 }  // namespace
