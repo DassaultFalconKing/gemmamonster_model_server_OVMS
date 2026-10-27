@@ -19,6 +19,9 @@
 #include <stdexcept>
 #include <utility>
 #include <unordered_set>
+#include <string_view>
+
+#include <rapidjson/document.h>
 
 #include "src/logging.hpp"
 #include "src/stringutils.hpp"
@@ -371,6 +374,7 @@ void OutputParser::resetStreamingState() {
     streamOutputCache.clear();
     lfm25PendingContent.clear();
     lfm25ReadyDeltas.clear();
+    lfm25PlainContentStreaming = false;
     pendingGemma4ToolHandoff = false;
     gemma4LogicalBoundary = true;
     gemma4ReasoningClosed = false;
@@ -468,7 +472,15 @@ std::optional<Delta> OutputParser::finishLfm25PendingContent() {
     if (lfm25PendingContent.empty()) return std::nullopt;
     std::string text = std::move(lfm25PendingContent);
     lfm25PendingContent.clear();
-    if (lfm2::shouldDemoteSegment(text)) return ReasoningDelta{std::move(text)};
+    // Never hide a valid standalone JSON object because it has "plan",
+    // "commands" or "explanation" keys. The rendered request intent is
+    // unavailable here, so automatic classification would be ambiguous.
+    rapidjson::Document json;
+    json.Parse(text.data(), text.size());
+    if (!json.HasParseError() && json.IsObject())
+        return ContentDelta{std::move(text)};
+    if (lfm2::shouldDemoteSegment(text))
+        return ReasoningDelta{std::move(text)};
     return ContentDelta{std::move(text)};
 }
 
@@ -479,6 +491,12 @@ std::optional<Delta> OutputParser::stageLfm25Delta(std::optional<Delta> value) {
     if (!lfm25ThoughtDemotion || !toolsEnabledForChunk) return value;
     if (value.has_value()) {
         if (auto* content = std::get_if<ContentDelta>(&*value)) {
+            // Common case: ordinary prose is not a candidate for the closed
+            // pseudo-thought profile. Stream it without waiting for STOP.
+            if (lfm25PlainContentStreaming) {
+                lfm25ReadyDeltas.push_back(std::move(*value));
+                return popLfm25ReadyDelta();
+            }
             constexpr size_t cap = 1024 * 1024;
             if (content->text.size() > cap || lfm25PendingContent.size() > cap - content->text.size()) {
                 lfm25PendingContent.clear();
@@ -486,11 +504,30 @@ std::optional<Delta> OutputParser::stageLfm25Delta(std::optional<Delta> value) {
                 throw std::invalid_argument("LFM hybrid pending content exceeds byte limit");
             }
             lfm25PendingContent += content->text;
+            std::string_view prefix(lfm25PendingContent);
+            while (!prefix.empty() && lfm2::thought_detail::space(prefix.front()))
+                prefix.remove_prefix(1);
+            bool ordinary = false;
+            if (!prefix.empty()) {
+                if (prefix.front() != '{' && prefix.front() != '[') {
+                    ordinary = true;
+                } else if (prefix.front() == '[') {
+                    constexpr std::string_view marker = "[tool:";
+                    const size_t common = std::min(prefix.size(), marker.size());
+                    ordinary = prefix.substr(0, common) != marker.substr(0, common);
+                }
+            }
+            if (ordinary) {
+                lfm25PlainContentStreaming = true;
+                lfm25ReadyDeltas.emplace_back(ContentDelta{std::move(lfm25PendingContent)});
+                lfm25PendingContent.clear();
+            }
         } else {
             // Preserve order: preceding content/reasoning must be observed
             // before a native tool call or a distinct reasoning/finish delta.
             if (auto preceding = finishLfm25PendingContent())
                 lfm25ReadyDeltas.push_back(std::move(*preceding));
+            lfm25PlainContentStreaming = false;
             lfm25ReadyDeltas.push_back(std::move(*value));
         }
     }
