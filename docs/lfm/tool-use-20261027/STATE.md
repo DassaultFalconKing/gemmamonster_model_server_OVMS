@@ -3,7 +3,7 @@
 ACTIVE_STAGE: Hybrid C **GPU ACCEPTED** (local validation PASS); start scripts pin hybrid-c-review EXE + u4
 BASE_SHA: a13dff47929bd40e38ecbb654ce7014e9a635704
 CURRENT_HEAD: see branch tip after start-script pin commit
-LAST_GREEN_TESTS: hybrid-c-review units 197 PASS / 2 SKIP; tool probe 8/8; ordinary JSON false-demotion PASS
+LAST_GREEN_TESTS: hybrid-c units 197P/2S; LFM25 agent det 4/4 + code PASS (official 2/4 FAIL); LFM2-24B agent 8/8 + code PASS; Cursor HTTP hammer PASS both
 CURRENT_FAILURE: known FP `{"plan":[]}` demotes to reasoning; offload cliff unchanged; A9 residuals
 STAFF_MODE: parallel_tool_calls=true (API default already; agent/probe harnesses aligned)
 NEXT_ACTION: cloud/PR review of Hybrid C; decide UX on plan-JSON FP; optional restore control 8137 with new pin
@@ -39,3 +39,4 @@ Implemented and locally validated 2026-10-27 on `review/lfm25-design-c-semantic-
 - [x] Hybrid C implementation (plan tasks 1–4)
 - [x] Local Hybrid-C GPU validation (units + tool cycle + false-demotion + U4 A/B)
 - [x] Wire start-lfm25 / start-lfm2-24b to hybrid-c-review pin + u4
+
