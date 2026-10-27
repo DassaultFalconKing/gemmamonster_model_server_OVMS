@@ -97,6 +97,8 @@ private:
     bool gemma4ToolHandoff = false;
     // Opt-in family-specific content classification; no changes to the native tool retainer.
     bool lfm25ThoughtDemotion = false;
+    // Once the segment cannot begin with a pseudo-plan, forward plain prose immediately.
+    bool lfm25PlainContentStreaming = false;
     std::string lfm25PendingContent;
     std::deque<Delta> lfm25ReadyDeltas;
     bool pendingGemma4ToolHandoff = false;
