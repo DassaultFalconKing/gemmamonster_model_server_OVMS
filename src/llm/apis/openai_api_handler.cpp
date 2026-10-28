@@ -357,6 +357,8 @@ absl::StatusOr<InputRequest> OpenAIApiHandler::extractInputRequest(GenerationCon
     try {
         configBuilder.validateStructuredOutputConfig(tokenizer);
     } catch (const std::exception& e) {
+        if (toolParserName == "lfm2" && configBuilder.requiresValidStructuredOutput())
+            return absl::InvalidArgumentError(std::string("LFM tool grammar validation failed: ") + e.what());
         SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "Tool guided generation will not be applied due to JSON schema validation failure: {}", e.what());
         configBuilder.unsetStructuredOutputConfig();
     }

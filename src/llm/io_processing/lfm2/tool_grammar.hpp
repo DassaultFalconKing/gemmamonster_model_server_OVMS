@@ -57,7 +57,7 @@ class ToolGrammar {
     static void checkKeys(const rapidjson::Value& schema) {
         static const std::set<std::string> allowed{
             "type", "properties", "required", "additionalProperties", "items", "enum", "const",
-            "description", "title", "default", "examples", "$comment"};
+            "description", "title", "default", "examples", "$comment", "anyOf", "maxLength", "minItems"};
         std::set<std::string> seen;
         for (auto it = schema.MemberBegin(); it != schema.MemberEnd(); ++it) {
             const std::string key(it->name.GetString(), it->name.GetStringLength());
@@ -124,6 +124,22 @@ class ToolGrammar {
         if (depth > 32 || ++nodeCount > 2048) fail("schema complexity limit exceeded");
         if (!schema.IsObject()) fail("schema node must be an object");
         checkKeys(schema);
+        if (schema.HasMember("anyOf")) {
+            if (!schema["anyOf"].IsArray() || schema["anyOf"].Empty()) fail("anyOf needs branches");
+            for (auto it = schema.MemberBegin(); it != schema.MemberEnd(); ++it) {
+                const std::string key(it->name.GetString(), it->name.GetStringLength());
+                if (key != "anyOf" && key != "description" && key != "title" && key != "default" && key != "examples" && key != "$comment")
+                    fail("anyOf siblings must be annotations");
+            }
+            std::string alternatives;
+            for (const auto& branch : schema["anyOf"].GetArray()) {
+                if (!alternatives.empty()) alternatives += " | ";
+                alternatives += value(branch, depth + 1);
+            }
+            const auto name = fresh();
+            define(name, alternatives);
+            return name;
+        }
         std::vector<std::string> types;
         if (schema.HasMember("type")) {
             const auto& type = schema["type"];
@@ -163,7 +179,14 @@ class ToolGrammar {
             if (type != "object" && (schema.HasMember("properties") || schema.HasMember("required") || schema.HasMember("additionalProperties")))
                 fail("object keywords on non-object types are unsupported");
             if (type != "array" && schema.HasMember("items")) fail("items on non-array type is unsupported");
-            if (type == "string") branches += "lfmstr";
+            if (schema.HasMember("maxLength") && type != "string") fail("maxLength requires string");
+            if (schema.HasMember("minItems") && type != "array") fail("minItems requires array");
+            if (type == "string") {
+                if (schema.HasMember("maxLength")) {
+                    if (!schema["maxLength"].IsUint() || schema["maxLength"].GetUint() > 4096) fail("maxLength exceeds bounded profile");
+                    branches += quote("\"") + " lfmchar{0," + std::to_string(schema["maxLength"].GetUint()) + "} " + quote("\"");
+                } else branches += "lfmstr";
+            }
             else if (type == "integer") branches += "lfmint";
             else if (type == "number") branches += "lfmnum";
             else if (type == "boolean") branches += "lfmbool";
@@ -172,7 +195,16 @@ class ToolGrammar {
             else if (type == "array") {
                 if (!schema.HasMember("items") || !schema["items"].IsObject()) fail("array items needs a single schema object");
                 const auto item = value(schema["items"], depth + 1);
-                branches += quote("[") + " lfmws (" + item + " (lfmws " + quote(",") + " lfmws " + item + ")*)? lfmws " + quote("]");
+                unsigned minimum = 0;
+                if (schema.HasMember("minItems")) {
+                    if (!schema["minItems"].IsUint() || schema["minItems"].GetUint() > 128) fail("minItems exceeds bounded profile");
+                    minimum = schema["minItems"].GetUint();
+                }
+                const auto tail = " (lfmws " + quote(",") + " lfmws " + item + ")";
+                branches += quote("[") + " lfmws ";
+                if (minimum) branches += item + tail + "{" + std::to_string(minimum - 1) + ",}";
+                else branches += "(" + item + tail + "*)?";
+                branches += " lfmws " + quote("]");
             } else fail("unsupported type: " + type);
         }
         const auto name = fresh();
@@ -180,7 +212,7 @@ class ToolGrammar {
         return name;
     }
 public:
-    std::string build(const ToolsSchemas_t& tools, bool parallel) {
+    std::string build(const ToolsSchemas_t& tools, bool parallel, bool envelope = true) {
         if (tools.size() > 128) fail("more than 128 tools");
         std::string calls;
         for (const auto& [name, wrapper] : tools) {
@@ -200,9 +232,9 @@ public:
             calls += quote(name) + " " + object(schema, 0, true);
         }
         if (calls.empty()) fail("at least one tool is required");
-        std::string result = "root ::= " + quote("<|tool_call_start|>[") + " lfmws lfmcall";
+        std::string result = "root ::= " + quote(envelope ? "<|tool_call_start|>[" : "[") + " lfmws lfmcall";
         if (parallel) result += " (lfmws " + quote(",") + " lfmws lfmcall)*";
-        result += " lfmws " + quote("]<|tool_call_end|>") + "\n";
+        result += " lfmws " + quote(envelope ? "]<|tool_call_end|>" : "]") + "\n";
         result += "lfmcall ::= " + calls + "\n";
         result += R"ebnf(lfmws ::= [ \n\t\r]{0,2}
 lfmstr ::= "\"" lfmchars
@@ -219,7 +251,7 @@ lfmbool ::= "true" | "false"
         return result;
     }
 };
-inline std::string toolGrammar(const ToolsSchemas_t& tools, bool parallel) {
-    return ToolGrammar{}.build(tools, parallel);
+inline std::string toolGrammar(const ToolsSchemas_t& tools, bool parallel, bool envelope = true) {
+    return ToolGrammar{}.build(tools, parallel, envelope);
 }
 }  // namespace ovms::lfm2

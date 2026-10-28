@@ -1,0 +1,420 @@
+{
+  "read": {
+    "type": "object",
+    "properties": {
+      "i": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "path",
+      "i"
+    ],
+    "additionalProperties": false
+  },
+  "bash": {
+    "type": "object",
+    "properties": {
+      "i": {
+        "type": "string"
+      },
+      "command": {
+        "type": "string"
+      },
+      "timeout": {
+        "type": "number"
+      },
+      "cwd": {
+        "type": "string"
+      },
+      "pty": {
+        "type": "boolean"
+      },
+      "async": {
+        "type": "boolean"
+      },
+      "name": {
+        "type": "string",
+        "maxLength": 48
+      },
+      "ready": {
+        "type": "object",
+        "properties": {
+          "log": {
+            "type": "string"
+          },
+          "port": {
+            "type": "number"
+          },
+          "host": {
+            "type": "string"
+          },
+          "timeout": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "command",
+      "i"
+    ],
+    "additionalProperties": false
+  },
+  "edit": {
+    "type": "object",
+    "properties": {
+      "i": {
+        "type": "string"
+      },
+      "input": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "input",
+      "i"
+    ],
+    "additionalProperties": false
+  },
+  "ask": {
+    "type": "object",
+    "properties": {
+      "i": {
+        "type": "string"
+      },
+      "questions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "question": {
+              "type": "string"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "preview": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "header": {
+              "type": "string"
+            },
+            "multi": {
+              "type": "boolean"
+            },
+            "recommended": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "id",
+            "question",
+            "options"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 1
+      }
+    },
+    "required": [
+      "questions",
+      "i"
+    ],
+    "additionalProperties": false
+  },
+  "eval": {
+    "type": "object",
+    "properties": {
+      "language": {
+        "enum": [
+          "py",
+          "js"
+        ],
+        "type": "string"
+      },
+      "code": {
+        "type": "string"
+      },
+      "timeout": {
+        "type": "number"
+      },
+      "reset": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "language",
+      "code"
+    ],
+    "additionalProperties": false
+  },
+  "glob": {
+    "type": "object",
+    "properties": {
+      "i": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      },
+      "hidden": {
+        "type": "boolean"
+      },
+      "gitignore": {
+        "type": "boolean"
+      },
+      "limit": {
+        "type": "number"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "i"
+    ]
+  },
+  "grep": {
+    "type": "object",
+    "properties": {
+      "i": {
+        "type": "string"
+      },
+      "pattern": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      },
+      "case": {
+        "type": "boolean"
+      },
+      "gitignore": {
+        "type": "boolean"
+      },
+      "skip": {
+        "type": [
+          "number",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "pattern",
+      "i"
+    ],
+    "additionalProperties": false
+  },
+  "task": {
+    "type": "object",
+    "properties": {
+      "i": {
+        "type": "string"
+      },
+      "context": {
+        "type": "string"
+      },
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "task": {
+              "type": "string"
+            },
+            "solutionSpace": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "agent": {
+              "type": "string"
+            },
+            "tools": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "sourceSession": {
+              "type": "string"
+            },
+            "model": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "task",
+            "solutionSpace"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "context",
+      "tasks",
+      "i"
+    ],
+    "additionalProperties": false
+  },
+  "wait": {
+    "type": "object",
+    "properties": {
+      "i": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false
+  },
+  "todo": {
+    "type": "object",
+    "properties": {
+      "i": {
+        "type": "string"
+      },
+      "op": {
+        "enum": [
+          "init",
+          "start",
+          "done",
+          "rm",
+          "drop",
+          "block",
+          "unblock",
+          "append",
+          "view"
+        ],
+        "type": "string"
+      },
+      "list": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "phase": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "phase",
+            "items"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "task": {
+        "type": "string"
+      },
+      "phase": {
+        "type": "string"
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "reason": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "op",
+      "i"
+    ],
+    "additionalProperties": false
+  },
+  "web_search": {
+    "type": "object",
+    "properties": {
+      "i": {
+        "type": "string"
+      },
+      "query": {
+        "type": "string"
+      },
+      "recency": {
+        "enum": [
+          "day",
+          "week",
+          "month",
+          "year"
+        ],
+        "type": "string"
+      },
+      "limit": {
+        "type": "number"
+      },
+      "max_tokens": {
+        "type": "number"
+      },
+      "temperature": {
+        "type": "number"
+      },
+      "num_search_results": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "query",
+      "i"
+    ],
+    "additionalProperties": false
+  },
+  "write": {
+    "type": "object",
+    "properties": {
+      "i": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      },
+      "content": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "path",
+      "i"
+    ],
+    "additionalProperties": false
+  }
+}

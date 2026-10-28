@@ -3,6 +3,8 @@
 #include <stdexcept>
 #include <string>
 #include <variant>
+#include <fstream>
+#include <sstream>
 #include "src/llm/io_processing/generation_config_builder.hpp"
 #include "src/test/platform_utils.hpp"
 
@@ -38,6 +40,59 @@ TEST(LfmGenerationPolicy, RequiredInstallsNativeEnvelopeFromFirstToken) {
     EXPECT_NE(text.find("write"), std::string::npos);
     EXPECT_EQ(text.find("<think>"), std::string::npos);
 }
+TEST(LfmGenerationPolicy, GuidedAutoProtectsThinkingAndConstrainsNativeCallsOnly) {
+    ovms::GenerationConfigBuilder builder({}, "lfm2", true, ovms::STANDARD);
+    auto request = lfmRequest("auto");
+    request.toolNameSchemaMap["glob"].stringRepr = R"({"type":"object","properties":{"i":{"type":"string"},"path":{"type":"string"}},"required":["i"],"additionalProperties":false})";
+    builder.parseConfigFromRequest(request);
+    ASSERT_TRUE(builder.getConfig().structured_output_config.has_value());
+    auto& cfg = *builder.getConfig().structured_output_config;
+    ASSERT_TRUE(cfg.structural_tags_config.has_value());
+    auto* held = std::get_if<Structured::StructuralTag>(&*cfg.structural_tags_config);
+    ASSERT_NE(held, nullptr);
+    auto* triggered = std::get_if<std::shared_ptr<Structured::TriggeredTags>>(held);
+    ASSERT_NE(triggered, nullptr);
+    EXPECT_FALSE((*triggered)->at_least_one);
+    ASSERT_EQ((*triggered)->tags.size(), 2);
+    EXPECT_EQ((*triggered)->tags[0].begin, "<think>");
+    EXPECT_EQ((*triggered)->tags[0].end, "</think>");
+    EXPECT_EQ((*triggered)->tags[1].begin, "<|tool_call_start|>");
+    EXPECT_EQ((*triggered)->tags[1].end, "<|tool_call_end|>");
+    auto* body = std::get_if<Structured::EBNF>(&(*triggered)->tags[1].content);
+    ASSERT_NE(body, nullptr);
+    EXPECT_NE(body->value.find("glob"), std::string::npos);
+    EXPECT_EQ(body->value.find("execute"), std::string::npos);
+    EXPECT_EQ(body->value.find("<|tool_call_start|>"), std::string::npos);
+}
+TEST(LfmGenerationPolicy, GuidedAutoCompilesRealOmpSchemasForBothTokenizers) {
+#ifdef _WIN32
+    const auto root = getWindowsRepoRootPath();
+#else
+    const std::string root = "/ovms";
+#endif
+    std::ifstream input(root + "/src/test/llm/output_parsers/fixtures/omp-lfm-tools.json");
+    ASSERT_TRUE(input.good());
+    std::stringstream buffer;
+    buffer << input.rdbuf();
+    rapidjson::Document schemas;
+    ASSERT_FALSE(schemas.Parse(buffer.str().c_str()).HasParseError());
+    for (const auto& family : {"LFM2-2.6B", "LFM2.5-8B-A1B"}) {
+        auto request = lfmRequest("auto");
+        request.toolNameSchemaMap.clear();
+        for (auto it = schemas.MemberBegin(); it != schemas.MemberEnd(); ++it) {
+            rapidjson::StringBuffer text;
+            rapidjson::Writer<rapidjson::StringBuffer> writer(text);
+            it->value.Accept(writer);
+            request.toolNameSchemaMap.emplace(it->name.GetString(), ovms::ToolSchemaWrapper{nullptr, text.GetString()});
+        }
+        ov::genai::Tokenizer tokenizer(root + "/src/test/llm_testing/LiquidAI/" + family);
+        ovms::GenerationConfigBuilder builder({}, "lfm2", true, ovms::STANDARD);
+        ASSERT_NO_THROW(builder.parseConfigFromRequest(request));
+        EXPECT_NO_THROW(builder.validateStructuredOutputConfig(tokenizer)) << family;
+        builder.parseConfigFromRequest(lfmRequest("none"));
+        EXPECT_FALSE(builder.getConfig().structured_output_config.has_value());
+    }
+}
 TEST(LfmGenerationPolicy, NamedRestrictsGrammarAndParallelFalse) {
     auto request = lfmRequest("write");
     request.parallelToolCalls = false;
@@ -49,8 +104,8 @@ TEST(LfmGenerationPolicy, NamedRestrictsGrammarAndParallelFalse) {
     EXPECT_EQ(text.find("cwd"), std::string::npos);
     EXPECT_EQ(text.find("lfmcall (lfmws"), std::string::npos);
 }
-TEST(LfmGenerationPolicy, AutoRemainsUnconstrainedEvenWithGuidanceEnabled) {
-    for (const auto enabled : {false, true}) {
+TEST(LfmGenerationPolicy, AutoRemainsUnconstrainedWithGuidanceDisabled) {
+    for (const auto enabled : {false}) {
         ovms::GenerationConfigBuilder builder({}, "lfm2", enabled, ovms::STANDARD);
         builder.parseConfigFromRequest(lfmRequest("auto"));
         EXPECT_FALSE(builder.requiresValidStructuredOutput());
@@ -105,13 +160,13 @@ TEST(LfmGenerationPolicy, HardGrammarCompilesWithBothRealTokenizers) {
         EXPECT_NO_THROW(builder.validateStructuredOutputConfig(tokenizer)) << family;
     }
 }
-TEST(LfmGenerationPolicy, ReusingBuilderDoesNotLeakHardGrammarIntoAutoOrNone) {
+TEST(LfmGenerationPolicy, ReusingBuilderReplacesHardWithLazyAndDropsGrammarForNone) {
     ovms::GenerationConfigBuilder builder({}, "lfm2", true, ovms::STANDARD);
     builder.parseConfigFromRequest(lfmRequest("required"));
     ASSERT_TRUE(builder.requiresValidStructuredOutput());
     builder.parseConfigFromRequest(lfmRequest("auto"));
-    EXPECT_FALSE(builder.requiresValidStructuredOutput());
-    EXPECT_FALSE(builder.getConfig().structured_output_config.has_value());
+    EXPECT_TRUE(builder.requiresValidStructuredOutput());
+    EXPECT_TRUE(builder.getConfig().structured_output_config.has_value());
     builder.parseConfigFromRequest(lfmRequest("required"));
     builder.parseConfigFromRequest(lfmRequest("none"));
     EXPECT_FALSE(builder.getConfig().structured_output_config.has_value());

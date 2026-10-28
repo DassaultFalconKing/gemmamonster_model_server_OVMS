@@ -26,8 +26,20 @@ public:
                         throw std::invalid_argument("LFM schema is outside the executable retainer profile: " + name);
                 }
             }
-            // Native unconstrained auto reference. A trigger inside an open
-            // reasoning span is not a valid transition to executable tools.
+            if (request.toolChoice != "none" && enableToolGuidedGeneration &&
+                !request.toolNameSchemaMap.empty() && !request.responseFormat.has_value()) {
+                using Structured = ov::genai::StructuredOutputConfig;
+                auto lazy = std::make_shared<Structured::TriggeredTags>();
+                lazy->triggers = {"<think>", "<|tool_call_start|>"};
+                // While in the thought tag, tool-like drafts are plain text.
+                // Native call constraints activate only outside that span.
+                lazy->tags.emplace_back("<think>", Structured::AnyText{}, "</think>");
+                lazy->tags.emplace_back("<|tool_call_start|>",
+                    Structured::EBNF(lfm2::toolGrammar(request.toolNameSchemaMap, request.parallelToolCalls, false)),
+                    "<|tool_call_end|>");
+                setStructuralTagsConfig(lazy);
+                hardToolPolicy = true;  // Own/reset the installed grammar; fail closed if compilation fails.
+            }
             return;
         }
         if (request.responseFormat.has_value())
