@@ -1,0 +1,105 @@
+{
+  "scope": "Native GenAI CB, RC4 DLLs, GPU, one short text prompt, 64 generated tokens; NOT OVMS acceptance",
+  "warmups_per_configuration": 2,
+  "reference_output_sha256": "0b835e4b5f1e5f1d7d131815f2125b193f9818e1109a1203f9c39c9c95c52629",
+  "results": [
+    {
+      "mode": "baseline",
+      "nat": 0,
+      "n": 5,
+      "median_seconds": 10.054,
+      "median_tokens_per_wall_second": 6.365625621643127,
+      "output_matches_baseline": 5,
+      "raw_statuses": [
+        0
+      ],
+      "raw_finish_reasons": [
+        2
+      ],
+      "speedup_by_median_wall_time": 1.0
+    },
+    {
+      "mode": "mtp",
+      "nat": 1,
+      "n": 5,
+      "median_seconds": 7.01742,
+      "median_tokens_per_wall_second": 9.120160970841134,
+      "output_matches_baseline": 0,
+      "raw_statuses": [
+        0
+      ],
+      "raw_finish_reasons": [
+        2
+      ],
+      "speedup_by_median_wall_time": 1.4327202875130745
+    },
+    {
+      "mode": "mtp",
+      "nat": 2,
+      "n": 5,
+      "median_seconds": 6.17476,
+      "median_tokens_per_wall_second": 10.364775311105209,
+      "output_matches_baseline": 0,
+      "raw_statuses": [
+        0
+      ],
+      "raw_finish_reasons": [
+        2
+      ],
+      "speedup_by_median_wall_time": 1.628241421528934
+    },
+    {
+      "mode": "mtp",
+      "nat": 3,
+      "n": 5,
+      "median_seconds": 6.04578,
+      "median_tokens_per_wall_second": 10.58589627806503,
+      "output_matches_baseline": 0,
+      "raw_statuses": [
+        0
+      ],
+      "raw_finish_reasons": [
+        2
+      ],
+      "speedup_by_median_wall_time": 1.6629781434322786
+    },
+    {
+      "mode": "mtp",
+      "nat": 5,
+      "n": 5,
+      "median_seconds": 6.36873,
+      "median_tokens_per_wall_second": 10.04909927096925,
+      "output_matches_baseline": 0,
+      "raw_statuses": [
+        0
+      ],
+      "raw_finish_reasons": [
+        2
+      ],
+      "speedup_by_median_wall_time": 1.5786506885988258
+    },
+    {
+      "mode": "mtp",
+      "nat": 8,
+      "n": 5,
+      "median_seconds": 7.65413,
+      "median_tokens_per_wall_second": 8.361498955465873,
+      "output_matches_baseline": 0,
+      "raw_statuses": [
+        0
+      ],
+      "raw_finish_reasons": [
+        2
+      ],
+      "speedup_by_median_wall_time": 1.3135392265352168
+    }
+  ],
+  "not_run": [
+    "OVMS patched build",
+    "HTTP/SSE/tools",
+    "long context",
+    "image input",
+    "full A/B/C matrix",
+    "acceptance rate"
+  ]
+}

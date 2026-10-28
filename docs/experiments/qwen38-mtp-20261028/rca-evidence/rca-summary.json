@@ -1,0 +1,177 @@
+{
+  "cases": [
+    {
+      "priority": "P0",
+      "kv": "u4",
+      "dq": 128,
+      "key_quant_mode": "default",
+      "same_input_ids": true,
+      "baseline_repeat_equal": true,
+      "mtp_repeat_equal": true,
+      "equivalence": "FAIL",
+      "first_difference_zero_based": 3,
+      "first_different_ids": {
+        "baseline": 33793,
+        "mtp": 11602,
+        "common_generated_prefix": [
+          32,
+          13540,
+          6297
+        ]
+      },
+      "statuses": [
+        "PASS_EXECUTION",
+        "PASS_EXECUTION"
+      ],
+      "min_available_physical_bytes": 2700435456
+    },
+    {
+      "priority": "P1",
+      "kv": "u8",
+      "dq": 128,
+      "key_quant_mode": "default",
+      "same_input_ids": true,
+      "baseline_repeat_equal": true,
+      "mtp_repeat_equal": true,
+      "equivalence": "PASS",
+      "first_difference_zero_based": null,
+      "statuses": [
+        "PASS_EXECUTION",
+        "PASS_EXECUTION"
+      ],
+      "min_available_physical_bytes": 3134283776
+    },
+    {
+      "priority": "P2",
+      "kv": "u4",
+      "dq": 0,
+      "key_quant_mode": "default",
+      "same_input_ids": true,
+      "baseline_repeat_equal": true,
+      "mtp_repeat_equal": true,
+      "equivalence": "FAIL",
+      "first_difference_zero_based": 3,
+      "first_different_ids": {
+        "baseline": 33793,
+        "mtp": 11602,
+        "common_generated_prefix": [
+          32,
+          13540,
+          6297
+        ]
+      },
+      "statuses": [
+        "PASS_EXECUTION",
+        "PASS_EXECUTION"
+      ],
+      "min_available_physical_bytes": 3007549440
+    },
+    {
+      "priority": "P3",
+      "kv": "f16",
+      "dq": 0,
+      "key_quant_mode": "default",
+      "same_input_ids": true,
+      "baseline_repeat_equal": true,
+      "mtp_repeat_equal": true,
+      "equivalence": "PASS",
+      "first_difference_zero_based": null,
+      "statuses": [
+        "PASS_EXECUTION",
+        "PASS_EXECUTION"
+      ],
+      "min_available_physical_bytes": 2771886080
+    },
+    {
+      "priority": "P4",
+      "kv": "f16",
+      "dq": 128,
+      "key_quant_mode": "default",
+      "same_input_ids": true,
+      "baseline_repeat_equal": true,
+      "mtp_repeat_equal": true,
+      "equivalence": "PASS",
+      "first_difference_zero_based": null,
+      "statuses": [
+        "PASS_EXECUTION",
+        "PASS_EXECUTION"
+      ],
+      "min_available_physical_bytes": 2622365696
+    },
+    {
+      "priority": "P5",
+      "kv": "u8",
+      "dq": 0,
+      "key_quant_mode": "default",
+      "same_input_ids": true,
+      "baseline_repeat_equal": true,
+      "mtp_repeat_equal": true,
+      "equivalence": "PASS",
+      "first_difference_zero_based": null,
+      "statuses": [
+        "PASS_EXECUTION",
+        "PASS_EXECUTION"
+      ],
+      "min_available_physical_bytes": 3100868608
+    },
+    {
+      "priority": "P6",
+      "kv": "u4",
+      "dq": 128,
+      "key_quant_mode": "BY_TOKEN",
+      "statuses": [
+        "BLOCKED_CAPABILITY",
+        "BLOCKED_CAPABILITY"
+      ],
+      "min_available_physical_bytes": 19986030592
+    },
+    {
+      "priority": "P6b",
+      "kv": "u8",
+      "dq": 128,
+      "key_quant_mode": "BY_TOKEN",
+      "same_input_ids": true,
+      "baseline_repeat_equal": true,
+      "mtp_repeat_equal": true,
+      "equivalence": "FAIL",
+      "first_difference_zero_based": 23,
+      "first_different_ids": {
+        "baseline": 23249,
+        "mtp": 17128,
+        "common_generated_prefix": [
+          32,
+          13540,
+          6297,
+          33793,
+          1957,
+          4906,
+          539,
+          68213,
+          279,
+          15694,
+          314,
+          34725,
+          321,
+          27073,
+          65789,
+          310,
+          13759,
+          279,
+          4927,
+          4478,
+          12558,
+          1881,
+          279
+        ]
+      },
+      "statuses": [
+        "PASS_EXECUTION",
+        "PASS_EXECUTION"
+      ],
+      "min_available_physical_bytes": 2044649472
+    }
+  ],
+  "logits": "observed pre-sampler argmax flip at index 3; see logit-comparison.json",
+  "internal_input_ids": "observed equal, 26 tokens, both modes and both repetitions",
+  "ovms": "HOLD; no product source changes"
+}

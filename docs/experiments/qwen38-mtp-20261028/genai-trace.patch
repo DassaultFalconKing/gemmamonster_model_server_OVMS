@@ -1,0 +1,82 @@
+--- a/src/cpp/src/continuous_batching/pipeline_impl.cpp
++++ b/src/cpp/src/continuous_batching/pipeline_impl.cpp
+@@ -3,6 +3,8 @@
+ 
+ #include <algorithm>
+ #include <atomic>
++#include <cstdlib>
++#include <fstream>
+ #include <optional>
+ #include <thread>
+ 
+@@ -556,6 +558,38 @@
+     dumper.dump_cache_state(*m_scheduler, m_requests, step_count);
+ #endif
+ 
++
++    // RCA observer: no sampler, cache, scheduling or tensor modifications.
++    static std::atomic<uint64_t> rca_event_counter{0};
++    const char* rca_dir = std::getenv("RCA_TRACE_DIR");
++    const uint64_t rca_event = rca_dir ? rca_event_counter.fetch_add(1) : 0;
++    std::string rca_prefix;
++    if (rca_dir && rca_event < 128) {
++        rca_prefix = std::string(rca_dir) + "/event-" + std::to_string(rca_event);
++        std::ofstream raw(rca_prefix + ".bin", std::ios::binary);
++        raw.write(static_cast<const char*>(logits.data()), logits.get_byte_size());
++    }
++    auto rca_dump = [&](const char* stage) {
++        if (rca_prefix.empty()) return;
++        std::ofstream out(rca_prefix + "-" + stage + ".txt");
++        out << "instance " << this << " validation " << m_is_validation_mode_enabled << " dtype " << logits.get_element_type() << " shape";
++        for (auto dim : logits.get_shape()) out << ' ' << dim;
++        out << '\n';
++        for (const auto& group : m_requests) {
++            out << "request " << group->get_request_id() << " processed " << group->get_num_processed_tokens()
++                << " scheduled " << group->get_num_scheduled_tokens() << " output_len " << group->get_output_seq_len()
++                << " validate " << group->get_num_tokens_to_validate() << " prompt";
++            for (auto id : group->get_prompt_ids()) out << ' ' << id;
++            out << '\n';
++            for (const auto& sequence : group->get_sequences()) {
++                out << "generated";
++                for (auto id : sequence->get_generated_ids()) out << ' ' << id;
++                out << '\n';
++            }
++        }
++    };
++    rca_dump("before");
++
+     // evict unimportant blocks from KV cache, if requested
+     const auto& sched_config = m_scheduler->get_config();
+     if (sched_config.use_cache_eviction) {
+@@ -582,6 +616,8 @@
+         m_batch_size = sampler_output.num_generated_tokens;
+         timer.end();
+     }
++
++    rca_dump("after-sample");
+ 
+     // Promote the committed linear-attention state to the correct physical row for any
+     // Commit after sampling rewinds the accepted prefix and before fork/free can release LA rows.
+--- a/src/cpp/src/visual_language/inputs_embedder.cpp
++++ b/src/cpp/src/visual_language/inputs_embedder.cpp
+@@ -1,3 +1,6 @@
++#include <atomic>
++#include <cstdlib>
++#include <fstream>
+ // Copyright (C) 2023-2026 Intel Corporation
+ // SPDX-License-Identifier: Apache-2.0
+ 
+@@ -179,6 +182,13 @@
+ ov::Tensor InputsEmbedder::IInputsEmbedder::get_encoded_input_ids(const std::string& prompt, ov::genai::VLMPerfMetrics& metrics) {
+     const auto new_chat_tokens = apply_chat_template_tokenize(prompt, metrics);
+     auto new_input_ids = update_history(new_chat_tokens);
++    if (const char* directory = std::getenv("RCA_TRACE_DIR")) {
++        static std::atomic<uint64_t> input_counter{0};
++        std::ofstream receipt(std::string(directory) + "/input-" + std::to_string(input_counter.fetch_add(1)) + ".txt");
++        const auto* data = new_input_ids.data<int64_t>();
++        for (size_t i=0; i<new_input_ids.get_size(); ++i) receipt << data[i] << '\n';
++    }
++
+     m_prev_hist_length = m_cache_state.get_state().size();
+     m_cache_state.add_inputs(new_input_ids);
+ 

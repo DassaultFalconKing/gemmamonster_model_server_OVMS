@@ -1,0 +1,8 @@
+mode,nat,rep,seconds,tokens,status,finish_reason
+baseline,0,-2,10.4646,64,0,2
+baseline,0,-1,10.179,64,0,2
+baseline,0,0,10.2674,64,0,2
+baseline,0,1,10.054,64,0,2
+baseline,0,2,10.0454,64,0,2
+baseline,0,3,10.0483,64,0,2
+baseline,0,4,10.0778,64,0,2

@@ -1,0 +1,915 @@
+{
+  "scope": "native GenAI RCA; NOT OVMS acceptance",
+  "input_boundary": "fixed IDs decoded to prompt with exact tokenizer roundtrip; string add_request; internal VLM token IDs NOT_EXPOSED (tensor API rejected)",
+  "nat": 3,
+  "max_new_tokens": 64,
+  "repetitions": 2,
+  "draft_plugin_properties": "same behavior as original probe: scheduler only at draft_model, target properties at CB constructor",
+  "logits": "NOT_EXPOSED",
+  "rejection_trace": "NOT_EXPOSED",
+  "exe_sha256": "1ea4cad67f4a5179b37fc20e6f1f1e0ffbae5a4f25809135d7dea2dceb60a973",
+  "cases": [
+    {
+      "priority": "P6b",
+      "kv": "u8",
+      "dq": 128,
+      "key_quant_mode": "BY_TOKEN",
+      "runs": [
+        {
+          "mode": "baseline",
+          "memory_before": {
+            "available_physical": 23225413632,
+            "available_commit": 113575469056
+          },
+          "command": [
+            "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\rca_probe.exe",
+            "baseline",
+            "u8",
+            "128",
+            "BY_TOKEN",
+            "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\P6b-baseline"
+          ],
+          "pid": 19752,
+          "exit_code": 0,
+          "memory_samples": [
+            {
+              "elapsed": 0.01600000000325963,
+              "available_physical": 23224254464,
+              "available_commit": 113573269504
+            },
+            {
+              "elapsed": 1.0160000000032596,
+              "available_physical": 21379829760,
+              "available_commit": 111824764928
+            },
+            {
+              "elapsed": 2.0160000000032596,
+              "available_physical": 21380186112,
+              "available_commit": 111718014976
+            },
+            {
+              "elapsed": 3.0160000000032596,
+              "available_physical": 21039190016,
+              "available_commit": 111377911808
+            },
+            {
+              "elapsed": 4.01600000000326,
+              "available_physical": 20897361920,
+              "available_commit": 111230046208
+            },
+            {
+              "elapsed": 5.01600000000326,
+              "available_physical": 20787015680,
+              "available_commit": 111094464512
+            },
+            {
+              "elapsed": 6.01600000000326,
+              "available_physical": 20598902784,
+              "available_commit": 111012773888
+            },
+            {
+              "elapsed": 7.01600000000326,
+              "available_physical": 20867862528,
+              "available_commit": 111281520640
+            },
+            {
+              "elapsed": 8.01600000000326,
+              "available_physical": 20396756992,
+              "available_commit": 110735880192
+            },
+            {
+              "elapsed": 9.01600000000326,
+              "available_physical": 19687632896,
+              "available_commit": 109990895616
+            },
+            {
+              "elapsed": 10.01600000000326,
+              "available_physical": 18606239744,
+              "available_commit": 108923215872
+            },
+            {
+              "elapsed": 11.01600000000326,
+              "available_physical": 17769201664,
+              "available_commit": 108079026176
+            },
+            {
+              "elapsed": 12.01600000000326,
+              "available_physical": 16675512320,
+              "available_commit": 107002204160
+            },
+            {
+              "elapsed": 13.01600000000326,
+              "available_physical": 15669944320,
+              "available_commit": 105981923328
+            },
+            {
+              "elapsed": 14.01600000000326,
+              "available_physical": 15023095808,
+              "available_commit": 105321029632
+            },
+            {
+              "elapsed": 15.01600000000326,
+              "available_physical": 13981523968,
+              "available_commit": 104324091904
+            },
+            {
+              "elapsed": 16.01600000000326,
+              "available_physical": 12977942528,
+              "available_commit": 103282130944
+            },
+            {
+              "elapsed": 17.01600000000326,
+              "available_physical": 12073304064,
+              "available_commit": 102420234240
+            },
+            {
+              "elapsed": 18.01600000000326,
+              "available_physical": 11456917504,
+              "available_commit": 101782151168
+            },
+            {
+              "elapsed": 19.01600000000326,
+              "available_physical": 10687758336,
+              "available_commit": 100969824256
+            },
+            {
+              "elapsed": 20.01600000000326,
+              "available_physical": 9851965440,
+              "available_commit": 100188340224
+            },
+            {
+              "elapsed": 21.01600000000326,
+              "available_physical": 9060741120,
+              "available_commit": 99404079104
+            },
+            {
+              "elapsed": 22.01600000000326,
+              "available_physical": 8268578816,
+              "available_commit": 98593271808
+            },
+            {
+              "elapsed": 23.01600000000326,
+              "available_physical": 7444619264,
+              "available_commit": 97777614848
+            },
+            {
+              "elapsed": 24.01600000000326,
+              "available_physical": 5353680896,
+              "available_commit": 96141000704
+            },
+            {
+              "elapsed": 25.01600000000326,
+              "available_physical": 5819449344,
+              "available_commit": 96137879552
+            },
+            {
+              "elapsed": 26.01600000000326,
+              "available_physical": 5602316288,
+              "available_commit": 95908163584
+            },
+            {
+              "elapsed": 27.01600000000326,
+              "available_physical": 5517295616,
+              "available_commit": 95836237824
+            },
+            {
+              "elapsed": 28.01600000000326,
+              "available_physical": 5486981120,
+              "available_commit": 95843737600
+            },
+            {
+              "elapsed": 29.01600000000326,
+              "available_physical": 5117779968,
+              "available_commit": 95457509376
+            },
+            {
+              "elapsed": 30.01600000000326,
+              "available_physical": 4958633984,
+              "available_commit": 95349178368
+            },
+            {
+              "elapsed": 31.03200000000652,
+              "available_physical": 4904251392,
+              "available_commit": 95297605632
+            },
+            {
+              "elapsed": 32.03200000000652,
+              "available_physical": 4891492352,
+              "available_commit": 95284998144
+            },
+            {
+              "elapsed": 33.03200000000652,
+              "available_physical": 5810413568,
+              "available_commit": 96226705408
+            },
+            {
+              "elapsed": 34.03200000000652,
+              "available_physical": 5748342784,
+              "available_commit": 96115929088
+            },
+            {
+              "elapsed": 35.03200000000652,
+              "available_physical": 5666201600,
+              "available_commit": 96003354624
+            },
+            {
+              "elapsed": 36.03200000000652,
+              "available_physical": 5719072768,
+              "available_commit": 96107139072
+            },
+            {
+              "elapsed": 37.03200000000652,
+              "available_physical": 5725261824,
+              "available_commit": 96096206848
+            },
+            {
+              "elapsed": 38.03200000000652,
+              "available_physical": 5710131200,
+              "available_commit": 96063819776
+            },
+            {
+              "elapsed": 39.03200000000652,
+              "available_physical": 5700472832,
+              "available_commit": 96046100480
+            },
+            {
+              "elapsed": 40.03200000000652,
+              "available_physical": 5692710912,
+              "available_commit": 96045928448
+            },
+            {
+              "elapsed": 41.03200000000652,
+              "available_physical": 5680709632,
+              "available_commit": 96038133760
+            },
+            {
+              "elapsed": 42.03200000000652,
+              "available_physical": 5679751168,
+              "available_commit": 96039350272
+            },
+            {
+              "elapsed": 43.03200000000652,
+              "available_physical": 5676658688,
+              "available_commit": 96039026688
+            },
+            {
+              "elapsed": 44.03200000000652,
+              "available_physical": 5676257280,
+              "available_commit": 96037855232
+            },
+            {
+              "elapsed": 45.03200000000652,
+              "available_physical": 5672214528,
+              "available_commit": 96053104640
+            },
+            {
+              "elapsed": 46.03200000000652,
+              "available_physical": 5675769856,
+              "available_commit": 96054579200
+            },
+            {
+              "elapsed": 47.03200000000652,
+              "available_physical": 5671632896,
+              "available_commit": 96072282112
+            },
+            {
+              "elapsed": 48.03200000000652,
+              "available_physical": 5681352704,
+              "available_commit": 96071610368
+            },
+            {
+              "elapsed": 49.03200000000652,
+              "available_physical": 5588054016,
+              "available_commit": 95977201664
+            },
+            {
+              "elapsed": 50.03200000000652,
+              "available_physical": 5523075072,
+              "available_commit": 95888224256
+            },
+            {
+              "elapsed": 51.03200000000652,
+              "available_physical": 5467340800,
+              "available_commit": 95834566656
+            },
+            {
+              "elapsed": 52.03200000000652,
+              "available_physical": 5406621696,
+              "available_commit": 95767121920
+            },
+            {
+              "elapsed": 53.03200000000652,
+              "available_physical": 5573218304,
+              "available_commit": 95967207424
+            },
+            {
+              "elapsed": 54.03200000000652,
+              "available_physical": 5482070016,
+              "available_commit": 95876472832
+            },
+            {
+              "elapsed": 55.03200000000652,
+              "available_physical": 5434515456,
+              "available_commit": 95822979072
+            },
+            {
+              "elapsed": 56.03200000000652,
+              "available_physical": 14624837632,
+              "available_commit": 105001046016
+            }
+          ],
+          "status": "PASS_EXECUTION",
+          "input_ids_sha256": "c1c9cc5d133ede3a9634b448789cdaaab0081a4ec49996a7279ad7a926bcc4aa",
+          "results": [
+            {
+              "seconds": 11.3131,
+              "status": 1,
+              "finish": 2,
+              "ids": [
+                32,
+                13540,
+                6297,
+                33793,
+                1957,
+                4906,
+                539,
+                68213,
+                279,
+                15694,
+                314,
+                34725,
+                321,
+                27073,
+                65789,
+                310,
+                13759,
+                279,
+                4927,
+                4478,
+                12558,
+                1881,
+                279,
+                23249,
+                71164,
+                8358,
+                8427,
+                4821,
+                321,
+                279,
+                11697,
+                6103,
+                1822,
+                4779,
+                13,
+                8439,
+                279,
+                13540,
+                25224,
+                506,
+                8598,
+                23944,
+                421,
+                2944,
+                12131,
+                279,
+                37972,
+                314,
+                30745,
+                21360,
+                11,
+                424,
+                1000,
+                5752,
+                8070,
+                279,
+                8421,
+                314,
+                1141,
+                854,
+                26750,
+                11,
+                8318,
+                364
+              ]
+            },
+            {
+              "seconds": 10.579,
+              "status": 1,
+              "finish": 2,
+              "ids": [
+                32,
+                13540,
+                6297,
+                33793,
+                1957,
+                4906,
+                539,
+                68213,
+                279,
+                15694,
+                314,
+                34725,
+                321,
+                27073,
+                65789,
+                310,
+                13759,
+                279,
+                4927,
+                4478,
+                12558,
+                1881,
+                279,
+                23249,
+                71164,
+                8358,
+                8427,
+                4821,
+                321,
+                279,
+                11697,
+                6103,
+                1822,
+                4779,
+                13,
+                8439,
+                279,
+                13540,
+                25224,
+                506,
+                8598,
+                23944,
+                421,
+                2944,
+                12131,
+                279,
+                37972,
+                314,
+                30745,
+                21360,
+                11,
+                424,
+                1000,
+                5752,
+                8070,
+                279,
+                8421,
+                314,
+                1141,
+                854,
+                26750,
+                11,
+                8318,
+                364
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "mtp",
+          "memory_before": {
+            "available_physical": 22856859648,
+            "available_commit": 113186213888
+          },
+          "command": [
+            "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\rca_probe.exe",
+            "mtp",
+            "u8",
+            "128",
+            "BY_TOKEN",
+            "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\P6b-mtp"
+          ],
+          "pid": 10360,
+          "exit_code": 0,
+          "memory_samples": [
+            {
+              "elapsed": 0.0,
+              "available_physical": 22854537216,
+              "available_commit": 113185619968
+            },
+            {
+              "elapsed": 1.0,
+              "available_physical": 21877628928,
+              "available_commit": 111440707584
+            },
+            {
+              "elapsed": 2.0,
+              "available_physical": 19872169984,
+              "available_commit": 111337312256
+            },
+            {
+              "elapsed": 3.0,
+              "available_physical": 21162823680,
+              "available_commit": 111509508096
+            },
+            {
+              "elapsed": 4.0,
+              "available_physical": 20578701312,
+              "available_commit": 110896259072
+            },
+            {
+              "elapsed": 5.0,
+              "available_physical": 19726991360,
+              "available_commit": 109552201728
+            },
+            {
+              "elapsed": 6.0,
+              "available_physical": 18127978496,
+              "available_commit": 109725429760
+            },
+            {
+              "elapsed": 7.0,
+              "available_physical": 19264937984,
+              "available_commit": 109591416832
+            },
+            {
+              "elapsed": 8.0,
+              "available_physical": 19098693632,
+              "available_commit": 109496823808
+            },
+            {
+              "elapsed": 9.0,
+              "available_physical": 19025874944,
+              "available_commit": 109416726528
+            },
+            {
+              "elapsed": 10.0,
+              "available_physical": 18864390144,
+              "available_commit": 109218123776
+            },
+            {
+              "elapsed": 11.0,
+              "available_physical": 18161606656,
+              "available_commit": 108438921216
+            },
+            {
+              "elapsed": 12.0,
+              "available_physical": 17081020416,
+              "available_commit": 107368292352
+            },
+            {
+              "elapsed": 13.0,
+              "available_physical": 16252583936,
+              "available_commit": 106575581184
+            },
+            {
+              "elapsed": 14.0,
+              "available_physical": 15224602624,
+              "available_commit": 105541431296
+            },
+            {
+              "elapsed": 15.0,
+              "available_physical": 14270373888,
+              "available_commit": 104542076928
+            },
+            {
+              "elapsed": 16.0,
+              "available_physical": 13600911360,
+              "available_commit": 103890743296
+            },
+            {
+              "elapsed": 17.0,
+              "available_physical": 12512600064,
+              "available_commit": 102800924672
+            },
+            {
+              "elapsed": 18.0,
+              "available_physical": 11584032768,
+              "available_commit": 101892657152
+            },
+            {
+              "elapsed": 19.0,
+              "available_physical": 10693070848,
+              "available_commit": 101011124224
+            },
+            {
+              "elapsed": 20.01600000000326,
+              "available_physical": 10011295744,
+              "available_commit": 100359073792
+            },
+            {
+              "elapsed": 21.01600000000326,
+              "available_physical": 9029439488,
+              "available_commit": 99395371008
+            },
+            {
+              "elapsed": 22.01600000000326,
+              "available_physical": 8144207872,
+              "available_commit": 98444128256
+            },
+            {
+              "elapsed": 23.01600000000326,
+              "available_physical": 7398404096,
+              "available_commit": 97730830336
+            },
+            {
+              "elapsed": 24.01600000000326,
+              "available_physical": 6421413888,
+              "available_commit": 96759173120
+            },
+            {
+              "elapsed": 25.01600000000326,
+              "available_physical": 5502570496,
+              "available_commit": 95811178496
+            },
+            {
+              "elapsed": 26.01600000000326,
+              "available_physical": 3599732736,
+              "available_commit": 94628839424
+            },
+            {
+              "elapsed": 27.01600000000326,
+              "available_physical": 4228665344,
+              "available_commit": 94470893568
+            },
+            {
+              "elapsed": 28.01600000000326,
+              "available_physical": 3869339648,
+              "available_commit": 94053773312
+            },
+            {
+              "elapsed": 29.01600000000326,
+              "available_physical": 3906699264,
+              "available_commit": 94053367808
+            },
+            {
+              "elapsed": 30.01600000000326,
+              "available_physical": 3512496128,
+              "available_commit": 93739708416
+            },
+            {
+              "elapsed": 31.01600000000326,
+              "available_physical": 4221992960,
+              "available_commit": 94501634048
+            },
+            {
+              "elapsed": 32.01600000000326,
+              "available_physical": 2651365376,
+              "available_commit": 92961341440
+            },
+            {
+              "elapsed": 33.01600000000326,
+              "available_physical": 2588241920,
+              "available_commit": 92825350144
+            },
+            {
+              "elapsed": 34.01600000000326,
+              "available_physical": 2135588864,
+              "available_commit": 92369817600
+            },
+            {
+              "elapsed": 35.01600000000326,
+              "available_physical": 2044649472,
+              "available_commit": 92280426496
+            },
+            {
+              "elapsed": 36.01600000000326,
+              "available_physical": 2218184704,
+              "available_commit": 92485005312
+            },
+            {
+              "elapsed": 37.01600000000326,
+              "available_physical": 2171703296,
+              "available_commit": 92409085952
+            },
+            {
+              "elapsed": 38.01600000000326,
+              "available_physical": 2104131584,
+              "available_commit": 92324155392
+            },
+            {
+              "elapsed": 39.01600000000326,
+              "available_physical": 2216509440,
+              "available_commit": 92465664000
+            },
+            {
+              "elapsed": 40.01600000000326,
+              "available_physical": 2135879680,
+              "available_commit": 92359016448
+            },
+            {
+              "elapsed": 41.01600000000326,
+              "available_physical": 2093629440,
+              "available_commit": 92295008256
+            },
+            {
+              "elapsed": 42.01600000000326,
+              "available_physical": 2221539328,
+              "available_commit": 92439351296
+            },
+            {
+              "elapsed": 43.01600000000326,
+              "available_physical": 2121658368,
+              "available_commit": 92343840768
+            },
+            {
+              "elapsed": 44.01600000000326,
+              "available_physical": 2080215040,
+              "available_commit": 92287397888
+            },
+            {
+              "elapsed": 45.01600000000326,
+              "available_physical": 2223202304,
+              "available_commit": 92439621632
+            },
+            {
+              "elapsed": 46.01600000000326,
+              "available_physical": 2128084992,
+              "available_commit": 92351987712
+            },
+            {
+              "elapsed": 47.01600000000326,
+              "available_physical": 10803056640,
+              "available_commit": 101006147584
+            },
+            {
+              "elapsed": 48.01600000000326,
+              "available_physical": 22588706816,
+              "available_commit": 112822829056
+            }
+          ],
+          "status": "PASS_EXECUTION",
+          "input_ids_sha256": "c1c9cc5d133ede3a9634b448789cdaaab0081a4ec49996a7279ad7a926bcc4aa",
+          "results": [
+            {
+              "seconds": 6.66643,
+              "status": 1,
+              "finish": 2,
+              "ids": [
+                32,
+                13540,
+                6297,
+                33793,
+                1957,
+                4906,
+                539,
+                68213,
+                279,
+                15694,
+                314,
+                34725,
+                321,
+                27073,
+                65789,
+                310,
+                13759,
+                279,
+                4927,
+                4478,
+                12558,
+                1881,
+                279,
+                17128,
+                725,
+                1496,
+                28632,
+                23959,
+                321,
+                279,
+                1691,
+                27467,
+                1822,
+                4779,
+                318,
+                32784,
+                553,
+                8439,
+                6278,
+                63266,
+                14061,
+                506,
+                8598,
+                23944,
+                421,
+                2944,
+                12131,
+                279,
+                37972,
+                314,
+                30745,
+                1822,
+                4779,
+                11,
+                279,
+                6297,
+                13653,
+                430,
+                264,
+                2526,
+                11,
+                23249,
+                71164,
+                5638
+              ]
+            },
+            {
+              "seconds": 5.95277,
+              "status": 1,
+              "finish": 2,
+              "ids": [
+                32,
+                13540,
+                6297,
+                33793,
+                1957,
+                4906,
+                539,
+                68213,
+                279,
+                15694,
+                314,
+                34725,
+                321,
+                27073,
+                65789,
+                310,
+                13759,
+                279,
+                4927,
+                4478,
+                12558,
+                1881,
+                279,
+                17128,
+                725,
+                1496,
+                28632,
+                23959,
+                321,
+                279,
+                1691,
+                27467,
+                1822,
+                4779,
+                318,
+                32784,
+                553,
+                8439,
+                6278,
+                63266,
+                14061,
+                506,
+                8598,
+                23944,
+                421,
+                2944,
+                12131,
+                279,
+                37972,
+                314,
+                30745,
+                1822,
+                4779,
+                11,
+                279,
+                6297,
+                13653,
+                430,
+                264,
+                2526,
+                11,
+                23249,
+                71164,
+                5638
+              ]
+            }
+          ]
+        }
+      ],
+      "same_input_ids": true,
+      "baseline_repeat_equal": true,
+      "mtp_repeat_equal": true,
+      "equivalence": "FAIL",
+      "first_difference_zero_based": 23,
+      "first_different_ids": {
+        "baseline": 23249,
+        "mtp": 17128,
+        "common_generated_prefix": [
+          32,
+          13540,
+          6297,
+          33793,
+          1957,
+          4906,
+          539,
+          68213,
+          279,
+          15694,
+          314,
+          34725,
+          321,
+          27073,
+          65789,
+          310,
+          13759,
+          279,
+          4927,
+          4478,
+          12558,
+          1881,
+          279
+        ]
+      }
+    }
+  ]
+}

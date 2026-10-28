@@ -1,0 +1,962 @@
+From 5f09c405dd4d46e089ab7671b633149a035c6c1f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Mi=C5=82osz=20=C5=BBeglarski?= <milosz.zeglarski@intel.com>
+Date: Wed, 2 Sep 2026 00:05:14 +0200
+Subject: [PATCH] Draft mode autodetection + fixes for speculative decoding
+ (#4490)
+
+---
+ demos/common/export_models/README.md          |   4 +-
+ demos/common/export_models/export_model.py    |  13 ++-
+ demos/continuous_batching/accuracy/README.md  |  23 ++--
+ .../speculative_decoding/README.md            |  68 +++++++++--
+ docs/parameters.md                            |   5 +-
+ src/capi_frontend/server_settings.hpp         |   4 +-
+ src/graph_export/graph_cli_parser.cpp         |  22 +++-
+ src/graph_export/graph_export.cpp             |  14 ++-
+ src/llm/http_llm_calculator.cc                |  12 +-
+ .../base_generation_config_builder.cpp        |  19 +++
+ .../base_generation_config_builder.hpp        |   9 +-
+ .../servable_initializer.cpp                  |  26 ++++-
+ .../legacy/servable_initializer.cpp           |  26 ++++-
+ src/llm/servable.cpp                          |  14 ++-
+ src/llm/servable.hpp                          |   7 +-
+ src/llm/servable_initializer.cpp              | 109 +++++++++++++++++-
+ src/llm/servable_initializer.hpp              |   7 ++
+ src/test/llm/llmnode_test.cpp                 |  69 +++++++++++
+ src/test/ovmsconfig_test.cpp                  |  43 +++++--
+ 19 files changed, 431 insertions(+), 63 deletions(-)
+
+diff --git a/demos/common/export_models/README.md b/demos/common/export_models/README.md
+index a30676b643..361edb9fa9 100644
+--- a/demos/common/export_models/README.md
++++ b/demos/common/export_models/README.md
+@@ -55,7 +55,9 @@ Some of the exceptions include:
+ 
+ ### Text Generation Models
+ 
+-#### Text Generation CPU Deployment
++When `--target_device` is omitted, no device field is written to the graph configuration and OVMS auto-detects the best available device at startup. Pass `--target_device` explicitly to pin execution to a specific device.
++
++#### Text Generation (Auto-detected Device)
+ ```console
+ python export_model.py text_generation --source_model meta-llama/Meta-Llama-3-8B-Instruct --weight-format fp16 --kv_cache_precision u8 --config_file_path models/config_all.json --model_repository_path models
+ ```
+diff --git a/demos/common/export_models/export_model.py b/demos/common/export_models/export_model.py
+index bbc606d530..b16694eb90 100644
+--- a/demos/common/export_models/export_model.py
++++ b/demos/common/export_models/export_model.py
+@@ -30,7 +30,7 @@ def add_common_arguments(parser):
+     parser.add_argument('--weight-format', default='int8', help='precision of the exported model', dest='precision')
+     parser.add_argument('--config_file_path', default='config.json', help='path to the config file', dest='config_file_path')
+     parser.add_argument('--overwrite_models', default=False, action='store_true', help='Overwrite the model if it already exists in the models repository', dest='overwrite_models')
+-    parser.add_argument('--target_device', default="CPU", help='CPU, GPU, NPU or HETERO, default is CPU', dest='target_device')
++    parser.add_argument('--target_device', default=None, help='CPU, GPU, NPU or HETERO. When not specified the server will auto-detect the best available device at startup.', dest='target_device')
+     parser.add_argument('--ov_cache_dir', default=None, help='Folder path for compilation cache to speedup initialization time', dest='ov_cache_dir')
+     parser.add_argument('--extra_quantization_params', required=False, help='Add advanced quantization parameters. Check optimum-intel documentation. Example: "--sym --group-size -1 --ratio 1.0 --awq --scale-estimation --dataset wikitext2"', dest='extra_quantization_params')
+ 
+@@ -240,13 +240,14 @@ def add_common_arguments(parser):
+           max_num_batched_tokens: {{max_num_batched_tokens}},{% endif %}
+           {%- if not dynamic_split_fuse %}
+           dynamic_split_fuse: false, {% endif %}
+-          max_num_seqs: {% if draft_eagle3_mode %}1{% else %}{{max_num_seqs|default("256", true)}}{% endif %},
+-          device: "{{target_device|default("CPU", true)}}",
++          max_num_seqs: {{max_num_seqs|default("256", true)}},
++          {%- if target_device %}
++          device: "{{target_device}}",{% endif %}
+           {%- if draft_model_dir_name %}
+           # Speculative decoding configuration
+           draft_models_path: "./{{draft_model_dir_name}}",
+-          draft_device: "{{target_device|default("CPU", true)}}",
+-          draft_eagle3_mode: {{draft_eagle3_mode|default(false)}},{% endif %}
++          {%- if target_device %}
++          draft_device: "{{target_device}}",{% endif %}{% endif %}
+           {%- if reasoning_parser %}
+           reasoning_parser: "{{reasoning_parser}}",{% endif %}
+           {%- if tool_parser %}
+@@ -458,7 +459,7 @@ def export_text_generation_model(model_repository_path, source_model, model_name
+         plugin_config['prompt_lookup'] = True
+     
+     # Additional plugin properties for HETERO
+-    if "HETERO" in task_parameters['target_device']:
++    if task_parameters['target_device'] and "HETERO" in task_parameters['target_device']:
+         plugin_config['MODEL_DISTRIBUTION_POLICY'] = 'PIPELINE_PARALLEL'
+ 
+     if task_parameters['target_device'] == 'NPU':
+diff --git a/demos/continuous_batching/accuracy/README.md b/demos/continuous_batching/accuracy/README.md
+index 263e1d2a5f..6e739c6fbf 100644
+--- a/demos/continuous_batching/accuracy/README.md
++++ b/demos/continuous_batching/accuracy/README.md
+@@ -25,9 +25,9 @@ Example of LLM and VLM models deployment is documented in other demos like
+ ## Running the tests for LLM models
+ 
+ ```text
+-lm-eval --model local-chat-completions --tasks gsm8k --model_args model=meta-llama/Meta-Llama-3.1-8B-Instruct,base_url=http://localhost:8000/v3/chat/completions,num_concurrent=1,max_retries=3,tokenized_requests=False --verbosity DEBUG  --log_samples --output_path test/ --seed 1 --apply_chat_template --limit 100
++lm-eval --model local-chat-completions --tasks gsm8k --model_args model=meta-llama/Meta-Llama-3.1-8B-Instruct,base_url=http://localhost:8000/v1/chat/completions,num_concurrent=1,max_retries=3,tokenized_requests=False --verbosity DEBUG  --log_samples --output_path test/ --seed 1 --apply_chat_template --limit 100
+ 
+-local-chat-completions ({'model': 'meta-llama/Meta-Llama-3.1-8B-Instruct', 'base_url': 'http://localhost:8000/v3/chat/completions', 'num_concurrent': 10, 'max_retries': 3, 'tokenized_requests': False}), gen_kwargs: ({}), limit: 100.0, num_fewshot: None, batch_size: 1
++local-chat-completions ({'model': 'meta-llama/Meta-Llama-3.1-8B-Instruct', 'base_url': 'http://localhost:8000/v1/chat/completions', 'num_concurrent': 10, 'max_retries': 3, 'tokenized_requests': False}), gen_kwargs: ({}), limit: 100.0, num_fewshot: None, batch_size: 1
+ |Tasks|Version|     Filter     |n-shot|  Metric   |   |Value|   |Stderr|
+ |-----|------:|----------------|-----:|-----------|---|----:|---|-----:|
+ |gsm8k|      3|flexible-extract|     5|exact_match|↑  | 0.62|±  |0.0488|
+@@ -37,9 +37,9 @@ local-chat-completions ({'model': 'meta-llama/Meta-Llama-3.1-8B-Instruct', 'base
+ While testing the non chat model and `completion` endpoint, the command would look like this:
+ 
+ ```text
+-lm-eval --model local-completions --tasks gsm8k --model_args model=meta-llama/Meta-Llama-3.1-8B,base_url=http://localhost:8000/v3/completions,num_concurrent=1,max_retries=3,tokenized_requests=False --verbosity DEBUG  --log_samples --output_path results/ --seed 1 --limit 100
++lm-eval --model local-completions --tasks gsm8k --model_args model=meta-llama/Meta-Llama-3.1-8B,base_url=http://localhost:8000/v1/completions,num_concurrent=1,max_retries=3,tokenized_requests=False --verbosity DEBUG  --log_samples --output_path results/ --seed 1 --limit 100
+ 
+-local-completions ({'model': 'meta-llama/Meta-Llama-3.1-8B', 'base_url': 'http://localhost:8000/v3/completions', 'num_concurrent': 10, 'max_retries': 3, 'tokenized_requests': False}), gen_kwargs: ({}), limit: 100.0, num_fewshot: None, batch_size: 1
++local-completions ({'model': 'meta-llama/Meta-Llama-3.1-8B', 'base_url': 'http://localhost:8000/v1/completions', 'num_concurrent': 10, 'max_retries': 3, 'tokenized_requests': False}), gen_kwargs: ({}), limit: 100.0, num_fewshot: None, batch_size: 1
+ |Tasks|Version|     Filter     |n-shot|  Metric   |   |Value|   |Stderr|
+ |-----|------:|----------------|-----:|-----------|---|----:|---|-----:|
+ |gsm8k|      3|flexible-extract|     5|exact_match|↑  | 0.43|±  |0.0498|
+@@ -49,11 +49,11 @@ local-completions ({'model': 'meta-llama/Meta-Llama-3.1-8B', 'base_url': 'http:/
+ Other examples are below:
+ 
+ ```text
+-lm-eval --model local-chat-completions --tasks leaderboard_ifeval --model_args model=meta-llama/Meta-Llama-3.1-8B-Instruct,base_url=http://localhost:8000/v3/chat/completions,num_concurrent=10,max_retries=3,tokenized_requests=False --verbosity DEBUG --log_samples --output_path test/ --seed 1 --limit 100 --apply_chat_template  
++lm-eval --model local-chat-completions --tasks leaderboard_ifeval --model_args model=meta-llama/Meta-Llama-3.1-8B-Instruct,base_url=http://localhost:8000/v1/chat/completions,num_concurrent=10,max_retries=3,tokenized_requests=False --verbosity DEBUG --log_samples --output_path test/ --seed 1 --limit 100 --apply_chat_template  
+ ```
+ 
+ ```text
+-lm-eval --model local-completions --tasks wikitext --model_args model=meta-llama/Meta-Llama-3.1-8B,base_url=http://localhost:8000/v3/completions,num_concurrent=10,max_retries=3,tokenized_requests=False --verbosity DEBUG --log_samples --output_path test/ --seed 1 --limit 100
++lm-eval --model local-completions --tasks wikitext --model_args model=meta-llama/Meta-Llama-3.1-8B,base_url=http://localhost:8000/v1/completions,num_concurrent=10,max_retries=3,tokenized_requests=False --verbosity DEBUG --log_samples --output_path test/ --seed 1 --limit 100
+ ```
+ 
+ ## Running the tests for VLM models
+@@ -61,7 +61,7 @@ lm-eval --model local-completions --tasks wikitext --model_args model=meta-llama
+ Use [lmms-eval project](https://github.com/EvolvingLMMs-Lab/lmms-eval) - mme and mmmu_val tasks. 
+ 
+ ```text
+-export OPENAI_BASE_URL=http://localhost:8000/v3
++export OPENAI_BASE_URL=http://localhost:8000/v1
+ export OPENAI_API_KEY="unused"
+ git clone https://github.com/EvolvingLMMs-Lab/lmms-eval
+ cd lmms-eval
+@@ -103,7 +103,7 @@ pip install -e . --extra-index-url "https://download.pytorch.org/whl/cpu"
+ ```
+ The commands below assumes the models is deployed with the name `ovms-model`. It must match the name set in the `bfcl_eval/constants/model_config.py`.
+ ```text
+-export OPENAI_BASE_URL=http://localhost:8000/v3
++export OPENAI_BASE_URL=http://localhost:8000/v1
+ export CHAT_TEMPLATE_KWARGS='{"enable_thinking":false, "reasoning_effort":"low", "preserve_reasoning":false}'
+ 
+ bfcl generate --model ovms-model --test-category simple_python,multiple,multi_turn_base --temperature 0.0 --num-threads 10 -o --result-dir model_name_dir
+@@ -112,7 +112,7 @@ bfcl evaluate --model ovms-model --result-dir model_name_dir
+ 
+ Alternatively, use the model name `ovms-model-stream` to run the tests with stream requests. The results should be the same.
+ ```text
+-export OPENAI_BASE_URL=http://localhost:8000/v3
++export OPENAI_BASE_URL=http://localhost:8000/v1
+ bfcl generate --model ovms-model-stream --test-category simple_python,multiple,multi_turn_base --temperature 0.0 --num-threads 10 -o --result-dir model_name_dir
+ bfcl evaluate --model ovms-model-stream --result-dir model_name_dir 
+ ```
+@@ -127,8 +127,3 @@ cat score/openvino-qwen3-8b-int4-FC/BFCL_v4_simple_python_score.json | head -1
+ Those results can be compared with the reference from the [berkeley leaderbaord](https://gorilla.cs.berkeley.edu/leaderboard.html#leaderboard).
+ 
+ ---
+-
+-> **Note:** The same procedure can be used to validate vLLM component. The only needed change would be updating base_url including replacing `/v3/` with `/v1/`.  
+-
+-
+-
+diff --git a/demos/continuous_batching/speculative_decoding/README.md b/demos/continuous_batching/speculative_decoding/README.md
+index 7dab7a594f..92810bf5fc 100644
+--- a/demos/continuous_batching/speculative_decoding/README.md
++++ b/demos/continuous_batching/speculative_decoding/README.md
+@@ -8,7 +8,7 @@ OpenVINO GenAI implements three drafting strategies, all exposed through the sam
+ |---|---|---|---|
+ | **Fast Draft** | Small off-the-shelf LLM | General-purpose; any target/draft pair | Yes — smaller LLM sharing target's tokenizer |
+ | **EAGLE3** | Draft head conditioned on target's hidden states | Highest acceptance rate; code and reasoning; supports tree drafting | Yes — EAGLE3 head trained on the target family |
+-| **MTP** | Built-in multi-token prediction head | Models with bundled MTP heads (e.g. Gemma4 on NPU) | No — head bundled with the main model |
++| **MTP** | Built-in multi-token prediction head | Models with bundled MTP heads (e.g. Qwen3.8-27B) | No — head bundled with the main model |
+ 
+ All three strategies share the same server API — only the generation parameters differ.
+ 
+@@ -90,11 +90,12 @@ models
+ 
+ :::{dropdown} **Deploying with Docker**
+ ```bash
+-docker run -d --rm -p 8000:8000 -v $(pwd)/models:/workspace:ro openvino/model_server:weekly --rest_port 8000 --config_path /workspace/config.json
++docker run -d --rm $(test -d /dev/dri && echo "--device /dev/dri --group-add $(stat -c '%g' /dev/dri/render* | head -n1)") \
++  -p 8000:8000 -v $(pwd)/models:/workspace:ro openvino/model_server:weekly \
++  --rest_port 8000 --config_path /workspace/config.json
+ ```
+ 
+-Running above command starts the container with no accelerators support. 
+-To deploy on devices other than CPU, change `target_device` parameter in `export_model.py` call and follow [AI accelerators guide](../../../docs/accelerators.md) for additionally required docker parameters.
++OVMS auto-detects the best available device at startup. To target a specific device explicitly, pass `--target_device GPU` (or `NPU`, `HETERO:GPU,CPU`, etc.) to `export_model.py` and follow the [AI accelerators guide](../../../docs/accelerators.md) for additionally required docker parameters.
+ :::
+ 
+ :::{dropdown} **Deploying on Bare Metal**
+@@ -119,7 +120,7 @@ Let's check how the deployed model is doing by running performance test. For tha
+ 
+ Install vLLM and download sonnet dataset: 
+ ```bash
+-pip install vllm --extra-index-url https://wheels.vllm.ai/nightly/cpu
++pip install vllm --index-url https://wheels.vllm.ai/nightly/cpu --extra-index-url https://pypi.org/simple
+ curl https://raw.githubusercontent.com/vllm-project/vllm/refs/heads/main/benchmarks/sonnet.txt -o sonnet.txt
+ ```
+ 
+@@ -287,8 +288,7 @@ models
+ docker run -d --rm -p 8000:8000 -v $(pwd)/models:/workspace:ro openvino/model_server:latest --rest_port 8000 --config_path /workspace/config.json
+ ```
+ 
+-Running above command starts the container with no accelerators support. 
+-To deploy on devices other than CPU, change `target_device` parameter in `export_model.py` call and follow [AI accelerators guide](../../../docs/accelerators.md) for additionally required docker parameters.
++OVMS auto-detects the best available device at startup. To target a specific device explicitly, pass `--target_device GPU` (or `NPU`, `HETERO:GPU,CPU`, etc.) to `export_model.py` and follow the [AI accelerators guide](../../../docs/accelerators.md) for additionally required docker parameters.
+ :::
+ 
+ :::{dropdown} **Deploying on Bare Metal**
+@@ -366,7 +366,59 @@ for chunk in stream:
+ 
+ # MTP (Multi-Token Prediction)
+ 
+-> **To be done**.
++MTP replaces the separate draft model with a lightweight prediction head bundled inside the main model weights — no additional download is needed. The head is auto-detected by OVMS when `openvino_mtp_model.xml` is present in the draft model directory. Because it shares the main model's weights, the draft cost is minimal and acceptance rates are high for the same model family.
++
++## Model considerations
++
++For this demo we use [OpenVINO/Qwen3.8-27B-int8-ov](https://huggingface.co/OpenVINO/Qwen3.8-27B-int8-ov) — a vision-language model with a bundled MTP head exported in INT8 precision.
++
++> **Note:** This model requires OpenVINO nightly builds and is marked experimental. See the model card for compatibility details.
++> **Note:** Prefix caching is not yet supported in this mode.
++
++## Server Deployment
++
++:::{dropdown} **Deploying with Docker**
++```bash
++docker run -d --rm $(test -d /dev/dri && echo "--device /dev/dri --group-add $(stat -c '%g' /dev/dri/render* | head -n1)") \
++  -p 8000:8000 -v ${HOME}/models:/models:rw openvino/model_server:weekly \
++  --rest_port 8000 \
++  --model_repository_path /models \
++  --source_model OpenVINO/Qwen3.8-27B-int4-ov \
++  --draft_model_path . \
++  --enable_prefix_caching false
++```
++:::
++
++:::{dropdown} **Deploying on Bare Metal**
++```console
++ovms --rest_port 8000 \
++  --model_repository_path c:\models \
++  --source_model OpenVINO/Qwen3.8-27B-int4-ov \
++  --draft_model_path . \
++  --enable_prefix_caching false
++```
++:::
++
++## Request Generation
++
++The API is identical to other speculative decoding strategies:
++
++```python
++from openai import OpenAI
++
++client = OpenAI(base_url="http://localhost:8000/v1", api_key="unused")
++
++response = client.chat.completions.create(
++    model="OpenVINO/Qwen3.8-27B-int4-ov",
++    messages=[{"role": "user", "content": "Explain the transformer attention mechanism."}],
++    temperature=0,
++    max_tokens=200,
++    extra_body={"num_assistant_tokens": 5},
++)
++print(response.choices[0].message.content)
++```
++
++`num_assistant_tokens` controls how many MTP candidates are proposed per target step. The default is `5` if not specified.
+ 
+ # Setting Default Generation Parameters
+ 
+diff --git a/docs/parameters.md b/docs/parameters.md
+index 1b4ce9ca71..c07dd0484e 100644
+--- a/docs/parameters.md
++++ b/docs/parameters.md
+@@ -147,7 +147,10 @@ Task specific parameters for different tasks (text generation/image generation/e
+ | `--enable_prefix_caching`             | `bool`       | Enables algorithm to cache the prompt tokens. Default: true.                                                               |
+ | `--max_num_batched_tokens`            | `integer`    | The maximum number of tokens that can be batched together.                                                                 |
+ | `--cache_size`                        | `integer`    | KV Cache size in GB. Default: 0 which is a dynamic allocation.                              |
+-| `--draft_source_model`                | `string`     | HF model name or path to the local folder with PyTorch or OpenVINO draft model.                                            |
++| `--draft_source_model`                | `string`     | HF model name or path to the local folder with PyTorch or OpenVINO draft model. Mutually exclusive with `--draft_model_path`.  |
++| `--draft_model_path`                  | `string`     | Absolute path to an already-exported OpenVINO draft model directory. Use for local models instead of `--draft_source_model`.   |
++| `--draft_eagle3_mode`                 | `bool`       | **Deprecated.** Draft model strategy (EAGLE3, DFlash, MTP, Fast Draft) is now auto-detected from model artifacts. This flag is accepted but has no effect.  |
++| `--draft_device`                      | `string`     | Device to run the draft model on. Defaults to the same device as the main model.                                              |
+ | `--dynamic_split_fuse`                | `bool`       | Enables dynamic split fuse algorithm. Default: true.                                                                       |
+ | `--max_prompt_len`                    | `integer`    | Sets NPU specific property for maximum number of tokens in the prompt.                                                     |
+ | `--kv_cache_precision`                | `string`     | Reduced kv cache precision to `u8` lowers the cache size consumption. Accepted values: `u8` or empty (default).            |
+diff --git a/src/capi_frontend/server_settings.hpp b/src/capi_frontend/server_settings.hpp
+index fa21d03be2..4eaa34ac98 100644
+--- a/src/capi_frontend/server_settings.hpp
++++ b/src/capi_frontend/server_settings.hpp
+@@ -121,7 +121,9 @@ struct TextGenGraphSettingsImpl {
+     std::string dynamicSplitFuse = "true";
+     std::optional<uint32_t> maxNumBatchedTokens;
+     std::optional<std::string> draftModelDirName;
+-    bool draftEagle3Mode = false;
++    bool draftEagle3Mode = false;  // deprecated: strategy is now auto-detected from model rt_info
++    std::optional<std::string> draftDevice;
++    std::optional<std::string> draftModelPath;
+     std::optional<std::string> pipelineType;
+     std::optional<std::string> reasoningParser;
+     std::optional<std::string> toolParser;
+diff --git a/src/graph_export/graph_cli_parser.cpp b/src/graph_export/graph_cli_parser.cpp
+index 4b005cb141..7516832ca3 100644
+--- a/src/graph_export/graph_cli_parser.cpp
++++ b/src/graph_export/graph_cli_parser.cpp
+@@ -65,8 +65,16 @@ void GraphCLIParser::createOptions() {
+             "HF model name or path to the local folder with PyTorch or OpenVINO draft model.",
+             cxxopts::value<std::string>(),
+             "DRAFT_SOURCE_MODEL")
++        ("draft_model_path",
++            "Absolute path to an already-exported OpenVINO draft model directory (use instead of --draft_source_model for local models).",
++            cxxopts::value<std::string>(),
++            "DRAFT_MODEL_PATH")
++        ("draft_device",
++            "Device to run the draft model on. Defaults to the same device as the main model.",
++            cxxopts::value<std::string>(),
++            "DRAFT_DEVICE")
+         ("draft_eagle3_mode",
+-            "Enable EAGLE3 speculative decoding mode for the draft model.",
++            "[Deprecated] Draft model strategy is now auto-detected from model artifacts; this flag is accepted but ignored.",
+             cxxopts::value<bool>()->default_value("false")->implicit_value("true"),
+             "DRAFT_EAGLE3_MODE")
+         ("dynamic_split_fuse",
+@@ -152,8 +160,16 @@ void GraphCLIParser::prepare(OvmsServerMode serverMode, HFSettingsImpl& hfSettin
+         if (result->count("draft_source_model")) {
+             graphSettings.draftModelDirName = result->operator[]("draft_source_model").as<std::string>();
+         }
+-        if (result->count("draft_eagle3_mode")) {
+-            graphSettings.draftEagle3Mode = result->operator[]("draft_eagle3_mode").as<bool>();
++        if (result->count("draft_model_path")) {
++            if (result->count("draft_source_model"))
++                throw std::invalid_argument("--draft_model_path and --draft_source_model are mutually exclusive");
++            graphSettings.draftModelPath = result->operator[]("draft_model_path").as<std::string>();
++        }
++        if (result->count("draft_device")) {
++            graphSettings.draftDevice = result->operator[]("draft_device").as<std::string>();
++        }
++        if (result->count("draft_eagle3_mode") && result->operator[]("draft_eagle3_mode").as<bool>()) {
++            std::cerr << "[WARNING] --draft_eagle3_mode is deprecated; draft model strategy is now auto-detected from model artifacts and this flag has no effect." << std::endl;
+         }
+         if (result->count("pipeline_type")) {
+             graphSettings.pipelineType = result->operator[]("pipeline_type").as<std::string>();
+diff --git a/src/graph_export/graph_export.cpp b/src/graph_export/graph_export.cpp
+index fd0b280c7e..8c6c68c942 100644
+--- a/src/graph_export/graph_export.cpp
++++ b/src/graph_export/graph_export.cpp
+@@ -217,12 +217,22 @@ static Status createTextGenerationGraphTemplate(const std::string& directoryPath
+         oss << R"(
+             dynamic_split_fuse: false,)";
+     }
+-    if (graphSettings.draftModelDirName.has_value()) {
++    if (graphSettings.draftModelDirName.has_value() || graphSettings.draftModelPath.has_value()) {
+         oss << R"(
+             # Speculative decoding configuration)";
+-        oss << R"(
++        if (graphSettings.draftModelPath.has_value()) {
++            oss << R"(
++            draft_models_path: ")" << graphSettings.draftModelPath.value() << R"(",)";
++        } else {
++            oss << R"(
+             draft_models_path: ")" << GraphExport::getDraftModelDirectoryName(graphSettings.draftModelDirName.value()) << R"(",)";
++        }
++        if (graphSettings.draftDevice.has_value()) {
++            oss << R"(
++            draft_device: ")" << graphSettings.draftDevice.value() << R"(",)";
++        }
+         if (graphSettings.draftEagle3Mode) {
++            // draft_eagle3_mode kept for backward compat with existing pbtxt consumers; auto-detected at runtime
+             oss << R"(
+             draft_eagle3_mode: true,)";
+         }
+diff --git a/src/llm/http_llm_calculator.cc b/src/llm/http_llm_calculator.cc
+index 9fbfb743b9..d37d16e220 100644
+--- a/src/llm/http_llm_calculator.cc
++++ b/src/llm/http_llm_calculator.cc
+@@ -107,7 +107,7 @@ class HttpLLMCalculator : public CalculatorBase {
+     }
+ 
+     absl::Status Process(CalculatorContext* cc) final {
+-        SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "LLMCalculator  [Node: {}] Process start", cc->NodeName());
++        SPDLOG_LOGGER_TRACE(llm_calculator_logger, "LLMCalculator  [Node: {}] Process start", cc->NodeName());
+         OVMS_PROFILE_FUNCTION();
+         RET_CHECK(this->servable != nullptr);
+ 
+@@ -184,12 +184,12 @@ class HttpLLMCalculator : public CalculatorBase {
+                 auto status = servable->readCompleteExecutionResults(executionContext);
+                 if (status != absl::OkStatus())
+                     return status;
+-                SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "LLMCalculator  [Node: {}] Received complete execution results, preparing response", cc->NodeName());
++                SPDLOG_LOGGER_TRACE(llm_calculator_logger, "LLMCalculator  [Node: {}] Received complete execution results, preparing response", cc->NodeName());
+ 
+                 status = servable->prepareCompleteResponse(executionContext);
+                 if (status != absl::OkStatus())
+                     return status;
+-                SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "LLMCalculator  [Node: {}] Response prepared, sending it down the graph", cc->NodeName());
++                SPDLOG_LOGGER_TRACE(llm_calculator_logger, "LLMCalculator  [Node: {}] Response prepared, sending it down the graph", cc->NodeName());
+ 
+                 std::string& response = executionContext->response;
+                 cc->Outputs().Tag(OUTPUT_TAG_NAME).Add(new std::string{std::move(response)}, iterationBeginTimestamp);
+@@ -198,14 +198,14 @@ class HttpLLMCalculator : public CalculatorBase {
+                 auto status = servable->readPartialExecutionResults(executionContext);
+                 if (status != absl::OkStatus())
+                     return status;
+-                SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "LLMCalculator  [Node: {}] Received partial execution results", cc->NodeName());
++                SPDLOG_LOGGER_TRACE(llm_calculator_logger, "LLMCalculator  [Node: {}] Received partial execution results", cc->NodeName());
+ 
+                 status = servable->preparePartialResponse(executionContext);
+                 if (status != absl::OkStatus())
+                     return status;
+                 std::string& response = executionContext->response;
+                 if (!response.empty()) {
+-                    SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "LLMCalculator  [Node: {}] Response prepared, sending it down the graph", cc->NodeName());
++                    SPDLOG_LOGGER_TRACE(llm_calculator_logger, "LLMCalculator  [Node: {}] Response prepared, sending it down the graph", cc->NodeName());
+                     cc->Outputs().Tag(OUTPUT_TAG_NAME).Add(new std::string{std::move(response)}, iterationBeginTimestamp);
+                 }
+                 if (executionContext->sendLoopbackSignal)
+@@ -223,7 +223,7 @@ class HttpLLMCalculator : public CalculatorBase {
+         }
+         auto now = std::chrono::system_clock::now();
+         iterationBeginTimestamp = ::mediapipe::Timestamp(std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch()).count());
+-        SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "LLMCalculator  [Node: {}] Process end", cc->NodeName());
++        SPDLOG_LOGGER_TRACE(llm_calculator_logger, "LLMCalculator  [Node: {}] Process end", cc->NodeName());
+         return absl::OkStatus();
+     }
+ };
+diff --git a/src/llm/io_processing/base_generation_config_builder.cpp b/src/llm/io_processing/base_generation_config_builder.cpp
+index 87a123242d..b5f2386523 100644
+--- a/src/llm/io_processing/base_generation_config_builder.cpp
++++ b/src/llm/io_processing/base_generation_config_builder.cpp
+@@ -52,6 +52,25 @@ void BaseGenerationConfigBuilder::adjustConfigForDecodingMethod() {
+         config.num_beams = 1;      // Eagle3 does not support beam search
+         SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "WARNING: Eagle3 greedy decoding enforced: setting do_sample to false and num_beams to 1.");
+         break;
++    case DecodingMethod::DFLASH:
++        // DFlash rejects assistant_confidence_threshold (same as EAGLE3); multinomial sampling allowed
++        if (config.assistant_confidence_threshold != 0.f)
++            throw std::invalid_argument("assistant_confidence_threshold is not supported for DFlash speculative decoding");
++        if (config.num_assistant_tokens.has_value() && config.num_assistant_tokens.value() == 0)
++            throw std::invalid_argument("num_assistant_tokens must be greater than 0 for DFlash decoding");
++        if (!config.num_assistant_tokens.has_value()) {
++            config.num_assistant_tokens = 5;
++            SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "WARNING: Overriding num_assistant_tokens to default value of 5 for DFlash decoding as it was not set.");
++        }
++        break;
++    case DecodingMethod::MTP:
++        if (config.num_assistant_tokens.has_value() && config.num_assistant_tokens.value() == 0)
++            throw std::invalid_argument("num_assistant_tokens must be greater than 0 for MTP decoding");
++        if (!config.num_assistant_tokens.has_value()) {
++            config.num_assistant_tokens = 5;
++            SPDLOG_LOGGER_DEBUG(llm_calculator_logger, "WARNING: Overriding num_assistant_tokens to default value of 5 for MTP decoding as it was not set.");
++        }
++        break;
+     case DecodingMethod::PROMPT_LOOKUP:
+         if (config.assistant_confidence_threshold != 0.f)
+             throw std::invalid_argument("assistant_confidence_threshold is not supported for prompt lookup decoding");
+diff --git a/src/llm/io_processing/base_generation_config_builder.hpp b/src/llm/io_processing/base_generation_config_builder.hpp
+index 5228fc5ec3..7b2793beb7 100644
+--- a/src/llm/io_processing/base_generation_config_builder.hpp
++++ b/src/llm/io_processing/base_generation_config_builder.hpp
+@@ -22,7 +22,6 @@
+ 
+ namespace ovms {
+ 
+-// TODO: Monitor Eagle3 sampling support in GenAI and update this when Eagle3 supports more sampling strategies.
+ /*
+ * DecodingMethod enum is used to properly set defaults and validate GenerationConfig depending on whether pipeline has been
+ * configured to use standard sampling strategies like greedy, beam search or multinomial or non-standard strategies like 
+@@ -32,7 +31,11 @@ namespace ovms {
+ * FAST_DRAFT: Classic two-model speculative decoding — a smaller off-the-shelf LLM drafts tokens that the main model verifies.
+ *             Pipeline configured with draft_models_path.
+ * EAGLE3: EAGLE3 speculative decoding — draft head conditioned on main model hidden states; supports tree drafting.
+-*         Pipeline configured with draft_models_path + draft_eagle3_mode=true. Greedy decoding only.
++*         Auto-detected from model rt_info (eagle3_mode=true). Greedy decoding only.
++* DFLASH: DFlash speculative decoding — hidden-state-conditioned head using linear attention.
++*         Auto-detected from model rt_info (dflash_mode=true). Supports VLM and multinomial sampling.
++* MTP: Multi-Token Prediction — bundled prediction head (openvino_mtp_model.xml) inside the draft model directory.
++*      Auto-detected from model artifacts; no extra flag required. Multinomial sampling supported.
+ * PROMPT_LOOKUP: N-gram prompt lookup decoding; no draft model required.
+ *                Pipeline configured with prompt_lookup=true in pluginConfig.
+ */
+@@ -40,6 +43,8 @@ enum DecodingMethod {
+     STANDARD,
+     FAST_DRAFT,
+     EAGLE3,
++    DFLASH,
++    MTP,
+     PROMPT_LOOKUP
+ };
+ 
+diff --git a/src/llm/language_model/continuous_batching/servable_initializer.cpp b/src/llm/language_model/continuous_batching/servable_initializer.cpp
+index e27f90bd49..7ead97723d 100644
+--- a/src/llm/language_model/continuous_batching/servable_initializer.cpp
++++ b/src/llm/language_model/continuous_batching/servable_initializer.cpp
+@@ -44,6 +44,7 @@
+ #include "llm_executor.hpp"
+ #include "servable.hpp"
+ #include "servable_initializer.hpp"
++#include "../../servable_initializer.hpp"
+ 
+ namespace ovms {
+ 
+@@ -209,7 +210,8 @@ Status ContinuousBatchingServableInitializer::initialize(std::shared_ptr<GenAiSe
+         auto draftSchedulerConfig = prepareDraftPipelineSchedulerConfig(nodeOptions);
+ 
+         try {
+-            auto draftPipeline = ov::genai::draft_model(draftPipelinePath, nodeOptions.draft_device(),
++            const std::string draftDevice = nodeOptions.draft_device().empty() ? properties->device : nodeOptions.draft_device();
++            auto draftPipeline = ov::genai::draft_model(draftPipelinePath, draftDevice,
+                 ov::genai::scheduler_config(draftSchedulerConfig));
+             properties->pluginConfig.insert(draftPipeline);
+         } catch (const std::exception& e) {
+@@ -219,7 +221,27 @@ Status ContinuousBatchingServableInitializer::initialize(std::shared_ptr<GenAiSe
+             SPDLOG_ERROR("Error during draft model initialization for draft models_path: {}", draftPipelinePath);
+             return StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED;
+         }
+-        properties->eagle3Mode = nodeOptions.draft_eagle3_mode();
++        try {
++            properties->draftModelStrategy = detectDraftModelStrategy(draftPipelinePath);
++        } catch (const std::exception& e) {
++            SPDLOG_ERROR("Failed to detect draft model strategy for {}: {}", draftPipelinePath, e.what());
++            return StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED;
++        }
++        using DS = GenAiServableProperties::DraftModelStrategy;
++        switch (properties->draftModelStrategy) {
++        case DS::EAGLE3:
++            SPDLOG_INFO("Draft model strategy: EAGLE3");
++            break;
++        case DS::DFLASH:
++            SPDLOG_INFO("Draft model strategy: DFlash");
++            break;
++        case DS::MTP:
++            SPDLOG_INFO("Draft model strategy: MTP (Multi-Token Prediction)");
++            break;
++        case DS::FAST_DRAFT:
++            SPDLOG_INFO("Draft model strategy: Fast Draft");
++            break;
++        }
+     } else if (nodeOptions.has_draft_max_num_batched_tokens() || nodeOptions.has_draft_cache_size() || nodeOptions.has_draft_dynamic_split_fuse() || nodeOptions.has_draft_max_num_seqs() || nodeOptions.has_draft_block_size() || nodeOptions.has_draft_device()) {
+         SPDLOG_ERROR("Draft model path is not provided, but draft scheduler options are set.");
+         return StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED;
+diff --git a/src/llm/language_model/legacy/servable_initializer.cpp b/src/llm/language_model/legacy/servable_initializer.cpp
+index 9fb8235426..8ed0686656 100644
+--- a/src/llm/language_model/legacy/servable_initializer.cpp
++++ b/src/llm/language_model/legacy/servable_initializer.cpp
+@@ -38,6 +38,7 @@
+ #include "../../io_processing/parser_config_validation.hpp"
+ #include "servable.hpp"
+ #include "servable_initializer.hpp"
++#include "../../servable_initializer.hpp"
+ 
+ namespace ovms {
+ Status LegacyServableInitializer::initialize(std::shared_ptr<GenAiServable>& servable, const mediapipe::LLMCalculatorOptions& nodeOptions, std::string graphPath) {
+@@ -97,7 +98,8 @@ Status LegacyServableInitializer::initialize(std::shared_ptr<GenAiServable>& ser
+                                             ? (std::filesystem::path(graphPath) / fsDraftModelsPath).string()
+                                             : fsDraftModelsPath.string();
+         try {
+-            auto draftPipeline = ov::genai::draft_model(draftPipelinePath, nodeOptions.draft_device());
++            const std::string draftDevice = nodeOptions.draft_device().empty() ? properties->device : nodeOptions.draft_device();
++            auto draftPipeline = ov::genai::draft_model(draftPipelinePath, draftDevice);
+             properties->pluginConfig.insert(draftPipeline);
+         } catch (const std::exception& e) {
+             SPDLOG_ERROR("Error during draft model initialization for draft_models_path: {} exception: {}", draftPipelinePath, e.what());
+@@ -106,7 +108,27 @@ Status LegacyServableInitializer::initialize(std::shared_ptr<GenAiServable>& ser
+             SPDLOG_ERROR("Error during draft model initialization for draft_models_path: {}", draftPipelinePath);
+             return StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED;
+         }
+-        properties->eagle3Mode = nodeOptions.draft_eagle3_mode();
++        try {
++            properties->draftModelStrategy = detectDraftModelStrategy(draftPipelinePath);
++        } catch (const std::exception& e) {
++            SPDLOG_ERROR("Failed to detect draft model strategy for {}: {}", draftPipelinePath, e.what());
++            return StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED;
++        }
++        using DS = GenAiServableProperties::DraftModelStrategy;
++        switch (properties->draftModelStrategy) {
++        case DS::EAGLE3:
++            SPDLOG_INFO("Draft model strategy: EAGLE3");
++            break;
++        case DS::DFLASH:
++            SPDLOG_INFO("Draft model strategy: DFlash");
++            break;
++        case DS::MTP:
++            SPDLOG_INFO("Draft model strategy: MTP (Multi-Token Prediction)");
++            break;
++        case DS::FAST_DRAFT:
++            SPDLOG_INFO("Draft model strategy: Fast Draft");
++            break;
++        }
+     }
+ 
+     status = JsonParser::parsePluginConfig(nodeOptions.plugin_config(), properties->pluginConfig);
+diff --git a/src/llm/servable.cpp b/src/llm/servable.cpp
+index 643f463ab7..8e0f35a094 100644
+--- a/src/llm/servable.cpp
++++ b/src/llm/servable.cpp
+@@ -53,10 +53,20 @@ void GenAiServable::determineDecodingMethod() {
+     getProperties()->decodingMethod = DecodingMethod::STANDARD;
+     auto& pluginConfig = getProperties()->pluginConfig;
+     if (pluginConfig.find("draft_model") != pluginConfig.end()) {
+-        if (getProperties()->eagle3Mode) {
++        using DS = GenAiServableProperties::DraftModelStrategy;
++        switch (getProperties()->draftModelStrategy) {
++        case DS::EAGLE3:
+             getProperties()->decodingMethod = DecodingMethod::EAGLE3;
+-        } else {
++            break;
++        case DS::DFLASH:
++            getProperties()->decodingMethod = DecodingMethod::DFLASH;
++            break;
++        case DS::MTP:
++            getProperties()->decodingMethod = DecodingMethod::MTP;
++            break;
++        default:
+             getProperties()->decodingMethod = DecodingMethod::FAST_DRAFT;
++            break;
+         }
+     }
+     auto it = pluginConfig.find("prompt_lookup");
+diff --git a/src/llm/servable.hpp b/src/llm/servable.hpp
+index f8ee08f28c..ca8bdb6205 100644
+--- a/src/llm/servable.hpp
++++ b/src/llm/servable.hpp
+@@ -212,7 +212,12 @@ struct GenAiServableProperties {
+     // Text processing utilities
+     ov::genai::Tokenizer tokenizer;
+     // Specific pipeline properties
+-    bool eagle3Mode = false;
++    // DFlash has priority over EAGLE3 when both markers are present (matches GenAI's strategy selection order)
++    enum class DraftModelStrategy { FAST_DRAFT,
++        EAGLE3,
++        DFLASH,
++        MTP };
++    DraftModelStrategy draftModelStrategy = DraftModelStrategy::FAST_DRAFT;
+     // Controls which steps InputProcessor builds for this servable type.
+     // Aggregated per-deployment context for InputProcessor.
+     InputProcessorContext inputProcessorContext;
+diff --git a/src/llm/servable_initializer.cpp b/src/llm/servable_initializer.cpp
+index 4cdf142189..14eb27b29c 100644
+--- a/src/llm/servable_initializer.cpp
++++ b/src/llm/servable_initializer.cpp
+@@ -13,7 +13,9 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ //*****************************************************************************
++#include <algorithm>
+ #include <filesystem>
++#include <fstream>
+ #include <memory>
+ #include <stdexcept>
+ #include <string>
+@@ -23,8 +25,6 @@
+ 
+ #include <spdlog/spdlog.h>
+ 
+-#include <fstream>
+-
+ #include <openvino/runtime/properties.hpp>
+ #include <rapidjson/error/en.h>
+ #include <rapidjson/istreamwrapper.h>
+@@ -58,6 +58,93 @@
+ 
+ namespace ovms {
+ 
++GenAiServableProperties::DraftModelStrategy detectDraftModelStrategy(const std::string& draftPath) {
++    namespace fs = std::filesystem;
++    using DS = GenAiServableProperties::DraftModelStrategy;
++    if (fs::exists(fs::path(draftPath) / "openvino_mtp_model.xml"))
++        return DS::MTP;
++
++    const auto xmlPath = fs::path(draftPath) / "openvino_model.xml";
++    if (!fs::exists(xmlPath))
++        throw std::runtime_error("Draft model XML not found at: " + xmlPath.string());
++    std::ifstream file(xmlPath.string(), std::ios::binary);
++    if (!file.good())
++        throw std::runtime_error("Cannot read draft model XML: " + xmlPath.string());
++
++    file.seekg(0, std::ios::end);
++    std::streamoff remaining = file.tellg();
++
++    static constexpr std::streamoff READ_BUF_SIZE = 4096;  // I/O buffer size, not a scan limit
++    static constexpr size_t MAX_LINES = 500;               // safety cap if rt_info is never found
++
++    bool inRtInfo = false;
++    bool foundDflash = false;
++    bool foundEagle3 = false;
++    bool stop = false;
++    size_t linesRead = 0;
++    std::string buffer;
++
++    // Scans a single line, walking the file from the last line upward.
++    auto processLine = [&](const std::string& l) {
++        if (l.find("</rt_info>") != std::string::npos) {
++            inRtInfo = true;
++            return;
++        }
++        if (l.find("<rt_info") != std::string::npos) {
++            stop = true;
++            return;
++        }
++        if (!inRtInfo)
++            return;
++        auto isTruthy = [&](const char* key, bool& found) {
++            if (found)
++                return;
++            auto keyPos = l.find(key);
++            if (keyPos == std::string::npos)
++                return;
++            auto valuePos = l.find("value=", keyPos);
++            if (valuePos == std::string::npos)
++                return;
++            if (l.find("\"1\"", valuePos) != std::string::npos ||
++                l.find("\"True\"", valuePos) != std::string::npos ||
++                l.find("\"true\"", valuePos) != std::string::npos)
++                found = true;
++        };
++        isTruthy("dflash_mode", foundDflash);
++        isTruthy("eagle3_mode", foundEagle3);
++    };
++
++    // Read backward in fixed-size buffers, prepending each earlier buffer to what's
++    // already accumulated, popping complete lines off the tail as soon as they are known.
++    // Stops as soon as the rt_info block has been fully scanned (its open tag reached)
++    // or MAX_LINES have been processed without finding it.
++    while (remaining > 0 && !stop && linesRead < MAX_LINES) {
++        const std::streamoff readSize = std::min(READ_BUF_SIZE, remaining);
++        remaining -= readSize;
++        file.seekg(remaining, std::ios::beg);
++        std::string chunk(static_cast<size_t>(readSize), '\0');
++        file.read(chunk.data(), readSize);
++        buffer.insert(0, chunk);
++
++        size_t nlPos;
++        while (!stop && linesRead < MAX_LINES && (nlPos = buffer.rfind('\n')) != std::string::npos) {
++            processLine(buffer.substr(nlPos + 1));
++            ++linesRead;
++            buffer.erase(nlPos);
++        }
++    }
++    if (!stop && linesRead < MAX_LINES && !buffer.empty()) {
++        processLine(buffer);
++    }
++
++    // DFlash takes priority over EAGLE3 (mirrors GenAI's CB pipeline strategy selection)
++    if (foundDflash)
++        return DS::DFLASH;
++    if (foundEagle3)
++        return DS::EAGLE3;
++    return DS::FAST_DRAFT;
++}
++
+ static const std::string CHAT_TEMPLATE_WARNING_MESSAGE = "Warning: Chat template has not been loaded properly. Servable will not respond to /chat/completions endpoint.";
+ 
+ // Dry-run probes: render the chat template with synthetic inputs to empirically
+@@ -565,9 +652,21 @@ Status initializeGenAiServable(std::shared_ptr<GenAiServable>& servable, const :
+         } else if (pipelineType == PipelineType::VLM_CB) {
+             // VLM uses CB engine, so initialization part is shared (both servables share the same properties),
+             // therefore we can use CB servable initializer to initialize VLM servable
+-            if (!nodeOptions.draft_models_path().empty() && !nodeOptions.draft_eagle3_mode()) {
+-                SPDLOG_LOGGER_ERROR(modelmanager_logger, "Fast Draft speculative decoding is not supported for VLM pipelines. Use EAGLE3 (draft_eagle3_mode: true) with a matching EAGLE3 head model instead.");
+-                return StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED;
++            if (!nodeOptions.draft_models_path().empty()) {
++                // Only plain Fast Draft is unsupported for VLM; EAGLE3, DFlash and MTP all work
++                auto fsDraftPath = std::filesystem::path(nodeOptions.draft_models_path());
++                if (!fsDraftPath.is_absolute())
++                    fsDraftPath = std::filesystem::path(graphPath) / fsDraftPath;
++                try {
++                    auto strategy = detectDraftModelStrategy(fsDraftPath.string());
++                    if (strategy == GenAiServableProperties::DraftModelStrategy::FAST_DRAFT) {
++                        SPDLOG_LOGGER_ERROR(modelmanager_logger, "Fast Draft speculative decoding is not supported for VLM pipelines. Use an EAGLE3 head, DFlash, or an MTP model instead.");
++                        return StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED;
++                    }
++                } catch (const std::exception& e) {
++                    SPDLOG_LOGGER_ERROR(modelmanager_logger, "Failed to detect draft model strategy: {}", e.what());
++                    return StatusCode::LLM_NODE_RESOURCE_STATE_INITIALIZATION_FAILED;
++                }
+             }
+             SPDLOG_LOGGER_INFO(modelmanager_logger, "Initializing Visual Language Model Continuous Batching servable");
+             ContinuousBatchingServableInitializer cbServableInitializer;
+diff --git a/src/llm/servable_initializer.hpp b/src/llm/servable_initializer.hpp
+index 7455d1c42b..d70ab2fb71 100644
+--- a/src/llm/servable_initializer.hpp
++++ b/src/llm/servable_initializer.hpp
+@@ -26,6 +26,7 @@
+ #pragma GCC diagnostic pop
+ #pragma warning(pop)
+ #include "src/llm/llm_calculator.pb.h"
++#include "src/llm/servable.hpp"
+ 
+ namespace ovms {
+ 
+@@ -68,6 +69,12 @@ class GenAiServableInitializer {
+ };
+ Status parseModelsPath(std::string& outPath, std::string modelsPath, std::string graphPath);
+ std::optional<uint32_t> parseMaxModelLength(std::string& modelsPath);
++// Detects draft model strategy from model artifacts without a full model load.
++// Scans the tail of the draft model XML (walking backward in bounded chunks/lines, up to a line cap)
++// to find eagle3/dflash rt_info markers; MTP is detected separately via file presence.
++// DFlash takes priority over EAGLE3 when both markers are present (matches GenAI's strategy selection order).
++// Throws std::runtime_error if the XML is missing or cannot be opened/read.
++GenAiServableProperties::DraftModelStrategy detectDraftModelStrategy(const std::string& draftPath);
+ Status determinePipelineType(PipelineType& pipelineType, const mediapipe::LLMCalculatorOptions& nodeOptions, const std::string& graphPath);
+ Status initializeGenAiServable(std::shared_ptr<GenAiServable>& servable, const ::mediapipe::CalculatorGraphConfig::Node& graphNodeConfig, std::string graphPath);
+ }  // namespace ovms
+diff --git a/src/test/llm/llmnode_test.cpp b/src/test/llm/llmnode_test.cpp
+index cd02c51305..20e0bea54a 100644
+--- a/src/test/llm/llmnode_test.cpp
++++ b/src/test/llm/llmnode_test.cpp
+@@ -51,6 +51,7 @@
+ #include "../../mediapipe_internal/mediapipegraphdefinition.hpp"
+ #include "../../ov_utils.hpp"
+ #include "../../server.hpp"
++#include "src/filesystem/filesystem.hpp"
+ #include "src/graph_export/graph_export.hpp"
+ #include "rapidjson/document.h"
+ #include "rapidjson/stringbuffer.h"
+@@ -59,6 +60,7 @@
+ #include "../platform_utils.hpp"
+ #include "../test_http_utils.hpp"
+ #include "../test_utils.hpp"
++#include "../test_with_temp_dir.hpp"
+ #include "src/test/environment.hpp"
+ 
+ using namespace ovms;
+@@ -5996,3 +5998,70 @@ TEST(BaseGenerationConfigBuilderTest, PromptLookupAssistantConfidenceThresholdTh
+     builder.parseConfigFromRequest(request);
+     EXPECT_THROW(builder.adjustConfigForDecodingMethod(), std::invalid_argument);
+ }
++
++// ==========================================
++// detectDraftModelStrategy tests
++// ==========================================
++
++class DetectDraftModelStrategyTest : public TestWithTempDir {};
++using DS = ovms::GenAiServableProperties::DraftModelStrategy;
++
++TEST_F(DetectDraftModelStrategyTest, MtpDetectedByFilePresence) {
++    std::ofstream(ovms::FileSystem::joinPath({directoryPath, "openvino_mtp_model.xml"})).close();
++    EXPECT_EQ(ovms::detectDraftModelStrategy(directoryPath), DS::MTP);
++}
++
++TEST_F(DetectDraftModelStrategyTest, Eagle3DetectedByNumericValue) {
++    std::ofstream(ovms::FileSystem::joinPath({directoryPath, "openvino_model.xml"}))
++        << "<net>\n<rt_info>\n<eagle3_mode value=\"1\" />\n</rt_info>\n</net>\n";
++    EXPECT_EQ(ovms::detectDraftModelStrategy(directoryPath), DS::EAGLE3);
++}
++
++TEST_F(DetectDraftModelStrategyTest, Eagle3DetectedByTrueUppercase) {
++    std::ofstream(ovms::FileSystem::joinPath({directoryPath, "openvino_model.xml"}))
++        << "<net>\n<rt_info>\n<eagle3_mode value=\"True\" />\n</rt_info>\n</net>\n";
++    EXPECT_EQ(ovms::detectDraftModelStrategy(directoryPath), DS::EAGLE3);
++}
++
++TEST_F(DetectDraftModelStrategyTest, Eagle3DetectedByTrueLowercase) {
++    std::ofstream(ovms::FileSystem::joinPath({directoryPath, "openvino_model.xml"}))
++        << "<net>\n<rt_info>\n<eagle3_mode value=\"true\" />\n</rt_info>\n</net>\n";
++    EXPECT_EQ(ovms::detectDraftModelStrategy(directoryPath), DS::EAGLE3);
++}
++
++TEST_F(DetectDraftModelStrategyTest, DflashDetected) {
++    std::ofstream(ovms::FileSystem::joinPath({directoryPath, "openvino_model.xml"}))
++        << "<net>\n<rt_info>\n<dflash_mode value=\"1\" />\n</rt_info>\n</net>\n";
++    EXPECT_EQ(ovms::detectDraftModelStrategy(directoryPath), DS::DFLASH);
++}
++
++TEST_F(DetectDraftModelStrategyTest, DflashTakesPriorityOverEagle3) {
++    std::ofstream(ovms::FileSystem::joinPath({directoryPath, "openvino_model.xml"}))
++        << "<net>\n<rt_info>\n<dflash_mode value=\"1\" />\n<eagle3_mode value=\"1\" />\n</rt_info>\n</net>\n";
++    EXPECT_EQ(ovms::detectDraftModelStrategy(directoryPath), DS::DFLASH);
++}
++
++TEST_F(DetectDraftModelStrategyTest, FastDraftWhenNoMarkers) {
++    std::ofstream(ovms::FileSystem::joinPath({directoryPath, "openvino_model.xml"}))
++        << "<net>\n<layers></layers>\n<rt_info>\n</rt_info>\n</net>\n";
++    EXPECT_EQ(ovms::detectDraftModelStrategy(directoryPath), DS::FAST_DRAFT);
++}
++
++TEST_F(DetectDraftModelStrategyTest, KeyOutsideRtInfoIgnored) {
++    // eagle3_mode keyword in a layer name must not trigger detection
++    std::ofstream(ovms::FileSystem::joinPath({directoryPath, "openvino_model.xml"}))
++        << "<net>\n<layers>\n<layer name=\"eagle3_mode_layer\" />\n</layers>\n<rt_info>\n</rt_info>\n</net>\n";
++    EXPECT_EQ(ovms::detectDraftModelStrategy(directoryPath), DS::FAST_DRAFT);
++}
++
++TEST_F(DetectDraftModelStrategyTest, ThrowsWhenXmlMissing) {
++    EXPECT_THROW(ovms::detectDraftModelStrategy(directoryPath), std::runtime_error);
++}
++
++TEST_F(DetectDraftModelStrategyTest, MtpTakesPriorityOverXmlScan) {
++    // MTP file presence short-circuits before reading the XML
++    std::ofstream(ovms::FileSystem::joinPath({directoryPath, "openvino_mtp_model.xml"})).close();
++    std::ofstream(ovms::FileSystem::joinPath({directoryPath, "openvino_model.xml"}))
++        << "<net>\n<rt_info>\n<eagle3_mode value=\"1\" />\n</rt_info>\n</net>\n";
++    EXPECT_EQ(ovms::detectDraftModelStrategy(directoryPath), DS::MTP);
++}
+diff --git a/src/test/ovmsconfig_test.cpp b/src/test/ovmsconfig_test.cpp
+index 2b3b816ed9..c0d218009c 100644
+--- a/src/test/ovmsconfig_test.cpp
++++ b/src/test/ovmsconfig_test.cpp
+@@ -3155,26 +3155,55 @@ TEST(OvmsGraphCliParserTest, noneParserNamesAreAccepted) {
+     EXPECT_EQ(graphSettings.reasoningParser.value(), "none");
+ }
+ 
+-TEST(OvmsGraphCliParserTest, draftEagle3ModeFlag) {
++TEST(OvmsGraphCliParserTest, draftSourceModelIsParsed) {
+     ovms::HFSettingsImpl hfSettings;
+     ovms::GraphCLIParser parser;
+-    std::vector<std::string> args = {"--draft_source_model", "/some/draft", "--draft_eagle3_mode"};
++    std::vector<std::string> args = {"--draft_source_model", "org/draft-model"};
+     parser.parse(args);
+     EXPECT_NO_THROW(parser.prepare(ovms::HF_PULL_MODE, hfSettings, "test_model"));
+     auto& graphSettings = std::get<ovms::TextGenGraphSettingsImpl>(hfSettings.graphSettings);
+     ASSERT_TRUE(graphSettings.draftModelDirName.has_value());
+-    EXPECT_EQ(graphSettings.draftModelDirName.value(), "/some/draft");
+-    EXPECT_TRUE(graphSettings.draftEagle3Mode);
++    EXPECT_EQ(graphSettings.draftModelDirName.value(), "org/draft-model");
++    EXPECT_FALSE(graphSettings.draftModelPath.has_value());
+ }
+ 
+-TEST(OvmsGraphCliParserTest, draftEagle3ModeDefaultFalse) {
++TEST(OvmsGraphCliParserTest, draftModelPathIsParsed) {
+     ovms::HFSettingsImpl hfSettings;
+     ovms::GraphCLIParser parser;
+-    std::vector<std::string> args = {"--draft_source_model", "/some/draft"};
++    std::vector<std::string> args = {"--draft_model_path", "."};
+     parser.parse(args);
+     EXPECT_NO_THROW(parser.prepare(ovms::HF_PULL_MODE, hfSettings, "test_model"));
+     auto& graphSettings = std::get<ovms::TextGenGraphSettingsImpl>(hfSettings.graphSettings);
+-    EXPECT_FALSE(graphSettings.draftEagle3Mode);
++    ASSERT_TRUE(graphSettings.draftModelPath.has_value());
++    EXPECT_EQ(graphSettings.draftModelPath.value(), ".");
++    EXPECT_FALSE(graphSettings.draftModelDirName.has_value());
++}
++
++TEST(OvmsGraphCliParserTest, draftDeviceIsParsed) {
++    ovms::HFSettingsImpl hfSettings;
++    ovms::GraphCLIParser parser;
++    std::vector<std::string> args = {"--draft_model_path", ".", "--draft_device", "GPU"};
++    parser.parse(args);
++    EXPECT_NO_THROW(parser.prepare(ovms::HF_PULL_MODE, hfSettings, "test_model"));
++    auto& graphSettings = std::get<ovms::TextGenGraphSettingsImpl>(hfSettings.graphSettings);
++    ASSERT_TRUE(graphSettings.draftDevice.has_value());
++    EXPECT_EQ(graphSettings.draftDevice.value(), "GPU");
++}
++
++TEST(OvmsGraphCliParserTest, draftModelPathAndDraftSourceModelAreMutuallyExclusive) {
++    ovms::HFSettingsImpl hfSettings;
++    ovms::GraphCLIParser parser;
++    std::vector<std::string> args = {"--draft_source_model", "org/draft-model", "--draft_model_path", "."};
++    parser.parse(args);
++    EXPECT_THROW({
++        try {
++            parser.prepare(ovms::HF_PULL_MODE, hfSettings, "test_model");
++        } catch (const std::invalid_argument& e) {
++            EXPECT_NE(std::string(e.what()).find("mutually exclusive"), std::string::npos);
++            throw;
++        }
++    },
++        std::invalid_argument);
+ }
+ 
+ TEST_F(OvmsInferredTaskTest, positiveConfigureModeInfersTaskFromModel) {

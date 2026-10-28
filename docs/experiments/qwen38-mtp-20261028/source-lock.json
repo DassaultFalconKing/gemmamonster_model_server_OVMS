@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-28T13:52:41.121377+00:00",
+  "experiment_worktree": "C:\\git\\gemmamonster-qwen38-mtp-20261028",
+  "experiment_branch": "experiment/qwen38-mtp-arc140v-20261028",
+  "rc4_tag_commit": "362b1d293b0461fa6b8772f1cf34d075c7ee23e4",
+  "origin_main_at_stage0": "f5970325764c7bc839d66f92e486941416737caa",
+  "port": 18138,
+  "model_name": "qwen38-27b-int4-ov",
+  "start_script": "C:\\Users\\testc\\.omp\\agent\\start-qwen38-mtp.ps1",
+  "host": {
+    "cpu": "Intel Core Ultra 258V",
+    "gpu": "Arc 140V",
+    "ram_gb": 32,
+    "uma": true
+  },
+  "hf_revision": "7b20ea8c7df7223a85ff27bab5c473f0cb038943",
+  "git_head": "362b1d293b0461fa6b8772f1cf34d075c7ee23e4"
+}

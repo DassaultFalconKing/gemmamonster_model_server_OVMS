@@ -1,0 +1,18 @@
+{
+  "source_commit": "5f7f1278107d7eae3990ce906bbcfcb69ac3397f",
+  "source_zip_sha256": "b87757b87f51609197571babe61012e2bc73cc5d38e0c1578f8c0b873dfa42c1",
+  "observer_patch_sha256": "d578d74acac6de88dd21b1fa404ccb62d3eff86017dc9fc7d65b5fc756d02c13",
+  "trace_dll_sha256": "d0a21f74ec9aedda51b3e9a2173319c774c705d07ea163f81cb7497d993c419d",
+  "probe_exe_sha256": "1ea4cad67f4a5179b37fc20e6f1f1e0ffbae5a4f25809135d7dea2dceb60a973",
+  "model_lock_verified_files": 55,
+  "features": {
+    "BUILD_TOKENIZERS": false,
+    "ENABLE_XGRAMMAR": false,
+    "ENABLE_GGUF": true,
+    "ENABLE_PYTHON": false,
+    "ENABLE_TESTS": false,
+    "ENABLE_SAMPLES": false,
+    "ENABLE_TOOLS": false
+  },
+  "scope": "diagnostic build only; no performance or release acceptance"
+}

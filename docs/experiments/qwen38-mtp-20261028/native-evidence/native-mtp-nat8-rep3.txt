@@ -1,0 +1,1 @@
+A CPU cache improves program performance by exploiting the principles of temporal and spatial locality to bridge the significant speed gap between the ultra-fast central processing unit and the relatively slow main memory (RAM). Since the CPU operates at gigahertz frequencies while accessing RAM incurs latency measured in hundreds of cycles, the cache acts as a small

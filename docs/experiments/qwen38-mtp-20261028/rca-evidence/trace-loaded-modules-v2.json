@@ -1,0 +1,52 @@
+﻿[
+    {
+        "name":  "openvino.dll",
+        "path":  "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\trace-runtime\\openvino.dll",
+        "sha256":  "829c4642e287522f8a8e748a726d4ad3117a701e22ab46adc82771f98e5d2f7e"
+    },
+    {
+        "name":  "tbb12.dll",
+        "path":  "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\trace-runtime\\tbb12.dll",
+        "sha256":  "63cc8a5a9cee86e9d57967337053569df6335aca09d03f8657343633645d2727"
+    },
+    {
+        "name":  "openvino_genai.dll",
+        "path":  "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\trace-runtime\\openvino_genai.dll",
+        "sha256":  "d0a21f74ec9aedda51b3e9a2173319c774c705d07ea163f81cb7497d993c419d"
+    },
+    {
+        "name":  "tbbmalloc.dll",
+        "path":  "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\trace-runtime\\tbbmalloc.dll",
+        "sha256":  "06e72fd9ed67405efd411c33d8dfbe9bf21cb62ff8ef2ccb1003bb1bc32b2924"
+    },
+    {
+        "name":  "openvino_tokenizers.dll",
+        "path":  "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\trace-runtime\\openvino_tokenizers.dll",
+        "sha256":  "e96e02744f4cd9567e54065430aa609e97c48951299a21f30abc00fba6078d3c"
+    },
+    {
+        "name":  "openvino_ir_frontend.dll",
+        "path":  "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\trace-runtime\\openvino_ir_frontend.dll",
+        "sha256":  "44604b39cbafcf4d8aa27697cee639038bdfcf24f5245f0be07abcf30609d4cd"
+    },
+    {
+        "name":  "openvino_auto_batch_plugin.dll",
+        "path":  "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\trace-runtime\\openvino_auto_batch_plugin.dll",
+        "sha256":  "d21dc67bee39d3af3fbda6720198a6b025eda297680d5d747996730bc75496dd"
+    },
+    {
+        "name":  "openvino_intel_cpu_plugin.dll",
+        "path":  "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\trace-runtime\\openvino_intel_cpu_plugin.dll",
+        "sha256":  "ce9c65b551e36139b62e28f2c8c7b9fc2a5c02c82e1dfd01e578dac30695e78b"
+    },
+    {
+        "name":  "tbbbind_2_5.dll",
+        "path":  "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\trace-runtime\\tbbbind_2_5.dll",
+        "sha256":  "235047df3f97a6b94c3a5e70d93b892141e32ae27ef06f0c583667b417118b20"
+    },
+    {
+        "name":  "openvino_intel_gpu_plugin.dll",
+        "path":  "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\trace-runtime\\openvino_intel_gpu_plugin.dll",
+        "sha256":  "21a2fd9f5d856c297416059325832f0f902c84a4e78b840f859ca508f5aea66d"
+    }
+]

@@ -1,0 +1,94 @@
+{
+  "reference_outputs_reproduced": true,
+  "internal_prompt_ids_equal": true,
+  "internal_prompt_token_count": 26,
+  "internal_prompt_ids": [
+    248045,
+    846,
+    198,
+    814,
+    20139,
+    1204,
+    264,
+    13540,
+    6297,
+    33793,
+    1957,
+    4906,
+    303,
+    799,
+    11346,
+    13901,
+    13,
+    248046,
+    198,
+    248045,
+    74455,
+    198,
+    248068,
+    271,
+    248069,
+    271
+  ],
+  "same_prior_generated_ids": [
+    32,
+    13540,
+    6297
+  ],
+  "baseline": {
+    "meta": "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\traces-v2\\P0-baseline\\event-3-before.txt",
+    "row": 0,
+    "position": 3,
+    "prompt_ids": [],
+    "generated_before": [
+      32,
+      13540,
+      6297
+    ],
+    "top1_id": 33793,
+    "top1_logit": 22.479400634765625,
+    "top2_id": 11602,
+    "top2_logit": 22.20063018798828,
+    "margin": 0.27877044677734375
+  },
+  "mtp": {
+    "meta": "C:\\gm\\qwenmonster\\benchmarks\\qwen38-mtp-20261028\\rca\\traces-v2\\P0-mtp\\event-4-before.txt",
+    "row": 2,
+    "position": 3,
+    "prompt_ids": [],
+    "generated_before": [
+      32,
+      13540,
+      6297,
+      33793
+    ],
+    "top1_id": 11602,
+    "top1_logit": 22.484539031982422,
+    "top2_id": 33793,
+    "top2_logit": 22.46994400024414,
+    "margin": 0.01459503173828125
+  },
+  "max_abs_logit_difference": 0.5927141653373837,
+  "candidate_logits": {
+    "33793": {
+      "baseline": 22.479400634765625,
+      "mtp": 22.46994400024414
+    },
+    "11602": {
+      "baseline": 22.20063018798828,
+      "mtp": 22.484539031982422
+    }
+  },
+  "warning": "Raw-logit argmax evidence does not by itself identify KV kernel versus GDN-state root cause.",
+  "chronology": {
+    "previous_target_verifications": [],
+    "draft_candidate_at_difference": 33793,
+    "after_sampling": [
+      32,
+      13540,
+      6297,
+      11602
+    ],
+    "interpretation": "Argmax flip occurs in first target verification, triggers candidate rejection; not an effect of earlier rejection/rollback."
+  }
+}

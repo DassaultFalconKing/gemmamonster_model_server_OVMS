@@ -1,0 +1,159 @@
+{
+  "utc": "2026-10-28T13:52:41.121377+00:00",
+  "package": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms",
+  "release": "gemmamonster-2026.4-rc4",
+  "py_off": true,
+  "files": [
+    {
+      "path": "git2.dll",
+      "bytes": 1756160,
+      "sha256": "7eb7ff327997dc19db29927153d54b1261df0888378f3c5d0ddf7c72f51998dd"
+    },
+    {
+      "path": "libcurl-x64.dll",
+      "bytes": 3647080,
+      "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334"
+    },
+    {
+      "path": "MANIFEST.json",
+      "bytes": 26793,
+      "sha256": "db24104211315967070f0d87ee74e87d4fa13583e24cbe588f9121b54851eda4"
+    },
+    {
+      "path": "opencv_world4140.dll",
+      "bytes": 79832576,
+      "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46"
+    },
+    {
+      "path": "openvino.dll",
+      "bytes": 16465168,
+      "sha256": "829c4642e287522f8a8e748a726d4ad3117a701e22ab46adc82771f98e5d2f7e"
+    },
+    {
+      "path": "openvino_auto_batch_plugin.dll",
+      "bytes": 208144,
+      "sha256": "d21dc67bee39d3af3fbda6720198a6b025eda297680d5d747996730bc75496dd"
+    },
+    {
+      "path": "openvino_auto_plugin.dll",
+      "bytes": 720656,
+      "sha256": "ed1492fe3f901d2b882ea89c8909d8ce35eb52986a3559353a44917ee3fb3e47"
+    },
+    {
+      "path": "openvino_c.dll",
+      "bytes": 234248,
+      "sha256": "8f89f65cb867d27d18607dad3ad5893df53561a809037a28c9c154b937976dfb"
+    },
+    {
+      "path": "openvino_genai.dll",
+      "bytes": 7425808,
+      "sha256": "5a2904f2564e4ce002db5ef5fe003a782e6f296f6377cd66df1b2db41d4c5e8d"
+    },
+    {
+      "path": "openvino_genai_c.dll",
+      "bytes": 178448,
+      "sha256": "0304bf893da72bbe4f31e41137a015e927ebc7fdfbb828236b6fa920310c8480"
+    },
+    {
+      "path": "openvino_gguf_frontend.dll",
+      "bytes": 1322248,
+      "sha256": "c984068e1e521fc2cd3ee6211c67c0ea7a798b76ece9febbff0510c1280b38cf"
+    },
+    {
+      "path": "openvino_hetero_plugin.dll",
+      "bytes": 531728,
+      "sha256": "c21be45cea174c79163394e4cfe3a782ebef7a7a64b4ee43dfcf3828d558de16"
+    },
+    {
+      "path": "openvino_intel_cpu_plugin.dll",
+      "bytes": 46222600,
+      "sha256": "ce9c65b551e36139b62e28f2c8c7b9fc2a5c02c82e1dfd01e578dac30695e78b"
+    },
+    {
+      "path": "openvino_intel_gpu_plugin.dll",
+      "bytes": 33879040,
+      "sha256": "21a2fd9f5d856c297416059325832f0f902c84a4e78b840f859ca508f5aea66d"
+    },
+    {
+      "path": "openvino_intel_npu_compiler.dll",
+      "bytes": 98174216,
+      "sha256": "c663f5c7649550359a373115be1946028a423fedf67e8893c46152323a65a06b"
+    },
+    {
+      "path": "openvino_intel_npu_compiler_loader.dll",
+      "bytes": 529672,
+      "sha256": "ea3a6b018a40e1a57c3d982a5e661ba12e6c3ada09ffe77a5eb9af58930f0fe1"
+    },
+    {
+      "path": "openvino_intel_npu_plugin.dll",
+      "bytes": 7615752,
+      "sha256": "e27a466c9690e079b82d453a93a583d9008cb08e9965a6f459c56bccde965198"
+    },
+    {
+      "path": "openvino_intel_npu_vm_runtime.dll",
+      "bytes": 485640,
+      "sha256": "b4ed9e64bcb6855b918c315614631d6bad2f506f56c18394e38d2ce6aed61b14"
+    },
+    {
+      "path": "openvino_ir_frontend.dll",
+      "bytes": 509192,
+      "sha256": "44604b39cbafcf4d8aa27697cee639038bdfcf24f5245f0be07abcf30609d4cd"
+    },
+    {
+      "path": "openvino_onnx_frontend.dll",
+      "bytes": 5414160,
+      "sha256": "1554b14f226c3bcdf73362cd818c5137f6f80c1ef19e4850a8b4765b70dba0f4"
+    },
+    {
+      "path": "openvino_paddle_frontend.dll",
+      "bytes": 1688848,
+      "sha256": "48b407390f572e20d557a8a5ba87f0ba42d4a224b92d7063332ddbbcc29c807c"
+    },
+    {
+      "path": "openvino_pytorch_frontend.dll",
+      "bytes": 2791176,
+      "sha256": "947363b58a525137487d4d3cac9f2d110c0ae1ae283ab27388c9d3d057ccecec"
+    },
+    {
+      "path": "openvino_tensorflow_frontend.dll",
+      "bytes": 4128016,
+      "sha256": "b8c7cb549e942c3062b1e13d4aea34c87d497f10b9f4dcfacc6d8848223eeef3"
+    },
+    {
+      "path": "openvino_tensorflow_lite_frontend.dll",
+      "bytes": 1263376,
+      "sha256": "0ded983534495e1c366fcb989fe1d63e226b12be73158000f2433e4278c06a5a"
+    },
+    {
+      "path": "openvino_tokenizers.dll",
+      "bytes": 3483912,
+      "sha256": "e96e02744f4cd9567e54065430aa609e97c48951299a21f30abc00fba6078d3c"
+    },
+    {
+      "path": "ovms.exe",
+      "bytes": 22596608,
+      "sha256": "f5eef01c9173d066ac25084b9f206dbf5d4ed00d695868e2f43d7d75e9de1acd"
+    },
+    {
+      "path": "tbb12.dll",
+      "bytes": 337160,
+      "sha256": "63cc8a5a9cee86e9d57967337053569df6335aca09d03f8657343633645d2727"
+    },
+    {
+      "path": "tbbbind_2_5.dll",
+      "bytes": 209168,
+      "sha256": "235047df3f97a6b94c3a5e70d93b892141e32ae27ef06f0c583667b417118b20"
+    },
+    {
+      "path": "tbbmalloc.dll",
+      "bytes": 119056,
+      "sha256": "06e72fd9ed67405efd411c33d8dfbe9bf21cb62ff8ef2ccb1003bb1bc32b2924"
+    },
+    {
+      "path": "tbbmalloc_proxy.dll",
+      "bytes": 41736,
+      "sha256": "44b6e5017bd693da7feb3a226e6d8897387614e2fda9308d30c1ffc50875a320"
+    }
+  ],
+  "note": "RC4 uses --draft_source_model (docs alias --draft_model_path)."
+}
