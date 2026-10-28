@@ -1,7 +1,7 @@
 ﻿<#
 ИНСТРУКЦИЯ ПО АДАПТАЦИИ СКРИПТОВ ЗАПУСКА (LFM2.5)
 1. package — каталог RC4 extracted-py_off\ovms: DLL OpenVINO/GenAI и MANIFEST.
-   exe — Hybrid-C review ovms.exe (parser + demotion); DLL пакета не подменять.
+   exe — corrected guided-auto LFM build; DLL пакета не подменять.
    modelPath — OpenVINO IR LFM2.5-8B; modelName — имя в API/карточке OMP.
 2. WEIGHTS_PATH не используется: OFFLOAD_RATIO=0 (Pack/offload отложены).
    Веса — openvino_model.bin (не openvino_language_model.bin).
@@ -17,7 +17,7 @@
    prefix caching выключен. cache_size — пул KV в гигабайтах, не вся RAM.
 6. Порт 8137 общий с Qwen/Gemma/Ornith: запускать по очереди либо сменить порт.
    Скрипт чужие процессы не останавливает. -ConfigureOnly только готовит serving.
-7. Default EXE pin = hybrid-c-review GPU-accepted build (SHA below). Override with
+7. Default EXE pin = malformed-tool correction (protocol tested). Override with
    -ExecutablePath / -ExecutableSha256 for a newer isolated candidate. Staging by port.
 8. Файл — UTF-8 с BOM для PS 5.1. Это запуск сервера, не автотест.
 #>
@@ -25,8 +25,8 @@ param(
     [switch]$ConfigureOnly,
     [ValidateRange(1,65535)][int]$Port = 8137,
     [ValidateSet('u4','auto')][string]$KvPrecision = 'auto',
-    [string]$ExecutablePath = 'C:\gm\lfm-2026.4\hybrid-c-review-20261027\build-py_off\bin\ovms.exe',
-    [ValidatePattern('^[A-Fa-f0-9]{64}$')][string]$ExecutableSha256 = 'd9663aa6ca29880ae6d3d85ff5f341a2461affd7bc539dd2c8cd3df9fa71136e'
+    [string]$ExecutablePath = 'C:\gm\lfm-2026.4\malformed-fix-20261028\final\build-py_off\bin\ovms.exe',
+    [ValidatePattern('^[A-Fa-f0-9]{64}$')][string]$ExecutableSha256 = 'b3440410a08c1a62d4f8aa187dffe3c64177c9729fa1249290e866c48e58e481'
 )
 $ErrorActionPreference = 'Stop'
 $package = 'C:\gm\qwenmonster\releases\gemmamonster-2026.4-rc4\extracted-py_off\ovms'

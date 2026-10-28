@@ -85,3 +85,8 @@ The repository and installed OMP LFM2 launcher defaults now pin that EXE (KV aut
 Smoke returned OK; a live AUTO get_status call, host result, and final ready
 answer passed. Deployment evidence: hub `live-8137/`. Prior task-quality limits
 remain applicable.
+
+The user then switched testing to LFM2.5. LFM2 was stopped; corrected LFM2.5
+`lfm25-8b-a1b-int4` now occupies8137 as PID26392, with the same corrected EXE.
+The repository and installed OMP `start-lfm25.ps1` defaults pin that binary and
+KV auto. Startup smoke returned OK; evidence is in hub `live-lfm25-8137/`.
