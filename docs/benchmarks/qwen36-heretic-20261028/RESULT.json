@@ -1,0 +1,83 @@
+{
+  "model": "qwen36-35b-a3b-heretic-int4",
+  "started_utc": "2026-10-28T01:11:55.485900+00:00",
+  "runner": "C:\\gm\\qwenmonster\\benchmarks\\speed-20261024\\run_ab.py",
+  "runner_sha256": "430bf33ea595fcd91f185d75f25e2f50a2ad885b5d4aaa470cfd3fa5787907bc",
+  "warmups": [
+    {
+      "usage": {
+        "prompt_tokens": 1788,
+        "completion_tokens": 256,
+        "total_tokens": 2044
+      },
+      "finish": "length",
+      "ttft_s": 20.23343940000632,
+      "wall_s": 36.15242919998127,
+      "content_chunks": 248,
+      "first_chunk_chars": 1,
+      "decode_tok_s_estimate": 16.01875231786003,
+      "text_sha256": "a5e986ae573f4720c8e6fc9637557b986e73f35ded392e0a9ba6c10f232dadce"
+    },
+    {
+      "usage": {
+        "prompt_tokens": 1788,
+        "completion_tokens": 256,
+        "total_tokens": 2044
+      },
+      "finish": "length",
+      "ttft_s": 19.152322000009008,
+      "wall_s": 35.19151279999642,
+      "content_chunks": 248,
+      "first_chunk_chars": 1,
+      "decode_tok_s_estimate": 15.89866988361119,
+      "text_sha256": "a5e986ae573f4720c8e6fc9637557b986e73f35ded392e0a9ba6c10f232dadce"
+    }
+  ],
+  "measured": [
+    {
+      "usage": {
+        "prompt_tokens": 1788,
+        "completion_tokens": 256,
+        "total_tokens": 2044
+      },
+      "finish": "length",
+      "ttft_s": 18.53110600000946,
+      "wall_s": 34.08149670000421,
+      "content_chunks": 248,
+      "first_chunk_chars": 1,
+      "decode_tok_s_estimate": 16.3984008331183,
+      "text_sha256": "a5e986ae573f4720c8e6fc9637557b986e73f35ded392e0a9ba6c10f232dadce"
+    },
+    {
+      "usage": {
+        "prompt_tokens": 1788,
+        "completion_tokens": 256,
+        "total_tokens": 2044
+      },
+      "finish": "length",
+      "ttft_s": 17.674201299989363,
+      "wall_s": 33.06450030000997,
+      "content_chunks": 248,
+      "first_chunk_chars": 1,
+      "decode_tok_s_estimate": 16.569143288338587,
+      "text_sha256": "a5e986ae573f4720c8e6fc9637557b986e73f35ded392e0a9ba6c10f232dadce"
+    },
+    {
+      "usage": {
+        "prompt_tokens": 1788,
+        "completion_tokens": 256,
+        "total_tokens": 2044
+      },
+      "finish": "length",
+      "ttft_s": 18.689637300005415,
+      "wall_s": 35.62219710001955,
+      "content_chunks": 248,
+      "first_chunk_chars": 1,
+      "decode_tok_s_estimate": 15.059907692686176,
+      "text_sha256": "a5e986ae573f4720c8e6fc9637557b986e73f35ded392e0a9ba6c10f232dadce"
+    }
+  ],
+  "status": "PASS",
+  "median_decode_tok_s": 16.3984008331183,
+  "median_ttft_s": 18.53110600000946
+}

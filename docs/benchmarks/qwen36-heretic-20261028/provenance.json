@@ -1,0 +1,236 @@
+{
+  "utc": "2026-10-28T01:12:20.3961293Z",
+  "process": {
+    "ProcessId": 8040,
+    "ExecutablePath": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\ovms.exe",
+    "CommandLine": "\"C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\ovms.exe\" --rest_port 8137 --rest_bind_address 127.0.0.1 --rest_workers 1 --config_path C:\\Users\\testc\\.omp\\agent\\configs\\qwen36-heretic-long-2slots-eviction\\config.json --log_path C:\\Users\\testc\\.omp\\agent\\logs\\qwen36-35b-a3b-heretic-int4-20261028T005402854Z.log",
+    "CreationDate": "/Date(1793148842891)/"
+  },
+  "modules": [
+    {
+      "ModuleName": "ovms.exe",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\ovms.exe",
+      "on_disk_sha256": "f5eef01c9173d066ac25084b9f206dbf5d4ed00d695868e2f43d7d75e9de1acd"
+    },
+    {
+      "ModuleName": "openvino_genai.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\openvino_genai.dll",
+      "on_disk_sha256": "5a2904f2564e4ce002db5ef5fe003a782e6f296f6377cd66df1b2db41d4c5e8d"
+    },
+    {
+      "ModuleName": "openvino.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\openvino.dll",
+      "on_disk_sha256": "829c4642e287522f8a8e748a726d4ad3117a701e22ab46adc82771f98e5d2f7e"
+    },
+    {
+      "ModuleName": "tbb12.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\tbb12.dll",
+      "on_disk_sha256": "63cc8a5a9cee86e9d57967337053569df6335aca09d03f8657343633645d2727"
+    },
+    {
+      "ModuleName": "tbbmalloc.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\tbbmalloc.dll",
+      "on_disk_sha256": "06e72fd9ed67405efd411c33d8dfbe9bf21cb62ff8ef2ccb1003bb1bc32b2924"
+    },
+    {
+      "ModuleName": "openvino_tokenizers.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\openvino_tokenizers.dll",
+      "on_disk_sha256": "e96e02744f4cd9567e54065430aa609e97c48951299a21f30abc00fba6078d3c"
+    },
+    {
+      "ModuleName": "openvino_auto_plugin.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\openvino_auto_plugin.dll",
+      "on_disk_sha256": "ed1492fe3f901d2b882ea89c8909d8ce35eb52986a3559353a44917ee3fb3e47"
+    },
+    {
+      "ModuleName": "openvino_auto_batch_plugin.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\openvino_auto_batch_plugin.dll",
+      "on_disk_sha256": "d21dc67bee39d3af3fbda6720198a6b025eda297680d5d747996730bc75496dd"
+    },
+    {
+      "ModuleName": "openvino_intel_cpu_plugin.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\openvino_intel_cpu_plugin.dll",
+      "on_disk_sha256": "ce9c65b551e36139b62e28f2c8c7b9fc2a5c02c82e1dfd01e578dac30695e78b"
+    },
+    {
+      "ModuleName": "tbbbind_2_5.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\tbbbind_2_5.dll",
+      "on_disk_sha256": "235047df3f97a6b94c3a5e70d93b892141e32ae27ef06f0c583667b417118b20"
+    },
+    {
+      "ModuleName": "openvino_intel_gpu_plugin.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\openvino_intel_gpu_plugin.dll",
+      "on_disk_sha256": "21a2fd9f5d856c297416059325832f0f902c84a4e78b840f859ca508f5aea66d"
+    },
+    {
+      "ModuleName": "openvino_hetero_plugin.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\openvino_hetero_plugin.dll",
+      "on_disk_sha256": "c21be45cea174c79163394e4cfe3a782ebef7a7a64b4ee43dfcf3828d558de16"
+    },
+    {
+      "ModuleName": "openvino_intel_npu_plugin.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\openvino_intel_npu_plugin.dll",
+      "on_disk_sha256": "e27a466c9690e079b82d453a93a583d9008cb08e9965a6f459c56bccde965198"
+    },
+    {
+      "ModuleName": "openvino_intel_npu_compiler_loader.dll",
+      "FileName": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\npu.inf_amd64_597e96d1fdad31a4\\openvino_intel_npu_compiler_loader.dll",
+      "on_disk_sha256": "8df6d149c80841d6eaeb78acb526530823992f1fd7916451da40f480b9cb5162"
+    },
+    {
+      "ModuleName": "openvino_intel_npu_compiler_loader.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\openvino_intel_npu_compiler_loader.dll",
+      "on_disk_sha256": "ea3a6b018a40e1a57c3d982a5e661ba12e6c3ada09ffe77a5eb9af58930f0fe1"
+    },
+    {
+      "ModuleName": "openvino_ir_frontend.dll",
+      "FileName": "C:\\gm\\qwenmonster\\releases\\gemmamonster-2026.4-rc4\\extracted-py_off\\ovms\\openvino_ir_frontend.dll",
+      "on_disk_sha256": "44604b39cbafcf4d8aa27697cee639038bdfcf24f5245f0be07abcf30609d4cd"
+    }
+  ],
+  "cpu": {
+    "Name": "Intel(R) Core(TM) Ultra 7 258V"
+  },
+  "gpu": [
+    {
+      "Name": "Intel(R) Arc(TM) 140V GPU (16GB)",
+      "DriverVersion": "32.0.101.9150"
+    },
+    {
+      "Name": "DisplayLink USB Device",
+      "DriverVersion": "11.2.3146.0"
+    },
+    {
+      "Name": "DisplayLink USB Device",
+      "DriverVersion": "11.2.3146.0"
+    }
+  ],
+  "model_files": [
+    {
+      "name": ".gitattributes",
+      "bytes": 1570,
+      "mtime_ns": 1793147842430199200,
+      "sha256": "34448b82c17d60fec9b65b1f093c115ddbaadc04beb1b0140b6bfed2e012a930"
+    },
+    {
+      "name": "chat_template.jinja",
+      "bytes": 8057,
+      "mtime_ns": 1793147842234904100,
+      "sha256": "55d4931433fe502b794226ee7f4d206a6bdd436ac9f80eb7d8ebb4c639f9ea0c"
+    },
+    {
+      "name": "config.json",
+      "bytes": 3188,
+      "mtime_ns": 1793147842088921000,
+      "sha256": "a2f437dca9dbdf94133eebe54b4057790701ee6dc5a7fd892ee2bfea45445312"
+    },
+    {
+      "name": "generation_config.json",
+      "bytes": 213,
+      "mtime_ns": 1793147842331993200,
+      "sha256": "07f857aba5260b2ea2513f80de8062d086661f00eada0a3794964e665ba680f5"
+    },
+    {
+      "name": "openvino_config.json",
+      "bytes": 1212,
+      "mtime_ns": 1793147841810530700,
+      "sha256": "4207385cfd1f364713239986ddef36cb575018581f5136ee2b50451836fbfea2"
+    },
+    {
+      "name": "openvino_detokenizer.bin",
+      "bytes": 3828184,
+      "mtime_ns": 1793147844330109100
+    },
+    {
+      "name": "openvino_detokenizer.xml",
+      "bytes": 15933,
+      "mtime_ns": 1793147841525441700,
+      "sha256": "09ca6a66b6aa898325d87b6f7f43d416c78d52b61da5dd04ddbf664bfd387dbf"
+    },
+    {
+      "name": "openvino_language_model.bin",
+      "bytes": 18646558250,
+      "mtime_ns": 1793148798599603700
+    },
+    {
+      "name": "openvino_language_model.xml",
+      "bytes": 7879887,
+      "mtime_ns": 1793147842694331800,
+      "sha256": "57261c58f7508468d15673cc1a7b4ff9a33dcc5da8fc13e41b87fd88a2395f06"
+    },
+    {
+      "name": "openvino_text_embeddings_model.bin",
+      "bytes": 509056004,
+      "mtime_ns": 1793147993203836900
+    },
+    {
+      "name": "openvino_text_embeddings_model.xml",
+      "bytes": 5903,
+      "mtime_ns": 1793147842526054700,
+      "sha256": "75c7392885a20e4de4815c98dd3e7264992565d022378341ec96566107f04c67"
+    },
+    {
+      "name": "openvino_tokenizer.bin",
+      "bytes": 9631155,
+      "mtime_ns": 1793147845025173400
+    },
+    {
+      "name": "openvino_tokenizer.xml",
+      "bytes": 32963,
+      "mtime_ns": 1793147842801719100,
+      "sha256": "4675aa8e3be1b9ed6c95a72a0b86e38c7ae9552bcc36de9e1fedd017946bdd19"
+    },
+    {
+      "name": "openvino_vision_embeddings_merger_model.bin",
+      "bytes": 442333988,
+      "mtime_ns": 1793148027623834800
+    },
+    {
+      "name": "openvino_vision_embeddings_merger_model.xml",
+      "bytes": 1226911,
+      "mtime_ns": 1793147843085182500,
+      "sha256": "d79d178b6c93185dab172ad1f60c86fd2dc0441c31ca27667db1410f921835e8"
+    },
+    {
+      "name": "openvino_vision_embeddings_model.bin",
+      "bytes": 1771832,
+      "mtime_ns": 1793147859123689000
+    },
+    {
+      "name": "openvino_vision_embeddings_model.xml",
+      "bytes": 7545,
+      "mtime_ns": 1793147843210365600,
+      "sha256": "3ab61516feac3f6a1d8853d35e7b1c896ce7355bc9f6c612c07a1becaf453cef"
+    },
+    {
+      "name": "openvino_vision_embeddings_pos_model.bin",
+      "bytes": 2658820,
+      "mtime_ns": 1793147878849259600
+    },
+    {
+      "name": "openvino_vision_embeddings_pos_model.xml",
+      "bytes": 5873,
+      "mtime_ns": 1793147843609741100,
+      "sha256": "b2aa28262600bc64196fb45da9fbcdaf5d7b25e080cf5a86432988a70d8f9212"
+    },
+    {
+      "name": "README.md",
+      "bytes": 5875,
+      "mtime_ns": 1793147841865200800,
+      "sha256": "7fd729aa4f5aa779b412c0fe9c90666141e1de97423834c2666462313dc9c3d6"
+    },
+    {
+      "name": "tokenizer.json",
+      "bytes": 19989343,
+      "mtime_ns": 1793147882683649600,
+      "sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4"
+    },
+    {
+      "name": "tokenizer_config.json",
+      "bytes": 1166,
+      "mtime_ns": 1793147844826517200,
+      "sha256": "4fa2244ff8ef610f55bb0f593d2fb96789adf059228693d1cf7ec4aa0ea39f56"
+    }
+  ],
+  "weight_hash_scope": "weights size/mtime only; full weight hashing not performed"
+}

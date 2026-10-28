@@ -1,0 +1,9 @@
+{
+  "mediapipe_config_list": [
+    {
+      "name": "qwen36-35b-a3b-heretic-int4",
+      "graph_path": "C:/Users/testc/.omp/agent/configs/qwen36-heretic-long-2slots-eviction/graph.pbtxt"
+    }
+  ],
+  "model_config_list": []
+}

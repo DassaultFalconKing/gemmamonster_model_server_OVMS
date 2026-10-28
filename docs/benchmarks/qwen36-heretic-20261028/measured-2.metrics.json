@@ -1,0 +1,14 @@
+{
+  "usage": {
+    "prompt_tokens": 1788,
+    "completion_tokens": 256,
+    "total_tokens": 2044
+  },
+  "finish": "length",
+  "ttft_s": 18.689637300005415,
+  "wall_s": 35.62219710001955,
+  "content_chunks": 248,
+  "first_chunk_chars": 1,
+  "decode_tok_s_estimate": 15.059907692686176,
+  "text_sha256": "a5e986ae573f4720c8e6fc9637557b986e73f35ded392e0a9ba6c10f232dadce"
+}
