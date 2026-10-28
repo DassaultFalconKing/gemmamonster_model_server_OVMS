@@ -75,3 +75,13 @@ load and universal agent/release acceptance are NOT_VERIFIED.
 Reproduce focused tests with `rtk proxy python C:/gm/lfm-2026.4/malformed-fix-20261028/run-tests.py final`.
 Original model/build pins were not overwritten. Candidate tests use loopback18147;
 the pinned LFM2 control on8137 is restored after tests rather than silently promoted.
+
+## Explicit deployment after user request
+
+The user subsequently requested the corrected server on8137. It is now running
+LFM2-24B as PID10404 with EXE SHA256
+`b3440410a08c1a62d4f8aa187dffe3c64177c9729fa1249290e866c48e58e481`.
+The repository and installed OMP LFM2 launcher defaults now pin that EXE (KV auto).
+Smoke returned OK; a live AUTO get_status call, host result, and final ready
+answer passed. Deployment evidence: hub `live-8137/`. Prior task-quality limits
+remain applicable.
