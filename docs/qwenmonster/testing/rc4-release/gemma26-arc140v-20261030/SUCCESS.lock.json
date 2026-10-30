@@ -1,0 +1,229 @@
+{
+  "schema": "gemma26-full-success-public-v1",
+  "created_utc": "20261030T010005Z",
+  "local_pin_name": "gemma26-full-success-arc140v-20261030T010005Z",
+  "local_identity_lock_sha256": "fbc3d16ab402ad31b91b32a873de7c3a2d8f7a61a67e56262b8da6f3dfbe5089",
+  "purpose": "Complete freeze of everything related to the successful lean Gemma26 + OMP ComputerUse/BrowserUse setup on Arc 140V",
+  "constraints": [
+    "ONE_OVMS_ONLY",
+    "PORT_8137"
+  ],
+  "success_summary": {
+    "model": "gemma26",
+    "launch_defaults": {
+      "seqs": 2,
+      "rest_workers": 4,
+      "batch": 1024,
+      "kv": "auto",
+      "prefix": false,
+      "guided": false
+    },
+    "agent_tools": "PASS",
+    "computer_use": "PASS",
+    "browser_use_relay": "PASS",
+    "memory_lean": "PASS relative to prior defaults"
+  },
+  "package_role": "gemmamonster-2026.4-rc4 extracted-py_off/ovms",
+  "model_id": "Wondernutts/gemma-4-26B-A4B-it-qat-q4_0-unquantized-uncensored-heretic-int4-ov",
+  "lean_pin": "gemma26-lean-arc140v-20261030T005525Z",
+  "runtime_file_count": 143,
+  "runtime_critical_modules": [
+    {
+      "path": "libcurl-x64.dll",
+      "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334",
+      "bytes": 3647080
+    },
+    {
+      "path": "opencv_world4140.dll",
+      "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46",
+      "bytes": 79832576
+    },
+    {
+      "path": "openvino.dll",
+      "sha256": "829c4642e287522f8a8e748a726d4ad3117a701e22ab46adc82771f98e5d2f7e",
+      "bytes": 16465168
+    },
+    {
+      "path": "openvino_genai.dll",
+      "sha256": "5a2904f2564e4ce002db5ef5fe003a782e6f296f6377cd66df1b2db41d4c5e8d",
+      "bytes": 7425808
+    },
+    {
+      "path": "openvino_intel_gpu_plugin.dll",
+      "sha256": "21a2fd9f5d856c297416059325832f0f902c84a4e78b840f859ca508f5aea66d",
+      "bytes": 33879040
+    },
+    {
+      "path": "openvino_tokenizers.dll",
+      "sha256": "e96e02744f4cd9567e54065430aa609e97c48951299a21f30abc00fba6078d3c",
+      "bytes": 3483912
+    },
+    {
+      "path": "ovms.exe",
+      "sha256": "f5eef01c9173d066ac25084b9f206dbf5d4ed00d695868e2f43d7d75e9de1acd",
+      "bytes": 22596608
+    },
+    {
+      "path": "tbb12.dll",
+      "sha256": "63cc8a5a9cee86e9d57967337053569df6335aca09d03f8657343633645d2727",
+      "bytes": 337160
+    }
+  ],
+  "loaded_non_windows_modules": [
+    {
+      "name": "ovms.exe",
+      "sha256": "f5eef01c9173d066ac25084b9f206dbf5d4ed00d695868e2f43d7d75e9de1acd",
+      "bytes": 22596608,
+      "copied_as": "f5eef01c9173d066-ovms.exe"
+    },
+    {
+      "name": "git2.dll",
+      "sha256": "7eb7ff327997dc19db29927153d54b1261df0888378f3c5d0ddf7c72f51998dd",
+      "bytes": 1756160,
+      "copied_as": "7eb7ff327997dc19-git2.dll"
+    },
+    {
+      "name": "libcurl-x64.dll",
+      "sha256": "f31fa58061e162ff4702b37224404df210346df6dff4a49e92d07b8dd5217334",
+      "bytes": 3647080,
+      "copied_as": "f31fa58061e162ff-libcurl-x64.dll"
+    },
+    {
+      "name": "openvino_genai.dll",
+      "sha256": "5a2904f2564e4ce002db5ef5fe003a782e6f296f6377cd66df1b2db41d4c5e8d",
+      "bytes": 7425808,
+      "copied_as": "5a2904f2564e4ce0-openvino_genai.dll"
+    },
+    {
+      "name": "opencv_world4140.dll",
+      "sha256": "a192cbf006faf48c054468fa2a2e56e3f680b401c23b8f7fb24373ff75654c46",
+      "bytes": 79832576,
+      "copied_as": "a192cbf006faf48c-opencv_world4140.dll"
+    },
+    {
+      "name": "tbb12.dll",
+      "sha256": "63cc8a5a9cee86e9d57967337053569df6335aca09d03f8657343633645d2727",
+      "bytes": 337160,
+      "copied_as": "63cc8a5a9cee86e9-tbb12.dll"
+    },
+    {
+      "name": "openvino.dll",
+      "sha256": "829c4642e287522f8a8e748a726d4ad3117a701e22ab46adc82771f98e5d2f7e",
+      "bytes": 16465168,
+      "copied_as": "829c4642e287522f-openvino.dll"
+    },
+    {
+      "name": "tbbmalloc.dll",
+      "sha256": "06e72fd9ed67405efd411c33d8dfbe9bf21cb62ff8ef2ccb1003bb1bc32b2924",
+      "bytes": 119056,
+      "copied_as": "06e72fd9ed67405e-tbbmalloc.dll"
+    },
+    {
+      "name": "openvino_tokenizers.dll",
+      "sha256": "e96e02744f4cd9567e54065430aa609e97c48951299a21f30abc00fba6078d3c",
+      "bytes": 3483912,
+      "copied_as": "e96e02744f4cd956-openvino_tokenizers.dll"
+    },
+    {
+      "name": "openvino_auto_plugin.dll",
+      "sha256": "ed1492fe3f901d2b882ea89c8909d8ce35eb52986a3559353a44917ee3fb3e47",
+      "bytes": 720656,
+      "copied_as": "ed1492fe3f901d2b-openvino_auto_plugin.dll"
+    },
+    {
+      "name": "openvino_auto_batch_plugin.dll",
+      "sha256": "d21dc67bee39d3af3fbda6720198a6b025eda297680d5d747996730bc75496dd",
+      "bytes": 208144,
+      "copied_as": "d21dc67bee39d3af-openvino_auto_batch_plugin.dll"
+    },
+    {
+      "name": "openvino_intel_cpu_plugin.dll",
+      "sha256": "ce9c65b551e36139b62e28f2c8c7b9fc2a5c02c82e1dfd01e578dac30695e78b",
+      "bytes": 46222600,
+      "copied_as": "ce9c65b551e36139-openvino_intel_cpu_plugin.dll"
+    },
+    {
+      "name": "tbbbind_2_5.dll",
+      "sha256": "235047df3f97a6b94c3a5e70d93b892141e32ae27ef06f0c583667b417118b20",
+      "bytes": 209168,
+      "copied_as": "235047df3f97a6b9-tbbbind_2_5.dll"
+    },
+    {
+      "name": "openvino_intel_gpu_plugin.dll",
+      "sha256": "21a2fd9f5d856c297416059325832f0f902c84a4e78b840f859ca508f5aea66d",
+      "bytes": 33879040,
+      "copied_as": "21a2fd9f5d856c29-openvino_intel_gpu_plugin.dll"
+    },
+    {
+      "name": "openvino_hetero_plugin.dll",
+      "sha256": "c21be45cea174c79163394e4cfe3a782ebef7a7a64b4ee43dfcf3828d558de16",
+      "bytes": 531728,
+      "copied_as": "c21be45cea174c79-openvino_hetero_plugin.dll"
+    },
+    {
+      "name": "openvino_intel_npu_plugin.dll",
+      "sha256": "e27a466c9690e079b82d453a93a583d9008cb08e9965a6f459c56bccde965198",
+      "bytes": 7615752,
+      "copied_as": "e27a466c9690e079-openvino_intel_npu_plugin.dll"
+    },
+    {
+      "name": "openvino_intel_npu_compiler_loader.dll",
+      "sha256": "ea3a6b018a40e1a57c3d982a5e661ba12e6c3ada09ffe77a5eb9af58930f0fe1",
+      "bytes": 529672,
+      "copied_as": "ea3a6b018a40e1a5-openvino_intel_npu_compiler_loader.dll"
+    },
+    {
+      "name": "openvino_ir_frontend.dll",
+      "sha256": "44604b39cbafcf4d8aa27697cee639038bdfcf24f5245f0be07abcf30609d4cd",
+      "bytes": 509192,
+      "copied_as": "44604b39cbafcf4d-openvino_ir_frontend.dll"
+    }
+  ],
+  "omp": {
+    "version": "18.14.0",
+    "omp_exe_sha256": "620a5935cdb6a9ed52d8b0c93892d6b5bb84155244a98f3be82af0455177bf29",
+    "tool_contracts": [
+      "browser.ts",
+      "computer.ts",
+      "eval.ts",
+      "browser.md",
+      "computer.md",
+      "eval.md"
+    ],
+    "pi_coding_agent_package_files": 3359
+  },
+  "relay": "Neon Browser Relay 18.14.0",
+  "acceptance": {
+    "agent_tools": "PASS",
+    "computer_use": "PASS",
+    "browser_use_relay": "PASS",
+    "memory_lean": "PASS relative to prior defaults",
+    "one_ovms_only": true,
+    "port": 8137
+  },
+  "host": {
+    "os": {
+      "Caption": "Microsoft Windows 11 Home",
+      "Version": "10.0.26300",
+      "BuildNumber": "26300",
+      "OSArchitecture": "64-bit",
+      "TotalVisibleMemorySize": 33072884
+    },
+    "gpu_drivers": [
+      {
+        "Name": "Intel(R) Arc(TM) 140V GPU (16GB)",
+        "DriverVersion": "32.0.101.9150",
+        "PNPDeviceID": "PCI\\VEN_8086&DEV_64A0&SUBSYS_146C1462&REV_04\\<instance>"
+      }
+    ]
+  },
+  "anonymization": {
+    "username_redacted": true,
+    "userprofile_paths_replaced_with": "%USERPROFILE%",
+    "pnp_instance_ids_redacted": true,
+    "binaries_omitted": true,
+    "session_jsonl_omitted": true,
+    "browser_process_inventory_omitted": true,
+    "note": "Local frozen pin retains full binaries and private paths; this tree is commit-safe summary only."
+  }
+}

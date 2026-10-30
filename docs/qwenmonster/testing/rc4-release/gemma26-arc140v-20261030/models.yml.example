@@ -1,0 +1,107 @@
+providers:
+  openvino-server:
+    baseUrl: "http://127.0.0.1:18082/v3"
+    api: "openai-completions"
+    apiKey: "not-needed-for-local"
+    auth: none
+    discovery:
+      type: "openai-models-list"
+      injectV1: false
+    # Local prefill can sit silent longer than the 5 minute stream default.
+    compat:
+      streamIdleTimeoutMs: 900000
+    modelOverrides:
+      gemma26:
+        # Text context is 131072. This server prefills in batches of 4096,
+        # so the working window stays at 32k. Coding output is 4096, 1/8 of it.
+        contextWindow: 32768
+        maxTokens: 4096
+        reasoning: true
+        supportsTools: true
+        thinking:
+          mode: effort
+          efforts: [low, medium]
+          defaultLevel: low
+        compat:
+          reasoningContentField: reasoning_content
+          supportsToolChoice: true
+          supportsForcedToolChoice: true
+          supportsReasoningEffort: true
+          maxTokensField: max_tokens
+          streamIdleTimeoutMs: 900000
+
+  openvino-server-ornith:
+    baseUrl: "http://127.0.0.1:8137/v3"
+    api: "openai-completions"
+    apiKey: "not-needed-for-local"
+    auth: none
+    discovery:
+      type: "openai-models-list"
+      injectV1: false
+    compat:
+      streamIdleTimeoutMs: 900000
+    modelOverrides:
+      gemma12:
+        contextWindow: 32768
+        maxTokens: 4096
+        input: [text, image]
+        imageCountBudget: 1
+        reasoning: true
+        supportsTools: true
+        thinking:
+          mode: effort
+          efforts: [low, medium]
+          defaultLevel: low
+        compat:
+          maxTokensField: max_tokens
+          alwaysSendMaxTokens: true
+          supportsImageDetailOriginal: false
+          extraBody:
+            temperature: 0
+            seed: 1234
+          reasoningContentField: reasoning_content
+          supportsToolChoice: true
+          supportsForcedToolChoice: true
+          supportsReasoningEffort: true
+          streamIdleTimeoutMs: 900000
+      gemma26:
+        contextWindow: 32768
+        maxTokens: 4096
+        input: [text, image]
+        imageCountBudget: 1
+        reasoning: true
+        supportsTools: true
+        thinking:
+          mode: effort
+          efforts: [low, medium]
+          defaultLevel: low
+        compat:
+          maxTokensField: max_tokens
+          alwaysSendMaxTokens: true
+          supportsImageDetailOriginal: false
+          extraBody:
+            temperature: 0
+            seed: 1234
+          reasoningContentField: reasoning_content
+          supportsToolChoice: true
+          supportsForcedToolChoice: true
+          supportsReasoningEffort: true
+          streamIdleTimeoutMs: 900000
+      ornith:
+        contextWindow: 32768
+        maxTokens: 4096
+        reasoning: true
+        supportsTools: true
+        thinking:
+          mode: effort
+          efforts: [low, medium]
+          defaultLevel: low
+        compat:
+          maxTokensField: max_tokens
+          alwaysSendMaxTokens: true
+          reasoningContentField: reasoning_content
+          thinkingFormat: qwen-chat-template
+          supportsToolChoice: true
+          supportsForcedToolChoice: true
+          supportsReasoningEffort: true
+          streamIdleTimeoutMs: 900000

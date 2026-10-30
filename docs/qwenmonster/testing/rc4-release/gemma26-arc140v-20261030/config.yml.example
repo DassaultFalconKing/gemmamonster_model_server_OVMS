@@ -1,0 +1,13 @@
+shellPath: C:\Program Files\Git\bin\bash.exe
+setupVersion: 2
+modelRoles:
+  default: openvino-server-ornith/gemma26
+  vision: openvino-server-ornith/gemma26
+defaultThinkingLevel: auto
+computer:
+  enabled: true
+browser:
+  relay: true
+compaction:
+  modelThresholds:
+    openvino-server-ornith/gemma26: f24576

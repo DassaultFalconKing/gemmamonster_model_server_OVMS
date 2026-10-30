@@ -1,0 +1,31 @@
+{
+  "scope": "Launch input files, not a complete model weight identity",
+  "files": [
+    {
+      "path": "config.json",
+      "sha256": "a62ff7eb0a97a7c6e83ba42edff8dc4118c109a7ededcd6d83cc08ffda6a7361",
+      "bytes": 3810
+    },
+    {
+      "path": "openvino_config.json",
+      "sha256": "7cbda792eb8fa65e8761801b0b9e18b354a574580ec5c253b230277ab654d8f6",
+      "bytes": 1272
+    },
+    {
+      "path": "generation_config.json",
+      "sha256": "5439541d3bf0ba9ade7c1122dc14703f85f32a520150351b344b14f48c574cc2",
+      "bytes": 203
+    },
+    {
+      "path": "chat_template.jinja",
+      "sha256": "24d32be0f96bbea1b9e1afd89e19bd4a632ab567c90555c7284be65f5e7f7609",
+      "bytes": 23077
+    },
+    {
+      "path": "tokenizer_config.json",
+      "sha256": "f24fb2adfa622cf3a0c003d06f1b38c5d824fda7aebdf064c4d4d414590731a0",
+      "bytes": 2819
+    }
+  ],
+  "model_root": "<MODEL_ROOT>"
+}
