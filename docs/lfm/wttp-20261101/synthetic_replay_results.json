@@ -1,0 +1,1198 @@
+{
+  "schema_version": "wttp-probe-results/v1",
+  "synthetic": true,
+  "runs": [
+    {
+      "scenario": "lfm2_dedicated_dedicated",
+      "events": [
+        {
+          "event": "ARMED",
+          "protocol": "lfm25",
+          "recognition": "DEDICATED_ID",
+          "marker_token_ids": [
+            301
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm25",
+          "start_recognition": "DEDICATED_ID",
+          "end_recognition": "DEDICATED_ID",
+          "start_marker_token_ids": [
+            301
+          ],
+          "end_marker_token_ids": [
+            302
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "[get_weather(city=\"Paris\")]",
+          "retainer_required": true,
+          "publication_eligible": true
+        }
+      ]
+    },
+    {
+      "scenario": "lfm2_dedicated_composite",
+      "events": [
+        {
+          "event": "ARMED",
+          "protocol": "lfm25",
+          "recognition": "DEDICATED_ID",
+          "marker_token_ids": [
+            301
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm25",
+          "start_recognition": "DEDICATED_ID",
+          "end_recognition": "COMPOSITE_TEXT",
+          "start_marker_token_ids": [
+            301
+          ],
+          "end_marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            201,
+            210,
+            200,
+            224,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "[get_weather(city=\"Paris\")]",
+          "retainer_required": true,
+          "publication_eligible": false
+        }
+      ]
+    },
+    {
+      "scenario": "lfm2_composite_dedicated",
+      "events": [
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 1,
+          "progress_fraction": 0.091,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25",
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 5,
+          "progress_fraction": 0.263,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 10,
+          "progress_fraction": 0.526,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 15,
+          "progress_fraction": 0.789,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197
+          ]
+        },
+        {
+          "event": "ARMED",
+          "protocol": "lfm25",
+          "recognition": "COMPOSITE_TEXT",
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197,
+            214,
+            216,
+            224,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm25",
+          "start_recognition": "COMPOSITE_TEXT",
+          "end_recognition": "DEDICATED_ID",
+          "start_marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197,
+            214,
+            216,
+            224,
+            162
+          ],
+          "end_marker_token_ids": [
+            302
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "[get_weather(city=\"Paris\")]",
+          "retainer_required": true,
+          "publication_eligible": false
+        }
+      ]
+    },
+    {
+      "scenario": "lfm2_composite_composite",
+      "events": [
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 1,
+          "progress_fraction": 0.091,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25",
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 5,
+          "progress_fraction": 0.263,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 10,
+          "progress_fraction": 0.526,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 15,
+          "progress_fraction": 0.789,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197
+          ]
+        },
+        {
+          "event": "ARMED",
+          "protocol": "lfm25",
+          "recognition": "COMPOSITE_TEXT",
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197,
+            214,
+            216,
+            224,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm25",
+          "start_recognition": "COMPOSITE_TEXT",
+          "end_recognition": "COMPOSITE_TEXT",
+          "start_marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197,
+            214,
+            216,
+            224,
+            162
+          ],
+          "end_marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            201,
+            210,
+            200,
+            224,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "[get_weather(city=\"Paris\")]",
+          "retainer_required": true,
+          "publication_eligible": false
+        }
+      ]
+    },
+    {
+      "scenario": "lfm25_dedicated_dedicated",
+      "events": [
+        {
+          "event": "ARMED",
+          "protocol": "lfm25",
+          "recognition": "DEDICATED_ID",
+          "marker_token_ids": [
+            301
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm25",
+          "start_recognition": "DEDICATED_ID",
+          "end_recognition": "DEDICATED_ID",
+          "start_marker_token_ids": [
+            301
+          ],
+          "end_marker_token_ids": [
+            302
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "[get_weather(city=\"Paris\")]",
+          "retainer_required": true,
+          "publication_eligible": true
+        }
+      ]
+    },
+    {
+      "scenario": "lfm25_dedicated_composite",
+      "events": [
+        {
+          "event": "ARMED",
+          "protocol": "lfm25",
+          "recognition": "DEDICATED_ID",
+          "marker_token_ids": [
+            301
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm25",
+          "start_recognition": "DEDICATED_ID",
+          "end_recognition": "COMPOSITE_TEXT",
+          "start_marker_token_ids": [
+            301
+          ],
+          "end_marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            201,
+            210,
+            200,
+            224,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "[get_weather(city=\"Paris\")]",
+          "retainer_required": true,
+          "publication_eligible": false
+        }
+      ]
+    },
+    {
+      "scenario": "lfm25_composite_dedicated",
+      "events": [
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 1,
+          "progress_fraction": 0.091,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25",
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 5,
+          "progress_fraction": 0.263,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 10,
+          "progress_fraction": 0.526,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 15,
+          "progress_fraction": 0.789,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197
+          ]
+        },
+        {
+          "event": "ARMED",
+          "protocol": "lfm25",
+          "recognition": "COMPOSITE_TEXT",
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197,
+            214,
+            216,
+            224,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm25",
+          "start_recognition": "COMPOSITE_TEXT",
+          "end_recognition": "DEDICATED_ID",
+          "start_marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197,
+            214,
+            216,
+            224,
+            162
+          ],
+          "end_marker_token_ids": [
+            302
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "[get_weather(city=\"Paris\")]",
+          "retainer_required": true,
+          "publication_eligible": false
+        }
+      ]
+    },
+    {
+      "scenario": "lfm25_composite_composite",
+      "events": [
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 1,
+          "progress_fraction": 0.091,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25",
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 5,
+          "progress_fraction": 0.263,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 10,
+          "progress_fraction": 0.526,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 15,
+          "progress_fraction": 0.789,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197
+          ]
+        },
+        {
+          "event": "ARMED",
+          "protocol": "lfm25",
+          "recognition": "COMPOSITE_TEXT",
+          "marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197,
+            214,
+            216,
+            224,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm25",
+          "start_recognition": "COMPOSITE_TEXT",
+          "end_recognition": "COMPOSITE_TEXT",
+          "start_marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            215,
+            216,
+            197,
+            214,
+            216,
+            224,
+            162
+          ],
+          "end_marker_token_ids": [
+            160,
+            224,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            195,
+            201,
+            210,
+            200,
+            224,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm2",
+            "lfm25"
+          ],
+          "family_preference": true,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "[get_weather(city=\"Paris\")]",
+          "retainer_required": true,
+          "publication_eligible": false
+        }
+      ]
+    },
+    {
+      "scenario": "lfm3_dedicated_dedicated",
+      "events": [
+        {
+          "event": "ARMED",
+          "protocol": "lfm3",
+          "recognition": "DEDICATED_ID",
+          "marker_token_ids": [
+            303
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm3"
+          ],
+          "family_preference": false
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm3",
+          "start_recognition": "DEDICATED_ID",
+          "end_recognition": "DEDICATED_ID",
+          "start_marker_token_ids": [
+            303
+          ],
+          "end_marker_token_ids": [
+            304
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm3"
+          ],
+          "family_preference": false,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "<function=get_weather><parameter=sample>hello</parameter></function>",
+          "retainer_required": true,
+          "publication_eligible": true
+        }
+      ]
+    },
+    {
+      "scenario": "lfm3_dedicated_composite",
+      "events": [
+        {
+          "event": "ARMED",
+          "protocol": "lfm3",
+          "recognition": "DEDICATED_ID",
+          "marker_token_ids": [
+            303
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm3"
+          ],
+          "family_preference": false
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm3",
+          "start_recognition": "DEDICATED_ID",
+          "end_recognition": "COMPOSITE_TEXT",
+          "start_marker_token_ids": [
+            303
+          ],
+          "end_marker_token_ids": [
+            160,
+            147,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm3"
+          ],
+          "family_preference": false,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "<function=get_weather><parameter=sample>hello</parameter></function>",
+          "retainer_required": true,
+          "publication_eligible": false
+        }
+      ]
+    },
+    {
+      "scenario": "lfm3_composite_dedicated",
+      "events": [
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 1,
+          "progress_fraction": 0.091,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25",
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 3,
+          "progress_fraction": 0.273,
+          "protocol_hypotheses": [
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160,
+            216,
+            211
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 6,
+          "progress_fraction": 0.545,
+          "protocol_hypotheses": [
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160,
+            216,
+            211,
+            211,
+            208,
+            195
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 9,
+          "progress_fraction": 0.818,
+          "protocol_hypotheses": [
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208
+          ]
+        },
+        {
+          "event": "ARMED",
+          "protocol": "lfm3",
+          "recognition": "COMPOSITE_TEXT",
+          "marker_token_ids": [
+            160,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm3"
+          ],
+          "family_preference": false
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm3",
+          "start_recognition": "COMPOSITE_TEXT",
+          "end_recognition": "DEDICATED_ID",
+          "start_marker_token_ids": [
+            160,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            162
+          ],
+          "end_marker_token_ids": [
+            304
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm3"
+          ],
+          "family_preference": false,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "<function=get_weather><parameter=sample>hello</parameter></function>",
+          "retainer_required": true,
+          "publication_eligible": false
+        }
+      ]
+    },
+    {
+      "scenario": "lfm3_composite_composite",
+      "events": [
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 1,
+          "progress_fraction": 0.091,
+          "protocol_hypotheses": [
+            "lfm2",
+            "lfm25",
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 3,
+          "progress_fraction": 0.273,
+          "protocol_hypotheses": [
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160,
+            216,
+            211
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 6,
+          "progress_fraction": 0.545,
+          "protocol_hypotheses": [
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160,
+            216,
+            211,
+            211,
+            208,
+            195
+          ]
+        },
+        {
+          "event": "PREFIX_PROGRESS",
+          "matched_chars": 9,
+          "progress_fraction": 0.818,
+          "protocol_hypotheses": [
+            "lfm3"
+          ],
+          "marker_token_ids": [
+            160,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208
+          ]
+        },
+        {
+          "event": "ARMED",
+          "protocol": "lfm3",
+          "recognition": "COMPOSITE_TEXT",
+          "marker_token_ids": [
+            160,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm3"
+          ],
+          "family_preference": false
+        },
+        {
+          "event": "TOOL_CANDIDATE",
+          "protocol": "lfm3",
+          "start_recognition": "COMPOSITE_TEXT",
+          "end_recognition": "COMPOSITE_TEXT",
+          "start_marker_token_ids": [
+            160,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            162
+          ],
+          "end_marker_token_ids": [
+            160,
+            147,
+            216,
+            211,
+            211,
+            208,
+            195,
+            199,
+            197,
+            208,
+            208,
+            162
+          ],
+          "compatible_protocol_hypotheses": [
+            "lfm3"
+          ],
+          "family_preference": false,
+          "syntax_valid": true,
+          "tools": [
+            "get_weather"
+          ],
+          "raw_body": "<function=get_weather><parameter=sample>hello</parameter></function>",
+          "retainer_required": true,
+          "publication_eligible": false
+        }
+      ]
+    }
+  ]
+}
